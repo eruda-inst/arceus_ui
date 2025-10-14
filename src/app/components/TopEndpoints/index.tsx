@@ -14,7 +14,7 @@ export function TopEndpoints() {
   return (
     <motion.div
       {...hoverAnimation}
-      className="p-4 flex flex-col justify-between bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md col-span-2 border border-[var(--border-light)] dark:border-[var(--border-dark)]"
+      className="p-4 flex flex-col justify-between bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md col-span-2 border border-[var(--border-light)] dark:border-[var(--border-dark)] flex-1"
     >
       <h3 className="text-lg font-semibold">Endpoints Mais Acessados</h3>
       <div className="mt-4">

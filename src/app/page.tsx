@@ -7,6 +7,7 @@ import { SidebarNavItem } from "@/app/components/SidebarNavItem";
 import { PageContent } from "@/app/components/PageContent";
 import { MetricsGrid } from "@/app/components/MetricsGrid";
 import { ChartsGrid } from "@/app/components/ChartsGrid";
+import { BottomGrid } from "@/app/components/BottomGrid";
 import { TopEndpoints } from "@/app/components/TopEndpoints";
 import { LastErrorRequests } from "@/app/components/LastErrorRequests";
 import { RecentRequestsLog } from "@/app/components/RecentRequestLog";
@@ -16,7 +17,7 @@ export default function Home() {
     <>
       <PageHeader />
       <PageSidebar>
-        <SidebarTitle>HTTP Monitor</SidebarTitle>
+        <SidebarTitle>Monitor.Aggregator</SidebarTitle>
         <SidebarNav>
           <SidebarNavItem>
             <FaChartLine /> Dashboard
@@ -26,10 +27,10 @@ export default function Home() {
       <PageContent>
         <MetricsGrid />
         <ChartsGrid />
-        <div className="grid grid-cols-3 gap-6">
+        <BottomGrid>
           <TopEndpoints />
           <LastErrorRequests />
-        </div>
+        </BottomGrid>
         <RecentRequestsLog />
       </PageContent>
     </>
