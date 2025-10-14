@@ -17,7 +17,7 @@ export default function Home() {
     <>
       <PageHeader />
       <PageSidebar>
-        <SidebarTitle>Monitor.Aggregator</SidebarTitle>
+        <SidebarTitle>Aggregator &middot; Monitor</SidebarTitle>
         <SidebarNav>
           <SidebarNavItem>
             <FaChartLine /> Dashboard

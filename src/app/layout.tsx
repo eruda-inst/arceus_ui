@@ -5,7 +5,7 @@ import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Monitor de Requisições . Aggregator",
+  title: "Aggregator · Monitor",
   description: "Monitora requisições realizadas à API Aggregator.",
 };
 
