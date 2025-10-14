@@ -12,11 +12,9 @@
   --border-light: var(--color-gray-200);
   --border-dark: var(--color-gray-700);
 
-  --divide-light: var(--color-gray-200);
-  --divide-dark: var(--color-gray-700);
-
   /* Others */
   --page-header-height: 61px;
+  --sidebar-width: calc(var(--spacing) * 64); /* w-64 */
 }
 
 body {
