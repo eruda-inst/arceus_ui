@@ -1,8 +1,5 @@
-"use client";
-
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion";
-import { hoverAnimation } from "@/utils/animations/hover";
+import { Card } from "@/app/components/Card";
 
 export function LastErrorRequests() {
   const errors = [
@@ -12,10 +9,7 @@ export function LastErrorRequests() {
   ];
 
   return (
-    <motion.div
-      {...hoverAnimation}
-      className="p-4 flex flex-col justify-between bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md border border-[var(--border-light)] dark:border-[var(--border-dark)]"
-    >
+    <Card className="justify-between">
       <h3 className="text-lg font-semibold">Últimas Requisições com Erro</h3>
       <div className="mt-4 text-sm">
         {errors.map(({ code, endpoint, time }) => (
@@ -30,7 +24,7 @@ export function LastErrorRequests() {
           </div>
         ))}
       </div>
-    </motion.div>
+    </Card>
   );
 }
 

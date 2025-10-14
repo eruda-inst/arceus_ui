@@ -1,8 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ReactNode } from "react";
-import { hoverAnimation } from "@/utils/animations/hover";
+import { Card } from "@/app/components/Card";
 
 interface MetricCardProps {
   title: string;
@@ -20,10 +17,7 @@ export function MetricCard({
   iconColor = "text-blue-600",
 }: MetricCardProps) {
   return (
-    <motion.li
-      className="p-4 flex items-center justify-between bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md h-24 border border-[var(--border-light)] dark:border-[var(--border-dark)]"
-      {...hoverAnimation}
-    >
+    <Card className="flex-row h-24 items-center">
       <dl className="h-full flex flex-col justify-between w-full">
         <dt className="text-sm text-gray-500 dark:text-gray-400">{title}</dt>
         <dd className="text-2xl font-bold">{value}</dd>
@@ -33,7 +27,7 @@ export function MetricCard({
       >
         {children}
       </div>
-    </motion.li>
+    </Card>
   );
 }
 

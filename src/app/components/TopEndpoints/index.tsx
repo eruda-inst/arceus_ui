@@ -1,8 +1,5 @@
-"use client";
-
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion";
-import { hoverAnimation } from "@/utils/animations/hover";
+import { Card } from "@/app/components/Card";
 
 export function TopEndpoints() {
   const endpoints = [
@@ -12,10 +9,7 @@ export function TopEndpoints() {
   ];
 
   return (
-    <motion.div
-      {...hoverAnimation}
-      className="p-4 flex flex-col justify-between bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md col-span-2 border border-[var(--border-light)] dark:border-[var(--border-dark)] flex-1"
-    >
+    <Card className="justify-between col-span-2 flex-1">
       <h3 className="text-lg font-semibold">Endpoints Mais Acessados</h3>
       <div className="mt-4">
         <table className="w-full text-left">
@@ -40,7 +34,7 @@ export function TopEndpoints() {
           </tbody>
         </table>
       </div>
-    </motion.div>
+    </Card>
   );
 }
 

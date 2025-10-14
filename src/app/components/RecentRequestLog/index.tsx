@@ -1,8 +1,5 @@
-"use client";
-
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion";
-import { hoverAnimation } from "@/utils/animations/hover";
+import { Card } from "@/app/components/Card";
 
 export function RecentRequestsLog() {
   const requests = [
@@ -33,10 +30,7 @@ export function RecentRequestsLog() {
   ];
 
   return (
-    <motion.div
-      {...hoverAnimation}
-      className="p-4 flex flex-col bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] rounded-lg shadow-md border border-[var(--border-light)] dark:border-[var(--border-dark)]"
-    >
+    <Card>
       <h3 className="text-lg font-semibold">Log de Requisições Recentes</h3>
       <div className="mt-4 overflow-x-auto">
         <table className="w-full text-left">
@@ -69,7 +63,7 @@ export function RecentRequestsLog() {
           </tbody>
         </table>
       </div>
-    </motion.div>
+    </Card>
   );
 }
 
