@@ -1,0 +1,19 @@
+# Docker
+Dockerfile
+.dockerignore
+compose.yml
+
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.next
+
+# Env
+.env.local
