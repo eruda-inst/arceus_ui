@@ -9,7 +9,8 @@ interface RequisicoesRecentesLog {
   http_method: number;
   endpoint: string;
   status_code: number;
-  datetime: string;
+  data: string;
+  hora: string;
   duracao: number;
 }
 
@@ -32,7 +33,8 @@ export function RequisicoesRecentes() {
               <th className="py-2">Verbo</th>
               <th className="py-2">Endpoint</th>
               <th className="py-2">Status</th>
-              <th className="py-2">Data/Hora</th>
+              <th className="py-2">Data</th>
+              <th className="py-2">Hora</th>
               <th className="py-2">Duração</th>
             </tr>
           </thead>
@@ -59,8 +61,9 @@ export function RequisicoesRecentes() {
                   <td className="py-2">{log.http_method}</td>
                   <td className="py-2">{log.endpoint}</td>
                   <td className="py-2">{log.status_code}</td>
-                  <td className="py-2">{log.datetime}</td>
-                  <td className="py-2">{Math.round(log.duracao)} ms</td>
+                  <td className="py-2">{log.data}</td>
+                  <td className="py-2">{log.hora.slice(0, 5)}</td>
+                  <td className="py-2">{(log.duracao * 1000).toFixed(0)} ms</td>
                 </tr>
               ))
             )}

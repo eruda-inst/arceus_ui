@@ -52,7 +52,7 @@ export function RequisicoesRecentesErro() {
                   >
                     <td className="py-2">{log.status_code}</td>
                     <td className="py-2">{log.endpoint}</td>
-                    <td className="py-2">{Math.round(log.duracao)} ms</td>
+                    <td className="py-2">{(log.duracao * 1000).toFixed(0)} ms</td>
                   </tr>
                 )
               )
