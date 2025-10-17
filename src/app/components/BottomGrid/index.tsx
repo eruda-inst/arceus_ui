@@ -5,7 +5,7 @@ interface BottomGridProps {
 }
 
 export function BottomGrid({ children }: BottomGridProps) {
-  return <div className="flex gap-x-6">{children}</div>;
+  return <div className="gap-6 grid grid-cols-2">{children}</div>;
 }
 
 BottomGrid.displayName = "BottomGrid";
