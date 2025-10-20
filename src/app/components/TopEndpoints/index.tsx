@@ -16,7 +16,10 @@ export function TopEndpoints() {
   const { isLoading, isError, data } = useQuery({
     queryKey: ["top_endpoints"],
     queryFn: async function () {
-      return await fetchDados(API_CONFIG.ENDPOINTS.TOP_ENDPOINTS);
+      const params = {
+        limit: 5,
+      };
+      return await fetchDados(API_CONFIG.ENDPOINTS.TOP_ENDPOINTS, params);
     },
   });
 

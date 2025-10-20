@@ -27,10 +27,6 @@ interface RequisicaoPorHora {
   total: number;
 }
 
-interface RequisicoesPorHoraOut {
-  requisicoes_por_hora: RequisicaoPorHora[];
-}
-
 interface DistribuicaoStatusCode {
   statusCode: string;
   total: number;

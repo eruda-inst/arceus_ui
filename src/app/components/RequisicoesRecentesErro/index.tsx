@@ -17,7 +17,13 @@ export function RequisicoesRecentesErro() {
   const { data, isError, isLoading } = useQuery({
     queryKey: ["requisicoes_recentes_erro"],
     queryFn: async function () {
-      return await fetchDados(API_CONFIG.ENDPOINTS.REQUISICOES_RECENTES_ERRO);
+      const params = {
+        limit: 5,
+      };
+      return await fetchDados(
+        API_CONFIG.ENDPOINTS.REQUISICOES_RECENTES_ERRO,
+        params
+      );
     },
   });
 
