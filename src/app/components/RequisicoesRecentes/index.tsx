@@ -5,6 +5,7 @@ import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
+import { converterTempo } from "@/utils/helpers/converter";
 
 interface RequisicoesRecentesLog {
   ip: string;
@@ -65,7 +66,7 @@ export function RequisicoesRecentes() {
                   <td className="py-2">{log.status_code}</td>
                   <td className="py-2">{log.data}</td>
                   <td className="py-2">{log.hora.slice(0, 5)}</td>
-                  <td className="py-2">{Math.round(log.duracao * 100)} ms</td>
+                  <td className="py-2">{converterTempo(log.duracao)}</td>
                 </tr>
               ))
             )}

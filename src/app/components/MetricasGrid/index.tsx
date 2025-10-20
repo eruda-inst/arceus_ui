@@ -14,6 +14,7 @@ import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { fetchDados } from "@/utils/helpers/fetch";
 import { API_CONFIG } from "@/utils/config";
+import { converterTempo } from "@/utils/helpers/converter";
 
 export function MetricasGrid() {
   const metricasQueries = useQueries({
@@ -53,7 +54,7 @@ export function MetricasGrid() {
       ) : metricasQueries[0].isError ? (
         <FetchingMensagemErro />
       ) : (
-        metricasQueries[0].data?.total_requisicoes
+        metricasQueries[0]?.data?.total_requisicoes
       ),
       iconBgColor: "bg-blue-100",
       iconColor: "text-blue-600",
@@ -65,7 +66,7 @@ export function MetricasGrid() {
       ) : metricasQueries[1].isError ? (
         <FetchingMensagemErro />
       ) : (
-        `${Math.round(metricasQueries[1].data?.tempo_medio_resposta)} ms`
+        converterTempo(metricasQueries[1]?.data?.tempo_medio_resposta)
       ),
       iconBgColor: "bg-purple-100",
       iconColor: "text-purple-600",
@@ -77,7 +78,7 @@ export function MetricasGrid() {
       ) : metricasQueries[2].isError ? (
         <FetchingMensagemErro />
       ) : (
-        `${metricasQueries[2].data?.taxa_sucesso?.toFixed(2)}%`
+        `${metricasQueries[2]?.data?.taxa_sucesso?.toFixed(2)}%`
       ),
       iconBgColor: "bg-green-100",
       iconColor: "text-green-600",
@@ -89,7 +90,7 @@ export function MetricasGrid() {
       ) : metricasQueries[3].isError ? (
         <FetchingMensagemErro />
       ) : (
-        `${metricasQueries[3].data?.taxa_erro?.toFixed(2)}%`
+        `${metricasQueries[3]?.data?.taxa_erro?.toFixed(2)}%`
       ),
       iconBgColor: "bg-red-100",
       iconColor: "text-red-600",
