@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import { Card } from "@/app/components/Card";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDados } from "@/utils/helpers/fetch";
+import { Card } from "@/app/components/Card";
+import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
 
 interface RequisicoesRecentesErroLog {
@@ -34,13 +36,13 @@ export function RequisicoesRecentesErro() {
             {isLoading ? (
               <tr>
                 <td colSpan={3}>
-                  <p>Carregando...</p>
+                  <FetchingLoadingMensagem />
                 </td>
               </tr>
             ) : isError ? (
               <tr>
                 <td colSpan={3}>
-                  <p className="text-red-500">Erro ao carregar os dados.</p>
+                  <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
@@ -52,7 +54,9 @@ export function RequisicoesRecentesErro() {
                   >
                     <td className="py-2">{log.status_code}</td>
                     <td className="py-2">{log.endpoint}</td>
-                    <td className="py-2">{(log.duracao * 1000).toFixed(0)} ms</td>
+                    <td className="py-2">
+                      {(log.duracao * 1000).toFixed(0)} ms
+                    </td>
                   </tr>
                 )
               )

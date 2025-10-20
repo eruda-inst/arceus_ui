@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import { Card } from "@/app/components/Card";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDados } from "@/utils/helpers/fetch";
+import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { Card } from "@/app/components/Card";
 import { API_CONFIG } from "@/utils/config";
 
 interface TopEndpointsLog {
@@ -33,14 +35,14 @@ export function TopEndpoints() {
           <tbody>
             {isLoading ? (
               <tr>
-                <td>
-                  <p>Carregando...</p>
+                <td colSpan={3}>
+                  <FetchingLoadingMensagem />
                 </td>
               </tr>
             ) : isError ? (
               <tr>
                 <td colSpan={3}>
-                  <p className="text-red-500">Erro ao carregar</p>
+                  <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (

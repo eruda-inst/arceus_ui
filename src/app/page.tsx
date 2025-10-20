@@ -17,6 +17,8 @@ import { RequisicoesRecentes } from "@/app/components/RequisicoesRecentes";
 import { ChartWrapper } from "@/app/components/ChartWrapper";
 import { LineChartComponent } from "@/app/components/LineChartComponent";
 import { BarChartComponent } from "@/app/components/BarChartComponent";
+import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
 import { fetchDados } from "@/utils/helpers/fetch";
 
@@ -61,7 +63,7 @@ export default function Home() {
   function transformDistribuicaoStatusCode(
     data: DistribuicaoStatusCodeOut
   ): DistribuicaoStatusCodeOut {
-    if (!data.distribuicao_status_code) {
+    if (!data?.distribuicao_status_code) {
       return { distribuicao_status_code: [] };
     }
 
@@ -93,12 +95,12 @@ export default function Home() {
           <ChartWrapper>
             <h3 className="text-left w-full">Requisições por Hora</h3>
             {queries[0].isLoading ? (
-              <p>Carregando...</p>
+              <FetchingLoadingMensagem />
             ) : queries[0].isError ? (
-              <p className="text-red-500">Erro ao carregar</p>
+              <FetchingMensagemErro />
             ) : (
               <LineChartComponent
-                data={queries[0].data.requisicoes_por_hora}
+                data={queries[0]?.data?.requisicoes_por_hora}
                 xKey="hora"
                 yKey="total"
                 lineName="Número de Requisições"
@@ -109,14 +111,14 @@ export default function Home() {
           <ChartWrapper>
             <h3 className="text-left w-full">Distribuição de Status Codes</h3>
             {queries[1].isLoading ? (
-              <p>Carregando...</p>
+              <FetchingLoadingMensagem />
             ) : queries[1].isError ? (
-              <p className="text-red-500">Erro ao carregar</p>
+              <FetchingMensagemErro />
             ) : (
               <BarChartComponent
                 data={
-                  transformDistribuicaoStatusCode(queries[1].data)
-                    .distribuicao_status_code
+                  transformDistribuicaoStatusCode(queries[1]?.data)
+                    ?.distribuicao_status_code
                 }
                 xKey="statusCode"
                 yKey="total"

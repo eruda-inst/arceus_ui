@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa6";
 import { useQueries } from "@tanstack/react-query";
 import { MetricaCard } from "@/app/components/MetricaCard";
+import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { fetchDados } from "@/utils/helpers/fetch";
 import { API_CONFIG } from "@/utils/config";
 
@@ -46,41 +48,49 @@ export function MetricasGrid() {
   const metrics = [
     {
       title: "Total de Requisições",
-      value: metricasQueries[0].isLoading
-        ? "Carregando..."
-        : metricasQueries[0].isError
-        ? 0
-        : metricasQueries[0].data?.total_requisicoes,
+      value: metricasQueries[0].isLoading ? (
+        <FetchingLoadingMensagem />
+      ) : metricasQueries[0].isError ? (
+        <FetchingMensagemErro />
+      ) : (
+        metricasQueries[0].data?.total_requisicoes
+      ),
       iconBgColor: "bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
       title: "T. Médio de Resposta",
-      value: metricasQueries[1].isLoading
-        ? "Carregando..."
-        : metricasQueries[1].isError
-        ? "0ms"
-        : `${Math.round(metricasQueries[1].data?.tempo_medio_resposta)} ms`,
+      value: metricasQueries[1].isLoading ? (
+        <FetchingLoadingMensagem />
+      ) : metricasQueries[1].isError ? (
+        <FetchingMensagemErro />
+      ) : (
+        `${Math.round(metricasQueries[1].data?.tempo_medio_resposta)} ms`
+      ),
       iconBgColor: "bg-purple-100",
       iconColor: "text-purple-600",
     },
     {
       title: "Taxa de Sucesso",
-      value: metricasQueries[2].isLoading
-        ? "Carregando..."
-        : metricasQueries[2].isError
-        ? "0%"
-        : `${metricasQueries[2].data?.taxa_sucesso?.toFixed(2)}%`,
+      value: metricasQueries[2].isLoading ? (
+        <FetchingLoadingMensagem />
+      ) : metricasQueries[2].isError ? (
+        <FetchingMensagemErro />
+      ) : (
+        `${metricasQueries[2].data?.taxa_sucesso?.toFixed(2)}%`
+      ),
       iconBgColor: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
       title: "Taxa de Erro",
-      value: metricasQueries[3].isLoading
-        ? "Carregando..."
-        : metricasQueries[3].isError
-        ? "0%"
-        : `${metricasQueries[3].data?.taxa_erro?.toFixed(2)}%`,
+      value: metricasQueries[3].isLoading ? (
+        <FetchingLoadingMensagem />
+      ) : metricasQueries[3].isError ? (
+        <FetchingMensagemErro />
+      ) : (
+        `${metricasQueries[3].data?.taxa_erro?.toFixed(2)}%`
+      ),
       iconBgColor: "bg-red-100",
       iconColor: "text-red-600",
     },
@@ -98,7 +108,7 @@ export function MetricasGrid() {
           iconBgColor={iconBgColor}
           iconColor={iconColor}
         >
-          {icons[index] && React.createElement(icons[index])}
+          {React.createElement(icons[index])}
         </MetricaCard>
       ))}
     </ul>
