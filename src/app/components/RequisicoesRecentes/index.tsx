@@ -65,7 +65,7 @@ export function RequisicoesRecentes() {
                   <td className="py-2">{log.status_code}</td>
                   <td className="py-2">{log.data}</td>
                   <td className="py-2">{log.hora.slice(0, 5)}</td>
-                  <td className="py-2">{(log.duracao * 1000).toFixed(0)} ms</td>
+                  <td className="py-2">{Math.round(log.duracao * 100)} ms</td>
                 </tr>
               ))
             )}
