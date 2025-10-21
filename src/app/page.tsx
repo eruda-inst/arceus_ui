@@ -78,6 +78,38 @@ export default function Home() {
     return { distribuicao_status_code: transformedData };
   }
 
+  function filterAndProcessHourlyRequests(
+    data: RequisicaoPorHora[] | undefined
+  ) {
+    if (!data) return [];
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const fullDayData: RequisicaoPorHora[] = Array.from(
+      { length: currentHour + 1 },
+      (_, i) => ({
+        hora: `${String(i).padStart(2, "0")}:00`,
+        total: 0,
+      })
+    );
+
+    if (data) {
+      data.forEach((item) => {
+        const itemHour = parseInt(String(item.hora).split(":")[0], 10);
+        if (itemHour <= currentHour) {
+          const index = fullDayData.findIndex(
+            (d) => d.hora === `${String(itemHour).padStart(2, "0")}:00`
+          );
+          if (index !== -1) {
+            fullDayData[index] = { ...item, hora: fullDayData[index].hora };
+          }
+        }
+      });
+    }
+
+    return fullDayData;
+  }
+
   return (
     <>
       <PageHeader />
@@ -100,7 +132,9 @@ export default function Home() {
               <FetchingMensagemErro />
             ) : (
               <LineChartComponent
-                data={queries[0]?.data?.requisicoes_por_hora}
+                data={filterAndProcessHourlyRequests(
+                  queries[0]?.data?.requisicoes_por_hora
+                )}
                 xKey="hora"
                 yKey="total"
                 lineName="Número de Requisições"
