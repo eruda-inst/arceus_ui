@@ -19,6 +19,7 @@ import { LineChartComponent } from "@/app/components/LineChartComponent";
 import { BarChartComponent } from "@/app/components/BarChartComponent";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { MensagemErro } from "@/app/components/MensagemErro";
 import { API_CONFIG } from "@/utils/config";
 import { fetchDados } from "@/utils/helpers/fetch";
 
@@ -59,17 +60,20 @@ export default function Home() {
   function transformDistribuicaoStatusCode(
     data: DistribuicaoStatusCodeOut
   ): DistribuicaoStatusCodeOut {
-    if (!data?.distribuicao_status_code) {
-      return { distribuicao_status_code: [] };
-    }
-
     const codes = [200, 201, 202, 204, 400, 404, 405, 422, 500];
-    const transformedData = Object.values(data.distribuicao_status_code).map(
-      (value, index) => ({
-        statusCode: String(codes[index]),
-        total: Number(value),
-      })
-    );
+
+    const transformedData = data?.distribuicao_status_code
+      ? Object.values(data.distribuicao_status_code)
+          .map(function (value, index) {
+            return {
+              statusCode: String(codes[index]),
+              total: Number(value),
+            };
+          })
+          .filter(function (item) {
+            return item.total > 0;
+          })
+      : [];
 
     return { distribuicao_status_code: transformedData };
   }
@@ -110,6 +114,8 @@ export default function Home() {
               <FetchingLoadingMensagem />
             ) : queries[1].isError ? (
               <FetchingMensagemErro />
+            ) : queries[1]?.data?.distribuicao_status_code?.length === 0 ? (
+              <MensagemErro>Sem dados</MensagemErro>
             ) : (
               <BarChartComponent
                 data={
