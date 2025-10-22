@@ -1,96 +1,119 @@
 "use client";
 
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import {
   FaArrowsRotate,
   FaGaugeHigh,
   FaCheck,
   FaTriangleExclamation,
 } from "react-icons/fa6";
-import { useQueries } from "@tanstack/react-query";
 import { MetricaCard } from "@/app/components/MetricaCard";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { fetchDados } from "@/utils/helpers/fetch";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
+import { useWebSocket } from "@/hooks/useWebSocket";
+
+interface TotalRequisicoes {
+  total_requisicoes: number;
+}
+
+interface TempoMedioResposta {
+  tempo_medio_resposta: number;
+}
+
+interface TaxaSucesso {
+  taxa_sucesso: number;
+}
+
+interface TaxaErro {
+  taxa_erro: number;
+}
 
 export function MetricasGrid() {
-  const metricasQueries = useQueries({
-    queries: [
-      {
-        queryKey: ["total_requisicoes"],
-        queryFn: async function () {
-          return await fetchDados(API_CONFIG.ENDPOINTS.TOTAL_REQUISICOES);
-        },
-      },
-      {
-        queryKey: ["tempo_medio_resposta"],
-        queryFn: async function () {
-          return await fetchDados(API_CONFIG.ENDPOINTS.TEMPO_MEDIO_RESPOSTA);
-        },
-      },
-      {
-        queryKey: ["taxa_sucesso"],
-        queryFn: async function () {
-          return await fetchDados(API_CONFIG.ENDPOINTS.TAXA_SUCESSO);
-        },
-      },
-      {
-        queryKey: ["taxa_erro"],
-        queryFn: async function () {
-          return await fetchDados(API_CONFIG.ENDPOINTS.TAXA_ERRO);
-        },
-      },
-    ],
-  });
+  const {
+    data: totalData,
+    isLoading: isTotalLoading,
+    isError: isTotalError,
+  } = useWebSocket<TotalRequisicoes>(API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES);
+
+  const {
+    data: tempoMedioData,
+    isLoading: isTempoMedioLoading,
+    isError: isTempoMedioError,
+  } = useWebSocket<TempoMedioResposta>(
+    API_CONFIG.WS_ENDPOINTS.TEMPO_MEDIO_RESPOSTA
+  );
+
+  const {
+    data: taxaSucessoData,
+    isLoading: isTaxaSucessoLoading,
+    isError: isTaxaSucessoError,
+  } = useWebSocket<TaxaSucesso>(API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO);
+
+  const {
+    data: taxaErroData,
+    isLoading: isTaxaErroLoading,
+    isError: isTaxaErroError,
+  } = useWebSocket<TaxaErro>(API_CONFIG.WS_ENDPOINTS.TAXA_ERRO);
 
   const metrics = [
     {
-      title: "Total de Requisições",
-      value: metricasQueries[0].isLoading ? (
+      id: "total-requisicoes",
+      title: "Total Requisições",
+      value: isTotalLoading ? (
         <FetchingLoadingMensagem />
-      ) : metricasQueries[0].isError ? (
+      ) : isTotalError ? (
         <FetchingMensagemErro />
+      ) : typeof totalData?.total_requisicoes === "number" ? (
+        totalData.total_requisicoes
       ) : (
-        metricasQueries[0]?.data?.total_requisicoes
+        "N/A"
       ),
       iconBgColor: "bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
+      id: "tempo-medio-resposta",
       title: "T. Médio de Resposta",
-      value: metricasQueries[1].isLoading ? (
+      value: isTempoMedioLoading ? (
         <FetchingLoadingMensagem />
-      ) : metricasQueries[1].isError ? (
+      ) : isTempoMedioError ? (
         <FetchingMensagemErro />
+      ) : typeof tempoMedioData?.tempo_medio_resposta === "number" ? (
+        converterTempo(tempoMedioData.tempo_medio_resposta)
       ) : (
-        converterTempo(metricasQueries[1]?.data?.tempo_medio_resposta)
+        "N/A"
       ),
       iconBgColor: "bg-purple-100",
       iconColor: "text-purple-600",
     },
     {
+      id: "taxa-sucesso",
       title: "Taxa de Sucesso",
-      value: metricasQueries[2].isLoading ? (
+      value: isTaxaSucessoLoading ? (
         <FetchingLoadingMensagem />
-      ) : metricasQueries[2].isError ? (
+      ) : isTaxaSucessoError ? (
         <FetchingMensagemErro />
+      ) : typeof taxaSucessoData?.taxa_sucesso === "number" ? (
+        `${taxaSucessoData.taxa_sucesso.toFixed(2)}%`
       ) : (
-        `${metricasQueries[2]?.data?.taxa_sucesso?.toFixed(2)}%`
+        "N/A"
       ),
       iconBgColor: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
+      id: "taxa-erro",
       title: "Taxa de Erro",
-      value: metricasQueries[3].isLoading ? (
+      value: isTaxaErroLoading ? (
         <FetchingLoadingMensagem />
-      ) : metricasQueries[3].isError ? (
+      ) : isTaxaErroError ? (
         <FetchingMensagemErro />
+      ) : typeof taxaErroData?.taxa_erro === "number" ? (
+        `${taxaErroData.taxa_erro.toFixed(2)}%`
       ) : (
-        `${metricasQueries[3]?.data?.taxa_erro?.toFixed(2)}%`
+        "N/A"
       ),
       iconBgColor: "bg-red-100",
       iconColor: "text-red-600",
@@ -101,11 +124,11 @@ export function MetricasGrid() {
 
   return (
     <ul className="grid grid-cols-4 gap-4">
-      {metrics.map(({ title, value, iconBgColor, iconColor }, index) => (
+      {metrics.map(({ id, title, value, iconBgColor, iconColor }, index) => (
         <MetricaCard
-          key={uuidv4()}
+          key={id}
           title={title}
-          value={value}
+          value={React.isValidElement(value) ? value : String(value)}
           iconBgColor={iconBgColor}
           iconColor={iconColor}
         >

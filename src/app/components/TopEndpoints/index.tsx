@@ -1,10 +1,11 @@
+"use client";
+
 import { v4 as uuidv4 } from "uuid";
-import { useQuery } from "@tanstack/react-query";
-import { fetchDados } from "@/utils/helpers/fetch";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { Card } from "@/app/components/Card";
 import { API_CONFIG } from "@/utils/config";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface TopEndpointsLog {
   http_method: number;
@@ -12,16 +13,16 @@ interface TopEndpointsLog {
   total_acessos: number;
 }
 
+interface TopEndpointsLogOut {
+  top_endpoints: TopEndpointsLog[];
+}
+
 export function TopEndpoints() {
-  const { isLoading, isError, data } = useQuery({
-    queryKey: ["top_endpoints"],
-    queryFn: async function () {
-      const params = {
-        limit: 5,
-      };
-      return await fetchDados(API_CONFIG.ENDPOINTS.TOP_ENDPOINTS, params);
-    },
-  });
+  const {
+    data: wsData,
+    isLoading: wsIsLoading,
+    isError: wsIsError,
+  } = useWebSocket<TopEndpointsLogOut>(API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS);
 
   return (
     <Card>
@@ -36,20 +37,20 @@ export function TopEndpoints() {
             </tr>
           </thead>
           <tbody>
-            {isLoading ? (
+            {wsIsLoading ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingLoadingMensagem />
                 </td>
               </tr>
-            ) : isError ? (
+            ) : wsIsError ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
-              data?.top_endpoints?.map((log: TopEndpointsLog) => (
+              wsData?.top_endpoints?.map((log: TopEndpointsLog) => (
                 <tr
                   key={uuidv4()}
                   className="text-sm border-b border-[var(--border-light)] dark:border-[var(--border-dark)]"

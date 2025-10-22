@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { HTMLAttributes, ReactNode } from "react";
 import { ClassNameValue, twMerge } from "tailwind-merge";
-import { hoverAnimation } from "@/utils/animations/hover";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -15,7 +14,8 @@ export function Card({ children, className }: CardProps) {
 
   return (
     <motion.div
-      {...hoverAnimation}
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", duration: 0.2 }}
       className={twMerge(defaultStyle, className as ClassNameValue)}
     >
       {children}

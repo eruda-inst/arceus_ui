@@ -1,4 +1,3 @@
-// hooks/usePrefersColorScheme.ts
 "use client";
 
 import { useState, useEffect } from "react";

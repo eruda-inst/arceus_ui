@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: larissa-dashboard-frontend
+    container_name: aggregator-interface-dashboard
+    env_file:
+      - .env
     ports:
       - "3000:3000"

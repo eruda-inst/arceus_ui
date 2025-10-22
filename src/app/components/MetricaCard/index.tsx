@@ -3,7 +3,7 @@ import { Card } from "@/app/components/Card";
 
 interface MetricaCardProps {
   title: string;
-  value: string;
+  value: string | ReactNode;
   children?: ReactNode;
   iconBgColor?: string;
   iconColor?: string;

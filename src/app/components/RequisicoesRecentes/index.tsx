@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { useQuery } from "@tanstack/react-query";
-import { fetchDados } from "@/utils/helpers/fetch";
 import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface RequisicoesRecentesLog {
   ip: string;
@@ -17,19 +16,18 @@ interface RequisicoesRecentesLog {
   duracao: number;
 }
 
+interface RequisicoesRecentesOut {
+  requisicoes_recentes: RequisicoesRecentesLog[];
+}
+
 export function RequisicoesRecentes() {
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["requisicoes_recentes"],
-    queryFn: async function () {
-      const params = {
-        limit: 5,
-      };
-      return await fetchDados(
-        API_CONFIG.ENDPOINTS.REQUISICOES_RECENTES,
-        params
-      );
-    },
-  });
+  const {
+    data: wsData,
+    isError: wsIsError,
+    isLoading: wsIsLoading,
+  } = useWebSocket<RequisicoesRecentesOut>(
+    API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES
+  );
 
   return (
     <Card>
@@ -48,33 +46,35 @@ export function RequisicoesRecentes() {
             </tr>
           </thead>
           <tbody>
-            {isLoading ? (
+            {wsIsLoading ? (
               <tr>
                 <td colSpan={6}>
                   <FetchingLoadingMensagem />
                 </td>
               </tr>
-            ) : isError ? (
+            ) : wsIsError ? (
               <tr>
                 <td colSpan={6}>
                   <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
-              data?.requisicoes_recentes?.map((log: RequisicoesRecentesLog) => (
-                <tr
-                  key={uuidv4()}
-                  className="text-sm border-b border-[var(--border-light)] dark:border-[var(--border-dark)]"
-                >
-                  <td className="py-2">{log.ip}</td>
-                  <td className="py-2">{log.http_method}</td>
-                  <td className="py-2">{log.endpoint}</td>
-                  <td className="py-2">{log.status_code}</td>
-                  <td className="py-2">{log.data}</td>
-                  <td className="py-2">{log.hora.slice(0, 5)}</td>
-                  <td className="py-2">{converterTempo(log.duracao)}</td>
-                </tr>
-              ))
+              wsData?.requisicoes_recentes?.map(
+                (log: RequisicoesRecentesLog) => (
+                  <tr
+                    key={uuidv4()}
+                    className="text-sm border-b border-[var(--border-light)] dark:border-[var(--border-dark)]"
+                  >
+                    <td className="py-2">{log.ip}</td>
+                    <td className="py-2">{log.http_method}</td>
+                    <td className="py-2">{log.endpoint}</td>
+                    <td className="py-2">{log.status_code}</td>
+                    <td className="py-2">{log.data}</td>
+                    <td className="py-2">{log.hora.slice(0, 5)}</td>
+                    <td className="py-2">{converterTempo(log.duracao)}</td>
+                  </tr>
+                )
+              )
             )}
           </tbody>
         </table>

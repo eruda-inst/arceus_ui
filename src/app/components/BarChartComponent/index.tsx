@@ -70,6 +70,7 @@ export function BarChartComponent<T = any>({
             name={barName}
             barSize={barSize}
             fill={fill}
+            isAnimationActive={false}
             activeBar={{ fill: "#faad60" }}
           />
         </BarChart>

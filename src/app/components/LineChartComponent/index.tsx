@@ -65,6 +65,7 @@ export function LineChartComponent<T = any>({
             name={lineName}
             strokeWidth={2}
             dot={showDots}
+            isAnimationActive={false}
             stroke={stroke}
             activeDot={{
               fill: "#d3346e",

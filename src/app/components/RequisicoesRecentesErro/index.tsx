@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { useQuery } from "@tanstack/react-query";
-import { fetchDados } from "@/utils/helpers/fetch";
 import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface RequisicoesRecentesErroLog {
   status_code: number;
@@ -13,19 +12,18 @@ interface RequisicoesRecentesErroLog {
   duracao: number;
 }
 
+interface RequisicoesRecentesErroOut {
+  requisicoes_recentes_erro: RequisicoesRecentesErroLog[];
+}
+
 export function RequisicoesRecentesErro() {
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["requisicoes_recentes_erro"],
-    queryFn: async function () {
-      const params = {
-        limit: 5,
-      };
-      return await fetchDados(
-        API_CONFIG.ENDPOINTS.REQUISICOES_RECENTES_ERRO,
-        params
-      );
-    },
-  });
+  const {
+    data: wsData,
+    isError: wsIsError,
+    isLoading: wsIsLoading,
+  } = useWebSocket<RequisicoesRecentesErroOut>(
+    API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO
+  );
 
   return (
     <Card>
@@ -40,20 +38,20 @@ export function RequisicoesRecentesErro() {
             </tr>
           </thead>
           <tbody>
-            {isLoading ? (
+            {wsIsLoading ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingLoadingMensagem />
                 </td>
               </tr>
-            ) : isError ? (
+            ) : wsIsError ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
-              data?.requisicoes_recentes_erro?.map(
+              wsData?.requisicoes_recentes_erro?.map(
                 (log: RequisicoesRecentesErroLog) => (
                   <tr
                     key={uuidv4()}
