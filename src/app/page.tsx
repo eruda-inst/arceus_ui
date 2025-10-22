@@ -64,10 +64,7 @@ export default function Home() {
   function transformDistribuicaoStatusCode(
     data: DistribuicaoStatusCodeOut | null | undefined
   ): DistribuicaoStatusCodeTransformed[] {
-    console.log("Dados recebidos para transformação:", data);
-
     if (!data || !data.distribuicao_status_code) {
-      console.log("Dados ausentes ou inválidos");
       return [];
     }
 

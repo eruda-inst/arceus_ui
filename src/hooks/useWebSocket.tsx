@@ -27,7 +27,6 @@ export function useWebSocket<T>(
       setIsConnected(true);
       setError(null);
       setIsError(false);
-      console.log(`WebSocket connected: ${wsPath}`);
 
       if (initialMessage && ws.readyState === WebSocket.OPEN) {
         const message =
@@ -64,11 +63,6 @@ export function useWebSocket<T>(
 
     ws.onclose = (event) => {
       setIsConnected(false);
-      console.log(
-        `WebSocket disconnected: ${wsPath}`,
-        event.code,
-        event.reason
-      );
 
       setTimeout(() => {
         setError("Tentando reconectar...");
