@@ -35,47 +35,42 @@ export function BarChartComponent<T = any>({
   yAxisFormatter,
 }: BarChartProps<T>) {
   return (
-    <div style={{ width: "100%", height }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={data}
-          margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={String(xKey)} tick={{ fontSize: 12 }} />
-          <YAxis tickFormatter={yAxisFormatter as any} />
-          <Tooltip
-            contentStyle={{
-              backgroundColor:
-                usePrefersColorScheme() === "dark"
-                  ? "var(--bg-dark)"
-                  : "var(--bg-light)",
-              borderColor:
-                usePrefersColorScheme() === "dark"
-                  ? "var(--border-dark)"
-                  : "var(--border-light)",
-              borderRadius: "8px",
-              padding: "16px",
-            }}
-            cursor={{
-              fill:
-                usePrefersColorScheme() === "dark"
-                  ? "rgba(255, 255, 255, 0.1)"
-                  : "rgba(25, 25, 25, 0.1)",
-            }}
-          />
-          <Legend />
-          <Bar
-            dataKey={String(yKey)}
-            name={barName}
-            barSize={barSize}
-            fill={fill}
-            isAnimationActive={false}
-            activeBar={{ fill: "#faad60" }}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey={String(xKey)} tick={{ fontSize: 12 }} />
+        <YAxis tickFormatter={yAxisFormatter as any} />
+        <Tooltip
+          contentStyle={{
+            backgroundColor:
+              usePrefersColorScheme() === "dark"
+                ? "var(--bg-dark)"
+                : "var(--bg-light)",
+            borderColor:
+              usePrefersColorScheme() === "dark"
+                ? "var(--border-dark)"
+                : "var(--border-light)",
+            borderRadius: "8px",
+            padding: "16px",
+          }}
+          cursor={{
+            fill:
+              usePrefersColorScheme() === "dark"
+                ? "rgba(255, 255, 255, 0.1)"
+                : "rgba(25, 25, 25, 0.1)",
+          }}
+        />
+        <Legend />
+        <Bar
+          dataKey={String(yKey)}
+          name={barName}
+          barSize={barSize}
+          fill={fill}
+          isAnimationActive={false}
+          activeBar={{ fill: "#faad60" }}
+        />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
 

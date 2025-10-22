@@ -35,46 +35,44 @@ export function LineChartComponent<T = any>({
   yAxisFormatter,
 }: LineChartProps<T>) {
   return (
-    <div style={{ width: "100%", height }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={data}
-          margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={String(xKey)} />
-          <YAxis tickFormatter={yAxisFormatter as any} />
-          <Tooltip
-            contentStyle={{
-              backgroundColor:
-                usePrefersColorScheme() === "dark"
-                  ? "var(--bg-dark)"
-                  : "var(--bg-light)",
-              borderColor:
-                usePrefersColorScheme() === "dark"
-                  ? "var(--border-dark)"
-                  : "var(--border-light)",
-              borderRadius: "8px",
-              padding: "16px",
-            }}
-          />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey={String(yKey)}
-            name={lineName}
-            strokeWidth={2}
-            dot={showDots}
-            isAnimationActive={false}
-            stroke={stroke}
-            activeDot={{
-              fill: "#d3346e",
-              stroke: "#d3346e",
-            }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={height}>
+      <LineChart
+        data={data}
+        margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey={String(xKey)} />
+        <YAxis tickFormatter={yAxisFormatter as any} />
+        <Tooltip
+          contentStyle={{
+            backgroundColor:
+              usePrefersColorScheme() === "dark"
+                ? "var(--bg-dark)"
+                : "var(--bg-light)",
+            borderColor:
+              usePrefersColorScheme() === "dark"
+                ? "var(--border-dark)"
+                : "var(--border-light)",
+            borderRadius: "8px",
+            padding: "16px",
+          }}
+        />
+        <Legend />
+        <Line
+          type="monotone"
+          dataKey={String(yKey)}
+          name={lineName}
+          strokeWidth={2}
+          dot={showDots}
+          isAnimationActive={false}
+          stroke={stroke}
+          activeDot={{
+            fill: "#d3346e",
+            stroke: "#d3346e",
+          }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 
