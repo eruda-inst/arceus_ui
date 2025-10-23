@@ -1,5 +1,3 @@
-"use client";
-
 import { v4 as uuidv4 } from "uuid";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
@@ -18,11 +16,9 @@ interface TopEndpointsLogOut {
 }
 
 export function TopEndpoints() {
-  const {
-    data: wsData,
-    isLoading: wsIsLoading,
-    isError: wsIsError,
-  } = useWebSocket<TopEndpointsLogOut>(API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS);
+  const { data, isLoading, isError } = useWebSocket<TopEndpointsLogOut>(
+    API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS
+  );
 
   return (
     <Card>
@@ -30,30 +26,30 @@ export function TopEndpoints() {
       <div className="mt-4">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-xs font-medium text-gray-500 border-b border-[var(--border-light)] dark:border-[var(--border-dark)]">
+            <tr className="text-xs font-medium text-gray-500 border-b border-(--border-light) dark:border-(--border-dark)">
               <th className="py-2">Verbo</th>
               <th className="py-2">Endpoint</th>
               <th className="py-2">Total</th>
             </tr>
           </thead>
           <tbody>
-            {wsIsLoading ? (
+            {isLoading ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingLoadingMensagem />
                 </td>
               </tr>
-            ) : wsIsError ? (
+            ) : isError ? (
               <tr>
                 <td colSpan={3}>
                   <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
-              wsData?.top_endpoints?.map((log: TopEndpointsLog) => (
+              data?.top_endpoints?.map((log: TopEndpointsLog) => (
                 <tr
                   key={uuidv4()}
-                  className="text-sm border-b border-[var(--border-light)] dark:border-[var(--border-dark)]"
+                  className="text-sm border-b border-(--border-light) dark:border-(--border-dark)"
                 >
                   <td className="py-2">{log.http_method}</td>
                   <td className="py-2">{log.endpoint}</td>

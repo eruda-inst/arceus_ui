@@ -21,11 +21,7 @@ interface RequisicoesRecentesOut {
 }
 
 export function RequisicoesRecentes() {
-  const {
-    data: wsData,
-    isError: wsIsError,
-    isLoading: wsIsLoading,
-  } = useWebSocket<RequisicoesRecentesOut>(
+  const { data, isError, isLoading } = useWebSocket<RequisicoesRecentesOut>(
     API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES
   );
 
@@ -35,7 +31,7 @@ export function RequisicoesRecentes() {
       <div className="mt-4 overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-xs font-medium text-gray-500 border-b border-[var(--border-light)] dark:border-[var(--border-dark)]">
+            <tr className="text-xs font-medium text-gray-500 border-b border-(--border-light) dark:border-(--border-dark)">
               <th className="py-2">IP</th>
               <th className="py-2">Verbo</th>
               <th className="py-2">Endpoint</th>
@@ -46,35 +42,33 @@ export function RequisicoesRecentes() {
             </tr>
           </thead>
           <tbody>
-            {wsIsLoading ? (
+            {isLoading ? (
               <tr>
                 <td colSpan={6}>
                   <FetchingLoadingMensagem />
                 </td>
               </tr>
-            ) : wsIsError ? (
+            ) : isError ? (
               <tr>
                 <td colSpan={6}>
                   <FetchingMensagemErro />
                 </td>
               </tr>
             ) : (
-              wsData?.requisicoes_recentes?.map(
-                (log: RequisicoesRecentesLog) => (
-                  <tr
-                    key={uuidv4()}
-                    className="text-sm border-b border-[var(--border-light)] dark:border-[var(--border-dark)]"
-                  >
-                    <td className="py-2">{log.ip}</td>
-                    <td className="py-2">{log.http_method}</td>
-                    <td className="py-2">{log.endpoint}</td>
-                    <td className="py-2">{log.status_code}</td>
-                    <td className="py-2">{log.data}</td>
-                    <td className="py-2">{log.hora.slice(0, 5)}</td>
-                    <td className="py-2">{converterTempo(log.duracao)}</td>
-                  </tr>
-                )
-              )
+              data?.requisicoes_recentes?.map((log: RequisicoesRecentesLog) => (
+                <tr
+                  key={uuidv4()}
+                  className="text-sm border-b border-(--border-light) dark:border-(--border-dark)"
+                >
+                  <td className="py-2">{log.ip}</td>
+                  <td className="py-2">{log.http_method}</td>
+                  <td className="py-2">{log.endpoint}</td>
+                  <td className="py-2">{log.status_code}</td>
+                  <td className="py-2">{log.data}</td>
+                  <td className="py-2">{log.hora.slice(0, 5)}</td>
+                  <td className="py-2">{converterTempo(log.duracao)}</td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Card } from "@/app/components/Card";
 
-interface MetricaCardProps {
+interface MetricCardProps {
   title: string;
   value: string | ReactNode;
   children?: ReactNode;
@@ -9,13 +9,13 @@ interface MetricaCardProps {
   iconColor?: string;
 }
 
-export function MetricaCard({
+export function MetricCard({
   title,
   value,
   children,
   iconBgColor = "bg-blue-100",
   iconColor = "text-blue-600",
-}: MetricaCardProps) {
+}: MetricCardProps) {
   return (
     <Card className="flex-row h-24 items-center">
       <dl className="h-full flex flex-col justify-between w-full">
@@ -31,4 +31,4 @@ export function MetricaCard({
   );
 }
 
-MetricaCard.displayName = "MetricaCard";
+MetricCard.displayName = "MetricCard";

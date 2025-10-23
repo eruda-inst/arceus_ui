@@ -1,0 +1,78 @@
+import { Card } from "@/app/components/Card";
+import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { LineChartComponent } from "@/app/components/LineChartComponent";
+import { useWebSocket } from "@/hooks/useWebSocket";
+import { API_CONFIG } from "@/utils/config";
+
+interface RequisicaoPorHora {
+  hora: string;
+  total: number;
+}
+
+interface RequisicoesPorHoraOut {
+  requisicoes_por_hora: RequisicaoPorHora[];
+}
+
+export function RequisicoesPorHora() {
+  const {
+    data: reqPorHoraData,
+    isLoading: reqPorHoraIsLoading,
+    isError: reqPorHoraIsError,
+  } = useWebSocket<RequisicoesPorHoraOut>(
+    API_CONFIG.WS_ENDPOINTS.REQUISICOES_POR_HORA
+  );
+
+  function filterAndProcessHourlyRequests(
+    data: RequisicaoPorHora[] | undefined
+  ) {
+    if (!data) return [];
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const fullDayData: RequisicaoPorHora[] = Array.from(
+      { length: currentHour + 1 },
+      (_, i) => ({
+        hora: `${String(i).padStart(2, "0")}:00`,
+        total: 0,
+      })
+    );
+
+    data.forEach((item) => {
+      const itemHour = parseInt(String(item.hora).split(":")[0], 10);
+      if (itemHour <= currentHour) {
+        const index = fullDayData.findIndex(
+          (d) => d.hora === `${String(itemHour).padStart(2, "0")}:00`
+        );
+        if (index !== -1) {
+          fullDayData[index] = { ...item, hora: fullDayData[index].hora };
+        }
+      }
+    });
+
+    return fullDayData;
+  }
+
+  return (
+    <Card>
+      <h3 className="text-left w-full">Requisições por Hora</h3>
+      {reqPorHoraIsLoading ? (
+        <FetchingLoadingMensagem />
+      ) : reqPorHoraIsError ? (
+        <FetchingMensagemErro />
+      ) : (
+        <LineChartComponent
+          data={filterAndProcessHourlyRequests(
+            reqPorHoraData?.requisicoes_por_hora
+          )}
+          xKey="hora"
+          yKey="total"
+          lineName="Número de Requisições"
+          showDots={true}
+        />
+      )}
+    </Card>
+  );
+}
+
+RequisicoesPorHora.displayName = "RequisicoesPorHora";

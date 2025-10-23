@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 
 type ColorScheme = "dark" | "light";
