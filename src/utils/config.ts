@@ -16,6 +16,7 @@ const API_CONFIG = {
     TOP_ENDPOINTS: "/api/v1/ws/info/top_endpoints",
     REQUISICOES_RECENTES: "/api/v1/ws/info/requisicoes_recentes",
     REQUISICOES_RECENTES_ERRO: "/api/v1/ws/info/requisicoes_recentes_erro",
+    LOGS: "/api/v1/ws/info/logs",
   },
 };
 

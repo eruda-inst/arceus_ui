@@ -6,6 +6,7 @@ export function useWebSocket<T>(
   options?: {
     initialMessage?: any;
     autoAck?: boolean;
+    onMessage?: (data: T) => void;
   }
 ) {
   const [data, setData] = useState<T | null>(null);
@@ -15,10 +16,15 @@ export function useWebSocket<T>(
   const [isError, setIsError] = useState(false);
 
   const wsRef = useRef<WebSocket | null>(null);
-  const { initialMessage, autoAck = true } = options || {};
+  const { initialMessage, autoAck = true, onMessage } = options || {};
 
   useEffect(() => {
-    const ws = new WebSocket(`${API_CONFIG.BASE_URL}${wsPath}`);
+    // Substituir http por ws para WebSocket
+    const wsUrl = `${API_CONFIG.BASE_URL}${wsPath}`
+      .replace("http://", "ws://")
+      .replace("https://", "wss://");
+
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -41,6 +47,10 @@ export function useWebSocket<T>(
         setData(message);
         setIsLoading(false);
 
+        if (onMessage) {
+          onMessage(message);
+        }
+
         if (autoAck && ws.readyState === WebSocket.OPEN) {
           ws.send("ack");
         }
@@ -62,6 +72,7 @@ export function useWebSocket<T>(
     ws.onclose = (event) => {
       setIsConnected(false);
 
+      // Tentar reconectar após 3 segundos
       setTimeout(() => {
         setError("Tentando reconectar...");
       }, 3000);
@@ -72,7 +83,7 @@ export function useWebSocket<T>(
         ws.close();
       }
     };
-  }, [wsPath, initialMessage, autoAck]);
+  }, [wsPath, initialMessage, autoAck, onMessage]);
 
   const sendMessage = (message: any) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
