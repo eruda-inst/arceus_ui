@@ -23,7 +23,7 @@ export function TempoMedioResposta() {
     ) : isError ? (
       <FetchingMensagemErro />
     ) : typeof data?.tempo_medio_resposta === "number" ? (
-      converterTempo(data.tempo_medio_resposta)
+      converterTempo(data.tempo_medio_resposta).replace(".", ",")
     ) : (
       "N/A"
     ),

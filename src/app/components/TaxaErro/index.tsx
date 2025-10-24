@@ -23,7 +23,7 @@ export function TaxaErro() {
     ) : isError ? (
       <FetchingMensagemErro />
     ) : typeof data?.taxa_erro === "number" ? (
-      `${data.taxa_erro.toFixed(2)}%`
+      `${String(data.taxa_erro.toFixed(2)).replace(".", ",")}%`
     ) : (
       "N/A"
     ),

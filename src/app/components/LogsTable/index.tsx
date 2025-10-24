@@ -1,3 +1,4 @@
+import { formatarData } from "@/utils/helpers/formatar";
 import { converterTempo } from "@/utils/helpers/converter";
 
 interface Log {
@@ -101,7 +102,7 @@ export function LogsTable({ logs }: LogsTableProps) {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {new Date(log.data).toLocaleDateString("pt-BR")}
+                  {formatarData(log.data)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   {log.hora.slice(0, 5)}

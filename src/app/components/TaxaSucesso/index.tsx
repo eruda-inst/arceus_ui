@@ -23,7 +23,7 @@ export function TaxaSucesso() {
     ) : isError ? (
       <FetchingMensagemErro />
     ) : typeof data?.taxa_sucesso === "number" ? (
-      `${data.taxa_sucesso.toFixed(2)}%`
+      `${String(data.taxa_sucesso.toFixed(2)).replace(".", ",")}%`
     ) : (
       "N/A"
     ),

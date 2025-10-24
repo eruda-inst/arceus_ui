@@ -20,7 +20,7 @@ export function TotalRequisicoes() {
 
   const totalRequisicoes = {
     id: "total-requisicoes",
-    title: "Total Requisições",
+    title: "Total de Requisições",
     value: isTotalLoading ? (
       <FetchingLoadingMensagem />
     ) : isTotalError ? (

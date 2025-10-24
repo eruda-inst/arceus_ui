@@ -3,6 +3,7 @@ import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { API_CONFIG } from "@/utils/config";
+import { formatarData } from "@/utils/helpers/formatar";
 import { converterTempo } from "@/utils/helpers/converter";
 import { useWebSocket } from "@/hooks/useWebSocket";
 
@@ -64,7 +65,7 @@ export function RequisicoesRecentes() {
                   <td className="py-2">{log.http_method}</td>
                   <td className="py-2">{log.endpoint}</td>
                   <td className="py-2">{log.status_code}</td>
-                  <td className="py-2">{log.data}</td>
+                  <td className="py-2">{formatarData(log.data)}</td>
                   <td className="py-2">{log.hora.slice(0, 5)}</td>
                   <td className="py-2">{converterTempo(log.duracao)}</td>
                 </tr>
