@@ -31,7 +31,7 @@ export function RequisicoesRecentes() {
       <div className="mt-4 overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-xs font-medium text-gray-500 border-b border-(--border-light) dark:border-(--border-dark)">
+            <tr className="text-xs font-medium text-gray-500 border-b border-border-light dark:border-border-dark">
               <th className="py-2">IP</th>
               <th className="py-2">Verbo</th>
               <th className="py-2">Endpoint</th>
@@ -58,7 +58,7 @@ export function RequisicoesRecentes() {
               data?.requisicoes_recentes?.map((log: RequisicoesRecentesLog) => (
                 <tr
                   key={uuidv4()}
-                  className="text-sm border-b border-(--border-light) dark:border-(--border-dark)"
+                  className="text-sm border-b border-border-light dark:border-border-dark"
                 >
                   <td className="py-2">{log.ip}</td>
                   <td className="py-2">{log.http_method}</td>

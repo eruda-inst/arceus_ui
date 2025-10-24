@@ -42,9 +42,9 @@ export function LogsTable({ logs }: LogsTableProps) {
   };
 
   return (
-    <div className="bg-(--bg-light) dark:bg-(--bg-dark) rounded-lg shadow overflow-hidden border border-(--border-light) dark:border-(--border-dark)">
+    <div className="bg-bg-light dark:bg-bg-dark rounded-lg shadow overflow-hidden border border-border-light dark:border-border-dark">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-(--border-light) dark:divide-(--border-dark)">
+        <table className="min-w-full divide-y divide-border-light dark:divide-border-dark">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -70,7 +70,7 @@ export function LogsTable({ logs }: LogsTableProps) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-(--border-light) dark:divide-(--border-dark)">
+          <tbody className="divide-y divide-border-light dark:divide-border-dark">
             {logs.map((log) => (
               <tr
                 key={log.id}

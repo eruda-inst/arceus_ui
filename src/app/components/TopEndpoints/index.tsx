@@ -49,7 +49,7 @@ export function TopEndpoints() {
               data?.top_endpoints?.map((log: TopEndpointsLog) => (
                 <tr
                   key={uuidv4()}
-                  className="text-sm border-b border-(--border-light) dark:border-(--border-dark)"
+                  className="text-sm border-b border-border-light dark:border-border-dark"
                 >
                   <td className="py-2">{log.http_method}</td>
                   <td className="py-2">{log.endpoint}</td>

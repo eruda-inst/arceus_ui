@@ -8,7 +8,7 @@ interface CardProps extends HTMLAttributes<HTMLLIElement> {
 
 export function Card({ children, className }: CardProps) {
   const defaultStyle =
-    "bg-[var(--bg-light)] rounded-lg shadow-md p-4 flex flex-col gap-y-2 border border-[var(--border-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-dark)]";
+    "bg-bg-light rounded-lg shadow-md p-4 flex flex-col gap-y-2 border border-border-light dark:border-border-dark dark:bg-bg-dark";
 
   return (
     <motion.li

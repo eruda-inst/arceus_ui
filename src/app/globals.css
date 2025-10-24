@@ -1,30 +1,25 @@
 @import "tailwindcss";
 
-:root {
-  /* Colors */
-  --body-bg-light: var(--color-gray-50);
-  --body-bg-dark: var(--color-gray-950);
-  --body-fg-light: var(--color-slate-800);
-  --body-fg-dark: var(--color-slate-200);
-
-  --bg-light: var(--color-white);
-  --bg-dark: var(--color-gray-900);
-  --border-light: var(--color-gray-200);
-  --border-dark: var(--color-gray-700);
-
-  /* Others */
-  --page-header-height: 61px;
-  --sidebar-width: calc(var(--spacing) * 64); /* w-64 */
-}
-
-body {
-  background-color: var(--body-bg-light);
-  color: var(--body-fg-light);
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: var(--body-bg-dark);
-    color: var(--body-fg-dark);
+@layer base {
+  :root {
+    /* Color */
+    --bg-light: var(--color-white);
+    --bg-dark: var(--color-gray-900);
+    --border-light: var(--color-gray-200);
+    --border-dark: var(--color-gray-700);
+    /* Spacing */
+    --sidebar-width: calc(var(--spacing) * 64);
+    --page-header-height: calc(var(--spacing) * 16);
   }
+}
+
+@theme {
+  /* Color */
+  --color-bg-light: var(--bg-light);
+  --color-bg-dark: var(--bg-dark);
+  --color-border-light: var(--border-light);
+  --color-border-dark: var(--border-dark);
+  /* Spacing */
+  --spacing-sidebar-width: var(--sidebar-width);
+  --spacing-page-header-height: var(--page-header-height);
 }

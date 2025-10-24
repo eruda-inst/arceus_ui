@@ -4,7 +4,7 @@ interface LoadingStateProps {
 
 export function LoadingState({ isConnected }: LoadingStateProps) {
   return (
-    <div className="p-6 bg-(--bg-light) dark:bg-(--bg-dark) border border-[var(--border-light)] dark:border-[var(--border-dark)] rounded-lg shadow">
+    <div className="p-6 bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark rounded-lg shadow">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Logs do Sistema</h1>
         <div className="flex items-center space-x-4">

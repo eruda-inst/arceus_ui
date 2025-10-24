@@ -27,7 +27,7 @@ export function RequisicoesRecentesErro() {
       <div className="mt-4">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-xs font-medium text-gray-500 border-b border-(--border-light) dark:border-(--border-dark)">
+            <tr className="text-xs font-medium text-gray-500 border-b border-border-light dark:border-border-dark">
               <th className="py-2">Status</th>
               <th className="py-2">Endpoint</th>
               <th className="py-2">Duração</th>
@@ -51,7 +51,7 @@ export function RequisicoesRecentesErro() {
                 (log: RequisicoesRecentesErroLog) => (
                   <tr
                     key={uuidv4()}
-                    className="text-sm border-b border-(--border-light) dark:border-(--border-dark)"
+                    className="text-sm border-b border-border-light dark:border-border-dark"
                   >
                     <td className="py-2">{log.status_code}</td>
                     <td className="py-2">{log.endpoint}</td>

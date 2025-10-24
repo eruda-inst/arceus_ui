@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} antialiased bg-(--body-bg-light) text-(--body-fg-light) dark:bg-(--body-bg-dark) dark:text-(--body-fg-dark)`}
+        className={`${inter.className} antialiased bg-gray-50 text-slate-800 dark:bg-gray-950 dark:text-slate-200`}
       >
         <PageHeader />
         <PageSidebar>
