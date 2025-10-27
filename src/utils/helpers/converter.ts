@@ -3,7 +3,7 @@ function converterTempo(milissegundos: number): string {
     return `${milissegundos} ms`;
   } else {
     // Converte para segundos
-    const segundos = milissegundos / 1000;
+    const segundos = (milissegundos / 1000).toFixed(3);
     return `${segundos} s`.replace(".", ",");
   }
 }
