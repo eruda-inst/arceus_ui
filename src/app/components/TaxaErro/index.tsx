@@ -35,13 +35,14 @@ export function TaxaErro() {
     <MetricCard
       key={taxaErro.id}
       title={taxaErro.title}
-      value={
+      valueGeral={
         isValidElement(taxaErro.value) ? taxaErro.value : String(taxaErro.value)
       }
+      valueHoje={"0,00%"}
       iconBgColor={taxaErro.iconBgColor}
       iconColor={taxaErro.iconColor}
     >
-      <FaTriangleExclamation />
+      <FaTriangleExclamation width={16} />
     </MetricCard>
   );
 }

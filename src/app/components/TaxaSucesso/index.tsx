@@ -35,15 +35,16 @@ export function TaxaSucesso() {
     <MetricCard
       key={taxaSucesso.id}
       title={taxaSucesso.title}
-      value={
+      valueGeral={
         isValidElement(taxaSucesso.value)
           ? taxaSucesso.value
           : String(taxaSucesso.value)
       }
+      valueHoje="100,00%"
       iconBgColor={taxaSucesso.iconBgColor}
       iconColor={taxaSucesso.iconColor}
     >
-      <FaCheck />
+      <FaCheck width={16} />
     </MetricCard>
   );
 }

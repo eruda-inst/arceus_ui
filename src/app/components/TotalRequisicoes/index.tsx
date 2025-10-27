@@ -37,11 +37,12 @@ export function TotalRequisicoes() {
   return (
     <MetricCard
       title={totalRequisicoes.title}
-      value={totalRequisicoes.value}
+      valueGeral={totalRequisicoes.value}
+      valueHoje={35}
       iconBgColor={totalRequisicoes.iconBgColor}
       iconColor={totalRequisicoes.iconColor}
     >
-      <FaArrowsRotate />
+      <FaArrowsRotate width={16} />
     </MetricCard>
   );
 }

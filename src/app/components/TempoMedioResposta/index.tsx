@@ -17,7 +17,7 @@ export function TempoMedioResposta() {
 
   const tempoMedioResposta = {
     id: "tempo-medio-resposta",
-    title: "T. Médio de Resposta",
+    title: "Tempo Médio de Resposta",
     value: isLoading ? (
       <FetchingLoadingMensagem />
     ) : isError ? (
@@ -34,11 +34,12 @@ export function TempoMedioResposta() {
   return (
     <MetricCard
       title={tempoMedioResposta.title}
-      value={tempoMedioResposta.value}
+      valueGeral={tempoMedioResposta.value}
+      valueHoje={"1,234 s"}
       iconBgColor={tempoMedioResposta.iconBgColor}
       iconColor={tempoMedioResposta.iconColor}
     >
-      <FaGaugeHigh />
+      <FaGaugeHigh width={16} />
     </MetricCard>
   );
 }
