@@ -54,7 +54,9 @@ export function DistribuicaoStatusCode() {
   const distribuicaoTransformada = transformDistribuicaoStatusCode(data);
   return (
     <Card>
-      <h3 className="text-left w-full">Distribuição de Status Codes</h3>
+      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+        Distribuição de Status Codes
+      </h3>
       {isLoading ? (
         <Mensagem>Carregando...</Mensagem>
       ) : isError ? (

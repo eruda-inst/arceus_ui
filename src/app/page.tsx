@@ -26,8 +26,8 @@ export default function Home() {
       </Grid>
       <Grid>
         <TopEndpoints />
-        <RequisicoesRecentesErro />
       </Grid>
+      <RequisicoesRecentesErro />
       <RequisicoesRecentes />
     </>
   );

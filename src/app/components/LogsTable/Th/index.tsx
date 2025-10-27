@@ -7,7 +7,7 @@ interface ThProps extends HTMLAttributes<HTMLSpanElement> {
 
 export function Th({ children, className = "" }: ThProps) {
   const baseStyle =
-    "px-6 py-3 text-left text-xs font-medium uppercase tracking-wider";
+    "px-6 py-3 text-left text-white text-xs font-medium uppercase tracking-wider";
 
   return (
     <th className={twMerge(baseStyle, className as ClassNameValue)}>

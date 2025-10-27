@@ -1,20 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
-import { Card } from "@/app/components/Card";
+import { Log } from "@/app/components/Log";
 import { Mensagem } from "@/app/components/Mensagem";
-import { Pill } from "@/app/components/Pill";
+import { Card } from "@/app/components/Card";
 import { API_CONFIG } from "@/utils/config";
-import { converterTempo } from "@/utils/helpers/converter";
-import { obterCorStatusCode } from "@/utils/helpers/obterCor";
 import { useWebSocket } from "@/hooks/useWebSocket";
-
-interface RequisicoesRecentesErroLog {
-  status_code: number;
-  endpoint: string;
-  duracao: number;
-}
+import { Log as LogType } from "@/utils/type/log";
 
 interface RequisicoesRecentesErroOut {
-  requisicoes_recentes_erro: RequisicoesRecentesErroLog[];
+  requisicoes_recentes_erro: LogType[];
 }
 
 export function RequisicoesRecentesErro() {
@@ -22,52 +14,24 @@ export function RequisicoesRecentesErro() {
     API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO
   );
 
+  if (isLoading) {
+    return <Mensagem>Carregando...</Mensagem>;
+  }
+
+  if (isError) {
+    return <Mensagem className="text-red-500">Erro</Mensagem>;
+  }
+
+  if (!data) {
+    return <Mensagem className="text-red-500">Nenhum log</Mensagem>;
+  }
+
   return (
     <Card>
-      <h3 className="text-lg font-semibold">Últimas Requisições com Erro</h3>
-      <div className="mt-4">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="text-xs font-medium text-gray-500 border-b border-border-light dark:border-border-dark">
-              <th className="py-2">Status</th>
-              <th className="py-2">Endpoint</th>
-              <th className="py-2">Duração</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={3}>
-                  <Mensagem>Caregando...</Mensagem>
-                </td>
-              </tr>
-            ) : isError ? (
-              <tr>
-                <td colSpan={3}>
-                  <Mensagem className="text-red-500">Erro</Mensagem>
-                </td>
-              </tr>
-            ) : (
-              data?.requisicoes_recentes_erro?.map(
-                (log: RequisicoesRecentesErroLog) => (
-                  <tr
-                    key={uuidv4()}
-                    className="text-sm border-b border-border-light dark:border-border-dark"
-                  >
-                    <td className="py-2">
-                      <Pill className={obterCorStatusCode(log.status_code)}>
-                        {log.status_code}
-                      </Pill>
-                    </td>
-                    <td className="py-2">{log.endpoint}</td>
-                    <td className="py-2">{converterTempo(log.duracao)}</td>
-                  </tr>
-                )
-              )
-            )}
-          </tbody>
-        </table>
-      </div>
+      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+        Últimas Requisições com Erro
+      </h3>
+      <Log data={data?.requisicoes_recentes_erro} />
     </Card>
   );
 }

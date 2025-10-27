@@ -1,20 +1,11 @@
+import { v4 as uuidv4 } from "uuid";
 import { Pill } from "@/app/components/Pill";
 import { Td } from "@/app/components/LogsTable/Td";
 import { Th } from "@/app/components/LogsTable/Th";
 import { formatarData } from "@/utils/helpers/formatar";
 import { converterTempo } from "@/utils/helpers/converter";
 import { obterCorMetodo, obterCorStatusCode } from "@/utils/helpers/obterCor";
-
-interface Log {
-  id: number;
-  ip: string;
-  http_method: string;
-  endpoint: string;
-  status_code: number;
-  data: string;
-  hora: string;
-  duracao: number;
-}
+import { Log } from "@/utils/type/log";
 
 interface LogsTableProps {
   logs: Log[];
@@ -37,9 +28,9 @@ export function LogsTable({ logs }: LogsTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-border-light dark:divide-border-dark">
-            {logs.map((log) => (
+            {logs.map((log: Log) => (
               <tr
-                key={log.id}
+                key={uuidv4()}
                 className="hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <Td className="text-sm font-mono">{log.ip}</Td>
