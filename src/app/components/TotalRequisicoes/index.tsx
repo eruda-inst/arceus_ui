@@ -9,38 +9,54 @@ interface TotalRequisicoesLog {
   total_requisicoes: number;
 }
 
+interface TotalRequisicoesHojeLog {
+  total_requisicoes_hoje: number;
+}
+
 export function TotalRequisicoes() {
   const {
-    data: totalData,
-    isLoading: isTotalLoading,
-    isError: isTotalError,
+    data: dataGeral,
+    isLoading: isLoadingGeral,
+    isError: isErrorGeral,
   } = useWebSocket<TotalRequisicoesLog>(
     API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES
   );
 
-  const totalRequisicoes = {
-    id: "total-requisicoes",
-    title: "Total de Requisições",
-    value: isTotalLoading ? (
-      <FetchingLoadingMensagem />
-    ) : isTotalError ? (
-      <FetchingMensagemErro />
-    ) : typeof totalData?.total_requisicoes === "number" ? (
-      totalData.total_requisicoes
-    ) : (
-      "N/A"
-    ),
-    iconBgColor: "bg-blue-100",
-    iconColor: "text-blue-600",
-  };
+  const {
+    data: dataHoje,
+    isLoading: isLoadingHoje,
+    isError: isErrorHoje,
+  } = useWebSocket<TotalRequisicoesHojeLog>(
+    API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES_HOJE
+  );
 
   return (
     <MetricCard
-      title={totalRequisicoes.title}
-      valueGeral={totalRequisicoes.value}
-      valueHoje={35}
-      iconBgColor={totalRequisicoes.iconBgColor}
-      iconColor={totalRequisicoes.iconColor}
+      title="Total de Requisições"
+      valueGeral={
+        isLoadingGeral ? (
+          <FetchingLoadingMensagem />
+        ) : isErrorGeral ? (
+          <FetchingMensagemErro />
+        ) : typeof dataGeral?.total_requisicoes === "number" ? (
+          dataGeral.total_requisicoes
+        ) : (
+          "N/A"
+        )
+      }
+      valueHoje={
+        isLoadingHoje ? (
+          <FetchingLoadingMensagem />
+        ) : isErrorHoje ? (
+          <FetchingMensagemErro />
+        ) : typeof dataHoje?.total_requisicoes_hoje === "number" ? (
+          dataHoje.total_requisicoes_hoje
+        ) : (
+          "N/A"
+        )
+      }
+      iconBgColor="bg-blue-100"
+      iconColor="text-blue-600"
     >
       <FaArrowsRotate width={16} />
     </MetricCard>

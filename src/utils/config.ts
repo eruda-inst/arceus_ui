@@ -8,9 +8,13 @@ const API_CONFIG = {
   BASE_URL,
   WS_ENDPOINTS: {
     TOTAL_REQUISICOES: "/api/v1/ws/info/total_requisicoes",
+    TOTAL_REQUISICOES_HOJE: "/api/v1/ws/info/total_requisicoes_hoje",
     TEMPO_MEDIO_RESPOSTA: "/api/v1/ws/info/tempo_medio_resposta",
+    TEMPO_MEDIO_RESPOSTA_HOJE: "/api/v1/ws/info/tempo_medio_resposta_hoje",
     TAXA_SUCESSO: "/api/v1/ws/info/taxa_sucesso",
+    TAXA_SUCESSO_HOJE: "/api/v1/ws/info/taxa_sucesso_hoje",
     TAXA_ERRO: "/api/v1/ws/info/taxa_erro",
+    TAXA_ERRO_HOJE: "/api/v1/ws/info/taxa_erro_hoje",
     REQUISICOES_POR_HORA: "/api/v1/ws/info/requisicoes_por_hora",
     DISTRIBUICAO_STATUS_CODE: "/api/v1/ws/info/distribuicao_status_code",
     TOP_ENDPOINTS: "/api/v1/ws/info/top_endpoints",

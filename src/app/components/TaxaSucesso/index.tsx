@@ -4,45 +4,67 @@ import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensage
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { MetricCard } from "@/app/components/MetricCard";
 import { useWebSocket } from "@/hooks/useWebSocket";
+import { formatarPorcentagem } from "@/utils/helpers/formatar";
 import { API_CONFIG } from "@/utils/config";
 
 interface TaxaSucessoLog {
   taxa_sucesso: number;
 }
 
+interface TaxaSucessoHojeLog {
+  taxa_sucesso_hoje: number;
+}
+
 export function TaxaSucesso() {
-  const { data, isLoading, isError } = useWebSocket<TaxaSucessoLog>(
-    API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO
+  const {
+    data: dataGeral,
+    isLoading: isLoadingGeral,
+    isError: isErrorGeral,
+  } = useWebSocket<TaxaSucessoLog>(API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO);
+
+  const {
+    data: dataHoje,
+    isLoading: isLoadingHoje,
+    isError: isErrorHoje,
+  } = useWebSocket<TaxaSucessoHojeLog>(
+    API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO_HOJE
   );
 
-  const taxaSucesso = {
-    id: "taxa-sucesso",
-    title: "Taxa de Sucesso",
-    value: isLoading ? (
-      <FetchingLoadingMensagem />
-    ) : isError ? (
-      <FetchingMensagemErro />
-    ) : typeof data?.taxa_sucesso === "number" ? (
-      `${String(data.taxa_sucesso.toFixed(2)).replace(".", ",")}%`
-    ) : (
-      "N/A"
-    ),
-    iconBgColor: "bg-green-100",
-    iconColor: "text-green-600",
-  };
+  const taxaSucessoGeral = isLoadingGeral ? (
+    <FetchingLoadingMensagem />
+  ) : isErrorGeral ? (
+    <FetchingMensagemErro />
+  ) : typeof dataGeral?.taxa_sucesso === "number" ? (
+    formatarPorcentagem(dataGeral.taxa_sucesso)
+  ) : (
+    "N/A"
+  );
+
+  const taxaSucessoHoje = isLoadingHoje ? (
+    <FetchingLoadingMensagem />
+  ) : isErrorHoje ? (
+    <FetchingMensagemErro />
+  ) : typeof dataHoje?.taxa_sucesso_hoje === "number" ? (
+    formatarPorcentagem(dataHoje.taxa_sucesso_hoje)
+  ) : (
+    "N/A"
+  );
 
   return (
     <MetricCard
-      key={taxaSucesso.id}
-      title={taxaSucesso.title}
+      title="Taxa de Sucesso"
       valueGeral={
-        isValidElement(taxaSucesso.value)
-          ? taxaSucesso.value
-          : String(taxaSucesso.value)
+        isValidElement(taxaSucessoGeral)
+          ? taxaSucessoGeral
+          : String(taxaSucessoGeral)
       }
-      valueHoje="100,00%"
-      iconBgColor={taxaSucesso.iconBgColor}
-      iconColor={taxaSucesso.iconColor}
+      valueHoje={
+        isValidElement(taxaSucessoHoje)
+          ? taxaSucessoHoje
+          : String(taxaSucessoHoje)
+      }
+      iconBgColor="bg-green-100"
+      iconColor="text-green-600"
     >
       <FaCheck width={16} />
     </MetricCard>

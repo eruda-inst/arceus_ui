@@ -7,4 +7,10 @@ function formatarData(data: string): string {
   });
 }
 
-export { formatarData };
+function formatarPorcentagem(valor: number | string): string {
+  const numero = typeof valor === "string" ? parseFloat(valor) : valor;
+  const arredondado = Math.round(numero * 100) / 100;
+  return arredondado.toFixed(2).replace(".", ",") + "%";
+}
+
+export { formatarData, formatarPorcentagem };
