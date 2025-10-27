@@ -2,9 +2,11 @@ import { v4 as uuidv4 } from "uuid";
 import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { Pill } from "@/app/components/Pill";
 import { API_CONFIG } from "@/utils/config";
 import { formatarData } from "@/utils/helpers/formatar";
 import { converterTempo } from "@/utils/helpers/converter";
+import { obterCorMetodo, obterCorStatusCode } from "@/utils/helpers/obterCor";
 import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface RequisicoesRecentesLog {
@@ -62,9 +64,17 @@ export function RequisicoesRecentes() {
                   className="text-sm border-b border-border-light dark:border-border-dark"
                 >
                   <td className="py-2">{log.ip}</td>
-                  <td className="py-2">{log.http_method}</td>
+                  <td className="py-2">
+                    <Pill className={obterCorMetodo(log.http_method)}>
+                      {log.http_method}
+                    </Pill>
+                  </td>
                   <td className="py-2">{log.endpoint}</td>
-                  <td className="py-2">{log.status_code}</td>
+                  <td className="py-2">
+                    <Pill className={obterCorStatusCode(log.status_code)}>
+                      {log.status_code}
+                    </Pill>
+                  </td>
                   <td className="py-2">{formatarData(log.data)}</td>
                   <td className="py-2">{log.hora.slice(0, 5)}</td>
                   <td className="py-2">{converterTempo(log.duracao)}</td>

@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
 import { Card } from "@/app/components/Card";
+import { Pill } from "@/app/components/Pill";
+import { obterCorMetodo } from "@/utils/helpers/obterCor";
 import { API_CONFIG } from "@/utils/config";
 import { useWebSocket } from "@/hooks/useWebSocket";
 
@@ -51,7 +53,11 @@ export function TopEndpoints() {
                   key={uuidv4()}
                   className="text-sm border-b border-border-light dark:border-border-dark"
                 >
-                  <td className="py-2">{log.http_method}</td>
+                  <td className="py-2">
+                    <Pill className={obterCorMetodo(log.http_method)}>
+                      {log.http_method}
+                    </Pill>
+                  </td>
                   <td className="py-2">{log.endpoint}</td>
                   <td className="py-2">{log.total_acessos}</td>
                 </tr>

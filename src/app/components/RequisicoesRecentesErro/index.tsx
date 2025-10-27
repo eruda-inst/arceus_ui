@@ -2,8 +2,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Card } from "@/app/components/Card";
 import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
 import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { Pill } from "@/app/components/Pill";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
+import { obterCorStatusCode } from "@/utils/helpers/obterCor";
 import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface RequisicoesRecentesErroLog {
@@ -53,7 +55,11 @@ export function RequisicoesRecentesErro() {
                     key={uuidv4()}
                     className="text-sm border-b border-border-light dark:border-border-dark"
                   >
-                    <td className="py-2">{log.status_code}</td>
+                    <td className="py-2">
+                      <Pill className={obterCorStatusCode(log.status_code)}>
+                        {log.status_code}
+                      </Pill>
+                    </td>
                     <td className="py-2">{log.endpoint}</td>
                     <td className="py-2">{converterTempo(log.duracao)}</td>
                   </tr>

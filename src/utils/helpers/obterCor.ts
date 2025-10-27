@@ -1,4 +1,5 @@
-function obterCorMetodo(metodo: string): string {
+function obterCorMetodo(metodo: string | number): string {
+  metodo = metodo.toString();
   switch (metodo) {
     case "GET":
       return "bg-blue-100 text-blue-800";
@@ -13,7 +14,8 @@ function obterCorMetodo(metodo: string): string {
   }
 }
 
-function obterCorStatusCode(statusCode: number): string {
+function obterCorStatusCode(statusCode: number | string): string {
+  statusCode = Number(statusCode);
   if (statusCode >= 200 && statusCode < 300) {
     return "bg-green-100 text-green-800";
   } else if (statusCode >= 400 && statusCode < 500) {
