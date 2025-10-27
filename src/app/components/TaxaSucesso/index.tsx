@@ -1,7 +1,6 @@
 import { isValidElement } from "react";
 import { FaCheck } from "react-icons/fa6";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { formatarPorcentagem } from "@/utils/helpers/formatar";
@@ -31,9 +30,9 @@ export function TaxaSucesso() {
   );
 
   const taxaSucessoGeral = isLoadingGeral ? (
-    <FetchingLoadingMensagem />
+    <Mensagem className="mt-0">Carregando...</Mensagem>
   ) : isErrorGeral ? (
-    <FetchingMensagemErro />
+    <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
   ) : typeof dataGeral?.taxa_sucesso === "number" ? (
     formatarPorcentagem(dataGeral.taxa_sucesso)
   ) : (
@@ -41,9 +40,9 @@ export function TaxaSucesso() {
   );
 
   const taxaSucessoHoje = isLoadingHoje ? (
-    <FetchingLoadingMensagem />
+    <Mensagem className="mt-0">Carregando...</Mensagem>
   ) : isErrorHoje ? (
-    <FetchingMensagemErro />
+    <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
   ) : typeof dataHoje?.taxa_sucesso_hoje === "number" ? (
     formatarPorcentagem(dataHoje.taxa_sucesso_hoje)
   ) : (

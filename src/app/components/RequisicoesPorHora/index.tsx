@@ -1,6 +1,5 @@
 import { Card } from "@/app/components/Card";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { LineChartComponent } from "@/app/components/LineChartComponent";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { API_CONFIG } from "@/utils/config";
@@ -57,9 +56,9 @@ export function RequisicoesPorHora() {
     <Card>
       <h3 className="text-left w-full">Requisições por Hora</h3>
       {reqPorHoraIsLoading ? (
-        <FetchingLoadingMensagem />
+        <Mensagem>Caregando...</Mensagem>
       ) : reqPorHoraIsError ? (
-        <FetchingMensagemErro />
+        <Mensagem className="text-red-500">Erro</Mensagem>
       ) : (
         <LineChartComponent
           data={filterAndProcessHourlyRequests(

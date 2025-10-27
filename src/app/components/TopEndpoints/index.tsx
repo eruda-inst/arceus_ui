@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { Mensagem } from "@/app/components/Mensagem";
 import { Card } from "@/app/components/Card";
 import { Pill } from "@/app/components/Pill";
 import { obterCorMetodo } from "@/utils/helpers/obterCor";
@@ -38,13 +37,13 @@ export function TopEndpoints() {
             {isLoading ? (
               <tr>
                 <td colSpan={3}>
-                  <FetchingLoadingMensagem />
+                  <Mensagem>Caregando...</Mensagem>
                 </td>
               </tr>
             ) : isError ? (
               <tr>
                 <td colSpan={3}>
-                  <FetchingMensagemErro />
+                  <Mensagem className="text-red-500">Erro</Mensagem>
                 </td>
               </tr>
             ) : (

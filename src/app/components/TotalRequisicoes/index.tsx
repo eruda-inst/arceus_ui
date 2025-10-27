@@ -1,6 +1,5 @@
 import { FaArrowsRotate } from "react-icons/fa6";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { API_CONFIG } from "@/utils/config";
@@ -35,9 +34,9 @@ export function TotalRequisicoes() {
       title="Total de Requisições"
       valueGeral={
         isLoadingGeral ? (
-          <FetchingLoadingMensagem />
+          <Mensagem className="mt-0">Carregando...</Mensagem>
         ) : isErrorGeral ? (
-          <FetchingMensagemErro />
+          <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
         ) : typeof dataGeral?.total_requisicoes === "number" ? (
           dataGeral.total_requisicoes
         ) : (
@@ -46,9 +45,9 @@ export function TotalRequisicoes() {
       }
       valueHoje={
         isLoadingHoje ? (
-          <FetchingLoadingMensagem />
+          <Mensagem className="mt-0">Carregando...</Mensagem>
         ) : isErrorHoje ? (
-          <FetchingMensagemErro />
+          <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
         ) : typeof dataHoje?.total_requisicoes_hoje === "number" ? (
           dataHoje.total_requisicoes_hoje
         ) : (

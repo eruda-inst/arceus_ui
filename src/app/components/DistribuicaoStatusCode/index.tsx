@@ -1,7 +1,5 @@
 import { Card } from "@/app/components/Card";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
-import { MensagemErro } from "@/app/components/MensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { BarChartComponent } from "@/app/components/BarChartComponent";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { API_CONFIG } from "@/utils/config";
@@ -58,11 +56,11 @@ export function DistribuicaoStatusCode() {
     <Card>
       <h3 className="text-left w-full">Distribuição de Status Codes</h3>
       {isLoading ? (
-        <FetchingLoadingMensagem />
+        <Mensagem>Carregando...</Mensagem>
       ) : isError ? (
-        <FetchingMensagemErro />
+        <Mensagem className="text-red-500">Erro</Mensagem>
       ) : distribuicaoTransformada.length === 0 ? (
-        <MensagemErro>Sem dados</MensagemErro>
+        "N/A"
       ) : (
         <BarChartComponent
           data={distribuicaoTransformada}

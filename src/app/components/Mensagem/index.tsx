@@ -1,17 +1,13 @@
 import { HtmlHTMLAttributes, ReactNode } from "react";
 import { ClassNameValue, twMerge } from "tailwind-merge";
 
-interface MensagemErroProps extends HtmlHTMLAttributes<HTMLParagraphElement> {
+interface MensagemProps extends HtmlHTMLAttributes<HTMLParagraphElement> {
   children: ReactNode;
 }
 
-export function MensagemErro({
-  children,
-  className,
-  ...props
-}: MensagemErroProps) {
+export function Mensagem({ children, className, ...props }: MensagemProps) {
   const defaultStyle =
-    "text-red-500 w-full text-start font-bold mt-5 text-base";
+    "text-blue-500 w-full text-start font-bold mt-5 text-base";
 
   return (
     <p
@@ -23,4 +19,4 @@ export function MensagemErro({
   );
 }
 
-MensagemErro.displayName = "MensagemErro";
+Mensagem.displayName = "Mensagem";

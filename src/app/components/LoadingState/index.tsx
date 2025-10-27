@@ -1,8 +1,16 @@
+import { Mensagem } from "@/app/components/Mensagem";
+
 interface LoadingStateProps {
   isConnected: boolean;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-export function LoadingState({ isConnected }: LoadingStateProps) {
+export function LoadingState({
+  isConnected,
+  isLoading,
+  isError,
+}: LoadingStateProps) {
   return (
     <div className="p-6 bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark rounded-lg shadow">
       <div className="flex justify-between items-center mb-6">
@@ -19,7 +27,13 @@ export function LoadingState({ isConnected }: LoadingStateProps) {
         </div>
       </div>
       <div className="flex justify-center items-center h-64">
-        <div>Carregando logs...</div>
+        {isLoading ? (
+          <Mensagem className="text-center">Carregando...</Mensagem>
+        ) : (
+          isError && (
+            <Mensagem className="text-center text-red-500">Erro</Mensagem>
+          )
+        )}
       </div>
     </div>
   );

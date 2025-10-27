@@ -31,7 +31,7 @@ export default function LogsCompleto() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { data, isConnected, sendMessage } =
+  const { data, isConnected, sendMessage, isLoading, isError } =
     useWebSocket<PaginatedLogsResponse>(API_CONFIG.WS_ENDPOINTS.LOGS, {
       autoAck: false,
     });
@@ -59,7 +59,13 @@ export default function LogsCompleto() {
   );
 
   if (!data) {
-    return <LoadingState isConnected={isConnected} />;
+    return (
+      <LoadingState
+        isConnected={isConnected}
+        isLoading={isLoading}
+        isError={isError}
+      />
+    );
   }
 
   const { logs, total_logs, page_count } = data;

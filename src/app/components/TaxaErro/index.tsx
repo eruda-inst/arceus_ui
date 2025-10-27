@@ -1,7 +1,6 @@
 import { isValidElement } from "react";
 import { FaTriangleExclamation } from "react-icons/fa6";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
 import { formatarPorcentagem } from "@/utils/helpers/formatar";
 import { useWebSocket } from "@/hooks/useWebSocket";
@@ -29,9 +28,9 @@ export function TaxaErro() {
   } = useWebSocket<TaxaErroHojeLog>(API_CONFIG.WS_ENDPOINTS.TAXA_ERRO_HOJE);
 
   const taxaErroGeral = isLoadingGeral ? (
-    <FetchingLoadingMensagem />
+    <Mensagem className="mt-0">Carregando...</Mensagem>
   ) : isErrorGeral ? (
-    <FetchingMensagemErro />
+    <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
   ) : typeof dataGeral?.taxa_erro === "number" ? (
     formatarPorcentagem(dataGeral.taxa_erro)
   ) : (
@@ -39,9 +38,9 @@ export function TaxaErro() {
   );
 
   const taxaErroHoje = isLoadingHoje ? (
-    <FetchingLoadingMensagem />
+    <Mensagem className="mt-0">Carregando...</Mensagem>
   ) : isErrorHoje ? (
-    <FetchingMensagemErro />
+    <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
   ) : typeof dataHoje?.taxa_erro_hoje === "number" ? (
     formatarPorcentagem(dataHoje.taxa_erro_hoje)
   ) : (

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "@/app/components/Card";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
+import { Mensagem } from "@/app/components/Mensagem";
 import { Pill } from "@/app/components/Pill";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
@@ -39,13 +38,13 @@ export function RequisicoesRecentesErro() {
             {isLoading ? (
               <tr>
                 <td colSpan={3}>
-                  <FetchingLoadingMensagem />
+                  <Mensagem>Caregando...</Mensagem>
                 </td>
               </tr>
             ) : isError ? (
               <tr>
                 <td colSpan={3}>
-                  <FetchingMensagemErro />
+                  <Mensagem className="text-red-500">Erro</Mensagem>
                 </td>
               </tr>
             ) : (

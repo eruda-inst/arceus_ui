@@ -1,6 +1,5 @@
 import { FaGaugeHigh } from "react-icons/fa6";
-import { FetchingLoadingMensagem } from "@/app/components/FetchingLoadingMensagem";
-import { FetchingMensagemErro } from "@/app/components/FetchingMensagemErro";
+import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { API_CONFIG } from "@/utils/config";
@@ -36,9 +35,9 @@ export function TempoMedioResposta() {
       title="Tempo Médio de Resposta"
       valueGeral={
         isLoadingGeral ? (
-          <FetchingLoadingMensagem />
+          <Mensagem className="mt-0">Carregando...</Mensagem>
         ) : isErrorGeral ? (
-          <FetchingMensagemErro />
+          <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
         ) : typeof dataGeral?.tempo_medio_resposta === "number" ? (
           converterTempo(dataGeral.tempo_medio_resposta)
         ) : (
@@ -47,9 +46,9 @@ export function TempoMedioResposta() {
       }
       valueHoje={
         isLoadingHoje ? (
-          <FetchingLoadingMensagem />
+          <Mensagem className="mt-0">Carregando...</Mensagem>
         ) : isErrorHoje ? (
-          <FetchingMensagemErro />
+          <Mensagem className="text-red-500 mt-0">Erro</Mensagem>
         ) : typeof dataHoje?.tempo_medio_resposta_hoje === "number" ? (
           converterTempo(dataHoje.tempo_medio_resposta_hoje)
         ) : (
