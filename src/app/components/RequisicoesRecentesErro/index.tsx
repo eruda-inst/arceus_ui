@@ -15,24 +15,16 @@ export function RequisicoesRecentesErro() {
       API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO
     );
 
-  if (isLoading) {
-    return <Mensagem>Carregando...</Mensagem>;
-  }
-
-  if (isError) {
-    return <Mensagem className="text-red-500">Erro</Mensagem>;
-  }
-
-  if (!data) {
-    return <Mensagem className="text-red-500">Nenhum log</Mensagem>;
-  }
-
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
         Últimas Requisições com Erro
       </h3>
-      <Log data={data?.requisicoes_recentes_erro} />
+      <Log
+        data={data?.requisicoes_recentes_erro}
+        isLoading={isLoading}
+        isError={isError}
+      />
     </Card>
   );
 }
