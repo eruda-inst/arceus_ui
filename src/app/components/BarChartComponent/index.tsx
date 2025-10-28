@@ -19,6 +19,7 @@ interface BarChartProps<T = any> {
   barSize?: number;
   height?: number;
   fill?: string;
+  activeBarColor?: string;
   yAxisFormatter?: (value: any) => string | number;
 }
 
@@ -30,6 +31,7 @@ export function BarChartComponent<T = any>({
   barSize = 18,
   height = 240,
   fill = "#60a5fa",
+  activeBarColor = "#faad60",
   yAxisFormatter,
 }: BarChartProps<T>) {
   return (
@@ -65,7 +67,7 @@ export function BarChartComponent<T = any>({
           barSize={barSize}
           fill={fill}
           isAnimationActive={false}
-          activeBar={{ fill: "#faad60" }}
+          activeBar={{ fill: activeBarColor }}
         />
       </BarChart>
     </ResponsiveContainer>

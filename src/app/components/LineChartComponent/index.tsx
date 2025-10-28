@@ -19,6 +19,10 @@ interface LineChartProps<T = any> {
   height?: number;
   showDots?: boolean;
   stroke?: string;
+  activeDot?: {
+    fill: string;
+    stroke: string;
+  };
   yAxisFormatter?: (value: any) => string | number;
 }
 
@@ -30,6 +34,10 @@ export function LineChartComponent<T = any>({
   height = 240,
   showDots = false,
   stroke = "#34d399",
+  activeDot = {
+    fill: "#d3346e",
+    stroke: "#d3346e",
+  },
   yAxisFormatter,
 }: LineChartProps<T>) {
   return (
@@ -64,10 +72,7 @@ export function LineChartComponent<T = any>({
           dot={showDots}
           isAnimationActive={false}
           stroke={stroke}
-          activeDot={{
-            fill: "#d3346e",
-            stroke: "#d3346e",
-          }}
+          activeDot={activeDot}
         />
       </LineChart>
     </ResponsiveContainer>
