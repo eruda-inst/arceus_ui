@@ -7,17 +7,7 @@ import { PaginationControls } from "@/app/components/PaginationControls";
 import { LogsTable } from "@/app/components/LogsTable";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { API_CONFIG } from "@/utils/config";
-
-interface Log {
-  id: number;
-  ip: string;
-  http_method: string;
-  endpoint: string;
-  status_code: number;
-  data: string;
-  hora: string;
-  duracao: number;
-}
+import { Log } from "@/utils/type/log";
 
 interface PaginatedLogsResponse {
   logs: Log[];
