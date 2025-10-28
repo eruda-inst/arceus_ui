@@ -1,7 +1,7 @@
 import { Card } from "@/app/components/Card";
 import { Mensagem } from "@/app/components/Mensagem";
 import { LineChartComponent } from "@/app/components/LineChartComponent";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 
 interface RequisicaoPorHora {
@@ -18,7 +18,7 @@ export function RequisicoesPorHora() {
     data: reqPorHoraData,
     isLoading: reqPorHoraIsLoading,
     isError: reqPorHoraIsError,
-  } = useWebSocket<RequisicoesPorHoraOut>(
+  } = useReactWebSocket<RequisicoesPorHoraOut>(
     API_CONFIG.WS_ENDPOINTS.REQUISICOES_POR_HORA
   );
 

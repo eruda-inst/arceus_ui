@@ -1,7 +1,7 @@
 import { Card } from "@/app/components/Card";
 import { Mensagem } from "@/app/components/Mensagem";
 import { BarChartComponent } from "@/app/components/BarChartComponent";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 
 interface DistribuicaoAcessosHoraData {
@@ -18,9 +18,10 @@ interface DistribuicaoAcessosHoraTransformed {
 }
 
 export function DistribuicaoAcessosHora() {
-  const { data, isLoading, isError } = useWebSocket<DistribuicaoAcessosHoraOut>(
-    API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_HORA // Altere o endpoint conforme necessário
-  );
+  const { data, isLoading, isError } =
+    useReactWebSocket<DistribuicaoAcessosHoraOut>(
+      API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_HORA // Altere o endpoint conforme necessário
+    );
 
   function transformDistribuicaoAcessosHora(
     data: DistribuicaoAcessosHoraOut | null | undefined

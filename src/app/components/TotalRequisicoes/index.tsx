@@ -1,7 +1,7 @@
 import { FaArrowsRotate } from "react-icons/fa6";
 import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 
 interface TotalRequisicoesLog {
@@ -17,7 +17,7 @@ export function TotalRequisicoes() {
     data: dataGeral,
     isLoading: isLoadingGeral,
     isError: isErrorGeral,
-  } = useWebSocket<TotalRequisicoesLog>(
+  } = useReactWebSocket<TotalRequisicoesLog>(
     API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES
   );
 
@@ -25,7 +25,7 @@ export function TotalRequisicoes() {
     data: dataHoje,
     isLoading: isLoadingHoje,
     isError: isErrorHoje,
-  } = useWebSocket<TotalRequisicoesHojeLog>(
+  } = useReactWebSocket<TotalRequisicoesHojeLog>(
     API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES_HOJE
   );
 

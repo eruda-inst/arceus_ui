@@ -3,7 +3,7 @@ import { FaTriangleExclamation } from "react-icons/fa6";
 import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
 import { formatarPorcentagem } from "@/utils/helpers/formatar";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 
 interface TaxaErroGeralLog {
@@ -19,13 +19,15 @@ export function TaxaErro() {
     data: dataGeral,
     isLoading: isLoadingGeral,
     isError: isErrorGeral,
-  } = useWebSocket<TaxaErroGeralLog>(API_CONFIG.WS_ENDPOINTS.TAXA_ERRO);
+  } = useReactWebSocket<TaxaErroGeralLog>(API_CONFIG.WS_ENDPOINTS.TAXA_ERRO);
 
   const {
     data: dataHoje,
     isLoading: isLoadingHoje,
     isError: isErrorHoje,
-  } = useWebSocket<TaxaErroHojeLog>(API_CONFIG.WS_ENDPOINTS.TAXA_ERRO_HOJE);
+  } = useReactWebSocket<TaxaErroHojeLog>(
+    API_CONFIG.WS_ENDPOINTS.TAXA_ERRO_HOJE
+  );
 
   const taxaErroGeral = isLoadingGeral ? (
     <Mensagem className="mt-0">Carregando...</Mensagem>

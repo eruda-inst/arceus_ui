@@ -1,7 +1,7 @@
 import { FaGaugeHigh } from "react-icons/fa6";
 import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 import { converterTempo } from "@/utils/helpers/converter";
 
@@ -18,7 +18,7 @@ export function TempoMedioResposta() {
     data: dataGeral,
     isLoading: isLoadingGeral,
     isError: isErrorGeral,
-  } = useWebSocket<TempoMedioRespostaLog>(
+  } = useReactWebSocket<TempoMedioRespostaLog>(
     API_CONFIG.WS_ENDPOINTS.TEMPO_MEDIO_RESPOSTA
   );
 
@@ -26,7 +26,7 @@ export function TempoMedioResposta() {
     data: dataHoje,
     isLoading: isLoadingHoje,
     isError: isErrorHoje,
-  } = useWebSocket<TempoMedioRespostaHojeLog>(
+  } = useReactWebSocket<TempoMedioRespostaHojeLog>(
     API_CONFIG.WS_ENDPOINTS.TEMPO_MEDIO_RESPOSTA_HOJE
   );
 

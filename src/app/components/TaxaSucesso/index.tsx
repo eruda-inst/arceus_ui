@@ -2,7 +2,7 @@ import { isValidElement } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { Mensagem } from "@/app/components/Mensagem";
 import { MetricCard } from "@/app/components/MetricCard";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { formatarPorcentagem } from "@/utils/helpers/formatar";
 import { API_CONFIG } from "@/utils/config";
 
@@ -19,13 +19,13 @@ export function TaxaSucesso() {
     data: dataGeral,
     isLoading: isLoadingGeral,
     isError: isErrorGeral,
-  } = useWebSocket<TaxaSucessoLog>(API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO);
+  } = useReactWebSocket<TaxaSucessoLog>(API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO);
 
   const {
     data: dataHoje,
     isLoading: isLoadingHoje,
     isError: isErrorHoje,
-  } = useWebSocket<TaxaSucessoHojeLog>(
+  } = useReactWebSocket<TaxaSucessoHojeLog>(
     API_CONFIG.WS_ENDPOINTS.TAXA_SUCESSO_HOJE
   );
 

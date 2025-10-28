@@ -1,7 +1,7 @@
 import { Card } from "@/app/components/Card";
 import { Mensagem } from "@/app/components/Mensagem";
 import { BarChartComponent } from "@/app/components/BarChartComponent";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 
 interface DistribuicaoStatusCodeData {
@@ -18,9 +18,10 @@ interface DistribuicaoStatusCodeTransformed {
 }
 
 export function DistribuicaoStatusCode() {
-  const { data, isLoading, isError } = useWebSocket<DistribuicaoStatusCodeOut>(
-    API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_STATUS_CODE
-  );
+  const { data, isLoading, isError } =
+    useReactWebSocket<DistribuicaoStatusCodeOut>(
+      API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_STATUS_CODE
+    );
 
   function transformDistribuicaoStatusCode(
     data: DistribuicaoStatusCodeOut | null | undefined

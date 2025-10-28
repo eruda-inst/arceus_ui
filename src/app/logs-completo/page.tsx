@@ -5,7 +5,7 @@ import { LoadingState } from "@/app/components/LoadingState";
 import { LogsHeader } from "@/app/components/LogsHeader";
 import { PaginationControls } from "@/app/components/PaginationControls";
 import { LogsTable } from "@/app/components/LogsTable";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/utils/config";
 import { Log } from "@/utils/type/log";
 
@@ -22,7 +22,7 @@ export default function LogsCompleto() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { data, isConnected, sendMessage, isLoading, isError } =
-    useWebSocket<PaginatedLogsResponse>(API_CONFIG.WS_ENDPOINTS.LOGS, {
+    useReactWebSocket<PaginatedLogsResponse>(API_CONFIG.WS_ENDPOINTS.LOGS, {
       autoAck: false,
     });
 

@@ -4,7 +4,7 @@ import { Card } from "@/app/components/Card";
 import { Pill } from "@/app/components/Pill";
 import { obterCorMetodo } from "@/utils/helpers/obterCor";
 import { API_CONFIG } from "@/utils/config";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { Log } from "@/utils/type/log";
 
 interface TopEndpointsLog extends Pick<Log, "http_method" | "endpoint"> {
@@ -16,7 +16,7 @@ interface TopEndpointsLogOut {
 }
 
 export function TopEndpoints() {
-  const { data, isLoading, isError } = useWebSocket<TopEndpointsLogOut>(
+  const { data, isLoading, isError } = useReactWebSocket<TopEndpointsLogOut>(
     API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS
   );
 

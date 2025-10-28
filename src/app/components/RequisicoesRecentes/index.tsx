@@ -2,7 +2,7 @@ import { Log } from "@/app/components/Log";
 import { Mensagem } from "@/app/components/Mensagem";
 import { Card } from "@/app/components/Card";
 import { API_CONFIG } from "@/utils/config";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { Log as LogType } from "@/utils/type/log";
 
 interface RequisicoesRecentesOut {
@@ -10,9 +10,10 @@ interface RequisicoesRecentesOut {
 }
 
 export function RequisicoesRecentes() {
-  const { data, isError, isLoading } = useWebSocket<RequisicoesRecentesOut>(
-    API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES
-  );
+  const { data, isError, isLoading } =
+    useReactWebSocket<RequisicoesRecentesOut>(
+      API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES
+    );
 
   if (isLoading) {
     return <Mensagem>Carregando...</Mensagem>;
