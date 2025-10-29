@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Pill } from "@/app/components/Pill";
 import { Td } from "@/app/components/LogsTable/Td";
 import { Th } from "@/app/components/LogsTable/Th";
+import { Mensagem } from "@/app/components/Mensagem";
 import { formatarData } from "@/utils/helpers/formatar";
 import { converterTempo } from "@/utils/helpers/converter";
 import { obterCorMetodo, obterCorStatusCode } from "@/utils/helpers/obterCor";
@@ -56,7 +57,7 @@ export function LogsTable({ logs }: LogsTableProps) {
 
       {logs.length === 0 && (
         <div className="text-center py-8">
-          <div>Nenhum log encontrado</div>
+          <Mensagem className="text-red-500">N/A</Mensagem>
         </div>
       )}
     </div>

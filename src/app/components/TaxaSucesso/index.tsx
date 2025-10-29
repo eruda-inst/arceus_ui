@@ -36,7 +36,7 @@ export function TaxaSucesso() {
   ) : typeof dataGeral?.taxa_sucesso === "number" ? (
     formatarPorcentagem(dataGeral.taxa_sucesso)
   ) : (
-    "N/A"
+    <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
   );
 
   const taxaSucessoHoje = isLoadingHoje ? (
@@ -46,7 +46,7 @@ export function TaxaSucesso() {
   ) : typeof dataHoje?.taxa_sucesso_hoje === "number" ? (
     formatarPorcentagem(dataHoje.taxa_sucesso_hoje)
   ) : (
-    "N/A"
+    <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
   );
 
   return (

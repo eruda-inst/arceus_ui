@@ -64,7 +64,7 @@ export function DistribuicaoStatusCode() {
       ) : isError ? (
         <Mensagem className="text-red-500">Erro</Mensagem>
       ) : distribuicaoTransformada.length === 0 ? (
-        "N/A"
+        <Mensagem className="text-red-500">N/A</Mensagem>
       ) : (
         <BarChartComponent
           data={distribuicaoTransformada}

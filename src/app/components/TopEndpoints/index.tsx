@@ -45,6 +45,12 @@ export function TopEndpoints() {
                   <Mensagem className="text-red-500">Erro</Mensagem>
                 </td>
               </tr>
+            ) : data?.top_endpoints?.length === 0 ? (
+              <tr>
+                <td colSpan={3}>
+                  <Mensagem className="text-red-500">N/A</Mensagem>
+                </td>
+              </tr>
             ) : (
               data?.top_endpoints?.map((log: TopEndpointsLog) => (
                 <tr

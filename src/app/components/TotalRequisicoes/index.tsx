@@ -40,7 +40,7 @@ export function TotalRequisicoes() {
         ) : typeof dataGeral?.total_requisicoes === "number" ? (
           dataGeral.total_requisicoes
         ) : (
-          "N/A"
+          <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
         )
       }
       valueHoje={
@@ -51,7 +51,7 @@ export function TotalRequisicoes() {
         ) : typeof dataHoje?.total_requisicoes_hoje === "number" ? (
           dataHoje.total_requisicoes_hoje
         ) : (
-          "N/A"
+          <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
         )
       }
       iconBgColor="bg-blue-100"

@@ -61,6 +61,8 @@ export function RequisicoesPorHora() {
         <Mensagem>Caregando...</Mensagem>
       ) : reqPorHoraIsError ? (
         <Mensagem className="text-red-500">Erro</Mensagem>
+      ) : reqPorHoraData?.requisicoes_por_hora?.length === 0 ? (
+        <Mensagem className="text-red-500">N/A</Mensagem>
       ) : (
         <LineChartComponent
           data={filterAndProcessHourlyRequests(

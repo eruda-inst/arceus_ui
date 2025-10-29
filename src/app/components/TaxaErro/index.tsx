@@ -36,7 +36,7 @@ export function TaxaErro() {
   ) : typeof dataGeral?.taxa_erro === "number" ? (
     formatarPorcentagem(dataGeral.taxa_erro)
   ) : (
-    "N/A"
+    <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
   );
 
   const taxaErroHoje = isLoadingHoje ? (
@@ -46,7 +46,7 @@ export function TaxaErro() {
   ) : typeof dataHoje?.taxa_erro_hoje === "number" ? (
     formatarPorcentagem(dataHoje.taxa_erro_hoje)
   ) : (
-    "N/A"
+    <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
   );
 
   return (

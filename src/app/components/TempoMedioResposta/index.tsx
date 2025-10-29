@@ -41,7 +41,7 @@ export function TempoMedioResposta() {
         ) : typeof dataGeral?.tempo_medio_resposta === "number" ? (
           converterTempo(dataGeral.tempo_medio_resposta)
         ) : (
-          "N/A"
+          <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
         )
       }
       valueHoje={
@@ -52,7 +52,7 @@ export function TempoMedioResposta() {
         ) : typeof dataHoje?.tempo_medio_resposta_hoje === "number" ? (
           converterTempo(dataHoje.tempo_medio_resposta_hoje)
         ) : (
-          "N/A"
+          <Mensagem className="text-red-500 mt-0">N/A</Mensagem>
         )
       }
       iconBgColor="bg-purple-100"

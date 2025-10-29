@@ -65,7 +65,7 @@ export function Log({ data, isLoading, isError }: LogProps) {
         ) : (
           <tr>
             <td colSpan={7}>
-              <Mensagem>Nenhum dado encontrado</Mensagem>
+              <Mensagem className="text-red-500">N/A</Mensagem>
             </td>
           </tr>
         )}
