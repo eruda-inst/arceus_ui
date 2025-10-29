@@ -22,6 +22,8 @@ const API_CONFIG = {
     REQUISICOES_RECENTES_ERRO: "/api/v1/ws/info/requisicoes_recentes_erro",
     LOGS: "/api/v1/ws/info/logs",
     DISTRIBUICAO_ACESSOS_HORA: "/api/v1/ws/info/distribuicao_acessos_hora",
+    DISTRIBUICAO_ACESSOS_DIA_SEMANA:
+      "/api/v1/ws/info/distribuicao_acessos_dia_semana",
   },
 };
 

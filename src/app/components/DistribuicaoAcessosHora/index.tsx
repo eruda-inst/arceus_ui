@@ -56,6 +56,7 @@ export function DistribuicaoAcessosHora() {
   }
 
   const distribuicaoTransformada = transformDistribuicaoAcessosHora(data);
+
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
@@ -73,8 +74,8 @@ export function DistribuicaoAcessosHora() {
           xKey="hora"
           yKey="acessos"
           barName="Número de Acessos"
-          fill="#a334d9"
-          activeBarColor="#34d955"
+          fill="#007BFF"
+          activeBarColor="#FF8400"
         />
       )}
     </Card>

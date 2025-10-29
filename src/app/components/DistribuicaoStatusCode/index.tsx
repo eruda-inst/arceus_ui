@@ -53,6 +53,7 @@ export function DistribuicaoStatusCode() {
   }
 
   const distribuicaoTransformada = transformDistribuicaoStatusCode(data);
+
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
@@ -70,6 +71,8 @@ export function DistribuicaoStatusCode() {
           xKey="statusCode"
           yKey="total"
           barName="Número de Ocorrências"
+          fill="#28A745"
+          activeBarColor="#D758BA"
         />
       )}
     </Card>

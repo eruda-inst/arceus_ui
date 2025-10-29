@@ -69,6 +69,8 @@ export function RequisicoesPorHora() {
           xKey="hora"
           yKey="total"
           lineName="Número de Requisições"
+          stroke="#6610F2"
+          activeDot={{ fill: "#EDF210", stroke: "#EDF210" }}
           showDots={true}
         />
       )}

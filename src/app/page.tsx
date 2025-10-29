@@ -11,6 +11,7 @@ import { TopEndpoints } from "@/app/components/TopEndpoints";
 import { RequisicoesRecentesErro } from "@/app/components/RequisicoesRecentesErro";
 import { RequisicoesRecentes } from "@/app/components/RequisicoesRecentes";
 import { DistribuicaoAcessosHora } from "@/app/components/DistribuicaoAcessosHora";
+import { DistribuicaoAcessosDiaSemana } from "@/app/components/DistribuicaoAcessosDiaSemana";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
       </Grid>
       <Grid>
         <DistribuicaoAcessosHora />
+        <DistribuicaoAcessosDiaSemana />
       </Grid>
       <Grid>
         <TopEndpoints />
