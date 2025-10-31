@@ -20,7 +20,7 @@ export function SidebarNav() {
         selected={pathname === "/logs-completo"}
         onClick={() => router.push("/logs-completo")}
       >
-        <FaTableList /> Logs Completo
+        <FaTableList /> Registros
       </SidebarNavItem>
     </ul>
   );

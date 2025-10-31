@@ -1,7 +1,7 @@
 export function LogsCompleto() {
   return (
     <div>
-      <h1>Logs Completo</h1>
+      <h1>Registros</h1>
       <p>Esta página exibirá os logs completos.</p>
     </div>
   );

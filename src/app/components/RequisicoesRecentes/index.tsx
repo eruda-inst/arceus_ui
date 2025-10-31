@@ -18,7 +18,7 @@ export function RequisicoesRecentes() {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-        Requisições Recentes
+        Requisições Recentes (todo o período)
       </h3>
       <Log
         data={data?.requisicoes_recentes}

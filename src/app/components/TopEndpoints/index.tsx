@@ -22,7 +22,9 @@ export function TopEndpoints() {
 
   return (
     <Card>
-      <h3 className="text-lg font-semibold">Endpoints Mais Acessados</h3>
+      <h3 className="text-lg font-semibold">
+        Endpoints Mais Acessados (todo o período)
+      </h3>
       <div className="mt-4">
         <table className="w-full text-left">
           <thead>
