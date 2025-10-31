@@ -267,7 +267,7 @@ function LoginContent() {
             </div>
           </div>
           <div className="border-t border-white/20 pt-6">
-            <p className="text-white/70 text-sm mb-2">Versão: 0.69.9</p>
+            <p className="text-white/70 text-sm mb-2">Versão: 0.72.0</p>
             <p className="text-white/50 text-xs">
               Sistema de monitoramento e análise em tempo real
             </p>
