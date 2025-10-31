@@ -55,7 +55,7 @@ export function RequisicoesPorHora() {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-        Requisições por Hora
+        Requisições por Hora (hoje)
       </h3>
       {reqPorHoraIsLoading ? (
         <Mensagem>Caregando...</Mensagem>

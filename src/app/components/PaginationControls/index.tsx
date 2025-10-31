@@ -20,16 +20,8 @@ export function PaginationControls({
   const isTop = variant === "top";
 
   return (
-    <div
-      className={`bg-bg-light dark:bg-bg-dark rounded-lg shadow p-4 border border-border-light dark:border-border-dark ${
-        isTop ? "mb-4" : "mt-4"
-      }`}
-    >
-      <div
-        className={`flex flex-col sm:flex-row justify-between items-center gap-4 ${
-          !isTop ? "flex-row" : ""
-        }`}
-      >
+    <div className="bg-bg-light dark:bg-bg-dark rounded-lg shadow p-4 border border-border-light dark:border-border-dark">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         {isTop ? (
           <div className="flex items-center space-x-3">
             <label htmlFor="itemsPerPage" className="text-sm font-medium">

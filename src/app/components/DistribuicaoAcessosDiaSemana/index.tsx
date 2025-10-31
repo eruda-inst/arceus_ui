@@ -53,7 +53,7 @@ export function DistribuicaoAcessosDiaSemana() {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-        Distribuição de Acessos por Dia da Semana
+        Distribuição de Acessos por Dia da Semana (todo o período)
       </h3>
       {isLoading ? (
         <Mensagem>Carregando...</Mensagem>

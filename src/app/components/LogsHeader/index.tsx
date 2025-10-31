@@ -5,7 +5,7 @@ interface LogsHeaderProps {
 
 export function LogsHeader({ totalLogs, isConnected }: LogsHeaderProps) {
   return (
-    <div className="flex justify-between items-center mb-6 gap-4">
+    <div className="flex justify-between items-center gap-4">
       <div>
         <h1 className="text-3xl font-semibold">Logs do Sistema</h1>
         <p className="text-sm mt-1">

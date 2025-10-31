@@ -29,7 +29,6 @@ export function useReactWebSocket<T = any>(
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  // Build a stable wsUrl and normalise slashes and protocol only once per wsPath
   const wsUrl = useMemo(() => {
     const base = (API_CONFIG.BASE_URL || "").replace(/\/+$/u, ""); // remove trailing slash
     const path = wsPath ? (wsPath.startsWith("/") ? wsPath : `/${wsPath}`) : "";
@@ -43,11 +42,8 @@ export function useReactWebSocket<T = any>(
   const { sendMessage, sendJsonMessage, lastMessage, readyState } =
     useWebSocket(wsUrl, {
       onOpen: () => {
-        // clear previous errors and mark as loading until first useful message
         setError(null);
         setIsError(false);
-        // do not send initial message directly here — we'll do it in an effect
-        // so we can guarantee it only runs once per connection
       },
       onError: (event: Event) => {
         console.error(`WebSocket error for ${wsPath}:`, event);
@@ -56,9 +52,6 @@ export function useReactWebSocket<T = any>(
         setIsLoading(false);
       },
       onClose: (event: CloseEvent) => {
-        console.log(
-          `WebSocket disconnected from ${wsPath}. Code: ${event.code}, Reason: ${event.reason}`
-        );
         setIsLoading(false);
         setIsError(true);
         if (event.code === 1006) {
@@ -71,7 +64,6 @@ export function useReactWebSocket<T = any>(
       reconnectInterval: 3000,
     });
 
-  // Send the initial message once when the socket becomes OPEN
   useEffect(() => {
     if (
       readyState === ReadyState.OPEN &&
@@ -79,7 +71,6 @@ export function useReactWebSocket<T = any>(
       !sentInitialRef.current
     ) {
       try {
-        // prefer sendJsonMessage for objects so the server receives proper JSON
         if (typeof initialMessage === "string") {
           sendMessage && sendMessage(initialMessage);
         } else {
@@ -91,11 +82,9 @@ export function useReactWebSocket<T = any>(
       }
     }
 
-    // reset the "sentInitial" flag when the wsUrl changes -> new connection
     return () => {};
   }, [readyState, initialMessage, sendJsonMessage, sendMessage]);
 
-  // Process incoming messages using lastMessage (safer with hooks)
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -106,7 +95,6 @@ export function useReactWebSocket<T = any>(
     try {
       parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
     } catch (err) {
-      // If parsing fails, fall back to raw data
       console.error(`Error parsing WebSocket message for ${wsPath}:`, err);
       setError("Erro ao processar mensagem do servidor");
       setIsError(true);
@@ -125,7 +113,6 @@ export function useReactWebSocket<T = any>(
 
     if (autoAck) {
       try {
-        // send a simple ack as a raw string so server receives exactly "ack"
         sendMessage && sendMessage("ack");
       } catch (err) {
         console.warn("Failed to send ack:", err);
@@ -146,7 +133,6 @@ export function useReactWebSocket<T = any>(
         if (typeof message === "string") {
           sendMessage && sendMessage(message);
         } else {
-          // sendJsonMessage will JSON.stringify the payload
           sendJsonMessage && sendJsonMessage(message);
         }
         return true;

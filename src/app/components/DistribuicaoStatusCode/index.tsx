@@ -57,7 +57,7 @@ export function DistribuicaoStatusCode() {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-        Distribuição de Status Codes
+        Distribuição de Status Codes (todo o período)
       </h3>
       {isLoading ? (
         <Mensagem>Carregando...</Mensagem>

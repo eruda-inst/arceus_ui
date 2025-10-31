@@ -61,7 +61,7 @@ export default function LogsCompleto() {
   const { logs, total_logs, page_count } = data;
 
   return (
-    <div className="min-h-screen">
+    <>
       <LogsHeader totalLogs={total_logs} isConnected={isConnected} />
       <PaginationControls
         itemsPerPage={itemsPerPage}
@@ -82,7 +82,7 @@ export default function LogsCompleto() {
           variant="bottom"
         />
       )}
-    </div>
+    </>
   );
 }
 
