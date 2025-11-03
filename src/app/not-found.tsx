@@ -1,4 +1,3 @@
-// app/not-found.tsx
 "use client";
 
 import Link from "next/link";
@@ -8,7 +7,6 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex items-center justify-center p-8">
       <div className="max-w-md w-full text-center">
-        {/* Ícone/Logo */}
         <div className="mb-8">
           <div className="w-24 h-24 bg-indigo-100 dark:bg-indigo-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FaExclamationTriangle className="text-indigo-600 dark:text-indigo-400 text-3xl" />
@@ -18,8 +16,6 @@ export default function NotFound() {
           </h1>
           <div className="w-12 h-1 bg-indigo-600 dark:bg-indigo-400 rounded-full mx-auto"></div>
         </div>
-
-        {/* Mensagem */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Página não encontrada

@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
@@ -12,7 +13,6 @@ import {
   FaRocket,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import axios from "axios";
 
 interface LoginForm {
   email: string;
