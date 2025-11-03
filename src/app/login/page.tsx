@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -12,6 +12,8 @@ import {
   FaShieldAlt,
   FaRocket,
   FaExclamationTriangle,
+  FaEye,
+  FaEyeSlash,
 } from "react-icons/fa";
 import { VersionInfo } from "@/app/components/VersionInfo";
 
@@ -33,6 +35,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -96,8 +99,12 @@ function LoginContent() {
     mutation.mutate(data);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex">
+    <div className="min-h-screen bg-body-bg-light dark:bg-body-bg-dark flex">
       {/* Left Panel - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
@@ -109,7 +116,6 @@ function LoginContent() {
               Entre com suas credenciais para acessar o painel
             </p>
           </div>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
@@ -125,6 +131,7 @@ function LoginContent() {
                 <input
                   id="email"
                   type="email"
+                  autoComplete="email"
                   {...register("email", {
                     required: "E-mail é obrigatório",
                     pattern: {
@@ -157,7 +164,7 @@ function LoginContent() {
                 </div>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   {...register("senha", {
                     required: "Senha é obrigatória",
                     minLength: {
@@ -165,10 +172,22 @@ function LoginContent() {
                       message: "Senha deve ter pelo menos 6 caracteres",
                     },
                   })}
-                  className="block w-full pl-10 pr-3 py-3 border border-border-light dark:border-border-dark rounded-lg bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  className="block w-full pl-10 pr-12 py-3 border border-border-light dark:border-border-dark rounded-lg bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   placeholder="Sua senha"
                   disabled={mutation.isPending}
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  disabled={mutation.isPending}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="h-5 w-5" />
+                  ) : (
+                    <FaEye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
               {errors.senha && (
                 <p className="text-red-500 text-sm mt-1">
@@ -192,7 +211,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
+              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium hover:cursor-pointer"
             >
               {mutation.isPending ? (
                 <div className="flex items-center justify-center">
