@@ -1,0 +1,88 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { LoadingState } from "@/app/components/LoadingState";
+import { LogsHeader } from "@/app/components/LogsHeader";
+import { PaginationControls } from "@/app/components/PaginationControls";
+import { LogsTable } from "@/app/components/LogsTable";
+import { useReactWebSocket } from "@/hooks/useReactWebSocket";
+import { API_CONFIG } from "@/config/config";
+import { Log } from "@/types/log";
+
+interface PaginatedLogsResponse {
+  logs: Log[];
+  total_logs: number;
+  current_page: number;
+  items_per_page: number;
+  page_count: number;
+}
+
+export default function LogsCompleto() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const { data, isConnected, sendMessage, isLoading, isError } =
+    useReactWebSocket<PaginatedLogsResponse>(API_CONFIG.WS_ENDPOINTS.LOGS, {
+      autoAck: false,
+    });
+
+  useEffect(() => {
+    if (isConnected) {
+      sendMessage({
+        page: currentPage,
+        items_per_page: itemsPerPage,
+      });
+    }
+  }, [currentPage, itemsPerPage, isConnected, sendMessage]);
+
+  const handlePageClick = useCallback((event: { selected: number }) => {
+    setCurrentPage(event.selected);
+  }, []);
+
+  const handleItemsPerPageChange = useCallback((value: string) => {
+    const newItemsPerPage = Number(value);
+    if (!Number.isNaN(newItemsPerPage) && newItemsPerPage > 0) {
+      setItemsPerPage(newItemsPerPage);
+      setCurrentPage(0);
+    }
+  }, []);
+
+  if (!data) {
+    return (
+      <LoadingState
+        isConnected={isConnected}
+        isLoading={isLoading}
+        isError={isError}
+      />
+    );
+  }
+
+  const { logs, total_logs, page_count } = data;
+
+  return (
+    <>
+      <LogsHeader totalLogs={total_logs} isConnected={isConnected} />
+      <PaginationControls
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        onPageChange={handlePageClick}
+        pageCount={page_count}
+        currentPage={currentPage}
+        variant="top"
+      />
+      <LogsTable logs={logs} />
+      {page_count > 1 && (
+        <PaginationControls
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onPageChange={handlePageClick}
+          pageCount={page_count}
+          currentPage={currentPage}
+          variant="bottom"
+        />
+      )}
+    </>
+  );
+}
+
+LogsCompleto.displayName = "LogsCompleto";
