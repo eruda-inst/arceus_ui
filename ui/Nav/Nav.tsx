@@ -14,6 +14,7 @@ import {
 import { LuChartLine, LuTable } from "react-icons/lu";
 import { VersionInfo } from "@/ui/VersionInfo/VersionInfo";
 import { usePathname, useRouter } from "next/navigation";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function Nav() {
   const router = useRouter();
@@ -43,11 +44,11 @@ export function Nav() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   className={`border py-6 px-3 rounded-lg ${
-                    pathname === "/logs-completo"
+                    pathname === "/registros"
                       ? "bg-bg-selected"
                       : "bg-sidebar-accent"
                   } hover:cursor-pointer hover:bg-bg-selected`}
-                  onClick={() => router.push("/logs-completo")}
+                  onClick={() => router.push("/registros")}
                 >
                   <LuTable /> Registros
                 </SidebarMenuButton>
@@ -57,6 +58,14 @@ export function Nav() {
         </SidebarContent>
         <SidebarFooter>
           <VersionInfo />
+          <Card>
+            <CardHeader>
+              <div className="flex flex-col">
+                <p>Arceus</p>
+                <p className="text-sm text-muted">admin</p>
+              </div>
+            </CardHeader>
+          </Card>
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
