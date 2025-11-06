@@ -6,7 +6,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define public routes that don't require authentication
-  const publicRoutes = ["/login", "/logout", "/public"];
+  const publicRoutes = ["/logout", "/public"];
 
   // Routes that should be accessible without authentication
   const isPublicRoute =
