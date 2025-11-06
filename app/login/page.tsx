@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -57,6 +56,14 @@ function LoginContent() {
     formState: { errors },
     setError,
   } = useForm<LoginForm>();
+
+  // Verifica se já está autenticado e redireciona
+  useEffect(() => {
+    const token = document.cookie.includes("auth-token=");
+    if (token) {
+      router.push("/");
+    }
+  }, [router]);
 
   const mutation = useMutation({
     mutationFn: async (credentials: LoginForm) => {

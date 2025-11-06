@@ -6,6 +6,10 @@ if (!BASE_URL) {
 
 const API_CONFIG = {
   BASE_URL,
+  HTTP_ENDPOINTS: {
+    LOGIN: "/api/v1/auth/login",
+    ME: "/api/v1/auth/me",
+  },
   WS_ENDPOINTS: {
     TOTAL_REQUISICOES: "/api/v1/ws/info/total_requisicoes",
     TOTAL_REQUISICOES_HOJE: "/api/v1/ws/info/total_requisicoes_hoje",

@@ -6,51 +6,34 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define public routes that don't require authentication
-  const publicRoutes = ["/logout", "/public"];
-
-  // Routes that should be accessible without authentication
-  const isPublicRoute =
-    publicRoutes.includes(pathname) ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/") || // Consider API routes separately
-    pathname.startsWith("/static");
+  const publicRoutes = ["/login", "/not_found"];
 
   // Allow public routes and static assets
-  if (isPublicRoute) {
+  if (
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api/") ||
+    pathname.includes(".")
+  ) {
+    // If user is authenticated and tries to access login, redirect to home
+    if (token && pathname === "/login") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
     return NextResponse.next();
   }
 
   // Redirect to login if no token exists for protected routes
   if (!token) {
     const loginUrl = new URL("/login", request.url);
-
-    // Store the intended destination for redirect after login
-    if (pathname !== "/") {
-      loginUrl.searchParams.set("redirect", pathname);
-    }
-
+    loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect authenticated users away from auth pages
-  if (token && pathname === "/login") {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // Allow access to protected routes for authenticated users
   return NextResponse.next();
 }
 
 export const config = {
-  // Protect all routes except public ones
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
