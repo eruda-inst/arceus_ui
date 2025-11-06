@@ -11,14 +11,31 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { LuChartLine, LuTable } from "react-icons/lu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LuChartLine, LuLogOut, LuTable } from "react-icons/lu";
 import { VersionInfo } from "@/ui/VersionInfo/VersionInfo";
 import { usePathname, useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardUsuario } from "@/ui/CardUsuario/CardUsuario";
 
 export function Nav() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    // Remove o token do cookie
+    document.cookie =
+      "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Redireciona para a página de login
+    router.push("/login");
+    router.refresh(); // Força atualização para limpar estado da aplicação
+  };
 
   return (
     <SidebarProvider className="w-sidebar-width fixed">
@@ -58,14 +75,19 @@ export function Nav() {
         </SidebarContent>
         <SidebarFooter>
           <VersionInfo />
-          <Card>
-            <CardHeader>
-              <div className="flex flex-col">
-                <p>Arceus</p>
-                <p className="text-sm text-muted">admin</p>
-              </div>
-            </CardHeader>
-          </Card>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <CardUsuario nome="John Doe" funcao="admin" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>Perfil e Conta</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LuLogOut className="mr-2" />
+                Sair
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
