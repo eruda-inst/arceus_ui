@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { PageHeader } from "@/app/components/PageHeader";
-import { PageContent } from "@/app/components/PageContent";
-import { Nav } from "@/app/components/Nav";
+import { PageHeader } from "@/ui/PageHeader/PageHeader";
+import { PageContent } from "@/ui/PageContent/PageContent";
+import { Nav } from "@/ui/Nav/Nav";
 
 export const metadata: Metadata = {
   title: "Aggregator · Monitor",

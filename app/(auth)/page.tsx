@@ -1,17 +1,17 @@
 "use client";
 
-import { Grid } from "@/app/components/Grid";
-import { TotalRequisicoes } from "@/app/components/TotalRequisicoes";
-import { TempoMedioResposta } from "@/app/components/TempoMedioResposta";
-import { TaxaSucesso } from "@/app/components/TaxaSucesso";
-import { TaxaErro } from "@/app/components/TaxaErro";
-import { RequisicoesPorHora } from "@/app/components/RequisicoesPorHora";
-import { DistribuicaoStatusCode } from "@/app/components/DistribuicaoStatusCode";
-import { TopEndpoints } from "@/app/components/TopEndpoints";
-import { RequisicoesRecentesErro } from "@/app/components/RequisicoesRecentesErro";
-import { RequisicoesRecentes } from "@/app/components/RequisicoesRecentes";
-import { DistribuicaoAcessosHora } from "@/app/components/DistribuicaoAcessosHora";
-import { DistribuicaoAcessosDiaSemana } from "@/app/components/DistribuicaoAcessosDiaSemana";
+import { Grid } from "@/ui/Grid/Grid";
+import { TotalRequisicoes } from "@/ui/TotalRequisicoes/TotalRequisicoes";
+import { TempoMedioResposta } from "@/ui/TempoMedioResposta/TempoMedioResposta";
+import { TaxaSucesso } from "@/ui/TaxaSucesso/TaxaSucesso";
+import { TaxaErro } from "@/ui/TaxaErro/TaxaErro";
+import { RequisicoesPorHora } from "@/ui/RequisicoesPorHora/RequisicoesPorHora";
+import { DistribuicaoStatusCode } from "@/ui/DistribuicaoStatusCode/DistribuicaoStatusCode";
+import { TopEndpoints } from "@/ui/TopEndpoints/TopEndpoints";
+import { RequisicoesRecentesErro } from "@/ui/RequisicoesRecentesErro/RequisicoesRecentesErro";
+import { RequisicoesRecentes } from "@/ui/RequisicoesRecentes/RequisicoesRecentes";
+import { DistribuicaoAcessosHora } from "@/ui/DistribuicaoAcessosHora/DistribuicaoAcessosHora";
+import { DistribuicaoAcessosDiaSemana } from "@/ui/DistribuicaoAcessosDiaSemana/DistribuicaoAcessosDiaSemana";
 
 export default function Home() {
   return (

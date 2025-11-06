@@ -5,7 +5,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { VersionInfo } from "@/app/components/VersionInfo";
+import { VersionInfo } from "@/ui/VersionInfo/VersionInfo";
 import {
   Card,
   CardContent,

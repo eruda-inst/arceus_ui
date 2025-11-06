@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { LoadingState } from "@/app/components/LoadingState";
-import { LogsHeader } from "@/app/components/LogsHeader";
-import { PaginationControls } from "@/app/components/PaginationControls";
-import { LogsTable } from "@/app/components/LogsTable";
+import { LoadingState } from "@/ui/LoadingState/LoadingState";
+import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
+import { PaginationControls } from "@/ui/PaginationControls/PaginationControls";
+import { LogsTable } from "@/ui/LogsTable/LogsTable";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/config/config";
 import { Log } from "@/types/log";
