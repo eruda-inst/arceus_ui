@@ -1,9 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterCorMetodo } from "@/helpers/obterCor";
-import { API_CONFIG } from "@/config/config";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { Log } from "@/types/log";
 import {
   Table,
   TableBody,
@@ -15,25 +13,37 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-interface EndpointComMaisErrosLog
-  extends Pick<Log, "http_method" | "endpoint"> {
-  total_erros: number;
+interface EndpointData {
+  http_method: string;
+  endpoint: string;
+  total_acessos?: number;
+  total_erros?: number;
 }
 
-interface EndpointsComMaisErrosLogOut {
-  endpoints_com_mais_erros: EndpointComMaisErrosLog[];
+interface EndpointsResponse<T> {
+  data: T[];
 }
 
-export function EndpointsComMaisErros() {
+interface TableTwoColsProps {
+  title: string;
+  websocketEndpoint: string;
+  dataKey: string;
+}
+
+export function TableTwoCols({
+  title,
+  websocketEndpoint,
+  dataKey,
+}: TableTwoColsProps) {
   const { data, isLoading, isError } =
-    useReactWebSocket<EndpointsComMaisErrosLogOut>(
-      API_CONFIG.WS_ENDPOINTS.ENDPOINTS_COM_MAIS_ERROS
-    );
+    useReactWebSocket<EndpointsResponse<EndpointData>>(websocketEndpoint);
+
+  const endpointsData = data?.[dataKey as keyof typeof data] as EndpointData[];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Endpoints Com mais Erros (todo o período)</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -48,7 +58,7 @@ export function EndpointsComMaisErros() {
             {isLoading ? (
               <TableRow>
                 <TableCell>
-                  <Mensagem>Caregando...</Mensagem>
+                  <Mensagem>Carregando...</Mensagem>
                 </TableCell>
               </TableRow>
             ) : isError ? (
@@ -57,30 +67,30 @@ export function EndpointsComMaisErros() {
                   <Mensagem className="text-destructive">Erro</Mensagem>
                 </TableCell>
               </TableRow>
-            ) : data?.endpoints_com_mais_erros?.length === 0 ? (
+            ) : !endpointsData || endpointsData.length === 0 ? (
               <TableRow>
                 <TableCell>
                   <Mensagem className="text-destructive">N/A</Mensagem>
                 </TableCell>
               </TableRow>
             ) : (
-              data?.endpoints_com_mais_erros?.map(
-                (log: EndpointComMaisErrosLog) => (
-                  <TableRow key={uuidv4()}>
-                    <TableCell>
-                      <Badge
-                        className={`${Object.values(
-                          obterCorMetodo(log.http_method)
-                        ).join(" ")}`}
-                      >
-                        {log.http_method}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{log.endpoint}</TableCell>
-                    <TableCell>{log.total_erros}</TableCell>
-                  </TableRow>
-                )
-              )
+              endpointsData.map((item: EndpointData) => (
+                <TableRow key={uuidv4()}>
+                  <TableCell>
+                    <Badge
+                      className={`${Object.values(
+                        obterCorMetodo(item.http_method)
+                      ).join(" ")}`}
+                    >
+                      {item.http_method}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{item.endpoint}</TableCell>
+                  <TableCell>
+                    {item.total_acessos ? item.total_acessos : item.total_erros}
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>
@@ -89,4 +99,4 @@ export function EndpointsComMaisErros() {
   );
 }
 
-EndpointsComMaisErros.displayName = "EndpointsComMaisErros";
+TableTwoCols.displayName = "TableTwoCols";

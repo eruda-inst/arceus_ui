@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { LoadingState } from "@/ui/LoadingState/LoadingState";
 import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
-import { PaginationControls } from "@/ui/PaginationControls/PaginationControls";
+import { ControlesPaginacao } from "@/ui/ControlesPaginacao/ControlesPaginacao";
 import { LogsTable } from "@/ui/LogsTable/LogsTable";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/config/config";
@@ -62,7 +62,7 @@ export default function LogsCompleto() {
   return (
     <>
       <LogsHeader totalLogs={total_logs} isConnected={isConnected} />
-      <PaginationControls
+      <ControlesPaginacao
         itemsPerPage={itemsPerPage}
         onItemsPerPageChange={handleItemsPerPageChange}
         onPageChange={handlePageClick}
@@ -72,7 +72,7 @@ export default function LogsCompleto() {
       />
       <LogsTable logs={logs} />
       {page_count > 1 && (
-        <PaginationControls
+        <ControlesPaginacao
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={handleItemsPerPageChange}
           onPageChange={handlePageClick}

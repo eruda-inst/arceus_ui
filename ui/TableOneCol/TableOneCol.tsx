@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { API_CONFIG } from "@/config/config";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { Log as LogType } from "@/types/log";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,20 +16,27 @@ import { Mensagem } from "../Mensagem/Mensagem";
 import { Badge } from "@/components/ui/badge";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
 
-interface RequisicoesRecentesErroOut {
-  requisicoes_recentes_erro: LogType[];
+interface TableOneColProps {
+  websocketEndpoint: string;
+  dataKey: string;
+  title: string;
 }
 
-export function RequisicoesRecentesErro() {
-  const { data, isError, isLoading } =
-    useReactWebSocket<RequisicoesRecentesErroOut>(
-      API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO
-    );
+export function TableOneCol({
+  websocketEndpoint,
+  dataKey,
+  title,
+}: TableOneColProps) {
+  const { data, isError, isLoading } = useReactWebSocket<{
+    [key: string]: LogType[];
+  }>(websocketEndpoint);
+
+  const logs = data?.[dataKey] || [];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Endpoints Mais Acessados (todo o período)</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -58,14 +64,14 @@ export function RequisicoesRecentesErro() {
                   <Mensagem className="text-destructive">Erro</Mensagem>
                 </TableCell>
               </TableRow>
-            ) : data?.requisicoes_recentes_erro?.length === 0 ? (
+            ) : logs.length === 0 ? (
               <TableRow>
                 <TableCell>
                   <Mensagem className="text-destructive">N/A</Mensagem>
                 </TableCell>
               </TableRow>
             ) : (
-              data?.requisicoes_recentes_erro?.map((log: LogType) => (
+              logs.map((log: LogType) => (
                 <TableRow key={uuidv4()}>
                   <TableCell>{log.ip}</TableCell>
                   <TableCell>
@@ -100,4 +106,4 @@ export function RequisicoesRecentesErro() {
   );
 }
 
-RequisicoesRecentesErro.displayName = "RequisicoesRecentesErro";
+TableOneCol.displayName = "TableOneCol";

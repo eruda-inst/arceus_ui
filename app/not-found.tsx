@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LuHouse, LuTriangleAlert, LuArrowLeft } from "react-icons/lu";
+import { ArrowLeft, House, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +25,7 @@ export default function NotFound() {
       <Card className="w-full max-w-md text-center">
         <CardHeader>
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-            <LuTriangleAlert className="h-8 w-8 text-destructive" />
+            <TriangleAlert className="h-8 w-8 text-destructive" />
           </div>
           <CardTitle className="mt-4 text-3xl font-bold">
             404 - Página Não Encontrada
@@ -41,12 +41,12 @@ export default function NotFound() {
         </CardContent>
         <CardFooter className="flex justify-center gap-4 pt-6">
           <Button onClick={handleGoBack} variant="outline">
-            <LuArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
           <Link href="/">
             <Button>
-              <LuHouse className="mr-2 h-4 w-4" />
+              <House className="mr-2 h-4 w-4" />
               Página Inicial
             </Button>
           </Link>

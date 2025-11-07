@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { inter } from "@/config/fonts";
-import { Providers } from "@/ui/Providers/Providers";
+import { Provedores } from "@/ui/Provedores/Provedores";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Aggregator · Monitor",
+  title: "Arceus",
   description: "Monitora requisições realizadas à API Aggregator.",
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={`${inter.className} antialiased`}>
-        <Providers>{children}</Providers>
+        <Provedores>{children}</Provedores>
       </body>
     </html>
   );

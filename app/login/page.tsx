@@ -5,7 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { VersionInfo } from "@/ui/VersionInfo/VersionInfo";
+import { Versao } from "@/ui/Versao/Versao";
 import {
   Card,
   CardContent,
@@ -19,16 +19,16 @@ import { Alert } from "@/components/ui/alert";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import {
-  LuUser,
-  LuEye,
-  LuEyeOff,
-  LuRocket,
-  LuTriangleAlert,
-  LuLoader,
-  LuLock,
-  LuChartBar,
-  LuShieldCheck,
-} from "react-icons/lu";
+  User,
+  Eye,
+  EyeOff,
+  Rocket,
+  TriangleAlert,
+  Loader,
+  Lock,
+  ChartBar,
+  ShieldCheck,
+} from "lucide-react";
 
 interface LoginForm {
   email: string;
@@ -147,7 +147,7 @@ function LoginContent() {
                   <FieldLabel htmlFor="email">E-mail</FieldLabel>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <LuUser className="h-4 w-4 text-muted-foreground" />
+                      <User className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <Input
                       id="email"
@@ -175,7 +175,7 @@ function LoginContent() {
                   <FieldLabel htmlFor="password">Senha</FieldLabel>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <LuLock className="h-4 w-4 text-muted-foreground" />
+                      <Lock className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <Input
                       id="password"
@@ -201,9 +201,9 @@ function LoginContent() {
                       }
                     >
                       {showPassword ? (
-                        <LuEyeOff className="h-4 w-4" />
+                        <EyeOff className="h-4 w-4" />
                       ) : (
-                        <LuEye className="h-4 w-4" />
+                        <Eye className="h-4 w-4" />
                       )}
                     </Button>
                   </div>
@@ -218,7 +218,7 @@ function LoginContent() {
                 {errors.root && (
                   <Alert>
                     <div className="flex items-start gap-3">
-                      <LuTriangleAlert className="h-4 w-4" />
+                      <TriangleAlert className="h-4 w-4" />
                       <div className="text-sm">
                         <div className="font-medium">{errors.root.message}</div>
                       </div>
@@ -233,7 +233,7 @@ function LoginContent() {
                 >
                   {mutation.isPending ? (
                     <div className="flex items-center justify-center">
-                      <LuLoader className="h-4 w-4 animate-spin mr-2" />{" "}
+                      <Loader className="h-4 w-4 animate-spin mr-2" />{" "}
                       Entrando...
                     </div>
                   ) : (
@@ -274,9 +274,9 @@ function LoginContent() {
         <div className="relative z-10 text-white text-center max-w-lg">
           <div className="mb-8">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-              <LuChartBar className="text-white" />
+              <ChartBar className="text-white" />
             </div>
-            <h2 className="text-4xl font-bold mb-2">Aggregator • Monitor</h2>
+            <h2 className="text-4xl font-bold mb-2">Arceus</h2>
             <div className="w-16 h-1 bg-white/50 rounded-full mx-auto"></div>
           </div>
 
@@ -288,13 +288,13 @@ function LoginContent() {
           <div className="space-y-4 mb-8">
             <div className="flex items-center justify-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <LuShieldCheck className="text-white text-sm" />
+                <ShieldCheck className="text-white text-sm" />
               </div>
               <span className="text-white/90">Monitoramento em tempo real</span>
             </div>
             <div className="flex items-center justify-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <LuRocket className="text-white text-sm" />
+                <Rocket className="text-white text-sm" />
               </div>
               <span className="text-white/90">
                 Análises detalhadas e insights
@@ -302,7 +302,7 @@ function LoginContent() {
             </div>
             <div className="flex items-center justify-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <LuLock className="text-white text-sm" />
+                <Lock className="text-white text-sm" />
               </div>
               <span className="text-white/90">Segurança e confiabilidade</span>
             </div>
@@ -311,7 +311,7 @@ function LoginContent() {
           <Separator className="border-white/20" />
 
           <div className="pt-6">
-            <VersionInfo />
+            <Versao />
             <p className="text-white/50 text-xs mt-2">
               Sistema de monitoramento e análise em tempo real
             </p>

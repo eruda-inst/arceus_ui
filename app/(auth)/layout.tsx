@@ -5,7 +5,7 @@ import { PageContent } from "@/ui/PageContent/PageContent";
 import { Nav } from "@/ui/Nav/Nav";
 
 export const metadata: Metadata = {
-  title: "Aggregator · Monitor",
+  title: "Arceus",
   description: "Monitora requisições realizadas à API Aggregator.",
 };
 

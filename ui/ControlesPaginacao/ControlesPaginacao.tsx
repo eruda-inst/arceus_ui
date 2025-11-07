@@ -26,7 +26,7 @@ interface PaginationControlsProps {
   variant: "top" | "bottom";
 }
 
-export function PaginationControls({
+export function ControlesPaginacao({
   itemsPerPage,
   onItemsPerPageChange,
   onPageChange,
@@ -171,4 +171,4 @@ export function PaginationControls({
   );
 }
 
-PaginationControls.displayName = "PaginationControls";
+ControlesPaginacao.displayName = "ControlesPaginacao";

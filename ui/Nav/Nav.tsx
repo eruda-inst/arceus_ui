@@ -25,10 +25,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LuChartLine, LuLogOut, LuTable, LuSmile } from "react-icons/lu";
-import { VersionInfo } from "@/ui/VersionInfo/VersionInfo";
+import { ChartLine, LogOut, Table, Smile } from "lucide-react";
+import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
-import { CardUsuario } from "@/ui/CardUsuario/CardUsuario";
+import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { API_CONFIG } from "@/config/config";
@@ -62,8 +62,8 @@ function getAuthToken(): string | undefined {
 
 // Navigation items configuration for better maintainability
 const navItems = [
-  { path: "/", label: "Dashboard", icon: LuChartLine },
-  { path: "/registros", label: "Registros", icon: LuTable },
+  { path: "/", label: "Dashboard", icon: ChartLine },
+  { path: "/registros", label: "Registros", icon: Table },
 ];
 
 export function Nav() {
@@ -169,7 +169,7 @@ export function Nav() {
         <Sidebar>
           <SidebarHeader>
             <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-2">
-              Aggregator &middot; Monitor
+              Arceus
             </h1>
           </SidebarHeader>
 
@@ -207,11 +207,11 @@ export function Nav() {
           </SidebarContent>
 
           <SidebarFooter>
-            <VersionInfo />
+            <Versao />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="hover:cursor-pointer">
-                  <CardUsuario
+                  <CartaoUsuario
                     nome={
                       isLoading ? "Carregando..." : usuario?.nome || "Usuário"
                     }
@@ -225,12 +225,12 @@ export function Nav() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onSelect={handleProfileClick}>
-                  <LuSmile className="mr-2" />
+                  <Smile className="mr-2" />
                   Perfil e Conta
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
-                  <LuLogOut className="mr-2" />
+                  <LogOut className="mr-2" />
                   Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
