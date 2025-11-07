@@ -8,7 +8,7 @@ export function VersionInfo({
 
   return (
     <p className={twMerge(defaultStyle, className as ClassNameValue)}>
-      Versão: 0.77.6
+      Versão: 0.78.6
     </p>
   );
 }
