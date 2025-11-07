@@ -1,12 +1,12 @@
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Settings2 } from "lucide-react";
 
-interface CardUsuarioProps {
+interface CartaoUsuarioProps {
   nome: string;
   funcao: string;
 }
 
-export function CartaoUsuario({ nome, funcao }: CardUsuarioProps) {
+export function CartaoUsuario({ nome, funcao }: CartaoUsuarioProps) {
   return (
     <Card className="bg-accent gap-y-2 p-2 justify-between relative">
       <CardHeader className="flex items-center justify-between p-0">
@@ -19,3 +19,5 @@ export function CartaoUsuario({ nome, funcao }: CardUsuarioProps) {
     </Card>
   );
 }
+
+CartaoUsuario.displayName = "CartaoUsuario";

@@ -1,5 +1,3 @@
-// Faça renderização de lista para os gráficos de barras
-
 "use client";
 
 import { Grid } from "@/ui/Grid/Grid";
@@ -7,14 +5,14 @@ import { RequisicoesPorHora } from "@/ui/RequisicoesPorHora/RequisicoesPorHora";
 import { TableTwoCols } from "@/ui/TableTwoCols/TableTwoCols";
 import { API_CONFIG } from "@/config/config";
 import { TableOneCol } from "@/ui/TableOneCol/TableOneCol";
-import { Metric } from "@/ui/Metric/Metric";
+import { Metrica } from "@/ui/Metrica/Metrica";
 import { formatarPorcentagem } from "@/helpers/formatar";
 import { converterTempo } from "@/helpers/converter";
 import { ReactNode } from "react";
 import { v4 as uuid } from "uuid";
 import { GraficoBarra } from "@/ui/GraficoBarra/GraficoBarra";
 
-interface MetricConfig {
+interface MetricaConfig {
   title: string;
   endpointGeral: string;
   endpointHoje: string;
@@ -24,7 +22,7 @@ interface MetricConfig {
   errorClassName?: string;
 }
 
-interface TableConfig {
+interface TabelaConfig {
   title: string;
   websocketEndpoint: string;
   dataKey: string;
@@ -142,7 +140,7 @@ function transformDistribuicaoStatusCode(
 }
 
 export default function Home() {
-  const metrics: MetricConfig[] = [
+  const metricas: MetricaConfig[] = [
     {
       title: "Total de Requisições",
       endpointGeral: API_CONFIG.WS_ENDPOINTS.TOTAL_REQUISICOES,
@@ -150,7 +148,6 @@ export default function Home() {
       dataKeyGeral: "total_requisicoes",
       dataKeyHoje: "total_requisicoes_hoje",
       formatter: undefined,
-      errorClassName: undefined,
     },
     {
       title: "T. Médio de Resposta",
@@ -159,7 +156,6 @@ export default function Home() {
       dataKeyGeral: "tempo_medio_resposta",
       dataKeyHoje: "tempo_medio_resposta_hoje",
       formatter: converterTempo,
-      errorClassName: undefined,
     },
     {
       title: "Taxa de Sucesso",
@@ -168,7 +164,6 @@ export default function Home() {
       dataKeyGeral: "taxa_sucesso",
       dataKeyHoje: "taxa_sucesso_hoje",
       formatter: formatarPorcentagem,
-      errorClassName: undefined,
     },
     {
       title: "Taxa de Erro",
@@ -177,11 +172,10 @@ export default function Home() {
       dataKeyGeral: "taxa_erro",
       dataKeyHoje: "taxa_erro_hoje",
       formatter: formatarPorcentagem,
-      errorClassName: "text-red-500 mt-0",
     },
   ];
 
-  const tableTwoCols: TableConfig[] = [
+  const tableTwoCols: TabelaConfig[] = [
     {
       title: "Endpoints Mais Acessados (todo o período)",
       websocketEndpoint: API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS,
@@ -194,7 +188,7 @@ export default function Home() {
     },
   ];
 
-  const tableOneCol: TableConfig[] = [
+  const tableOneCol: TabelaConfig[] = [
     {
       title: "Requisições Recentes com Erro (todo o período)",
       websocketEndpoint: API_CONFIG.WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO,
@@ -241,8 +235,8 @@ export default function Home() {
   return (
     <>
       <Grid className="grid-cols-4">
-        {metrics.map((metric) => (
-          <Metric
+        {metricas.map((metric) => (
+          <Metrica
             key={uuid()}
             title={metric.title}
             endpointGeral={metric.endpointGeral}
@@ -250,11 +244,9 @@ export default function Home() {
             dataKeyGeral={metric.dataKeyGeral}
             dataKeyHoje={metric.dataKeyHoje}
             formatter={metric.formatter}
-            errorClassName={metric.errorClassName}
           />
         ))}
       </Grid>
-
       <Grid>
         <RequisicoesPorHora />
         {graficosBarras.map((grafico) => (
@@ -271,7 +263,6 @@ export default function Home() {
           />
         ))}
       </Grid>
-
       <Grid>
         {tableTwoCols.map((table) => (
           <TableTwoCols
@@ -282,7 +273,6 @@ export default function Home() {
           />
         ))}
       </Grid>
-
       {tableOneCol.map((table) => (
         <TableOneCol
           key={uuid()}

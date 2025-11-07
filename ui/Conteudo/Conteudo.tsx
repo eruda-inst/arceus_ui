@@ -4,7 +4,7 @@ interface PageContentProps {
   children: ReactNode;
 }
 
-export function PageContent({ children }: PageContentProps) {
+export function Conteudo({ children }: PageContentProps) {
   return (
     <main
       style={{ minWidth: "calc(1024px - var(--sidebar-width))" }}
@@ -15,4 +15,4 @@ export function PageContent({ children }: PageContentProps) {
   );
 }
 
-PageContent.displayName = "PageContent";
+Conteudo.displayName = "Conteudo";

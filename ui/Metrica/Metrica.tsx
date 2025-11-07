@@ -2,26 +2,25 @@ import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 
-interface MetricProps<TGeral, THoje> {
+interface MetricaProps<TGeral, THoje> {
   title: string;
   endpointGeral: string;
   endpointHoje: string;
   dataKeyGeral: keyof TGeral;
   dataKeyHoje: keyof THoje;
   formatter?: (value: any) => ReactNode;
-  errorClassName?: string;
 }
 
-export function Metric<TGeral, THoje>({
+export function Metrica<TGeral, THoje>({
   title,
   endpointGeral,
   endpointHoje,
   dataKeyGeral,
   dataKeyHoje,
   formatter,
-  errorClassName = "text-destructive mt-0",
-}: MetricProps<TGeral, THoje>) {
+}: MetricaProps<TGeral, THoje>) {
   const {
     data: dataGeral,
     isLoading: isLoadingGeral,
@@ -41,18 +40,14 @@ export function Metric<TGeral, THoje>({
     dataKey: string | number | symbol
   ): ReactNode => {
     if (isLoading) {
-      return <Mensagem className="mt-0">Carregando...</Mensagem>;
+      return <Spinner />;
     }
 
     if (isError) {
-      return <Mensagem className={errorClassName}>Erro</Mensagem>;
+      return <Mensagem className="text-destructive mt-0">Erro</Mensagem>;
     }
 
     const value = data?.[dataKey];
-
-    if (typeof value !== "number" && typeof value !== "string") {
-      return <Mensagem className={errorClassName}>N/A</Mensagem>;
-    }
 
     return formatter ? formatter(value) : value;
   };
@@ -93,4 +88,4 @@ export function Metric<TGeral, THoje>({
   );
 }
 
-Metric.displayName = "Metric";
+Metrica.displayName = "Metrica";

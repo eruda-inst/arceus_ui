@@ -67,12 +67,6 @@ export function LogsTable({ logs }: LogsTableProps) {
           </TableBody>
         </Table>
       </CardContent>
-
-      {logs.length === 0 && (
-        <div className="text-center py-8">
-          <Mensagem className="text-destructive">N/A</Mensagem>
-        </div>
-      )}
     </Card>
   );
 }

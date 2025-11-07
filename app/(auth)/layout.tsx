@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { PageHeader } from "@/ui/PageHeader/PageHeader";
-import { PageContent } from "@/ui/PageContent/PageContent";
+import { Header } from "@/ui/Header/Header";
+import { Conteudo } from "@/ui/Conteudo/Conteudo";
 import { Nav } from "@/ui/Nav/Nav";
 
 export const metadata: Metadata = {
@@ -16,9 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <PageHeader />
+      <Header />
       <Nav />
-      <PageContent>{children}</PageContent>
+      <Conteudo>{children}</Conteudo>
     </>
   );
 }

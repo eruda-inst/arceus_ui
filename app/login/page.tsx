@@ -29,6 +29,7 @@ import {
   ChartBar,
   ShieldCheck,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface LoginForm {
   email: string;
@@ -232,10 +233,7 @@ function LoginContent() {
                   disabled={mutation.isPending}
                 >
                   {mutation.isPending ? (
-                    <div className="flex items-center justify-center">
-                      <Loader className="h-4 w-4 animate-spin mr-2" />{" "}
-                      Entrando...
-                    </div>
+                    <Spinner>Entrando...</Spinner>
                   ) : (
                     "Entrar"
                   )}

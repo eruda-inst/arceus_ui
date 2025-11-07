@@ -1,4 +1,5 @@
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
+import { Spinner } from "@/components/ui/spinner";
 
 interface LoadingStateProps {
   isConnected: boolean;
@@ -28,7 +29,7 @@ export function LoadingState({
       </div>
       <div className="flex justify-center items-center h-64">
         {isLoading ? (
-          <Mensagem className="text-center">Carregando...</Mensagem>
+          <Spinner />
         ) : (
           isError && (
             <Mensagem className="text-center text-destructive">Erro</Mensagem>

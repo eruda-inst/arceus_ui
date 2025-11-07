@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterCorMetodo } from "@/helpers/obterCor";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 
 interface EndpointData {
   http_method: string;
@@ -58,7 +59,7 @@ export function TableTwoCols({
             {isLoading ? (
               <TableRow>
                 <TableCell>
-                  <Mensagem>Carregando...</Mensagem>
+                  <Spinner />
                 </TableCell>
               </TableRow>
             ) : isError ? (
@@ -67,15 +68,9 @@ export function TableTwoCols({
                   <Mensagem className="text-destructive">Erro</Mensagem>
                 </TableCell>
               </TableRow>
-            ) : !endpointsData || endpointsData.length === 0 ? (
-              <TableRow>
-                <TableCell>
-                  <Mensagem className="text-destructive">N/A</Mensagem>
-                </TableCell>
-              </TableRow>
             ) : (
-              endpointsData.map((item: EndpointData) => (
-                <TableRow key={uuidv4()}>
+              endpointsData?.map((item: EndpointData) => (
+                <TableRow key={uuid()}>
                   <TableCell>
                     <Badge
                       className={`${Object.values(

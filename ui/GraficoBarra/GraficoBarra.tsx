@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { BarChartComponent } from "@/ui/BarChartComponent/BarChartComponent";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
+import { Spinner } from "@/components/ui/spinner";
 
 interface GraficoBarraProps {
   endpoint: string;
@@ -22,7 +23,6 @@ export function GraficoBarra({
   transformData,
   xKey,
   yKey,
-  emptyMessage = "N/A",
   barName = "Valor",
   barSize = 60,
   fill = "var(--chart-2)",
@@ -38,11 +38,9 @@ export function GraficoBarra({
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <Mensagem>Carregando...</Mensagem>
+          <Spinner />
         ) : isError ? (
           <Mensagem className="text-destructive">Erro</Mensagem>
-        ) : transformedData.length === 0 ? (
-          <Mensagem className="text-destructive">{emptyMessage}</Mensagem>
         ) : (
           <BarChartComponent
             data={transformedData}

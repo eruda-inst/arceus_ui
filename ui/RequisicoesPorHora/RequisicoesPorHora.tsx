@@ -3,6 +3,7 @@ import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { API_CONFIG } from "@/config/config";
+import { Spinner } from "@/components/ui/spinner";
 
 interface RequisicaoPorHora {
   hora: string;
@@ -59,11 +60,9 @@ export function RequisicoesPorHora() {
       </CardHeader>
       <CardContent>
         {reqPorHoraIsLoading ? (
-          <Mensagem>Caregando...</Mensagem>
+          <Spinner />
         ) : reqPorHoraIsError ? (
           <Mensagem className="text-destructive">Erro</Mensagem>
-        ) : reqPorHoraData?.requisicoes_por_hora?.length === 0 ? (
-          <Mensagem className="text-destructive">N/A</Mensagem>
         ) : (
           <LineChartComponent
             data={filterAndProcessHourlyRequests(

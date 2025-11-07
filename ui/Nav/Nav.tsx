@@ -37,6 +37,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Usuario {
   id: number;
@@ -211,16 +212,14 @@ export function Nav() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="hover:cursor-pointer">
-                  <CartaoUsuario
-                    nome={
-                      isLoading ? "Carregando..." : usuario?.nome || "Usuário"
-                    }
-                    funcao={
-                      isLoading
-                        ? "Carregando..."
-                        : usuario?.funcao || "Função não definida"
-                    }
-                  />
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <CartaoUsuario
+                      nome={usuario?.nome || "Usuário"}
+                      funcao={usuario?.funcao || "Função não definida"}
+                    />
+                  )}
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

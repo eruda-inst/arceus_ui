@@ -15,6 +15,7 @@ import {
 import { Mensagem } from "../Mensagem/Mensagem";
 import { Badge } from "@/components/ui/badge";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
+import { Spinner } from "@/components/ui/spinner";
 
 interface TableOneColProps {
   websocketEndpoint: string;
@@ -55,19 +56,13 @@ export function TableOneCol({
             {isLoading ? (
               <TableRow>
                 <TableCell>
-                  <Mensagem>Caregando...</Mensagem>
+                  <Spinner />
                 </TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
                 <TableCell>
                   <Mensagem className="text-destructive">Erro</Mensagem>
-                </TableCell>
-              </TableRow>
-            ) : logs.length === 0 ? (
-              <TableRow>
-                <TableCell>
-                  <Mensagem className="text-destructive">N/A</Mensagem>
                 </TableCell>
               </TableRow>
             ) : (
