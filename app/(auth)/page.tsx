@@ -12,6 +12,7 @@ import { RequisicoesRecentesErro } from "@/ui/RequisicoesRecentesErro/Requisicoe
 import { RequisicoesRecentes } from "@/ui/RequisicoesRecentes/RequisicoesRecentes";
 import { DistribuicaoAcessosHora } from "@/ui/DistribuicaoAcessosHora/DistribuicaoAcessosHora";
 import { DistribuicaoAcessosDiaSemana } from "@/ui/DistribuicaoAcessosDiaSemana/DistribuicaoAcessosDiaSemana";
+import { EndpointsComMaisErros } from "@/ui/EndpointsComMaisErros/EndpointsComMaisErros";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
       </Grid>
       <Grid>
         <TopEndpoints />
+        <EndpointsComMaisErros />
       </Grid>
       <RequisicoesRecentesErro />
       <RequisicoesRecentes />

@@ -28,6 +28,7 @@ const API_CONFIG = {
     DISTRIBUICAO_ACESSOS_HORA: "/api/v1/ws/info/distribuicao_acessos_hora",
     DISTRIBUICAO_ACESSOS_DIA_SEMANA:
       "/api/v1/ws/info/distribuicao_acessos_dia_semana",
+    ENDPOINTS_COM_MAIS_ERROS: "/api/v1/ws/info/endpoints_com_mais_erros",
   },
 };
 
