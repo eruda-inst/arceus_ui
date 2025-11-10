@@ -70,7 +70,6 @@ export function RequisicoesPorHora() {
             )}
             xKey="hora"
             yKey="total"
-            lineName="Número de Requisições"
             showDots={true}
           />
         )}

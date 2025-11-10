@@ -10,11 +10,11 @@ interface GraficoBarraProps {
   transformData: (data: any | null | undefined) => any[];
   xKey: string;
   yKey: string;
-  barName: string;
   barSize?: number;
   fill?: string;
   activeBarColor?: string;
   emptyMessage?: string;
+  labelText?: string;
 }
 
 export function GraficoBarra({
@@ -23,10 +23,10 @@ export function GraficoBarra({
   transformData,
   xKey,
   yKey,
-  barName = "Valor",
   barSize = 60,
   fill = "var(--chart-2)",
   activeBarColor = "var(--chart-2)",
+  labelText = "Total",
 }: GraficoBarraProps) {
   const { data, isLoading, isError } = useReactWebSocket<any>(endpoint);
   const transformedData = transformData(data);
@@ -46,10 +46,10 @@ export function GraficoBarra({
             data={transformedData}
             xKey={xKey}
             yKey={yKey}
-            barName={barName}
             barSize={barSize}
             fill={fill}
             activeBarColor={activeBarColor}
+            labelText={labelText}
           />
         )}
       </CardContent>

@@ -11,6 +11,7 @@ import { converterTempo } from "@/helpers/converter";
 import { ReactNode } from "react";
 import { v4 as uuid } from "uuid";
 import { GraficoBarra } from "@/ui/GraficoBarra/GraficoBarra";
+import { capitalizarString } from "@/helpers/misc";
 
 interface MetricaConfig {
   title: string;
@@ -52,7 +53,9 @@ function transformDistribuicaoAcessosDiaSemana(
   Object.keys(acessosPordiaSemana).forEach((diaSemana) => {
     const acessos = acessosPordiaSemana[diaSemana];
     if (acessos > 0) {
-      transformedData.push({ diaSemana, acessos });
+      const diaSemanaCurto = diaSemana.slice(0, 3);
+      const diaSemanaCapitalizado = capitalizarString(diaSemanaCurto);
+      transformedData.push({ diaSemana: diaSemanaCapitalizado, acessos });
     }
   });
 
@@ -84,7 +87,7 @@ function transformDistribuicaoAcessosHora(
     const acessos = acessosPorHora[hora];
     if (acessos > 0) {
       transformedData.push({
-        hora: `${hora}:00`,
+        hora: `${hora}h`,
         acessos,
       });
     }
@@ -208,7 +211,7 @@ export default function Home() {
       transformData: transformDistribuicaoStatusCode,
       xKey: "statusCode" as const,
       yKey: "total" as const,
-      barName: "Número de Ocorrências",
+      labelText: "Total",
     },
     {
       endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_HORA,
@@ -216,9 +219,9 @@ export default function Home() {
       transformData: transformDistribuicaoAcessosHora,
       xKey: "hora" as const,
       yKey: "acessos" as const,
-      barName: "Número de Acessos",
       fill: "var(--chart-3)",
       activeBarColor: "var(--chart-3)",
+      labelText: "Total",
     },
     {
       endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_DIA_SEMANA,
@@ -226,9 +229,9 @@ export default function Home() {
       transformData: transformDistribuicaoAcessosDiaSemana,
       xKey: "diaSemana" as const,
       yKey: "acessos" as const,
-      barName: "Número de Acessos",
       fill: "var(--chart-4)",
       activeBarColor: "var(--chart-4)",
+      labelText: "Total",
     },
   ];
 
@@ -257,9 +260,9 @@ export default function Home() {
             transformData={grafico.transformData}
             xKey={grafico.xKey}
             yKey={grafico.yKey}
-            barName={grafico.barName}
             fill={grafico.fill}
             activeBarColor={grafico.activeBarColor}
+            labelText={grafico.labelText}
           />
         ))}
       </Grid>

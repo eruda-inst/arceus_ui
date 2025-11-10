@@ -15,27 +15,27 @@ interface BarChartProps<TData> {
   data: TData[];
   xKey: keyof TData;
   yKey: keyof TData;
-  barName?: string;
   barSize?: number;
   height?: number;
   fill?: string;
   activeBarColor?: string;
   yAxisFormatter?: (value: number) => string;
+  labelText?: string;
 }
 
 export function BarChartComponent<TData>({
   data,
   xKey,
   yKey,
-  barName = "Valor",
   barSize = 60,
   fill = "var(--chart-2)",
   activeBarColor = "var(--chart-2)",
   yAxisFormatter,
+  labelText = "Total",
 }: BarChartProps<TData>) {
   const chartConfig = {
     [yKey as string]: {
-      label: barName,
+      label: labelText,
       color: fill,
     },
   };

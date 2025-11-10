@@ -15,7 +15,6 @@ interface LineChartProps<T> {
   data: T[];
   xKey: keyof T;
   yKey: keyof T;
-  lineName?: string;
   showDots?: boolean;
   stroke?: string;
   activeDot?: {
@@ -23,13 +22,13 @@ interface LineChartProps<T> {
     stroke: string;
   };
   yAxisFormatter?: (value: number) => string;
+  labelText?: string;
 }
 
 export function LineChartComponent<T>({
   data,
   xKey,
   yKey,
-  lineName = "Valor",
   showDots = true,
   stroke = "var(--chart-1)",
   activeDot = {
@@ -37,10 +36,11 @@ export function LineChartComponent<T>({
     stroke: "var(--chart-1)",
   },
   yAxisFormatter,
+  labelText = "Total",
 }: LineChartProps<T>) {
   const chartConfig = {
     [yKey as string]: {
-      label: lineName,
+      label: labelText,
       color: stroke,
     },
   };
