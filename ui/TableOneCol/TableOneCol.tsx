@@ -72,10 +72,10 @@ export function TableOneCol({
                   <TableCell>
                     <Badge
                       className={`${Object.values(
-                        obterCorMetodo(log.http_method)
+                        obterCorMetodo(log.metodo_http)
                       ).join(" ")}`}
                     >
-                      {log.http_method}
+                      {log.metodo_http}
                     </Badge>
                   </TableCell>
                   <TableCell>{log.endpoint}</TableCell>

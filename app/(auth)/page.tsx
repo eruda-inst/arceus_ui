@@ -102,26 +102,26 @@ function transformDistribuicaoAcessosHora(
   return transformedData;
 }
 
-interface DistribuicaoStatusCodeData {
+interface DistribuicaoStatusCodesData {
   [key: string]: number;
 }
 
-interface DistribuicaoStatusCodeOut {
-  distribuicao_status_code: DistribuicaoStatusCodeData;
+interface DistribuicaoStatusCodesOut {
+  distribuicao_status_codes: DistribuicaoStatusCodesData;
 }
 
-interface DistribuicaoStatusCodeTransformed {
+interface DistribuicaoStatusCodesTransformed {
   statusCode: string;
   total: number;
 }
 
 function transformDistribuicaoStatusCode(
-  data: DistribuicaoStatusCodeOut | null | undefined
-): DistribuicaoStatusCodeTransformed[] {
-  if (!data?.distribuicao_status_code) return [];
+  data: DistribuicaoStatusCodesOut | null | undefined
+): DistribuicaoStatusCodesTransformed[] {
+  if (!data?.distribuicao_status_codes) return [];
 
-  const statusCodesMap = data.distribuicao_status_code;
-  const transformedData: DistribuicaoStatusCodeTransformed[] = [];
+  const statusCodesMap = data.distribuicao_status_codes;
+  const transformedData: DistribuicaoStatusCodesTransformed[] = [];
 
   Object.keys(statusCodesMap).forEach((key) => {
     const total = statusCodesMap[key];
@@ -206,7 +206,7 @@ export default function Home() {
 
   const graficosBarras = [
     {
-      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_STATUS_CODE,
+      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_STATUS_CODES,
       cardTitle: "Distribuição de Status Codes (todo o período)",
       transformData: transformDistribuicaoStatusCode,
       xKey: "statusCode" as const,
@@ -214,7 +214,7 @@ export default function Home() {
       labelText: "Total",
     },
     {
-      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_HORA,
+      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_HORA,
       cardTitle: "Distribuição de Acessos por Hora (todo o período)",
       transformData: transformDistribuicaoAcessosHora,
       xKey: "hora" as const,
@@ -224,7 +224,7 @@ export default function Home() {
       labelText: "Total",
     },
     {
-      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_ACESSOS_DIA_SEMANA,
+      endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_DIA_SEMANA,
       cardTitle: "Distribuição de Acessos por Dia da Semana (todo o período)",
       transformData: transformDistribuicaoAcessosDiaSemana,
       xKey: "diaSemana" as const,

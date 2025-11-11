@@ -10,11 +10,11 @@ import { API_CONFIG } from "@/config/config";
 import { Log } from "@/types/log";
 
 interface PaginatedLogsResponse {
-  logs: Log[];
-  total_logs: number;
-  current_page: number;
-  items_per_page: number;
-  page_count: number;
+  registros: Log[];
+  total_registros: number;
+  pagina_atual: number;
+  itens_por_pagina: number;
+  pagina_contagem: number;
 }
 
 export default function LogsCompleto() {
@@ -22,9 +22,12 @@ export default function LogsCompleto() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { data, isConnected, sendMessage, isLoading, isError } =
-    useReactWebSocket<PaginatedLogsResponse>(API_CONFIG.WS_ENDPOINTS.LOGS, {
-      autoAck: false,
-    });
+    useReactWebSocket<PaginatedLogsResponse>(
+      API_CONFIG.WS_ENDPOINTS.REGISTROS,
+      {
+        autoAck: false,
+      }
+    );
 
   useEffect(() => {
     if (isConnected) {
@@ -57,26 +60,26 @@ export default function LogsCompleto() {
     );
   }
 
-  const { logs, total_logs, page_count } = data;
+  const { registros, total_registros, pagina_contagem } = data;
 
   return (
     <>
-      <LogsHeader totalLogs={total_logs} isConnected={isConnected} />
+      <LogsHeader totalLogs={total_registros} isConnected={isConnected} />
       <ControlesPaginacao
         itemsPerPage={itemsPerPage}
         onItemsPerPageChange={handleItemsPerPageChange}
         onPageChange={handlePageClick}
-        pageCount={page_count}
+        pageCount={pagina_contagem}
         currentPage={currentPage}
         variant="top"
       />
-      <LogsTable logs={logs} />
-      {page_count > 1 && (
+      <LogsTable logs={registros} />
+      {pagina_contagem > 1 && (
         <ControlesPaginacao
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={handleItemsPerPageChange}
           onPageChange={handlePageClick}
-          pageCount={page_count}
+          pageCount={pagina_contagem}
           currentPage={currentPage}
           variant="bottom"
         />

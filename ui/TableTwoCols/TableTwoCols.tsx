@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 
 interface EndpointData {
-  http_method: string;
+  metodo_http: string;
   endpoint: string;
   total_acessos?: number;
   total_erros?: number;
@@ -74,10 +74,10 @@ export function TableTwoCols({
                   <TableCell>
                     <Badge
                       className={`${Object.values(
-                        obterCorMetodo(item.http_method)
+                        obterCorMetodo(item.metodo_http)
                       ).join(" ")}`}
                     >
-                      {item.http_method}
+                      {item.metodo_http}
                     </Badge>
                   </TableCell>
                   <TableCell>{item.endpoint}</TableCell>

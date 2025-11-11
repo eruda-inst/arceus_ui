@@ -20,14 +20,15 @@ const API_CONFIG = {
     TAXA_ERRO: "/api/v1/ws/info/taxa_erro",
     TAXA_ERRO_HOJE: "/api/v1/ws/info/taxa_erro_hoje",
     REQUISICOES_POR_HORA: "/api/v1/ws/info/requisicoes_por_hora",
-    DISTRIBUICAO_STATUS_CODE: "/api/v1/ws/info/distribuicao_status_code",
+    DISTRIBUICAO_STATUS_CODES: "/api/v1/ws/info/distribuicao_status_codes",
     TOP_ENDPOINTS: "/api/v1/ws/info/top_endpoints",
     REQUISICOES_RECENTES: "/api/v1/ws/info/requisicoes_recentes",
     REQUISICOES_RECENTES_ERRO: "/api/v1/ws/info/requisicoes_recentes_erro",
-    LOGS: "/api/v1/ws/info/logs",
-    DISTRIBUICAO_ACESSOS_HORA: "/api/v1/ws/info/distribuicao_acessos_hora",
-    DISTRIBUICAO_ACESSOS_DIA_SEMANA:
-      "/api/v1/ws/info/distribuicao_acessos_dia_semana",
+    REGISTROS: "/api/v1/ws/info/registros",
+    DISTRIBUICAO_REQUISICOES_HORA:
+      "/api/v1/ws/info/distribuicao_requisicoes_hora",
+    DISTRIBUICAO_REQUISICOES_DIA_SEMANA:
+      "/api/v1/ws/info/distribuicao_requisicoes_dia_semana",
     ENDPOINTS_COM_MAIS_ERROS: "/api/v1/ws/info/endpoints_com_mais_erros",
   },
 };

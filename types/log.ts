@@ -1,7 +1,7 @@
 interface Log {
   id: number;
   ip: string;
-  http_method: string;
+  metodo_http: string;
   endpoint: string;
   status_code: number;
   data: string;
