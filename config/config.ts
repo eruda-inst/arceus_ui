@@ -9,6 +9,7 @@ const API_CONFIG = {
   HTTP_ENDPOINTS: {
     LOGIN: "/api/v1/auth/login",
     ME: "/api/v1/auth/me",
+    REFRESH: "/api/v1/auth/refresh",
   },
   WS_ENDPOINTS: {
     TOTAL_REQUISICOES: "/api/v1/ws/info/total_requisicoes",

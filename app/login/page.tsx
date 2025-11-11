@@ -24,12 +24,13 @@ import {
   EyeOff,
   Rocket,
   TriangleAlert,
-  Loader,
   Lock,
   ChartBar,
   ShieldCheck,
 } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import api from "@/lib/api";
+import { setCookie } from "cookies-next";
 
 interface LoginForm {
   email: string;
@@ -38,6 +39,7 @@ interface LoginForm {
 
 interface LoginResponse {
   token: string;
+  refreshToken: string;
   user: {
     id: string;
     email: string;
@@ -68,23 +70,22 @@ function LoginContent() {
 
   const mutation = useMutation({
     mutationFn: async (credentials: LoginForm) => {
-      const response = await axios.post<LoginResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login` ||
-          "http://localhost:8000/api/v1/auth/login",
-        credentials,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await api.post<LoginResponse>(
+        `/api/v1/auth/login`,
+        credentials
       );
       return response.data;
     },
     onSuccess: (data) => {
-      // Set the auth token cookie that middleware expects
-      document.cookie = `auth-token=${data.token}; path=/; max-age=${
-        60 * 60 * 24 * 7
-      }; SameSite=Strict`;
+      // Set the auth token cookie
+      setCookie("auth-token", data.token, {
+        path: "/",
+        maxAge: 60 * 15, // 15 minutes
+        sameSite: "strict",
+      });
+
+      // Store refresh token
+      localStorage.setItem("refreshToken", data.refreshToken);
 
       // Redirect to intended page or default
       router.push(redirect);
