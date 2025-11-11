@@ -30,6 +30,8 @@ const API_CONFIG = {
     DISTRIBUICAO_REQUISICOES_DIA_SEMANA:
       "/api/v1/ws/info/distribuicao_requisicoes_dia_semana",
     ENDPOINTS_COM_MAIS_ERROS: "/api/v1/ws/info/endpoints_com_mais_erros",
+    TOTAL_ATENDIMENTOS: "/api/v1/ws/info/total_atendimentos",
+    TOTAL_ATENDIMENTOS_HOJE: "/api/v1/ws/info/total_atendimentos_hoje",
   },
 };
 

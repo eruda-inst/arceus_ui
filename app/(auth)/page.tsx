@@ -176,6 +176,14 @@ export default function Home() {
       dataKeyHoje: "taxa_erro_hoje",
       formatter: formatarPorcentagem,
     },
+    {
+      title: "Total de Atendimentos",
+      endpointGeral: API_CONFIG.WS_ENDPOINTS.TOTAL_ATENDIMENTOS,
+      endpointHoje: API_CONFIG.WS_ENDPOINTS.TOTAL_ATENDIMENTOS_HOJE,
+      dataKeyGeral: "total_atendimentos",
+      dataKeyHoje: "total_atendimentos_hoje",
+      formatter: undefined,
+    },
   ];
 
   const tableTwoCols: TabelaConfig[] = [
