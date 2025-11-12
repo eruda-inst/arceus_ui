@@ -14,7 +14,7 @@ interface PaginatedLogsResponse {
   total_registros: number;
   pagina_atual: number;
   itens_por_pagina: number;
-  pagina_contagem: number;
+  total_paginas: number;
 }
 
 export default function LogsCompleto() {
@@ -32,14 +32,15 @@ export default function LogsCompleto() {
   useEffect(() => {
     if (isConnected) {
       sendMessage({
-        page: currentPage,
-        items_per_page: itemsPerPage,
+        pagina: currentPage + 1,
+        itens_por_pagina: itemsPerPage,
       });
     }
   }, [currentPage, itemsPerPage, isConnected, sendMessage]);
 
   const handlePageClick = useCallback((event: { selected: number }) => {
     setCurrentPage(event.selected);
+    console.log(event.selected);
   }, []);
 
   const handleItemsPerPageChange = useCallback((value: string) => {
@@ -60,7 +61,7 @@ export default function LogsCompleto() {
     );
   }
 
-  const { registros, total_registros, pagina_contagem } = data;
+  const { registros, total_registros, total_paginas } = data;
 
   return (
     <>
@@ -69,17 +70,17 @@ export default function LogsCompleto() {
         itemsPerPage={itemsPerPage}
         onItemsPerPageChange={handleItemsPerPageChange}
         onPageChange={handlePageClick}
-        pageCount={pagina_contagem}
+        pageCount={total_paginas}
         currentPage={currentPage}
         variant="top"
       />
       <LogsTable logs={registros} />
-      {pagina_contagem > 1 && (
+      {total_paginas > 1 && (
         <ControlesPaginacao
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={handleItemsPerPageChange}
           onPageChange={handlePageClick}
-          pageCount={pagina_contagem}
+          pageCount={total_paginas}
           currentPage={currentPage}
           variant="bottom"
         />

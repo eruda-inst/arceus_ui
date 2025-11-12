@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
 
 interface PaginationControlsProps {
   itemsPerPage: number;
@@ -86,6 +87,10 @@ export function ControlesPaginacao({
   if (pageCount <= 1) {
     return null;
   }
+
+  useEffect(() => {
+    console.log(pageCount, currentPage, itemsPerPage);
+  }, []);
 
   return (
     <Card>
