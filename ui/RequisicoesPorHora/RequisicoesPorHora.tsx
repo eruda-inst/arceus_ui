@@ -33,7 +33,7 @@ export function RequisicoesPorHora() {
     const fullDayData: RequisicaoPorHora[] = Array.from(
       { length: currentHour + 1 },
       (_, i) => ({
-        hora: `${String(i)}:00`,
+        hora: `${String(i)}h`,
         total: 0,
       })
     );
@@ -42,7 +42,7 @@ export function RequisicoesPorHora() {
       const itemHour = parseInt(String(item.hora).split(":")[0], 10);
       if (itemHour <= currentHour) {
         const index = fullDayData.findIndex(
-          (d) => d.hora === `${String(itemHour)}:00`
+          (d) => d.hora === `${String(itemHour)}h`
         );
         if (index !== -1) {
           fullDayData[index] = { ...item, hora: fullDayData[index].hora };
