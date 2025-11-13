@@ -17,7 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 interface EndpointData {
   metodo_http: string;
   endpoint: string;
-  total_acessos?: number;
+  total_requisicoes?: number;
   total_erros?: number;
 }
 
@@ -82,7 +82,9 @@ export function TableTwoCols({
                   </TableCell>
                   <TableCell>{item.endpoint}</TableCell>
                   <TableCell>
-                    {item.total_acessos ? item.total_acessos : item.total_erros}
+                    {item.total_requisicoes
+                      ? item.total_requisicoes
+                      : item.total_erros}
                   </TableCell>
                 </TableRow>
               ))

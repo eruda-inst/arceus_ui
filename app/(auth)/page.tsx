@@ -188,12 +188,12 @@ export default function Home() {
 
   const tableTwoCols: TabelaConfig[] = [
     {
-      title: "Endpoints Mais Acessados (todo o período)",
+      title: "Endpoints Mais Requisitados (todo o período)",
       websocketEndpoint: API_CONFIG.WS_ENDPOINTS.TOP_ENDPOINTS,
       dataKey: "top_endpoints",
     },
     {
-      title: "Endpoints Com mais Erros (todo o período)",
+      title: "Endpoints com Mais Erros (todo o período)",
       websocketEndpoint: API_CONFIG.WS_ENDPOINTS.ENDPOINTS_COM_MAIS_ERROS,
       dataKey: "endpoints_com_mais_erros",
     },
@@ -223,7 +223,7 @@ export default function Home() {
     },
     {
       endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_HORA,
-      cardTitle: "Distribuição de Acessos por Hora (todo o período)",
+      cardTitle: "Distribuição de Requisições por Hora (todo o período)",
       transformData: transformDistribuicaoAcessosHora,
       xKey: "hora" as const,
       yKey: "acessos" as const,
@@ -233,7 +233,8 @@ export default function Home() {
     },
     {
       endpoint: API_CONFIG.WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_DIA_SEMANA,
-      cardTitle: "Distribuição de Acessos por Dia da Semana (todo o período)",
+      cardTitle:
+        "Distribuição de Requisições por Dia da Semana (todo o período)",
       transformData: transformDistribuicaoAcessosDiaSemana,
       xKey: "diaSemana" as const,
       yKey: "acessos" as const,
