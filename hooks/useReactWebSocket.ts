@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { API_CONFIG } from "@/config/config";
 
 type Options<T> = {
   initialMessage?: unknown | (() => unknown);
@@ -21,7 +20,7 @@ type UseReactWebSocketResult<T> = {
 };
 
 export function useReactWebSocket<T = unknown>(
-  wsPath: string,
+  rota: string,
   options?: Options<T>
 ): UseReactWebSocketResult<T> {
   const { initialMessage, autoAck = true, onMessage } = options || {};
@@ -30,15 +29,6 @@ export function useReactWebSocket<T = unknown>(
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-
-  const wsUrl = useMemo(() => {
-    const base = (API_CONFIG.BASE_URL || "").replace(/\/+$/u, "");
-    const path = wsPath ? (wsPath.startsWith("/") ? wsPath : `/${wsPath}`) : "";
-    return `${base}${path}`
-      .replace(/^http:\/\//i, "ws://")
-      .replace(/^https:\/\//i, "wss://");
-    // note: dependency intentionally just wsPath
-  }, [wsPath]);
 
   const sentInitialRef = useRef(false);
   const mountedRef = useRef(true);
@@ -49,13 +39,13 @@ export function useReactWebSocket<T = unknown>(
     };
   }, []);
 
-  // Reset sentInitial when wsUrl changes so a new connection can send initial message again
+  // Reset sentInitial when rota changes so a new connection can send initial message again
   useEffect(() => {
     sentInitialRef.current = false;
-  }, [wsUrl]);
+  }, [rota]);
 
   const { sendMessage, sendJsonMessage, lastMessage, readyState } =
-    useWebSocket(wsUrl, {
+    useWebSocket(rota, {
       onOpen: () => {
         // connection opened
         setError(null);
@@ -63,7 +53,7 @@ export function useReactWebSocket<T = unknown>(
         setIsLoading(false);
       },
       onError: (event: Event) => {
-        console.error(`WebSocket error for ${wsPath}:`, event);
+        console.error(`WebSocket error for ${rota}:`, event);
         if (mountedRef.current) {
           setError("Erro na conexão WebSocket");
           setIsError(true);
@@ -195,13 +185,13 @@ export function useReactWebSocket<T = unknown>(
           }
         }
       } catch (err) {
-        console.error(`Error processing WebSocket message for ${wsPath}:`, err);
+        console.error(`Error processing WebSocket message for ${rota}:`, err);
         if (!mountedRef.current) return;
         setError("Erro ao processar mensagem do servidor");
         setIsError(true);
       }
     })();
-  }, [lastMessage, onMessage, autoAck, wsPath, sendMessage]);
+  }, [lastMessage, onMessage, autoAck, rota, sendMessage]);
 
   const isConnected = readyState === ReadyState.OPEN;
 

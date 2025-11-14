@@ -36,15 +36,12 @@ export default function Usuarios() {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios.get(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.HTTP_ENDPOINTS.USUARIOS}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(API_CONFIG.HTTP.ROTAS.USUARIOS, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     },
     retry: false,

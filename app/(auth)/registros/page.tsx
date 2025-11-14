@@ -22,12 +22,9 @@ export default function LogsCompleto() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { data, isConnected, sendMessage, isLoading, isError } =
-    useReactWebSocket<PaginatedLogsResponse>(
-      API_CONFIG.WS_ENDPOINTS.REGISTROS,
-      {
-        autoAck: false,
-      }
-    );
+    useReactWebSocket<PaginatedLogsResponse>(API_CONFIG.WS.ROTAS.REGISTROS, {
+      autoAck: false,
+    });
 
   useEffect(() => {
     if (isConnected) {
@@ -40,7 +37,6 @@ export default function LogsCompleto() {
 
   const handlePageClick = useCallback((event: { selected: number }) => {
     setCurrentPage(event.selected);
-    console.log(event.selected);
   }, []);
 
   const handleItemsPerPageChange = useCallback((value: string) => {

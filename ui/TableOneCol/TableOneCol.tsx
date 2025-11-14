@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Log as LogType } from "@/types/log";

@@ -6,8 +6,8 @@ import { Spinner } from "@/components/ui/spinner";
 
 interface MetricaProps<TGeral, THoje> {
   title: string;
-  endpointGeral: string;
-  endpointHoje: string;
+  rotaGeral: string;
+  rotaHoje: string;
   dataKeyGeral: keyof TGeral;
   dataKeyHoje: keyof THoje;
   formatter?: (value: any) => ReactNode;
@@ -15,8 +15,8 @@ interface MetricaProps<TGeral, THoje> {
 
 export function Metrica<TGeral, THoje>({
   title,
-  endpointGeral,
-  endpointHoje,
+  rotaGeral,
+  rotaHoje,
   dataKeyGeral,
   dataKeyHoje,
   formatter,
@@ -25,13 +25,13 @@ export function Metrica<TGeral, THoje>({
     data: dataGeral,
     isLoading: isLoadingGeral,
     isError: isErrorGeral,
-  } = useReactWebSocket<TGeral>(endpointGeral);
+  } = useReactWebSocket<TGeral>(rotaGeral);
 
   const {
     data: dataHoje,
     isLoading: isLoadingHoje,
     isError: isErrorHoje,
-  } = useReactWebSocket<THoje>(endpointHoje);
+  } = useReactWebSocket<THoje>(rotaHoje);
 
   const renderValue = (
     isLoading: boolean,

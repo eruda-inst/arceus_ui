@@ -20,7 +20,7 @@ export function RequisicoesPorHora() {
     isLoading: reqPorHoraIsLoading,
     isError: reqPorHoraIsError,
   } = useReactWebSocket<RequisicoesPorHoraOut>(
-    API_CONFIG.WS_ENDPOINTS.REQUISICOES_POR_HORA
+    API_CONFIG.WS.ROTAS.REQUISICOES_POR_HORA
   );
 
   function filterAndProcessHourlyRequests(

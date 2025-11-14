@@ -31,6 +31,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import api from "@/lib/api";
 import { setCookie } from "cookies-next";
+import { API_CONFIG } from "@/config/config";
 
 interface LoginForm {
   email: string;
@@ -71,7 +72,7 @@ function LoginContent() {
   const mutation = useMutation({
     mutationFn: async (credentials: LoginForm) => {
       const response = await api.post<LoginResponse>(
-        `/api/v1/auth/login`,
+        API_CONFIG.HTTP.ROTAS.LOGIN,
         credentials
       );
       return response.data;

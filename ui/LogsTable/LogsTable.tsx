@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import { formatarData } from "@/helpers/formatar";
 import { converterTempo } from "@/helpers/converter";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
@@ -14,17 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect } from "react";
 
 interface LogsTableProps {
   logs: Log[];
 }
 
 export function LogsTable({ logs }: LogsTableProps) {
-  useEffect(() => {
-    console.log(logs);
-  }, [logs]);
-
   return (
     <Card>
       <CardContent>
@@ -42,7 +37,7 @@ export function LogsTable({ logs }: LogsTableProps) {
           </TableHeader>
           <TableBody>
             {logs?.map((log: LogType) => (
-              <TableRow key={uuidv4()}>
+              <TableRow key={uuid()}>
                 <TableCell>{log.ip}</TableCell>
                 <TableCell>
                   <Badge

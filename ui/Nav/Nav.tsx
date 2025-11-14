@@ -83,7 +83,7 @@ export function Nav() {
       }
 
       await axios.patch(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.HTTP_ENDPOINTS.ME}`,
+        API_CONFIG.HTTP.ROTAS.ME,
         { senha: data.senha },
         {
           headers: {
@@ -109,15 +109,12 @@ export function Nav() {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.HTTP_ENDPOINTS.ME}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios(API_CONFIG.HTTP.ROTAS.ME, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     },
     retry: (failureCount, error) => {

@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API_CONFIG } from "@/config/config";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000",
+  baseURL: API_CONFIG.HTTP.URL_BASE,
 });
 
 api.interceptors.request.use(
@@ -24,15 +25,17 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
-      const refreshToken = typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null;
+
+      const refreshToken =
+        typeof window !== "undefined"
+          ? localStorage.getItem("refreshToken")
+          : null;
 
       if (refreshToken) {
         try {
-          const { data } = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"}/api/v1/auth/refresh`,
-            { refreshToken }
-          );
+          const { data } = await axios.post(API_CONFIG.HTTP.ROTAS.REFRESH, {
+            refreshToken,
+          });
 
           const { token: newAccessToken } = data;
 
@@ -54,11 +57,11 @@ api.interceptors.response.use(
           return Promise.reject(refreshError);
         }
       } else {
-        console.log("No refresh token available.");
+        console.error("No refresh token available.");
         if (typeof window !== "undefined") {
-            deleteCookie("auth-token");
-            localStorage.removeItem("refreshToken");
-            window.location.href = "/login";
+          deleteCookie("auth-token");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
         }
       }
     }
