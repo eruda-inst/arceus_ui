@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
+import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Log as LogType } from "@/types/log";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { converterTempo } from "@/helpers/converter";
@@ -32,7 +33,8 @@ export function TableOneCol({
     [key: string]: LogType[];
   }>(websocketEndpoint);
 
-  const logs = data?.[dataKey] || [];
+  const registros = data?.[dataKey] || [];
+  const chavesEstaveis = useChavesEstaveis(registros.length || 0);
 
   return (
     <Card>
@@ -55,19 +57,19 @@ export function TableOneCol({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell>
+                <TableCell colSpan={7}>
                   <Spinner />
                 </TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
-                <TableCell>
+                <TableCell colSpan={7}>
                   <Mensagem className="text-destructive">Erro</Mensagem>
                 </TableCell>
               </TableRow>
             ) : (
-              logs.map((log: LogType) => (
-                <TableRow key={uuidv4()}>
+              registros.map((log: LogType, indice: number) => (
+                <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>{log.ip}</TableCell>
                   <TableCell>
                     <Badge

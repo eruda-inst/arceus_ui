@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterCorMetodo } from "@/helpers/obterCor";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
+import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import {
   Table,
   TableBody,
@@ -40,6 +42,7 @@ export function TableTwoCols({
     useReactWebSocket<EndpointsResponse<EndpointData>>(websocketEndpoint);
 
   const endpointsData = data?.[dataKey as keyof typeof data] as EndpointData[];
+  const chavesEstaveis = useChavesEstaveis(endpointsData?.length || 0);
 
   return (
     <Card>
@@ -58,19 +61,19 @@ export function TableTwoCols({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell>
+                <TableCell colSpan={3}>
                   <Spinner />
                 </TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
-                <TableCell>
+                <TableCell colSpan={3}>
                   <Mensagem className="text-destructive">Erro</Mensagem>
                 </TableCell>
               </TableRow>
             ) : (
-              endpointsData?.map((item: EndpointData) => (
-                <TableRow key={uuid()}>
+              endpointsData?.map((item: EndpointData, indice: number) => (
+                <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>
                     <Badge
                       className={`${Object.values(
