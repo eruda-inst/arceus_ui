@@ -25,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ChartLine, LogOut, Table, Smile } from "lucide-react";
+import { ChartLine, LogOut, Table, Smile, Users } from "lucide-react";
 import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
 import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
@@ -38,6 +38,7 @@ import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { obterTokenAutenticacao } from "@/helpers/misc";
 
 interface Usuario {
   id: number;
@@ -51,20 +52,11 @@ interface Formulario {
   confirmarSenha: string;
 }
 
-// Extract cookie logic to a reusable function
-function getAuthToken(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-
-  return document.cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("auth-token="))
-    ?.split("=")[1];
-}
-
 // Navigation items configuration for better maintainability
 const navItems = [
   { path: "/", label: "Dashboard", icon: ChartLine },
   { path: "/registros", label: "Registros", icon: Table },
+  { path: "/usuarios", label: "Usuários", icon: Users },
 ];
 
 export function Nav() {
@@ -84,7 +76,7 @@ export function Nav() {
 
   const onSubmit: SubmitHandler<Formulario> = async (data) => {
     try {
-      const token = getAuthToken();
+      const token = obterTokenAutenticacao();
       if (!token) {
         console.error("No authentication token found");
         return;
@@ -109,14 +101,10 @@ export function Nav() {
     }
   };
 
-  const {
-    data: usuario,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: usuario, isLoading } = useQuery({
     queryKey: ["usuario"],
     queryFn: async (): Promise<Usuario> => {
-      const token = getAuthToken();
+      const token = obterTokenAutenticacao();
       if (!token) {
         throw new Error("No authentication token found");
       }

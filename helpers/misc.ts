@@ -7,4 +7,13 @@ function capitalizarString(str: string): string {
   return stringCapitalizada;
 }
 
-export { capitalizarString };
+function obterTokenAutenticacao(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+
+  return document.cookie
+    .split(";")
+    .find((c) => c.trim().startsWith("auth-token="))
+    ?.split("=")[1];
+}
+
+export { capitalizarString, obterTokenAutenticacao };
