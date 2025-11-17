@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { API_CONFIG } from "@/config/config";
+import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import {
   Card,
   CardContent,
@@ -36,12 +36,15 @@ export default function Usuarios() {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios.get(API_CONFIG.HTTP.ROTAS.USUARIOS, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     },
     retry: false,

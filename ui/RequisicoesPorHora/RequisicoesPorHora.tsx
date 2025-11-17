@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { API_CONFIG } from "@/config/config";
+import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { Spinner } from "@/components/ui/spinner";
 
 interface RequisicaoPorHora {
@@ -20,7 +20,7 @@ export function RequisicoesPorHora() {
     isLoading: reqPorHoraIsLoading,
     isError: reqPorHoraIsError,
   } = useReactWebSocket<RequisicoesPorHoraOut>(
-    API_CONFIG.WS.ROTAS.REQUISICOES_POR_HORA
+    getWsUrl(WS_ENDPOINTS_NAME.REQUISICOES_POR_HORA)
   );
 
   function filterAndProcessHourlyRequests(

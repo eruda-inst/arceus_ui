@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_CONFIG } from "@/config/config";
+import { API_CONFIG, getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
 const api = axios.create({
@@ -33,9 +33,12 @@ api.interceptors.response.use(
 
       if (refreshToken) {
         try {
-          const { data } = await axios.post(API_CONFIG.HTTP.ROTAS.REFRESH, {
-            refreshToken,
-          });
+          const { data } = await axios.post(
+            getHttpUrl(HTTP_ENDPOINTS_NAME.REFRESH),
+            {
+              refreshToken,
+            }
+          );
 
           const { token: newAccessToken } = data;
 

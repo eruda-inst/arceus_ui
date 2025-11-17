@@ -3,7 +3,7 @@
 import { Grid } from "@/ui/Grid/Grid";
 import { RequisicoesPorHora } from "@/ui/RequisicoesPorHora/RequisicoesPorHora";
 import { TableTwoCols } from "@/ui/TableTwoCols/TableTwoCols";
-import { API_CONFIG } from "@/config/config";
+import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { TableOneCol } from "@/ui/TableOneCol/TableOneCol";
 import { Metrica } from "@/ui/Metrica/Metrica";
 import { formatarPorcentagem } from "@/helpers/formatar";
@@ -12,6 +12,7 @@ import { ReactNode } from "react";
 import { v4 as uuid } from "uuid";
 import { GraficoBarra } from "@/ui/GraficoBarra/GraficoBarra";
 import { capitalizarString } from "@/helpers/misc";
+import { get } from "http";
 
 interface MetricaConfig {
   title: string;
@@ -146,40 +147,40 @@ export default function Home() {
   const metricas: MetricaConfig[] = [
     {
       title: "Total de Requisições",
-      rotaGeral: API_CONFIG.WS.ROTAS.TOTAL_REQUISICOES,
-      rotaHoje: API_CONFIG.WS.ROTAS.TOTAL_REQUISICOES_HOJE,
+      rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_REQUISICOES),
+      rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_REQUISICOES_HOJE),
       dataKeyGeral: "total_requisicoes",
       dataKeyHoje: "total_requisicoes_hoje",
       formatter: undefined,
     },
     {
       title: "T. Médio de Resposta",
-      rotaGeral: API_CONFIG.WS.ROTAS.TEMPO_MEDIO_RESPOSTA,
-      rotaHoje: API_CONFIG.WS.ROTAS.TEMPO_MEDIO_RESPOSTA_HOJE,
+      rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA),
+      rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA_HOJE),
       dataKeyGeral: "tempo_medio_resposta",
       dataKeyHoje: "tempo_medio_resposta_hoje",
       formatter: converterTempo,
     },
     {
       title: "Taxa de Sucesso",
-      rotaGeral: API_CONFIG.WS.ROTAS.TAXA_SUCESSO,
-      rotaHoje: API_CONFIG.WS.ROTAS.TAXA_SUCESSO_HOJE,
+      rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TAXA_SUCESSO),
+      rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE),
       dataKeyGeral: "taxa_sucesso",
       dataKeyHoje: "taxa_sucesso_hoje",
       formatter: formatarPorcentagem,
     },
     {
       title: "Taxa de Erro",
-      rotaGeral: API_CONFIG.WS.ROTAS.TAXA_ERRO,
-      rotaHoje: API_CONFIG.WS.ROTAS.TAXA_ERRO_HOJE,
+      rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TAXA_ERRO),
+      rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE),
       dataKeyGeral: "taxa_erro",
       dataKeyHoje: "taxa_erro_hoje",
       formatter: formatarPorcentagem,
     },
     {
       title: "Total de Atendimentos",
-      rotaGeral: API_CONFIG.WS.ROTAS.TOTAL_ATENDIMENTOS,
-      rotaHoje: API_CONFIG.WS.ROTAS.TOTAL_ATENDIMENTOS_HOJE,
+      rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS),
+      rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS_HOJE),
       dataKeyGeral: "total_atendimentos",
       dataKeyHoje: "total_atendimentos_hoje",
       formatter: undefined,
@@ -189,12 +190,12 @@ export default function Home() {
   const tableTwoCols: TabelaConfig[] = [
     {
       title: "Endpoints Mais Requisitados (todo o período)",
-      websocketEndpoint: API_CONFIG.WS.ROTAS.TOP_ENDPOINTS,
+      websocketEndpoint: getWsUrl(WS_ENDPOINTS_NAME.TOP_ENDPOINTS),
       dataKey: "top_endpoints",
     },
     {
       title: "Endpoints com Mais Erros (todo o período)",
-      websocketEndpoint: API_CONFIG.WS.ROTAS.ENDPOINTS_COM_MAIS_ERROS,
+      websocketEndpoint: getWsUrl(WS_ENDPOINTS_NAME.ENDPOINTS_COM_MAIS_ERROS),
       dataKey: "endpoints_com_mais_erros",
     },
   ];
@@ -202,19 +203,19 @@ export default function Home() {
   const tableOneCol: TabelaConfig[] = [
     {
       title: "Requisições Recentes com Erro (todo o período)",
-      websocketEndpoint: API_CONFIG.WS.ROTAS.REQUISICOES_RECENTES_ERRO,
+      websocketEndpoint: getWsUrl(WS_ENDPOINTS_NAME.REQUISICOES_RECENTES_ERRO),
       dataKey: "requisicoes_recentes_erro",
     },
     {
       title: "Requisições Recentes (todo o período)",
-      websocketEndpoint: API_CONFIG.WS.ROTAS.REQUISICOES_RECENTES,
+      websocketEndpoint: getWsUrl(WS_ENDPOINTS_NAME.REQUISICOES_RECENTES),
       dataKey: "requisicoes_recentes",
     },
   ];
 
   const graficosBarras = [
     {
-      endpoint: API_CONFIG.WS.ROTAS.DISTRIBUICAO_STATUS_CODES,
+      endpoint: getWsUrl(WS_ENDPOINTS_NAME.DISTRIBUICAO_STATUS_CODES),
       cardTitle: "Distribuição de Status Codes (todo o período)",
       transformData: transformDistribuicaoStatusCode,
       xKey: "statusCode" as const,
@@ -222,7 +223,7 @@ export default function Home() {
       labelText: "Total",
     },
     {
-      endpoint: API_CONFIG.WS.ROTAS.DISTRIBUICAO_REQUISICOES_HORA,
+      endpoint: getWsUrl(WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_HORA),
       cardTitle: "Distribuição de Requisições por Hora (todo o período)",
       transformData: transformDistribuicaoAcessosHora,
       xKey: "hora" as const,
@@ -232,7 +233,7 @@ export default function Home() {
       labelText: "Total",
     },
     {
-      endpoint: API_CONFIG.WS.ROTAS.DISTRIBUICAO_REQUISICOES_DIA_SEMANA,
+      endpoint: getWsUrl(WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_DIA_SEMANA),
       cardTitle:
         "Distribuição de Requisições por Dia da Semana (todo o período)",
       transformData: transformDistribuicaoAcessosDiaSemana,

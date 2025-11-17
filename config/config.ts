@@ -1,82 +1,143 @@
-const BASE_HTTP_URL =
-  process.env.NEXT_PUBLIC_API_BASE_HTTP_URL || "http://localhost:8000";
-const BASE_WS_URL =
-  process.env.NEXT_PUBLIC_API_BASE_WS_URL || "ws://localhost:8000";
-
-if (!BASE_HTTP_URL) {
-  throw new Error("Informe NEXT_PUBLIC_API_BASE_HTTP_URL no .env para a API.");
+export interface ApiConfig {
+  HTTP: {
+    URL_BASE: string;
+    ENDPOINTS: Record<string, string>;
+    ROTAS: Record<string, string>;
+  };
+  WS: {
+    URL_BASE: string;
+    ENDPOINTS: Record<string, string>;
+    ROTAS: Record<string, string>;
+  };
 }
 
-if (!BASE_WS_URL) {
-  throw new Error("Informe NEXT_PUBLIC_API_BASE_WS_URL no .env para a API.");
+export const DEFAULT_HTTP_BASE_URL = "http://localhost:8000";
+export const DEFAULT_WS_BASE_URL = "ws://localhost:8000";
+
+export const enum HTTP_ENDPOINTS_NAME {
+  LOGIN = "LOGIN",
+  ME = "ME",
+  REFRESH = "REFRESH",
+  USUARIOS = "USUARIOS",
 }
 
-const HTTP_ENDPOINTS = {
-  LOGIN: "api/v1/auth/login",
-  ME: "api/v1/auth/me",
-  REFRESH: "api/v1/auth/refresh",
-  USUARIOS: "api/v1/usuarios/",
-};
+export const HTTP_ENDPOINTS = {
+  [HTTP_ENDPOINTS_NAME.LOGIN]: "api/v1/auth/login",
+  [HTTP_ENDPOINTS_NAME.ME]: "api/v1/auth/me",
+  [HTTP_ENDPOINTS_NAME.REFRESH]: "api/v1/auth/refresh",
+  [HTTP_ENDPOINTS_NAME.USUARIOS]: "api/v1/usuarios/",
+} as const;
 
-const WS_ENDPOINTS = {
-  TOTAL_REQUISICOES: "api/v1/ws/info/total_requisicoes",
-  TOTAL_REQUISICOES_HOJE: "api/v1/ws/info/total_requisicoes_hoje",
-  TEMPO_MEDIO_RESPOSTA: "api/v1/ws/info/tempo_medio_resposta",
-  TEMPO_MEDIO_RESPOSTA_HOJE: "api/v1/ws/info/tempo_medio_resposta_hoje",
-  TAXA_SUCESSO: "api/v1/ws/info/taxa_sucesso",
-  TAXA_SUCESSO_HOJE: "api/v1/ws/info/taxa_sucesso_hoje",
-  TAXA_ERRO: "api/v1/ws/info/taxa_erro",
-  TAXA_ERRO_HOJE: "api/v1/ws/info/taxa_erro_hoje",
-  REQUISICOES_POR_HORA: "api/v1/ws/info/requisicoes_por_hora",
-  DISTRIBUICAO_STATUS_CODES: "api/v1/ws/info/distribuicao_status_codes",
-  TOP_ENDPOINTS: "api/v1/ws/info/top_endpoints",
-  REQUISICOES_RECENTES: "api/v1/ws/info/requisicoes_recentes",
-  REQUISICOES_RECENTES_ERRO: "api/v1/ws/info/requisicoes_recentes_erro",
-  REGISTROS: "api/v1/ws/info/registros",
-  DISTRIBUICAO_REQUISICOES_HORA: "api/v1/ws/info/distribuicao_requisicoes_hora",
-  DISTRIBUICAO_REQUISICOES_DIA_SEMANA:
+export const enum WS_ENDPOINTS_NAME {
+  TOTAL_REQUISICOES = "TOTAL_REQUISICOES",
+  TOTAL_REQUISICOES_HOJE = "TOTAL_REQUISICOES_HOJE",
+  TEMPO_MEDIO_RESPOSTA = "TEMPO_MEDIO_RESPOSTA",
+  TEMPO_MEDIO_RESPOSTA_HOJE = "TEMPO_MEDIO_RESPOSTA_HOJE",
+  TAXA_SUCESSO = "TAXA_SUCESSO",
+  TAXA_SUCESSO_HOJE = "TAXA_SUCESSO_HOJE",
+  TAXA_ERRO = "TAXA_ERRO",
+  TAXA_ERRO_HOJE = "TAXA_ERRO_HOJE",
+  REQUISICOES_POR_HORA = "REQUISICOES_POR_HORA",
+  DISTRIBUICAO_STATUS_CODES = "DISTRIBUICAO_STATUS_CODES",
+  TOP_ENDPOINTS = "TOP_ENDPOINTS",
+  REQUISICOES_RECENTES = "REQUISICOES_RECENTES",
+  REQUISICOES_RECENTES_ERRO = "REQUISICOES_RECENTES_ERRO",
+  REGISTROS = "REGISTROS",
+  DISTRIBUICAO_REQUISICOES_HORA = "DISTRIBUICAO_REQUISICOES_HORA",
+  DISTRIBUICAO_REQUISICOES_DIA_SEMANA = "DISTRIBUICAO_REQUISICOES_DIA_SEMANA",
+  ENDPOINTS_COM_MAIS_ERROS = "ENDPOINTS_COM_MAIS_ERROS",
+  TOTAL_ATENDIMENTOS = "TOTAL_ATENDIMENTOS",
+  TOTAL_ATENDIMENTOS_HOJE = "TOTAL_ATENDIMENTOS_HOJE",
+}
+
+export const WS_ENDPOINTS = {
+  [WS_ENDPOINTS_NAME.TOTAL_REQUISICOES]: "api/v1/ws/info/total_requisicoes",
+  [WS_ENDPOINTS_NAME.TOTAL_REQUISICOES_HOJE]:
+    "api/v1/ws/info/total_requisicoes_hoje",
+  [WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA]:
+    "api/v1/ws/info/tempo_medio_resposta",
+  [WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA_HOJE]:
+    "api/v1/ws/info/tempo_medio_resposta_hoje",
+  [WS_ENDPOINTS_NAME.TAXA_SUCESSO]: "api/v1/ws/info/taxa_sucesso",
+  [WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE]: "api/v1/ws/info/taxa_sucesso_hoje",
+  [WS_ENDPOINTS_NAME.TAXA_ERRO]: "api/v1/ws/info/taxa_erro",
+  [WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE]: "api/v1/ws/info/taxa_erro_hoje",
+  [WS_ENDPOINTS_NAME.REQUISICOES_POR_HORA]:
+    "api/v1/ws/info/requisicoes_por_hora",
+  [WS_ENDPOINTS_NAME.DISTRIBUICAO_STATUS_CODES]:
+    "api/v1/ws/info/distribuicao_status_codes",
+  [WS_ENDPOINTS_NAME.TOP_ENDPOINTS]: "api/v1/ws/info/top_endpoints",
+  [WS_ENDPOINTS_NAME.REQUISICOES_RECENTES]:
+    "api/v1/ws/info/requisicoes_recentes",
+  [WS_ENDPOINTS_NAME.REQUISICOES_RECENTES_ERRO]:
+    "api/v1/ws/info/requisicoes_recentes_erro",
+  [WS_ENDPOINTS_NAME.REGISTROS]: "api/v1/ws/info/registros",
+  [WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_HORA]:
+    "api/v1/ws/info/distribuicao_requisicoes_hora",
+  [WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_DIA_SEMANA]:
     "api/v1/ws/info/distribuicao_requisicoes_dia_semana",
-  ENDPOINTS_COM_MAIS_ERROS: "api/v1/ws/info/endpoints_com_mais_erros",
-  TOTAL_ATENDIMENTOS: "api/v1/ws/info/total_atendimentos",
-  TOTAL_ATENDIMENTOS_HOJE: "api/v1/ws/info/total_atendimentos_hoje",
+  [WS_ENDPOINTS_NAME.ENDPOINTS_COM_MAIS_ERROS]:
+    "api/v1/ws/info/endpoints_com_mais_erros",
+  [WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS]: "api/v1/ws/info/total_atendimentos",
+  [WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS_HOJE]:
+    "api/v1/ws/info/total_atendimentos_hoje",
+} as const;
+
+const createCompleteUrls = (
+  baseUrl: string,
+  endpoints: Record<string, string>
+): Record<string, string> => {
+  const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
+
+  return Object.fromEntries(
+    Object.entries(endpoints).map(([key, endpoint]) => [
+      key,
+      `${normalizedBaseUrl}/${endpoint.replace(/^\//, "")}`,
+    ])
+  );
 };
 
-const API_CONFIG = {
+const validateEnvironmentVariables = () => {
+  if (!process.env.NEXT_PUBLIC_BASE_HTTP_URL) {
+    console.warn(
+      `NEXT_PUBLIC_BASE_HTTP_URL não foi definido, usando valor padrão: ${DEFAULT_HTTP_BASE_URL}`
+    );
+  }
+
+  if (!process.env.NEXT_PUBLIC_BASE_WS_URL) {
+    console.warn(
+      `NEXT_PUBLIC_BASE_WS_URL não foi definido, usando valor padrão: ${DEFAULT_WS_BASE_URL}`
+    );
+  }
+};
+
+validateEnvironmentVariables();
+
+export const BASE_HTTP_URL =
+  process.env.NEXT_PUBLIC_BASE_HTTP_URL || DEFAULT_HTTP_BASE_URL;
+export const BASE_WS_URL =
+  process.env.NEXT_PUBLIC_BASE_WS_URL || DEFAULT_WS_BASE_URL;
+
+export const API_CONFIG: ApiConfig = {
   HTTP: {
     URL_BASE: BASE_HTTP_URL,
     ENDPOINTS: HTTP_ENDPOINTS,
-    ROTAS: {
-      LOGIN: `${BASE_HTTP_URL}/${HTTP_ENDPOINTS.LOGIN}`,
-      ME: `${BASE_HTTP_URL}/${HTTP_ENDPOINTS.ME}`,
-      REFRESH: `${BASE_HTTP_URL}/${HTTP_ENDPOINTS.REFRESH}`,
-      USUARIOS: `${BASE_HTTP_URL}/${HTTP_ENDPOINTS.USUARIOS}`,
-    },
+    ROTAS: createCompleteUrls(BASE_HTTP_URL, HTTP_ENDPOINTS),
   },
   WS: {
     URL_BASE: BASE_WS_URL,
     ENDPOINTS: WS_ENDPOINTS,
-    ROTAS: {
-      TOTAL_REQUISICOES: `${BASE_WS_URL}/${WS_ENDPOINTS.TOTAL_REQUISICOES}`,
-      TOTAL_REQUISICOES_HOJE: `${BASE_WS_URL}/${WS_ENDPOINTS.TOTAL_REQUISICOES_HOJE}`,
-      TEMPO_MEDIO_RESPOSTA: `${BASE_WS_URL}/${WS_ENDPOINTS.TEMPO_MEDIO_RESPOSTA}`,
-      TEMPO_MEDIO_RESPOSTA_HOJE: `${BASE_WS_URL}/${WS_ENDPOINTS.TEMPO_MEDIO_RESPOSTA_HOJE}`,
-      TAXA_SUCESSO: `${BASE_WS_URL}/${WS_ENDPOINTS.TAXA_SUCESSO}`,
-      TAXA_SUCESSO_HOJE: `${BASE_WS_URL}/${WS_ENDPOINTS.TAXA_SUCESSO_HOJE}`,
-      TAXA_ERRO: `${BASE_WS_URL}/${WS_ENDPOINTS.TAXA_ERRO}`,
-      TAXA_ERRO_HOJE: `${BASE_WS_URL}/${WS_ENDPOINTS.TAXA_ERRO_HOJE}`,
-      REQUISICOES_POR_HORA: `${BASE_WS_URL}/${WS_ENDPOINTS.REQUISICOES_POR_HORA}`,
-      DISTRIBUICAO_STATUS_CODES: `${BASE_WS_URL}/${WS_ENDPOINTS.DISTRIBUICAO_STATUS_CODES}`,
-      TOP_ENDPOINTS: `${BASE_WS_URL}/${WS_ENDPOINTS.TOP_ENDPOINTS}`,
-      REQUISICOES_RECENTES: `${BASE_WS_URL}/${WS_ENDPOINTS.REQUISICOES_RECENTES}`,
-      REQUISICOES_RECENTES_ERRO: `${BASE_WS_URL}/${WS_ENDPOINTS.REQUISICOES_RECENTES_ERRO}`,
-      REGISTROS: `${BASE_WS_URL}/${WS_ENDPOINTS.REGISTROS}`,
-      DISTRIBUICAO_REQUISICOES_HORA: `${BASE_WS_URL}/${WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_HORA}`,
-      DISTRIBUICAO_REQUISICOES_DIA_SEMANA: `${BASE_WS_URL}/${WS_ENDPOINTS.DISTRIBUICAO_REQUISICOES_DIA_SEMANA}`,
-      ENDPOINTS_COM_MAIS_ERROS: `${BASE_WS_URL}/${WS_ENDPOINTS.ENDPOINTS_COM_MAIS_ERROS}`,
-      TOTAL_ATENDIMENTOS: `${BASE_WS_URL}/${WS_ENDPOINTS.TOTAL_ATENDIMENTOS}`,
-      TOTAL_ATENDIMENTOS_HOJE: `${BASE_WS_URL}/${WS_ENDPOINTS.TOTAL_ATENDIMENTOS_HOJE}`,
-    },
+    ROTAS: createCompleteUrls(BASE_WS_URL, WS_ENDPOINTS),
   },
 };
 
-export { API_CONFIG };
+export const getHttpUrl = (endpoint: HTTP_ENDPOINTS_NAME): string => {
+  return API_CONFIG.HTTP.ROTAS[endpoint];
+};
+
+export const getWsUrl = (endpoint: WS_ENDPOINTS_NAME): string => {
+  return API_CONFIG.WS.ROTAS[endpoint];
+};
+
+export type HttpEndpoint = keyof typeof HTTP_ENDPOINTS;
+export type WsEndpoint = keyof typeof WS_ENDPOINTS;

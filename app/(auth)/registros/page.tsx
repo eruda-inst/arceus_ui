@@ -6,7 +6,7 @@ import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
 import { ControlesPaginacao } from "@/ui/ControlesPaginacao/ControlesPaginacao";
 import { LogsTable } from "@/ui/LogsTable/LogsTable";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { API_CONFIG } from "@/config/config";
+import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { Log } from "@/types/log";
 
 interface PaginatedLogsResponse {
@@ -22,9 +22,12 @@ export default function LogsCompleto() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { data, isConnected, sendMessage, isLoading, isError } =
-    useReactWebSocket<PaginatedLogsResponse>(API_CONFIG.WS.ROTAS.REGISTROS, {
-      autoAck: false,
-    });
+    useReactWebSocket<PaginatedLogsResponse>(
+      getWsUrl(WS_ENDPOINTS_NAME.REGISTROS),
+      {
+        autoAck: false,
+      }
+    );
 
   useEffect(() => {
     if (isConnected) {

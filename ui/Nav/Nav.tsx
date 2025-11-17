@@ -31,7 +31,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { API_CONFIG } from "@/config/config";
+import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { useState } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -83,7 +83,7 @@ export function Nav() {
       }
 
       await axios.patch(
-        API_CONFIG.HTTP.ROTAS.ME,
+        getHttpUrl(HTTP_ENDPOINTS_NAME.ME),
         { senha: data.senha },
         {
           headers: {
@@ -109,7 +109,7 @@ export function Nav() {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios(API_CONFIG.HTTP.ROTAS.ME, {
+      const response = await axios(getHttpUrl(HTTP_ENDPOINTS_NAME.ME), {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
