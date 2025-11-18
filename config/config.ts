@@ -22,9 +22,9 @@ export const enum HTTP_ENDPOINTS_NAME {
 }
 
 export const HTTP_ENDPOINTS = {
-  [HTTP_ENDPOINTS_NAME.LOGIN]: "api/v1/auth/login",
-  [HTTP_ENDPOINTS_NAME.ME]: "api/v1/auth/me",
-  [HTTP_ENDPOINTS_NAME.REFRESH]: "api/v1/auth/refresh",
+  [HTTP_ENDPOINTS_NAME.LOGIN]: "api/v1/autenticacao/login",
+  [HTTP_ENDPOINTS_NAME.ME]: "api/v1/autenticacao/me",
+  [HTTP_ENDPOINTS_NAME.REFRESH]: "api/v1/autenticacao/refresh",
   [HTTP_ENDPOINTS_NAME.USUARIOS]: "api/v1/usuarios/",
 } as const;
 
@@ -51,36 +51,37 @@ export const enum WS_ENDPOINTS_NAME {
 }
 
 export const WS_ENDPOINTS = {
-  [WS_ENDPOINTS_NAME.TOTAL_REQUISICOES]: "api/v1/ws/info/total_requisicoes",
+  [WS_ENDPOINTS_NAME.TOTAL_REQUISICOES]: "api/v1/ws/metricas/total_requisicoes",
   [WS_ENDPOINTS_NAME.TOTAL_REQUISICOES_HOJE]:
-    "api/v1/ws/info/total_requisicoes_hoje",
+    "api/v1/ws/metricas/total_requisicoes_hoje",
   [WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA]:
-    "api/v1/ws/info/tempo_medio_resposta",
+    "api/v1/ws/metricas/tempo_medio_resposta",
   [WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA_HOJE]:
-    "api/v1/ws/info/tempo_medio_resposta_hoje",
-  [WS_ENDPOINTS_NAME.TAXA_SUCESSO]: "api/v1/ws/info/taxa_sucesso",
-  [WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE]: "api/v1/ws/info/taxa_sucesso_hoje",
-  [WS_ENDPOINTS_NAME.TAXA_ERRO]: "api/v1/ws/info/taxa_erro",
-  [WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE]: "api/v1/ws/info/taxa_erro_hoje",
+    "api/v1/ws/metricas/tempo_medio_resposta_hoje",
+  [WS_ENDPOINTS_NAME.TAXA_SUCESSO]: "api/v1/ws/metricas/taxa_sucesso",
+  [WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE]: "api/v1/ws/metricas/taxa_sucesso_hoje",
+  [WS_ENDPOINTS_NAME.TAXA_ERRO]: "api/v1/ws/metricas/taxa_erro",
+  [WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE]: "api/v1/ws/metricas/taxa_erro_hoje",
   [WS_ENDPOINTS_NAME.REQUISICOES_POR_HORA]:
-    "api/v1/ws/info/requisicoes_por_hora",
+    "api/v1/ws/metricas/requisicoes_por_hora",
   [WS_ENDPOINTS_NAME.DISTRIBUICAO_STATUS_CODES]:
-    "api/v1/ws/info/distribuicao_status_codes",
-  [WS_ENDPOINTS_NAME.TOP_ENDPOINTS]: "api/v1/ws/info/top_endpoints",
+    "api/v1/ws/metricas/distribuicao_status_codes",
+  [WS_ENDPOINTS_NAME.TOP_ENDPOINTS]: "api/v1/ws/metricas/top_endpoints",
   [WS_ENDPOINTS_NAME.REQUISICOES_RECENTES]:
-    "api/v1/ws/info/requisicoes_recentes",
+    "api/v1/ws/metricas/requisicoes_recentes",
   [WS_ENDPOINTS_NAME.REQUISICOES_RECENTES_ERRO]:
-    "api/v1/ws/info/requisicoes_recentes_erro",
-  [WS_ENDPOINTS_NAME.REGISTROS]: "api/v1/ws/info/registros",
+    "api/v1/ws/metricas/requisicoes_recentes_erro",
+  [WS_ENDPOINTS_NAME.REGISTROS]: "api/v1/ws/metricas/registros",
   [WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_HORA]:
-    "api/v1/ws/info/distribuicao_requisicoes_hora",
+    "api/v1/ws/metricas/distribuicao_requisicoes_hora",
   [WS_ENDPOINTS_NAME.DISTRIBUICAO_REQUISICOES_DIA_SEMANA]:
-    "api/v1/ws/info/distribuicao_requisicoes_dia_semana",
+    "api/v1/ws/metricas/distribuicao_requisicoes_dia_semana",
   [WS_ENDPOINTS_NAME.ENDPOINTS_COM_MAIS_ERROS]:
-    "api/v1/ws/info/endpoints_com_mais_erros",
-  [WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS]: "api/v1/ws/info/total_atendimentos",
+    "api/v1/ws/metricas/endpoints_com_mais_erros",
+  [WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS]:
+    "api/v1/ws/metricas/total_atendimentos",
   [WS_ENDPOINTS_NAME.TOTAL_ATENDIMENTOS_HOJE]:
-    "api/v1/ws/info/total_atendimentos_hoje",
+    "api/v1/ws/metricas/total_atendimentos_hoje",
 } as const;
 
 const createCompleteUrls = (
