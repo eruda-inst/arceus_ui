@@ -183,6 +183,7 @@ function LoginContent() {
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
                       {...register("senha", {
                         required: "Senha é obrigatório.",
                         minLength: {

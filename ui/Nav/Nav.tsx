@@ -164,7 +164,6 @@ export function Nav() {
               Arceus
             </h1>
           </SidebarHeader>
-
           <SidebarContent>
             <SidebarGroup>
               <SidebarMenu className="gap-y-2 mt-7">
@@ -239,6 +238,7 @@ export function Nav() {
               <Input
                 id="senha"
                 type="password"
+                autoComplete="new-password"
                 placeholder="Digite a nova senha"
                 {...register("senha", {
                   required: "Senha é obrigatório.",
@@ -261,6 +261,7 @@ export function Nav() {
               <Input
                 id="confirmarSenha"
                 type="password"
+                autoComplete="new-password"
                 placeholder="Confirme a nova senha"
                 {...register("confirmarSenha", {
                   required: "Senha é obrigatório.",

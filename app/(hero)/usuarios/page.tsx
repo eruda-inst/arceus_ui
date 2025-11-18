@@ -207,6 +207,7 @@ export default function Usuarios() {
               <Input
                 id="nome"
                 type="text"
+                autoComplete="name"
                 placeholder="John Doe"
                 {...register("nome", {
                   required: "O nome é obrigatório.",
@@ -231,6 +232,7 @@ export default function Usuarios() {
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
                 placeholder="exemplo@exemplo.com"
                 {...register("email", {
                   required: "O e-mail é obrigatório.",
@@ -251,6 +253,7 @@ export default function Usuarios() {
               <Input
                 id="senha"
                 type="password"
+                autoComplete="current-password"
                 placeholder="abCD12@"
                 {...register("senha", {
                   required: "A senha é obrigatória.",
@@ -275,6 +278,7 @@ export default function Usuarios() {
               <Input
                 id="confirmarSenha"
                 type="password"
+                autoComplete="current-password"
                 placeholder="abCD12@"
                 {...register("confirmarSenha", {
                   required: "A senha é obrigatória.",
