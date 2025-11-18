@@ -157,10 +157,10 @@ function LoginContent() {
                       type="email"
                       autoComplete="email"
                       {...register("email", {
-                        required: "E-mail é obrigatório",
+                        required: "E-mail é obrigatório.",
                         pattern: {
                           value: /^\S+@\S+$/i,
-                          message: "E-mail inválido",
+                          message: "E-mail inválido.",
                         },
                       })}
                       className="pl-10"
@@ -184,14 +184,14 @@ function LoginContent() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       {...register("senha", {
-                        required: "Senha é obrigatória",
+                        required: "Senha é obrigatório.",
                         minLength: {
                           value: 6,
-                          message: "Senha deve ter pelo menos 6 caracteres",
+                          message: "Senha deve ter pelo menos 6 caracteres. ",
                         },
                       })}
                       className="pl-10 pr-12"
-                      placeholder="Sua senha"
+                      placeholder="12ABab@"
                       disabled={mutation.isPending}
                     />
                     <Button
@@ -216,32 +216,21 @@ function LoginContent() {
                     </p>
                   )}
                 </Field>
-
                 {/* Root Error Display */}
                 {errors.root && (
-                  <Alert>
-                    <div className="flex items-start gap-3">
-                      <TriangleAlert className="h-4 w-4" />
-                      <div className="text-sm">
-                        <div className="font-medium">{errors.root.message}</div>
-                      </div>
-                    </div>
-                  </Alert>
+                  <p className="text-destructive text-sm mt-1">
+                    {errors.root.message}
+                  </p>
                 )}
-
                 <Button
                   type="submit"
+                  variant="default"
                   className="w-full hover:cursor-pointer"
                   disabled={mutation.isPending}
                 >
-                  {mutation.isPending ? (
-                    <Spinner>Entrando...</Spinner>
-                  ) : (
-                    "Entrar"
-                  )}
+                  {mutation.isPending ? <Spinner /> : "Entrar"}
                 </Button>
               </form>
-
               <div className="mt-6 text-center">
                 <p className="text-xs text-muted-foreground">
                   Ao continuar, você concorda com nossos{" "}
@@ -262,7 +251,6 @@ function LoginContent() {
           </Card>
         </div>
       </div>
-
       {/* Right Panel - Branding */}
       <div className="lg:flex lg:w-1/2 bg-linear-to-br from-indigo-600 to-purple-700 dark:from-indigo-800 dark:to-purple-900 flex items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -270,7 +258,6 @@ function LoginContent() {
           <div className="absolute bottom-20 right-20 w-48 h-48 bg-white rounded-full"></div>
           <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white rounded-full"></div>
         </div>
-
         <div className="relative z-10 text-white text-center max-w-lg">
           <div className="mb-8">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
@@ -279,12 +266,10 @@ function LoginContent() {
             <h2 className="text-4xl font-bold mb-2">Arceus</h2>
             <div className="w-16 h-1 bg-white/50 rounded-full mx-auto"></div>
           </div>
-
           <p className="text-xl mb-8 text-white/90 leading-relaxed">
             Monitoramento em tempo real para uma operação mais inteligente e
             eficiente.
           </p>
-
           <div className="space-y-4 mb-8">
             <div className="flex items-center justify-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -307,9 +292,7 @@ function LoginContent() {
               <span className="text-white/90">Segurança e confiabilidade</span>
             </div>
           </div>
-
           <Separator className="border-white/20" />
-
           <div className="pt-6">
             <Versao />
             <p className="text-white/50 text-xs mt-2">

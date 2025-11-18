@@ -39,6 +39,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { obterTokenAutenticacao } from "@/helpers/misc";
+import { toast } from "sonner";
 
 interface Usuario {
   id: number;
@@ -92,6 +93,11 @@ export function Nav() {
           },
         }
       );
+
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: "Senha atualizada com sucesso!",
+      });
 
       // Reset form and close dialog on success
       reset();
@@ -191,7 +197,6 @@ export function Nav() {
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>
-
           <SidebarFooter>
             <Versao />
             <DropdownMenu>
@@ -222,14 +227,12 @@ export function Nav() {
           </SidebarFooter>
         </Sidebar>
       </SidebarProvider>
-
       <Dialog open={isProfileDialogOpen} onOpenChange={handleDialogClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Perfil e Conta</DialogTitle>
             <DialogDescription>Configurações da conta</DialogDescription>
           </DialogHeader>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Field>
               <FieldLabel htmlFor="senha">Nova Senha</FieldLabel>
@@ -237,9 +240,8 @@ export function Nav() {
                 id="senha"
                 type="password"
                 placeholder="Digite a nova senha"
-                autoFocus
                 {...register("senha", {
-                  required: "Campo obrigatório",
+                  required: "Senha é obrigatório.",
                   minLength: {
                     value: 6,
                     message: "A senha deve ter no mínimo 6 caracteres",
@@ -252,7 +254,6 @@ export function Nav() {
                 </span>
               )}
             </Field>
-
             <Field>
               <FieldLabel htmlFor="confirmarSenha">
                 Confirmar Nova Senha
@@ -262,7 +263,7 @@ export function Nav() {
                 type="password"
                 placeholder="Confirme a nova senha"
                 {...register("confirmarSenha", {
-                  required: "Campo obrigatório",
+                  required: "Senha é obrigatório.",
                   validate: (value) =>
                     value === watchSenha || "As senhas não coincidem",
                 })}
@@ -276,19 +277,11 @@ export function Nav() {
 
             <div className="flex gap-2 pt-2">
               <Button
-                variant="outline"
-                type="button"
-                onClick={handleDialogClose}
-                className="flex-1"
-              >
-                Cancelar
-              </Button>
-              <Button
                 variant="default"
                 type="submit"
-                className="flex-1 hover:cursor-pointer"
+                className="hover:cursor-pointer ml-auto w-fit"
               >
-                Salvar Senha
+                Atualizar Senha
               </Button>
             </div>
           </form>

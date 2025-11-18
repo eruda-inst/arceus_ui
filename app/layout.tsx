@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { inter } from "@/config/fonts";
 import { Provedores } from "@/ui/Provedores/Provedores";
 import "@/app/globals.css";
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${inter.className} antialiased`}>
         <Provedores>{children}</Provedores>
+        <Toaster />
       </body>
     </html>
   );

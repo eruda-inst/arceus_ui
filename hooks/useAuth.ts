@@ -19,7 +19,7 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("/api/auth/verify");
+      const response = await fetch("/api/autenticacao/verify");
       const data = await response.json();
 
       if (data.valid) {
@@ -34,7 +34,7 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("/api/autenticacao/logout", { method: "POST" });
       setUser(null);
       router.push("/login");
     } catch (error) {
