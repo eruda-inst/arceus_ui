@@ -32,6 +32,7 @@ export function LogsTable({ logs }: LogsTableProps) {
               <TableHead>Data</TableHead>
               <TableHead>Hora</TableHead>
               <TableHead>Duração</TableHead>
+              <TableHead>Protocolo</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,6 +61,7 @@ export function LogsTable({ logs }: LogsTableProps) {
                 <TableCell>{formatarData(log.data)}</TableCell>
                 <TableCell>{log.hora.slice(0, 5)}</TableCell>
                 <TableCell>{formatarTempo(log.duracao)}</TableCell>
+                <TableCell>{log.protocolo}</TableCell>
               </TableRow>
             ))}
           </TableBody>

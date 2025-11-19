@@ -7,6 +7,7 @@ interface Log {
   data: string;
   hora: string;
   duracao: number;
+  protocolo: string;
 }
 
 export type { Log };
