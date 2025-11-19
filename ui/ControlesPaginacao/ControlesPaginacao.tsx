@@ -120,7 +120,6 @@ export function ControlesPaginacao({
               página
             </div>
           )}
-
           <Pagination>
             <PaginationContent>
               {/* Botão Anterior */}
@@ -134,7 +133,6 @@ export function ControlesPaginacao({
                   }
                 />
               </PaginationItem>
-
               {/* Números de página */}
               {visiblePages.map((page, index) => (
                 <PaginationItem key={index}>
@@ -151,7 +149,6 @@ export function ControlesPaginacao({
                   )}
                 </PaginationItem>
               ))}
-
               {/* Botão Próximo */}
               <PaginationItem>
                 <PaginationNext

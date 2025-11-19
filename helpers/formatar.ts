@@ -13,4 +13,14 @@ function formatarPorcentagem(valor: number | string): string {
   return arredondado.toFixed(2).replace(".", ",") + "%";
 }
 
-export { formatarData, formatarPorcentagem };
+function formatarTempo(milissegundos: number): string {
+  if (milissegundos < 1000) {
+    return `${milissegundos} ms`;
+  } else {
+    // Converte para segundos
+    const segundos = (milissegundos / 1000).toFixed(3);
+    return `${segundos} s`.replace(".", ",");
+  }
+}
+
+export { formatarData, formatarPorcentagem, formatarTempo };

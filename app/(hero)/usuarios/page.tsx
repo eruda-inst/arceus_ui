@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import {
   Card,
@@ -16,10 +16,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogClose,
-  DialogFooter,
-  DialogOverlay,
-  DialogPortal,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -28,20 +24,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldTitle,
-} from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import {
@@ -49,9 +33,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -85,6 +66,7 @@ interface Usuarios {
 
 export default function Usuarios() {
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useQuery<Usuarios>({
     queryKey: ["usuarios"],
     queryFn: async () => {
@@ -92,7 +74,6 @@ export default function Usuarios() {
       if (!token) {
         throw new Error("No authentication token found");
       }
-
       const response = await axios.get(
         getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
         {
@@ -121,7 +102,6 @@ export default function Usuarios() {
         console.error("No authentication token found");
         return;
       }
-
       await axios.post(
         getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
         {
@@ -137,15 +117,13 @@ export default function Usuarios() {
           },
         }
       );
-
       toast.success("Sucesso!", {
         position: "top-center",
         description: "Usuário criado com sucesso!",
       });
-
-      // Reset form and close dialog on success
       reset();
       setIsProfileDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
     } catch (error) {
       console.error("Error updating password:", error);
     }
@@ -174,7 +152,11 @@ export default function Usuarios() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    <Badge variant="secondary">{usuario.funcao}</Badge>
+                    <Badge variant="secondary">
+                      {usuario?.funcao === "administrador"
+                        ? "Administrador"
+                        : "Usuário"}
+                    </Badge>
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -300,8 +282,8 @@ export default function Usuarios() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Grupos</SelectLabel>
-                    <SelectItem value="administrador">Admin</SelectItem>
+                    <SelectItem value="administrador">Administrador</SelectItem>
+                    <SelectSeparator />
                     <SelectItem value="usuario">Usuário</SelectItem>
                   </SelectGroup>
                 </SelectContent>

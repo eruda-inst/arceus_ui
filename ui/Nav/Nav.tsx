@@ -170,7 +170,6 @@ export function Nav() {
                 {navItems.map((item) => {
                   const isActive = pathname === item.path;
                   const IconComponent = item.icon;
-
                   return (
                     <SidebarMenuItem key={item.path}>
                       <SidebarMenuButton
@@ -205,8 +204,14 @@ export function Nav() {
                     <Spinner />
                   ) : (
                     <CartaoUsuario
-                      nome={usuario?.nome || "Usuário"}
-                      funcao={usuario?.funcao || "Função não definida"}
+                      nome={usuario?.nome || "Erro"}
+                      funcao={
+                        usuario?.funcao
+                          ? usuario?.funcao === "administrador"
+                            ? "Administrador"
+                            : "Usuário"
+                          : "Erro"
+                      }
                     />
                   )}
                 </div>
@@ -275,7 +280,6 @@ export function Nav() {
                 </span>
               )}
             </Field>
-
             <div className="flex gap-2 pt-2">
               <Button
                 variant="default"

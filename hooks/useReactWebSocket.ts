@@ -27,7 +27,9 @@ export function useReactWebSocket<T = unknown>(
 
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const shouldConnect = !!rota;
+  const [isLoading, setIsLoading] = useState(shouldConnect);
   const [isError, setIsError] = useState(false);
 
   const sentInitialRef = useRef(false);
@@ -39,20 +41,20 @@ export function useReactWebSocket<T = unknown>(
     };
   }, []);
 
-  // Reset sentInitial when rota changes so a new connection can send initial message again
   useEffect(() => {
     sentInitialRef.current = false;
   }, [rota]);
 
   const { sendMessage, sendJsonMessage, lastMessage, readyState } =
-    useWebSocket(rota, {
+    useWebSocket(shouldConnect ? rota : null, {
       onOpen: () => {
-        // connection opened
+        if (!shouldConnect) return;
         setError(null);
         setIsError(false);
         setIsLoading(false);
       },
       onError: (event: Event) => {
+        if (!shouldConnect) return;
         console.error(`WebSocket error for ${rota}:`, event);
         if (mountedRef.current) {
           setError("Erro na conexão WebSocket");
@@ -61,14 +63,13 @@ export function useReactWebSocket<T = unknown>(
         }
       },
       onClose: (event: CloseEvent) => {
-        // reset initial-sent flag so next successful open will re-send initialMessage if needed
+        if (!shouldConnect) return;
         sentInitialRef.current = false;
 
         if (!mountedRef.current) return;
 
         setIsLoading(false);
 
-        // treat a clean/normal close (1000) as non-error
         if (event.code === 1000 || event.wasClean) {
           setIsError(false);
           setError(null);
@@ -81,13 +82,18 @@ export function useReactWebSocket<T = unknown>(
           }
         }
       },
-      shouldReconnect: () => true,
+      shouldReconnect: () => shouldConnect, // Só reconecta se dever conectar
       reconnectInterval: 3000,
     });
 
-  // reflect readyState -> isLoading
   useEffect(() => {
     if (!mountedRef.current) return;
+
+    if (!shouldConnect) {
+      setIsLoading(false);
+      return;
+    }
+
     if (readyState === ReadyState.CONNECTING) {
       setIsLoading(true);
     } else if (readyState === ReadyState.OPEN) {
@@ -98,11 +104,11 @@ export function useReactWebSocket<T = unknown>(
     ) {
       setIsLoading(false);
     }
-  }, [readyState]);
+  }, [readyState, shouldConnect]);
 
-  // send initial message when connection opens (and not yet sent for this connection)
   useEffect(() => {
     if (
+      shouldConnect &&
       readyState === ReadyState.OPEN &&
       initialMessage !== undefined &&
       !sentInitialRef.current
@@ -123,12 +129,10 @@ export function useReactWebSocket<T = unknown>(
         console.error("Failed to send initial message", err);
       }
     }
-    // intentionally not returning anything
-  }, [readyState, initialMessage, sendJsonMessage, sendMessage]);
+  }, [readyState, initialMessage, sendJsonMessage, sendMessage, shouldConnect]);
 
-  // handle incoming messages (supports string, Blob, ArrayBuffer, and raw object)
   useEffect(() => {
-    if (!lastMessage) return;
+    if (!lastMessage || !shouldConnect) return;
     if (!mountedRef.current) return;
 
     setIsLoading(false);
@@ -140,7 +144,6 @@ export function useReactWebSocket<T = unknown>(
         let parsed: T;
 
         if (typeof raw === "string") {
-          // try parse JSON but fallback to raw string
           try {
             parsed = JSON.parse(raw) as T;
           } catch {
@@ -161,7 +164,6 @@ export function useReactWebSocket<T = unknown>(
             parsed = text as unknown as T;
           }
         } else {
-          // non-standard / already-parsed object
           parsed = raw as T;
         }
 
@@ -191,13 +193,13 @@ export function useReactWebSocket<T = unknown>(
         setIsError(true);
       }
     })();
-  }, [lastMessage, onMessage, autoAck, rota, sendMessage]);
+  }, [lastMessage, onMessage, autoAck, rota, sendMessage, shouldConnect]);
 
-  const isConnected = readyState === ReadyState.OPEN;
+  const isConnected = readyState === ReadyState.OPEN && shouldConnect;
 
   const sendMessageWrapper = useCallback(
     (message: unknown) => {
-      if (readyState !== ReadyState.OPEN) {
+      if (readyState !== ReadyState.OPEN || !shouldConnect) {
         console.warn("WebSocket not connected");
         return false;
       }
@@ -214,7 +216,7 @@ export function useReactWebSocket<T = unknown>(
         return false;
       }
     },
-    [readyState, sendJsonMessage, sendMessage]
+    [readyState, sendJsonMessage, sendMessage, shouldConnect]
   );
 
   return {

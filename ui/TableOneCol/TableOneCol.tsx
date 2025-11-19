@@ -2,8 +2,7 @@ import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Log as LogType } from "@/types/log";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { converterTempo } from "@/helpers/converter";
-import { formatarData } from "@/helpers/formatar";
+import { formatarData, formatarTempo } from "@/helpers/formatar";
 import {
   Table,
   TableBody,
@@ -91,7 +90,7 @@ export function TableOneCol({
                   </TableCell>
                   <TableCell>{formatarData(log.data)}</TableCell>
                   <TableCell>{log.hora.slice(0, 5)}</TableCell>
-                  <TableCell>{converterTempo(log.duracao)}</TableCell>
+                  <TableCell>{formatarTempo(log.duracao)}</TableCell>
                 </TableRow>
               ))
             )}

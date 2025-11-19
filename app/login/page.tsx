@@ -159,7 +159,7 @@ function LoginContent() {
                       {...register("email", {
                         required: "E-mail é obrigatório.",
                         pattern: {
-                          value: /^\S+@\S+$/i,
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                           message: "E-mail inválido.",
                         },
                       })}

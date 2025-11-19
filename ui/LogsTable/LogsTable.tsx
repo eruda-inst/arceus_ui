@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { formatarData } from "@/helpers/formatar";
-import { converterTempo } from "@/helpers/converter";
+import { formatarData, formatarTempo } from "@/helpers/formatar";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
 import { Log } from "@/types/log";
 import { Badge } from "@/components/ui/badge";
@@ -60,7 +59,7 @@ export function LogsTable({ logs }: LogsTableProps) {
                 </TableCell>
                 <TableCell>{formatarData(log.data)}</TableCell>
                 <TableCell>{log.hora.slice(0, 5)}</TableCell>
-                <TableCell>{converterTempo(log.duracao)}</TableCell>
+                <TableCell>{formatarTempo(log.duracao)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

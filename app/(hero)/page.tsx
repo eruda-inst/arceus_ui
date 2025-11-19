@@ -6,20 +6,22 @@ import { TableTwoCols } from "@/ui/TableTwoCols/TableTwoCols";
 import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { TableOneCol } from "@/ui/TableOneCol/TableOneCol";
 import { Metrica } from "@/ui/Metrica/Metrica";
-import { formatarPorcentagem } from "@/helpers/formatar";
-import { converterTempo } from "@/helpers/converter";
+import { formatarPorcentagem, formatarTempo } from "@/helpers/formatar";
 import { ReactNode } from "react";
 import { v4 as uuid } from "uuid";
 import { GraficoBarra } from "@/ui/GraficoBarra/GraficoBarra";
 import { capitalizarString } from "@/helpers/misc";
-import { get } from "http";
 
 interface MetricaConfig {
   title: string;
   rotaGeral: string;
   rotaHoje: string;
+  rotaGeralAbsolute?: string;
+  rotaHojeAbsolute?: string;
   dataKeyGeral: string;
   dataKeyHoje: string;
+  dataKeyGeralAbsolute?: string;
+  dataKeyHojeAbsolute?: string;
   formatter?: (value: any) => ReactNode;
   errorClassName?: string;
 }
@@ -159,22 +161,30 @@ export default function Home() {
       rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TEMPO_MEDIO_RESPOSTA_HOJE),
       dataKeyGeral: "tempo_medio_resposta",
       dataKeyHoje: "tempo_medio_resposta_hoje",
-      formatter: converterTempo,
+      formatter: formatarTempo,
     },
     {
       title: "Taxa de Sucesso",
       rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TAXA_SUCESSO),
       rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE),
+      rotaGeralAbsolute: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_SUCESSOS),
+      rotaHojeAbsolute: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_SUCESSOS_HOJE),
       dataKeyGeral: "taxa_sucesso",
       dataKeyHoje: "taxa_sucesso_hoje",
+      dataKeyGeralAbsolute: "total_sucessos",
+      dataKeyHojeAbsolute: "total_sucessos_hoje",
       formatter: formatarPorcentagem,
     },
     {
       title: "Taxa de Erro",
       rotaGeral: getWsUrl(WS_ENDPOINTS_NAME.TAXA_ERRO),
       rotaHoje: getWsUrl(WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE),
+      rotaGeralAbsolute: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_ERROS),
+      rotaHojeAbsolute: getWsUrl(WS_ENDPOINTS_NAME.TOTAL_ERROS_HOJE),
       dataKeyGeral: "taxa_erro",
       dataKeyHoje: "taxa_erro_hoje",
+      dataKeyGeralAbsolute: "total_erros",
+      dataKeyHojeAbsolute: "total_erros_hoje",
       formatter: formatarPorcentagem,
     },
     {
@@ -247,15 +257,19 @@ export default function Home() {
 
   return (
     <>
-      <Grid className="grid-cols-4">
+      <Grid className="grid-cols-3">
         {metricas.map((metric) => (
           <Metrica
             key={uuid()}
             title={metric.title}
             rotaGeral={metric.rotaGeral}
             rotaHoje={metric.rotaHoje}
+            rotaGeralAbsolute={metric.rotaGeralAbsolute}
+            rotaHojeAbsolute={metric.rotaHojeAbsolute}
             dataKeyGeral={metric.dataKeyGeral}
             dataKeyHoje={metric.dataKeyHoje}
+            dataKeyGeralAbsolute={metric.dataKeyGeralAbsolute}
+            dataKeyHojeAbsolute={metric.dataKeyHojeAbsolute}
             formatter={metric.formatter}
           />
         ))}

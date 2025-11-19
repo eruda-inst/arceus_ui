@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-import { v4 as uuid } from "uuid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterCorMetodo } from "@/helpers/obterCor";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";

@@ -35,8 +35,12 @@ export const enum WS_ENDPOINTS_NAME {
   TEMPO_MEDIO_RESPOSTA_HOJE = "TEMPO_MEDIO_RESPOSTA_HOJE",
   TAXA_SUCESSO = "TAXA_SUCESSO",
   TAXA_SUCESSO_HOJE = "TAXA_SUCESSO_HOJE",
+  TOTAL_SUCESSOS = "TOTAL_SUCESSOS",
+  TOTAL_SUCESSOS_HOJE = "TOTAL_SUCESSOS_HOJE",
   TAXA_ERRO = "TAXA_ERRO",
   TAXA_ERRO_HOJE = "TAXA_ERRO_HOJE",
+  TOTAL_ERROS = "TOTAL_ERROS",
+  TOTAL_ERROS_HOJE = "TOTAL_ERROS_HOJE",
   REQUISICOES_POR_HORA = "REQUISICOES_POR_HORA",
   DISTRIBUICAO_STATUS_CODES = "DISTRIBUICAO_STATUS_CODES",
   TOP_ENDPOINTS = "TOP_ENDPOINTS",
@@ -60,8 +64,13 @@ export const WS_ENDPOINTS = {
     "api/v1/ws/metricas/tempo_medio_resposta_hoje",
   [WS_ENDPOINTS_NAME.TAXA_SUCESSO]: "api/v1/ws/metricas/taxa_sucesso",
   [WS_ENDPOINTS_NAME.TAXA_SUCESSO_HOJE]: "api/v1/ws/metricas/taxa_sucesso_hoje",
+  [WS_ENDPOINTS_NAME.TOTAL_SUCESSOS]: "api/v1/ws/metricas/total_sucessos",
+  [WS_ENDPOINTS_NAME.TOTAL_SUCESSOS_HOJE]:
+    "api/v1/ws/metricas/total_sucessos_hoje",
   [WS_ENDPOINTS_NAME.TAXA_ERRO]: "api/v1/ws/metricas/taxa_erro",
   [WS_ENDPOINTS_NAME.TAXA_ERRO_HOJE]: "api/v1/ws/metricas/taxa_erro_hoje",
+  [WS_ENDPOINTS_NAME.TOTAL_ERROS]: "api/v1/ws/metricas/total_erros",
+  [WS_ENDPOINTS_NAME.TOTAL_ERROS_HOJE]: "api/v1/ws/metricas/total_erros_hoje",
   [WS_ENDPOINTS_NAME.REQUISICOES_POR_HORA]:
     "api/v1/ws/metricas/requisicoes_por_hora",
   [WS_ENDPOINTS_NAME.DISTRIBUICAO_STATUS_CODES]:
