@@ -169,7 +169,7 @@ export default function Usuarios() {
       )}
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="default" className="absolute bottom-0 right-0">
+          <Button variant="default" className="fixed bottom-5 right-5">
             Novo usuário
           </Button>
         </DialogTrigger>
