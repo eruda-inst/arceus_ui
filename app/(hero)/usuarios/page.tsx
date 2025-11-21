@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import {
   Card,
@@ -24,21 +24,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
+import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
 
 enum Funcao {
   ADMINISTRADOR = "administrador",
@@ -52,22 +41,18 @@ interface Usuario {
   funcao?: Funcao;
 }
 
-interface Formulario {
-  id: number;
-  email: string;
-  senha: string;
-  confirmarSenha: string;
-  nome: string;
-  funcao?: Funcao;
-}
-
 interface Usuarios {
   usuarios: Usuario[];
 }
 
 export default function Usuarios() {
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
+  const [selectedIXCUser, setSelectedIXCUser] = useState<{
+    id: number;
+    email: string;
+    nome: string;
+  } | null>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const { data, isLoading, isError, error } = useQuery<Usuarios>({
     queryKey: ["usuarios"],
     queryFn: async () => {
@@ -88,47 +73,6 @@ export default function Usuarios() {
     },
     retry: false,
   });
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-    watch,
-    reset,
-  } = useForm<Formulario>();
-
-  const onSubmit: SubmitHandler<Formulario> = async (data) => {
-    try {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-      await axios.post(
-        getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
-        {
-          nome: data.nome,
-          email: data.email,
-          senha: data.senha,
-          funcao: data.funcao,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success("Sucesso!", {
-        position: "top-center",
-        description: "Usuário criado com sucesso!",
-      });
-      reset();
-      setIsProfileDialogOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
 
   return (
     <div
@@ -182,124 +126,50 @@ export default function Usuarios() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar Novo Usuário</DialogTitle>
+            <DialogTitle>Seleção de Usuário do IXC</DialogTitle>
             <DialogDescription>
-              Preencha os campos abaixo para criar um novo usuário.
+              Selecione o usuário do IXC que deseja adicionar ao sistema.
             </DialogDescription>
           </DialogHeader>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-y-4"
+          <ListagemUsuariosIXC
+            selectedId={selectedIXCUser?.id ?? null}
+            onSelect={(u) => setSelectedIXCUser(u)}
+            existingEmails={data?.usuarios?.map((u) => u.email) ?? []}
+          />
+          <Button
+            disabled={!selectedIXCUser}
+            onClick={() => {
+              setIsProfileDialogOpen(false);
+              setIsAddDialogOpen(true);
+            }}
+            className="w-fit ml-auto hover:cursor-pointer hover:disabled:cursor-not-allowed"
           >
-            <Field>
-              <FieldLabel htmlFor="nome">Nome</FieldLabel>
-              <Input
-                id="nome"
-                type="text"
-                autoComplete="name"
-                placeholder="John Doe"
-                {...register("nome", {
-                  required: "O nome é obrigatório.",
-                  minLength: {
-                    value: 3,
-                    message: "O nome deve ter no mínimo 3 caracteres.",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "O nome deve ter no máximo 50 caracteres.",
-                  },
-                })}
-              />
-              {errors.nome && (
-                <span className="text-destructive text-sm">
-                  {errors.nome.message}
-                </span>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="email">E-mail</FieldLabel>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                placeholder="exemplo@exemplo.com"
-                {...register("email", {
-                  required: "O e-mail é obrigatório.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Por favor, insira um e-mail válido.",
-                  },
-                })}
-              />
-              {errors.email && (
-                <span className="text-destructive text-sm">
-                  {errors.email.message}
-                </span>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="senha">Senha</FieldLabel>
-              <Input
-                id="senha"
-                type="password"
-                autoComplete="current-password"
-                placeholder="abCD12@"
-                {...register("senha", {
-                  required: "A senha é obrigatória.",
-                  minLength: {
-                    value: 6,
-                    message: "A senha deve ter no mínimo 6 caracteres.",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "A senha deve ter no máximo 50 caracteres.",
-                  },
-                })}
-              />
-              {errors.senha && (
-                <span className="text-destructive text-sm">
-                  {errors.senha.message}
-                </span>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="confirmarSenha">Confirmar Senha</FieldLabel>
-              <Input
-                id="confirmarSenha"
-                type="password"
-                autoComplete="current-password"
-                placeholder="abCD12@"
-                {...register("confirmarSenha", {
-                  required: "A senha é obrigatória.",
-                  validate: (value) =>
-                    value === watch("senha") || "As senhas não coincidem.",
-                })}
-              />
-              {errors.confirmarSenha && (
-                <span className="text-destructive text-sm">
-                  {errors.confirmarSenha.message}
-                </span>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel>Grupo</FieldLabel>
-              <Select {...register("funcao")}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um grupo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="administrador">Administrador</SelectItem>
-                    <SelectSeparator />
-                    <SelectItem value="usuario">Usuário</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
-            <Button type="submit" className="w-fit ml-auto">
-              Criar usuário
-            </Button>
-          </form>
+            Selecionar Usuário
+          </Button>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar Usuário</DialogTitle>
+            <DialogDescription>Preencha grupo e senha.</DialogDescription>
+          </DialogHeader>
+          <AdicionarUsuarioForm
+            initialValues={
+              selectedIXCUser
+                ? {
+                    id: selectedIXCUser.id,
+                    email: selectedIXCUser.email,
+                    nome: selectedIXCUser.nome,
+                  }
+                : undefined
+            }
+            onCreated={() => {
+              setIsAddDialogOpen(false);
+              setSelectedIXCUser(null);
+            }}
+          />
         </DialogContent>
       </Dialog>
     </div>
