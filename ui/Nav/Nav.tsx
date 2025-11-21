@@ -75,38 +75,6 @@ export function Nav() {
 
   const watchSenha = watch("senha");
 
-  const onSubmit: SubmitHandler<Formulario> = async (data) => {
-    try {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      await axios.patch(
-        getHttpUrl(HTTP_ENDPOINTS_NAME.ME),
-        { senha: data.senha },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      toast.success("Sucesso!", {
-        position: "top-center",
-        description: "Senha atualizada com sucesso!",
-      });
-
-      // Reset form and close dialog on success
-      reset();
-      setIsProfileDialogOpen(false);
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
-
   const { data: usuario, isLoading } = useQuery({
     queryKey: ["usuario"],
     queryFn: async (): Promise<Usuario> => {
@@ -132,6 +100,38 @@ export function Nav() {
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  const onSubmit: SubmitHandler<Formulario> = async (data) => {
+    try {
+      const token = obterTokenAutenticacao();
+      if (!token) {
+        console.error("No authentication token found");
+        return;
+      }
+
+      await axios.patch(
+        ` ${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${usuario?.id}`,
+        { senha: data.senha },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: "Senha atualizada com sucesso!",
+      });
+
+      // Reset form and close dialog on success
+      reset();
+      setIsProfileDialogOpen(false);
+    } catch (error) {
+      console.error("Error updating password:", error);
+    }
+  };
 
   const handleLogout = () => {
     // Clear the auth token

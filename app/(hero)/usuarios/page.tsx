@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 enum Funcao {
   ADMINISTRADOR = "administrador",
@@ -75,7 +76,7 @@ export default function Usuarios() {
         throw new Error("No authentication token found");
       }
       const response = await axios.get(
-        getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -144,22 +145,28 @@ export default function Usuarios() {
         <Grid className="grid-cols-4">
           {data?.usuarios &&
             data?.usuarios.map((usuario: Usuario) => (
-              <Card key={usuario.id}>
-                <CardHeader>
-                  <CardTitle>
-                    <CardTitle>{usuario.nome}</CardTitle>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    <Badge variant="secondary">
-                      {usuario?.funcao === "administrador"
-                        ? "Administrador"
-                        : "Usuário"}
-                    </Badge>
-                  </CardDescription>
-                </CardContent>
-              </Card>
+              <motion.li
+                key={usuario.id}
+                whileHover={{ y: "-5%" }}
+                transition={{ type: "spring", bounce: 0 }}
+              >
+                <Card className="hover:cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>
+                      <CardTitle>{usuario.nome}</CardTitle>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription>
+                      <Badge variant="secondary">
+                        {usuario?.funcao === "administrador"
+                          ? "Administrador"
+                          : "Usuário"}
+                      </Badge>
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.li>
             ))}
         </Grid>
       ) : (
