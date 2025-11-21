@@ -111,6 +111,8 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           id="nome"
           type="text"
           autoComplete="name"
+          readOnly={Boolean(initialValues?.nome)}
+          className="bg-muted text-muted-foreground"
           placeholder="John Doe"
           {...register("nome", {
             required: "O nome é obrigatório.",
@@ -136,6 +138,8 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           id="email"
           type="email"
           autoComplete="email"
+          readOnly={Boolean(initialValues?.email)}
+          className="bg-muted text-muted-foreground"
           placeholder="exemplo@exemplo.com"
           {...register("email", {
             required: "O e-mail é obrigatório.",
