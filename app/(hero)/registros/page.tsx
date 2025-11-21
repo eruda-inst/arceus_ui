@@ -4,10 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import { LoadingState } from "@/ui/LoadingState/LoadingState";
 import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
 import { ControlesPaginacao } from "@/ui/ControlesPaginacao/ControlesPaginacao";
-import { LogsTable } from "@/ui/LogsTable/LogsTable";
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
 import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { Log } from "@/types/log";
+import { TabelaCompleta } from "@/ui/TabelaCompleta/TabelaCompleta";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface PaginatedLogsResponse {
   registros: Log[];
@@ -73,7 +74,11 @@ export default function LogsCompleto() {
         currentPage={currentPage}
         variant="top"
       />
-      <LogsTable logs={registros} />
+      <Card>
+        <CardContent>
+          <TabelaCompleta registros={registros} />
+        </CardContent>
+      </Card>
       {total_paginas > 1 && (
         <ControlesPaginacao
           itemsPerPage={itemsPerPage}

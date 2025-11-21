@@ -1,20 +1,7 @@
 import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Log as LogType } from "@/types/log";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatarData, formatarTempo } from "@/helpers/formatar";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Mensagem } from "../Mensagem/Mensagem";
-import { Badge } from "@/components/ui/badge";
-import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
-import { Spinner } from "@/components/ui/spinner";
+import { TabelaCompleta } from "@/ui/TabelaCompleta/TabelaCompleta";
 
 interface TableOneColProps {
   websocketEndpoint: string;
@@ -32,7 +19,6 @@ export function TableOneCol({
   }>(websocketEndpoint);
 
   const registros = data?.[dataKey] || [];
-  const chavesEstaveis = useChavesEstaveis(registros.length || 0);
 
   return (
     <Card>
@@ -40,64 +26,11 @@ export function TableOneCol({
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>IP</TableHead>
-              <TableHead>Verbo</TableHead>
-              <TableHead>Endpoint</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Hora</TableHead>
-              <TableHead>Duração</TableHead>
-              <TableHead>Protocolo</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={7}>
-                  <Spinner />
-                </TableCell>
-              </TableRow>
-            ) : isError ? (
-              <TableRow>
-                <TableCell colSpan={7}>
-                  <Mensagem className="text-destructive">Erro</Mensagem>
-                </TableCell>
-              </TableRow>
-            ) : (
-              registros.map((log: LogType, indice: number) => (
-                <TableRow key={chavesEstaveis[indice]}>
-                  <TableCell>{log.ip}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`${Object.values(
-                        obterCorMetodo(log.metodo_http)
-                      ).join(" ")}`}
-                    >
-                      {log.metodo_http}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{log.endpoint}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`${Object.values(
-                        obterCorStatusCode(log.status_code)
-                      ).join(" ")}`}
-                    >
-                      {log.status_code}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{formatarData(log.data)}</TableCell>
-                  <TableCell>{log.hora.slice(0, 5)}</TableCell>
-                  <TableCell>{formatarTempo(log.duracao)}</TableCell>
-                  <TableCell>{log.protocolo}</TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+        <TabelaCompleta
+          isError={isError}
+          isLoading={isLoading}
+          registros={registros}
+        />
       </CardContent>
     </Card>
   );
