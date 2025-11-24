@@ -86,6 +86,9 @@ export function useReactWebSocket<T = unknown>(
       reconnectInterval: 3000,
     });
 
+  // Queue for outgoing messages when socket is not open.
+  const outboundQueueRef = useRef<unknown[]>([]);
+
   useEffect(() => {
     if (!mountedRef.current) return;
 
@@ -105,6 +108,28 @@ export function useReactWebSocket<T = unknown>(
       setIsLoading(false);
     }
   }, [readyState, shouldConnect]);
+
+  // Flush queued outbound messages when connection opens
+  useEffect(() => {
+    if (!shouldConnect) return;
+    if (readyState !== ReadyState.OPEN) return;
+
+    if (outboundQueueRef.current.length === 0) return;
+
+    try {
+      outboundQueueRef.current.forEach((msg) => {
+        if (typeof msg === "string") {
+          sendMessage && sendMessage(msg);
+        } else {
+          sendJsonMessage && sendJsonMessage(msg);
+        }
+      });
+    } catch (err) {
+      console.warn("Failed to flush outbound message queue:", err);
+    } finally {
+      outboundQueueRef.current = [];
+    }
+  }, [readyState, shouldConnect, sendJsonMessage, sendMessage]);
 
   useEffect(() => {
     if (
@@ -200,8 +225,10 @@ export function useReactWebSocket<T = unknown>(
   const sendMessageWrapper = useCallback(
     (message: unknown) => {
       if (readyState !== ReadyState.OPEN || !shouldConnect) {
-        console.warn("WebSocket not connected");
-        return false;
+        // queue message for later delivery
+        outboundQueueRef.current.push(message);
+        console.info("WebSocket not connected — queued outbound message");
+        return true;
       }
 
       try {
