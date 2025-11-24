@@ -7,7 +7,7 @@ export function LogsHeader({ totalLogs, isConnected }: LogsHeaderProps) {
   return (
     <div className="flex justify-between items-center gap-4">
       <div>
-        <h1 className="text-3xl font-semibold">Logs do Sistema</h1>
+        <h1 className="text-3xl font-semibold">Registros</h1>
         <p className="text-sm mt-1">
           Total de <span className="font-medium">{totalLogs}</span> requisições
           registradas

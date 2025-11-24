@@ -89,8 +89,6 @@ export default function LogsCompleto() {
       const newFilters = { ...filters, [key]: normalized };
       setFilters(newFilters);
       setCurrentPage(0);
-
-      // send immediately if connected so the backend can respond with filtered page 1
       if (isConnected) {
         sendMessage({
           pagina: 1,
@@ -134,18 +132,19 @@ export default function LogsCompleto() {
         <CardContent>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             <Field>
-              <FieldLabel>IP</FieldLabel>
+              <FieldLabel htmlFor="ip">IP</FieldLabel>
               <FieldContent>
                 <Input
-                  placeholder="127.0.0.1"
+                  id="ip"
+                  type="text"
+                  placeholder="192.168.0.100"
                   value={filters.ip ?? ""}
                   onChange={(e) => handleFilterChange("ip", e.target.value)}
                 />
               </FieldContent>
             </Field>
-
             <Field>
-              <FieldLabel>Verb</FieldLabel>
+              <FieldLabel htmlFor="verbo">Verbo</FieldLabel>
               <FieldContent>
                 <Select
                   value={
@@ -155,32 +154,29 @@ export default function LogsCompleto() {
                   }
                   onValueChange={(v) => handleFilterChange("verb", v)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full" id="verbo">
                     <SelectValue>
                       {filters.verb && filters.verb !== ""
                         ? filters.verb
-                        : "Any"}
+                        : "Selecione"}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="__any__">Any</SelectItem>
+                    <SelectItem value="__any__">Selecione</SelectItem>
                     <SelectItem value="GET">GET</SelectItem>
                     <SelectItem value="POST">POST</SelectItem>
                     <SelectItem value="PUT">PUT</SelectItem>
-                    <SelectItem value="PATCH">PATCH</SelectItem>
                     <SelectItem value="DELETE">DELETE</SelectItem>
-                    <SelectItem value="OPTIONS">OPTIONS</SelectItem>
-                    <SelectItem value="HEAD">HEAD</SelectItem>
                   </SelectContent>
                 </Select>
               </FieldContent>
             </Field>
-
             <Field>
-              <FieldLabel>Endpoint</FieldLabel>
+              <FieldLabel htmlFor="endpoint">Endpoint</FieldLabel>
               <FieldContent>
                 <Input
-                  placeholder="/api/users"
+                  id="endpoint"
+                  placeholder="/api/v1/financeiro/chave_pix"
                   value={filters.endpoint ?? ""}
                   onChange={(e) =>
                     handleFilterChange("endpoint", e.target.value)
@@ -188,44 +184,64 @@ export default function LogsCompleto() {
                 />
               </FieldContent>
             </Field>
-
             <Field>
               <FieldLabel>Status</FieldLabel>
               <FieldContent>
-                <Input
-                  placeholder="200"
-                  value={filters.status ?? ""}
-                  onChange={(e) => handleFilterChange("status", e.target.value)}
-                />
+                <Select
+                  value={
+                    filters.status === "" || filters.status === undefined
+                      ? "__any__"
+                      : filters.status
+                  }
+                  onValueChange={(v) => handleFilterChange("status", v)}
+                >
+                  <SelectTrigger className="w-full" id="status">
+                    <SelectValue>
+                      {filters.status && filters.status !== ""
+                        ? filters.status
+                        : "Selecione"}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__any__">Selecione</SelectItem>
+                    <SelectItem value="200">200</SelectItem>
+                    <SelectItem value="201">201</SelectItem>
+                    <SelectItem value="404">404</SelectItem>
+                    <SelectItem value="422">422</SelectItem>
+                    <SelectItem value="500">500</SelectItem>
+                  </SelectContent>
+                </Select>
               </FieldContent>
             </Field>
             <Field>
-              <FieldLabel>Date</FieldLabel>
+              <FieldLabel htmlFor="data">Data</FieldLabel>
               <FieldContent>
                 <Input
+                  id="data"
                   type="date"
                   value={filters.date ?? ""}
+                  max={new Date().toISOString().split("T")[0]}
                   onChange={(e) => handleFilterChange("date", e.target.value)}
                 />
               </FieldContent>
             </Field>
-
             <Field>
-              <FieldLabel>Hour</FieldLabel>
+              <FieldLabel htmlFor="hora">Hora</FieldLabel>
               <FieldContent>
                 <Input
+                  id="hora"
                   type="time"
                   value={filters.hour ?? ""}
                   onChange={(e) => handleFilterChange("hour", e.target.value)}
                 />
               </FieldContent>
             </Field>
-
             <Field>
-              <FieldLabel>Duration</FieldLabel>
+              <FieldLabel htmlFor="duracao">Duration</FieldLabel>
               <FieldContent>
                 <Input
-                  placeholder=">100ms or 0-200"
+                  id="duracao"
+                  placeholder=">100 ou 0-200"
                   value={filters.duration ?? ""}
                   onChange={(e) =>
                     handleFilterChange("duration", e.target.value)
@@ -233,11 +249,11 @@ export default function LogsCompleto() {
                 />
               </FieldContent>
             </Field>
-
             <Field>
-              <FieldLabel>Protocolo</FieldLabel>
+              <FieldLabel htmlFor="protocolo">Protocolo</FieldLabel>
               <FieldContent>
                 <Input
+                  id="protocolo"
                   placeholder="NWT202512345"
                   value={filters.protocol ?? ""}
                   onChange={(e) =>
@@ -247,12 +263,11 @@ export default function LogsCompleto() {
               </FieldContent>
             </Field>
           </div>
-
           <div className="mt-4 flex gap-2">
             <Button
-              variant="outline"
+              variant="default"
+              className="hover:cursor-pointer"
               onClick={() => {
-                // always send current filters explicitly (cleaned)
                 setCurrentPage(0);
                 try {
                   sendMessage({
@@ -261,16 +276,18 @@ export default function LogsCompleto() {
                     filtros: cleanFilters(filters),
                   });
                 } catch (err) {
-                  // best-effort: log so developer can inspect when not connected
-                  // eslint-disable-next-line no-console
                   console.warn("sendMessage failed", err);
                 }
               }}
             >
-              Apply Filters
+              Aplicar filtros
             </Button>
-            <Button variant="ghost" onClick={handleClearFilters}>
-              Clear Filters
+            <Button
+              variant="outline"
+              className="hover:cursor-pointer"
+              onClick={handleClearFilters}
+            >
+              Limpar filtros
             </Button>
           </div>
         </CardContent>
