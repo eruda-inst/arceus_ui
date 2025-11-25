@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 interface User {
   email: string;
   name: string;
+  funcao?: string;
 }
 
 export function useAuth() {
@@ -23,7 +24,18 @@ export function useAuth() {
       const data = await response.json();
 
       if (data.valid) {
-        setUser({ email: "admin@empresa.com", name: "Administrador" });
+        // Try to use role/funcao returned by the API, fallback to heuristics
+        const funcao =
+          data.funcao ??
+          data.role ??
+          (data.email && data.email.includes("admin")
+            ? "administrador"
+            : "usuario");
+        setUser({
+          email: data.email ?? "admin@empresa.com",
+          name: data.name ?? "Administrador",
+          funcao,
+        });
       }
     } catch (error) {
       console.error("Erro ao verificar autenticação:", error);

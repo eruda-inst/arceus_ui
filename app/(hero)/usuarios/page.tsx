@@ -24,7 +24,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
@@ -73,6 +74,34 @@ export default function Usuarios() {
     },
     retry: false,
   });
+
+  // protect route: only administrators may access
+  const router = useRouter();
+  const { data: me, isLoading: meLoading } = useQuery<Usuario>({
+    queryKey: ["me"],
+    queryFn: async () => {
+      const token = obterTokenAutenticacao();
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+      const response = await axios.get(getHttpUrl(HTTP_ENDPOINTS_NAME.ME), {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!meLoading) {
+      if (!me || me.funcao !== Funcao.ADMINISTRADOR) {
+        router.push("/");
+      }
+    }
+  }, [me, meLoading, router]);
 
   return (
     <div

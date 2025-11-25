@@ -167,31 +167,39 @@ export function Nav() {
           <SidebarContent>
             <SidebarGroup>
               <SidebarMenu className="gap-y-2 mt-7">
-                {navItems.map((item) => {
-                  const isActive = pathname === item.path;
-                  const IconComponent = item.icon;
-                  return (
-                    <SidebarMenuItem key={item.path}>
-                      <SidebarMenuButton
-                        className={`border py-6 px-3 rounded-lg transition-colors ${
-                          isActive ? "bg-bg-selected" : "bg-sidebar-accent"
-                        } hover:cursor-pointer hover:bg-bg-selected`}
-                        onClick={() => handleNavigation(item.path)}
-                        aria-current={isActive ? "page" : undefined}
-                        role="link"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            handleNavigation(item.path);
-                          }
-                        }}
-                      >
-                        <IconComponent aria-hidden="true" />
-                        {item.label}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                {navItems
+                  .filter((item) => {
+                    // hide the users tab for non-administrators
+                    if (item.path === "/usuarios") {
+                      return usuario?.funcao === "administrador";
+                    }
+                    return true;
+                  })
+                  .map((item) => {
+                    const isActive = pathname === item.path;
+                    const IconComponent = item.icon;
+                    return (
+                      <SidebarMenuItem key={item.path}>
+                        <SidebarMenuButton
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            isActive ? "bg-bg-selected" : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                          onClick={() => handleNavigation(item.path)}
+                          aria-current={isActive ? "page" : undefined}
+                          role="link"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              handleNavigation(item.path);
+                            }
+                          }}
+                        >
+                          <IconComponent aria-hidden="true" />
+                          {item.label}
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>
