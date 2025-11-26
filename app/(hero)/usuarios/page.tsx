@@ -102,7 +102,6 @@ export default function Usuarios() {
           Nenhum usuário encontrado.
         </Mensagem>
       )}
-
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="default" className="fixed bottom-5 right-5">
@@ -159,3 +158,5 @@ export default function Usuarios() {
     </div>
   );
 }
+
+Usuarios.displayName = "Usuarios";
