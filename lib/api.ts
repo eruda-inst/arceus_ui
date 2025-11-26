@@ -44,18 +44,18 @@ api.interceptors.response.use(
         const { data } = await axios.post(
           getHttpUrl(HTTP_ENDPOINTS_NAME.REFRESH),
           {
-            refreshToken,
+            refresh_token: refreshToken,
           }
         );
 
-        // backend may return a new access token and optionally a new refresh token
-        const { token: newAccessToken, refreshToken: newRefreshToken } =
+        // backend returns token and refresh_token (snake_case)
+        const { token: newAccessToken, refresh_token: newRefreshToken } =
           data as any;
 
         if (newAccessToken) {
           setCookie("auth-token", newAccessToken, {
             path: "/",
-            maxAge: 60 * 15, // 15 minutes
+            maxAge: 60 * 30, // 30 minutes (matches backend TOKEN_EXPIRE_MINUTES)
             sameSite: "strict",
           });
 

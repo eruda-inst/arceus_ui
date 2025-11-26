@@ -29,24 +29,17 @@ import { ChartLine, LogOut, Table, Smile, Users } from "lucide-react";
 import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
 import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { useState } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { obterTokenAutenticacao } from "@/helpers/misc";
+import { useAuth } from "@/hooks/useAuth";
+import api from "@/lib/api";
+import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { toast } from "sonner";
-
-interface Usuario {
-  id: number;
-  email: string;
-  nome: string;
-  funcao: string;
-}
+import axios from "axios";
 
 interface Formulario {
   senha: string;
@@ -63,7 +56,9 @@ const navItems = [
 export function Nav() {
   const router = useRouter();
   const pathname = usePathname();
+  const { user, loading, logout, isAdmin } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const {
     formState: { errors },
@@ -75,71 +70,50 @@ export function Nav() {
 
   const watchSenha = watch("senha");
 
-  const { data: usuario, isLoading } = useQuery({
-    queryKey: ["usuario"],
-    queryFn: async (): Promise<Usuario> => {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        throw new Error("No authentication token found");
-      }
-
-      const response = await axios(getHttpUrl(HTTP_ENDPOINTS_NAME.ME), {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    },
-    retry: (failureCount, error) => {
-      // Don't retry on 401 errors
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        return false;
-      }
-      return failureCount < 3;
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
   const onSubmit: SubmitHandler<Formulario> = async (data) => {
-    try {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
+    if (!user) {
+      toast.error("Erro", {
+        position: "top-center",
+        description: "Usuário não encontrado",
+      });
+      return;
+    }
 
-      await axios.patch(
-        ` ${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${usuario?.id}`,
-        { senha: data.senha },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    try {
+      setIsUpdatingPassword(true);
+      await api.patch(`${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${user.id}`, {
+        senha: data.senha,
+      });
 
       toast.success("Sucesso!", {
         position: "top-center",
         description: "Senha atualizada com sucesso!",
       });
 
-      // Reset form and close dialog on success
       reset();
       setIsProfileDialogOpen(false);
     } catch (error) {
       console.error("Error updating password:", error);
+      let errorMessage = "Erro ao atualizar senha";
+
+      if (axios.isAxiosError(error)) {
+        errorMessage =
+          error.response?.data?.detail ||
+          error.response?.data?.message ||
+          errorMessage;
+      }
+
+      toast.error("Erro", {
+        position: "top-center",
+        description: errorMessage,
+      });
+    } finally {
+      setIsUpdatingPassword(false);
     }
   };
 
-  const handleLogout = () => {
-    // Clear the auth token
-    document.cookie =
-      "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-    // Redirect to login
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    await logout();
   };
 
   const handleNavigation = (path: string) => {
@@ -152,7 +126,7 @@ export function Nav() {
 
   const handleDialogClose = () => {
     setIsProfileDialogOpen(false);
-    reset(); // Reset form when dialog closes
+    reset();
   };
 
   return (
@@ -169,9 +143,9 @@ export function Nav() {
               <SidebarMenu className="gap-y-2 mt-7">
                 {navItems
                   .filter((item) => {
-                    // hide the users tab for non-administrators
+                    // show the users tab only for administrators
                     if (item.path === "/usuarios") {
-                      return usuario?.funcao === "administrador";
+                      return isAdmin() === true;
                     }
                     return true;
                   })
@@ -208,19 +182,17 @@ export function Nav() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="hover:cursor-pointer">
-                  {isLoading ? (
+                  {loading ? (
                     <Spinner />
                   ) : (
-                    <CartaoUsuario
-                      nome={usuario?.nome || "Erro"}
-                      funcao={
-                        usuario?.funcao
-                          ? usuario?.funcao === "administrador"
-                            ? "Administrador"
-                            : "Usuário"
-                          : "Erro"
-                      }
-                    />
+                    user && (
+                      <CartaoUsuario
+                        nome={user.nome || "Erro"}
+                        funcao={
+                          user?.id_grupo === 1 ? "Administrador" : "Usuário"
+                        }
+                      />
+                    )
                   )}
                 </div>
               </DropdownMenuTrigger>
@@ -246,6 +218,26 @@ export function Nav() {
             <DialogDescription>Configurações da conta</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                id="email"
+                type="email"
+                value={user?.email || ""}
+                disabled
+                readOnly
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="nome">Nome</FieldLabel>
+              <Input
+                id="nome"
+                type="text"
+                value={user?.nome || ""}
+                disabled
+                readOnly
+              />
+            </Field>
             <Field>
               <FieldLabel htmlFor="senha">Nova Senha</FieldLabel>
               <Input
@@ -277,7 +269,7 @@ export function Nav() {
                 autoComplete="new-password"
                 placeholder="Confirme a nova senha"
                 {...register("confirmarSenha", {
-                  required: "Senha é obrigatório.",
+                  required: "Confirmação de senha é obrigatório.",
                   validate: (value) =>
                     value === watchSenha || "As senhas não coincidem",
                 })}
@@ -293,8 +285,9 @@ export function Nav() {
                 variant="default"
                 type="submit"
                 className="hover:cursor-pointer ml-auto w-fit"
+                disabled={isUpdatingPassword}
               >
-                Atualizar Senha
+                {isUpdatingPassword ? <Spinner /> : "Atualizar Senha"}
               </Button>
             </div>
           </form>
@@ -303,5 +296,3 @@ export function Nav() {
     </>
   );
 }
-
-Nav.displayName = "Nav";

@@ -22,24 +22,19 @@ import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/ui/Grid/Grid";
 import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
-import { obterTokenAutenticacao } from "@/helpers/misc";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
-
-enum Funcao {
-  ADMINISTRADOR = "administrador",
-  USUARIO = "usuario",
-}
+import api from "@/lib/api";
 
 interface Usuario {
   id: number;
   email: string;
   nome: string;
-  funcao?: Funcao;
+  id_grupo: number;
 }
 
 interface Usuarios {
@@ -54,54 +49,17 @@ export default function Usuarios() {
     nome: string;
   } | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const { data, isLoading, isError, error } = useQuery<Usuarios>({
+
+  const { data, isLoading, isError, error } = useQuery<Usuario[]>({
     queryKey: ["usuarios"],
     queryFn: async () => {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        throw new Error("No authentication token found");
-      }
-      const response = await axios.get(
-        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await api.get(
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`
       );
       return response.data;
     },
     retry: false,
   });
-
-  // protect route: only administrators may access
-  const router = useRouter();
-  const { data: me, isLoading: meLoading } = useQuery<Usuario>({
-    queryKey: ["me"],
-    queryFn: async () => {
-      const token = obterTokenAutenticacao();
-      if (!token) {
-        throw new Error("No authentication token found");
-      }
-      const response = await axios.get(getHttpUrl(HTTP_ENDPOINTS_NAME.ME), {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    },
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (!meLoading) {
-      if (!me || me.funcao !== Funcao.ADMINISTRADOR) {
-        router.push("/");
-      }
-    }
-  }, [me, meLoading, router]);
 
   return (
     <div
@@ -113,40 +71,40 @@ export default function Usuarios() {
       {isLoading ? (
         <Spinner />
       ) : isError ? (
-        <Mensagem className="text-destructive">Erro: {error?.message}</Mensagem>
-      ) : data?.usuarios && data?.usuarios.length > 0 ? (
+        <Mensagem className="text-destructive">
+          Erro ao carregar usuários
+        </Mensagem>
+      ) : data && data.length > 0 ? (
         <Grid className="grid-cols-4">
-          {data?.usuarios &&
-            data?.usuarios.map((usuario: Usuario) => (
-              <motion.li
-                key={usuario.id}
-                whileHover={{ y: "-5%" }}
-                transition={{ type: "spring", bounce: 0 }}
-              >
-                <Card className="hover:cursor-pointer">
-                  <CardHeader>
-                    <CardTitle>
-                      <CardTitle>{usuario.nome}</CardTitle>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription>
-                      <Badge variant="secondary">
-                        {usuario?.funcao === "administrador"
-                          ? "Administrador"
-                          : "Usuário"}
-                      </Badge>
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.li>
-            ))}
+          {data.map((usuario: Usuario) => (
+            <motion.li
+              key={usuario.id}
+              whileHover={{ y: "-5%" }}
+              transition={{ type: "spring", bounce: 0 }}
+            >
+              <Card className="hover:cursor-pointer">
+                <CardHeader>
+                  <CardTitle>
+                    <CardTitle>{usuario.nome}</CardTitle>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    <Badge variant="secondary">
+                      {usuario?.id_grupo === 1 ? "Administrador" : "Usuário"}
+                    </Badge>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </motion.li>
+          ))}
         </Grid>
       ) : (
         <Mensagem className="text-destructive">
           Nenhum usuário encontrado.
         </Mensagem>
       )}
+
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="default" className="fixed bottom-5 right-5">
@@ -163,7 +121,7 @@ export default function Usuarios() {
           <ListagemUsuariosIXC
             selectedId={selectedIXCUser?.id ?? null}
             onSelect={(u) => setSelectedIXCUser(u)}
-            existingEmails={data?.usuarios?.map((u) => u.email) ?? []}
+            existingEmails={data?.map((u) => u.email) ?? []}
           />
           <Button
             disabled={!selectedIXCUser}
@@ -204,5 +162,3 @@ export default function Usuarios() {
     </div>
   );
 }
-
-Usuarios.displayName = "Usuarios";

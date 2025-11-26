@@ -6,7 +6,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define public routes that don't require authentication
-  const publicRoutes = ["/login", "/not_found"];
+  const publicRoutes = ["/login"];
 
   // Allow public routes and static assets
   if (
@@ -37,3 +37,6 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
+
+// Export default for compatibility with some Next.js setups
+export default proxy;

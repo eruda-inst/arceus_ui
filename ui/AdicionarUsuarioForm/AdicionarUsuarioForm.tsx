@@ -20,24 +20,22 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-enum Funcao {
-  ADMINISTRADOR = "administrador",
-  USUARIO = "usuario",
-}
-
 interface Formulario {
   id: number;
   email: string;
   senha: string;
   confirmarSenha: string;
   nome: string;
-  funcao?: Funcao;
+  id_grupo: number;
 }
 
 interface InitialValues {
   id?: number;
   email?: string;
   nome?: string;
+  senha?: string;
+  confirmarSenha?: string;
+  id_grupo?: number;
 }
 
 interface Props {
@@ -64,7 +62,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        funcao: undefined,
+        id_grupo: 2,
       });
     }
   }, [initialValues, reset]);
@@ -82,7 +80,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           nome: data.nome,
           email: data.email,
           senha: data.senha,
-          funcao: data.funcao,
+          id_grupo: data.id_grupo,
         },
         {
           headers: {
@@ -202,21 +200,21 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
       <Field>
         <FieldLabel>Grupo</FieldLabel>
         <Controller
-          name="funcao"
+          name="id_grupo"
           control={control}
           render={({ field }) => (
             <Select
               onValueChange={(val: string) => field.onChange(val)}
-              value={field.value}
+              value={String(field.value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione um grupo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="administrador">Administrador</SelectItem>
+                  <SelectItem value="1">Administrador</SelectItem>
                   <SelectSeparator />
-                  <SelectItem value="usuario">Usuário</SelectItem>
+                  <SelectItem value="2">Usuário</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

@@ -39,12 +39,7 @@ interface LoginForm {
 
 interface LoginResponse {
   token: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
+  refresh_token: string;
 }
 
 function LoginContent() {
@@ -80,12 +75,12 @@ function LoginContent() {
       // Set the auth token cookie
       setCookie("auth-token", data.token, {
         path: "/",
-        maxAge: 60 * 15, // 15 minutes
+        maxAge: 60 * 30, // 30 minutes (matches TOKEN_EXPIRE_MINUTES in backend)
         sameSite: "strict",
       });
 
-      // Store refresh token
-      localStorage.setItem("refreshToken", data.refreshToken);
+      // Store refresh token securely
+      localStorage.setItem("refreshToken", data.refresh_token);
 
       // Redirect to intended page or default
       router.push(redirect);

@@ -148,7 +148,32 @@ export const getHttpUrl = (endpoint: HTTP_ENDPOINTS_NAME): string => {
 };
 
 export const getWsUrl = (endpoint: WS_ENDPOINTS_NAME): string => {
-  return API_CONFIG.WS.ROTAS[endpoint];
+  const url = API_CONFIG.WS.ROTAS[endpoint];
+
+  // If running in the browser, try to attach the access token from cookies
+  // so the backend can authenticate the websocket connection via query param.
+  // We avoid importing cookie helpers here to keep the module safe for server
+  // side usage — only access `document` when available.
+  if (typeof window !== "undefined") {
+    try {
+      const cookieEntry = document.cookie
+        .split("; ")
+        .find((c) => c.startsWith("auth-token="));
+
+      if (cookieEntry) {
+        const token = decodeURIComponent(cookieEntry.split("=")[1] || "");
+        if (token) {
+          const sep = url.includes("?") ? "&" : "?";
+          return `${url}${sep}token=${encodeURIComponent(token)}`;
+        }
+      }
+    } catch (err) {
+      // silent fallback to plain URL on any error
+      console.warn("Failed to attach token to WS URL:", err);
+    }
+  }
+
+  return url;
 };
 
 export type HttpEndpoint = keyof typeof HTTP_ENDPOINTS;

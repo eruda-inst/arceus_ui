@@ -2,16 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
+import { getCookie, deleteCookie } from "cookies-next";
+import api from "@/lib/api";
 
-interface User {
+export interface User {
+  id: number;
   email: string;
-  name: string;
-  funcao?: string;
+  ativo: boolean;
+  nome: string;
+  criado_em: string;
+  id_grupo: number;
 }
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,25 +27,25 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("/api/autenticacao/verify");
-      const data = await response.json();
+      const token = getCookie("auth-token");
 
-      if (data.valid) {
-        // Try to use role/funcao returned by the API, fallback to heuristics
-        const funcao =
-          data.funcao ??
-          data.role ??
-          (data.email && data.email.includes("admin")
-            ? "administrador"
-            : "usuario");
-        setUser({
-          email: data.email ?? "admin@empresa.com",
-          name: data.name ?? "Administrador",
-          funcao,
-        });
+      if (!token) {
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Erro ao verificar autenticação:", error);
+
+      const response = await api.get<User>(getHttpUrl(HTTP_ENDPOINTS_NAME.ME));
+
+      if (response.data) {
+        setUser(response.data);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Erro ao verificar autenticação:", err);
+      setError("Falha ao carregar dados do usuário");
+      // Clear invalid token
+      deleteCookie("auth-token");
+      localStorage.removeItem("refreshToken");
     } finally {
       setLoading(false);
     }
@@ -46,13 +53,27 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      await fetch("/api/autenticacao/logout", { method: "POST" });
       setUser(null);
+      deleteCookie("auth-token");
+      localStorage.removeItem("refreshToken");
       router.push("/login");
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }
   };
 
-  return { user, loading, logout };
+  const isAdmin = (): boolean => {
+    return user?.id_grupo === 1;
+  };
+
+  const hasPermission = (permissionCode: string): boolean => {
+    // For now, admins have all permissions
+    if (isAdmin()) {
+      return true;
+    }
+    // TODO: Implement role-based permission checking when available
+    return false;
+  };
+
+  return { user, loading, error, logout, isAdmin, hasPermission };
 }
