@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import {
@@ -23,8 +22,7 @@ import { Grid } from "@/ui/Grid/Grid";
 import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
@@ -135,7 +133,6 @@ export default function Usuarios() {
           </Button>
         </DialogContent>
       </Dialog>
-
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent>
           <DialogHeader>

@@ -52,7 +52,11 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
     watch,
     reset,
     control,
-  } = useForm<Formulario>();
+  } = useForm<Formulario>({
+    defaultValues: {
+      id_grupo: 2, // Valor padrão definido aqui
+    },
+  });
 
   useEffect(() => {
     if (initialValues) {
@@ -62,7 +66,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        id_grupo: 2,
+        id_grupo: initialValues.id_grupo ?? 2, // Mantém o valor do initialValues ou usa 2 como padrão
       });
     }
   }, [initialValues, reset]);
@@ -74,21 +78,21 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         console.error("No authentication token found");
         return;
       }
-      await axios.post(
-        getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS),
-        {
-          nome: data.nome,
-          email: data.email,
-          senha: data.senha,
-          id_grupo: data.id_grupo,
+
+      // Garante que id_grupo será 2 se não for informado
+      const formData = {
+        nome: data.nome,
+        email: data.email,
+        senha: data.senha,
+        id_grupo: data.id_grupo || 2,
+      };
+
+      await axios.post(getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS), formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       toast.success("Sucesso!", {
         position: "top-center",
         description: "Usuário criado com sucesso!",
@@ -202,9 +206,10 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         <Controller
           name="id_grupo"
           control={control}
+          defaultValue={2} // Garante o valor padrão
           render={({ field }) => (
             <Select
-              onValueChange={(val: string) => field.onChange(val)}
+              onValueChange={(val: string) => field.onChange(Number(val))}
               value={String(field.value)}
             >
               <SelectTrigger>
