@@ -53,7 +53,7 @@ export function useAuth() {
   const buscarPermissoes = async (id_grupo: number): Promise<Permissao[]> => {
     try {
       const response = await api.get<Permissao[]>(
-        `/api/v1/grupos_permissoes?id_grupo=${id_grupo}`
+        `/api/v1/grupos_permissoes/?id_grupo=${id_grupo}`
       );
       return response.data;
     } catch (error) {
