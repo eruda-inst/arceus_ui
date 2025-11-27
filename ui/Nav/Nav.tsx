@@ -25,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ChartLine, LogOut, Table, Smile, Users } from "lucide-react";
+import { ChartLine, LogOut, Table, Smile, Users, Bot } from "lucide-react";
 import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
 import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
@@ -46,11 +46,11 @@ interface Formulario {
   confirmarSenha: string;
 }
 
-// Navigation items configuration for better maintainability
 const navItems = [
   { path: "/", label: "Dashboard", icon: ChartLine },
   { path: "/registros", label: "Registros", icon: Table },
   { path: "/usuarios", label: "Usuários", icon: Users },
+  { path: "/agentes", label: "Agentes", icon: Bot },
 ];
 
 export function Nav() {

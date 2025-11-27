@@ -20,6 +20,7 @@ export const enum HTTP_ENDPOINTS_NAME {
   REFRESH = "REFRESH",
   USUARIOS = "USUARIOS",
   USUARIOS_IXC = "USUARIOS_IXC",
+  AGENTES = "AGENTES",
 }
 
 export const HTTP_ENDPOINTS = {
@@ -28,6 +29,7 @@ export const HTTP_ENDPOINTS = {
   [HTTP_ENDPOINTS_NAME.REFRESH]: "api/v1/autenticacao/refresh",
   [HTTP_ENDPOINTS_NAME.USUARIOS]: "api/v1/usuarios/",
   [HTTP_ENDPOINTS_NAME.USUARIOS_IXC]: "api/v1/usuarios_ixc/",
+  [HTTP_ENDPOINTS_NAME.AGENTES]: "api/v1/agentes/",
 } as const;
 
 export const enum WS_ENDPOINTS_NAME {
