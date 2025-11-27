@@ -144,7 +144,7 @@ export function Nav() {
                 {navItems
                   .filter((item) => {
                     // show the users tab only for administrators
-                    if (item.path === "/usuarios") {
+                    if (item.path === "/usuarios" || item.path === "/agentes") {
                       return isAdmin() === true;
                     }
                     return true;
