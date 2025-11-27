@@ -22,11 +22,12 @@ import { Grid } from "@/ui/Grid/Grid";
 import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
 import api from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Usuario {
   id: number;
@@ -40,6 +41,7 @@ interface Usuarios {
 }
 
 export default function Usuarios() {
+  const { hasPermission, redirectIfNoPermission, loading } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -47,6 +49,12 @@ export default function Usuarios() {
     nome: string;
   } | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      redirectIfNoPermission("usuarios:ver");
+    }
+  }, [loading, redirectIfNoPermission]);
 
   const { data, isLoading, isError, error } = useQuery<Usuario[]>({
     queryKey: ["usuarios"],
@@ -58,6 +66,15 @@ export default function Usuarios() {
     },
     retry: false,
   });
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  // Se não tem permissão, não renderiza o conteúdo (já foi redirecionado)
+  if (!hasPermission("usuarios:ver")) {
+    return null;
+  }
 
   return (
     <div

@@ -17,6 +17,8 @@ import { motion } from "framer-motion";
 import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Download, Calendar, RefreshCw } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 interface Agente {
   id: number;
@@ -29,6 +31,14 @@ interface Agente {
 }
 
 export default function Agentes() {
+  const { hasPermission, redirectIfNoPermission, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading) {
+      redirectIfNoPermission("agentes:ver");
+    }
+  }, [loading, redirectIfNoPermission]);
+
   const { data, isLoading, isError, error } = useQuery<Agente[]>({
     queryKey: ["agentes"],
     queryFn: async () => {
@@ -59,6 +69,15 @@ export default function Agentes() {
       year: "numeric",
     });
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  // Se não tem permissão, não renderiza o conteúdo (já foi redirecionado)
+  if (!hasPermission("agentes:ver")) {
+    return null;
+  }
 
   return (
     <div
