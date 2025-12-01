@@ -28,7 +28,7 @@ import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuario
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { Lock, UserX, Trash2 } from "lucide-react";
+import { Lock, UserX, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
 
 interface Usuario {
   id: number;
@@ -70,7 +70,7 @@ export default function Usuarios() {
     queryKey: ["usuarios"],
     queryFn: async () => {
       const response = await api.get(
-        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`,
       );
       return response.data;
     },
@@ -103,7 +103,7 @@ export default function Usuarios() {
     try {
       await api.patch(
         `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`,
-        { ativo: ativo }
+        { ativo: ativo },
       );
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsDisableDialogOpen(false);
@@ -118,7 +118,7 @@ export default function Usuarios() {
 
     try {
       await api.delete(
-        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`,
       );
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsDeleteDialogOpen(false);
@@ -134,7 +134,7 @@ export default function Usuarios() {
     try {
       await api.patch(
         `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`,
-        { senha: novaSenha }
+        { senha: novaSenha },
       );
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsChangePasswordDialogOpen(false);
@@ -166,30 +166,113 @@ export default function Usuarios() {
           Erro ao carregar usuários
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-4">
+        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {data.map((usuario: Usuario) => (
             <motion.div
               key={usuario.id}
-              whileHover={{ y: "-5%" }}
+              whileHover={usuario.ativo ? { y: "-5%" } : {}}
               transition={{ type: "spring", bounce: 0 }}
             >
               <Card
-                className="hover:cursor-pointer relative"
+                className={`
+                  hover:cursor-pointer relative overflow-hidden
+                  transition-all duration-200
+                  ${
+                    !usuario.ativo
+                      ? "bg-muted/50 opacity-80 hover:opacity-100"
+                      : "hover:shadow-md"
+                  }
+                `}
                 onClick={() => handleUserClick(usuario)}
               >
-                <CardHeader>
-                  <CardTitle>{usuario.nome}</CardTitle>
+                <div
+                  className={`absolute top-0 right-0 p-2 ${usuario.ativo ? "text-green-500" : "text-muted-foreground"}`}
+                >
+                  {usuario.ativo ? (
+                    <CheckCircle className="h-5 w-5" />
+                  ) : (
+                    <Ban className="h-5 w-5" />
+                  )}
+                </div>
+                {usuario.id_grupo === 1 && (
+                  <div className="absolute top-2 left-2">
+                    <UserCog className="h-4 w-4 text-primary" />
+                  </div>
+                )}
+                <CardHeader className="pt-6">
+                  <CardTitle
+                    className={`
+                    flex items-center gap-2
+                    ${!usuario.ativo ? "text-muted-foreground" : ""}
+                  `}
+                  >
+                    <div className="flex-1 truncate" title={usuario.nome}>
+                      {usuario.nome}
+                    </div>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="flex flex-col gap-2">
-                    <Badge variant="secondary">
-                      {usuario?.id_grupo === 1 ? "Administrador" : "Usuário"}
-                    </Badge>
-                    <Badge variant={usuario.ativo ? "default" : "destructive"}>
-                      {usuario.ativo ? "Ativo" : "Inativo"}
-                    </Badge>
+                  <CardDescription className="flex flex-col gap-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="secondary"
+                          className={`
+                            ${!usuario.ativo ? "opacity-75" : ""}
+                            flex items-center gap-1
+                          `}
+                        >
+                          <UserCog className="h-3 w-3" />
+                          {usuario?.id_grupo === 1
+                            ? "Administrador"
+                            : "Usuário"}
+                        </Badge>
+                      </div>
+                      <Badge
+                        variant={usuario.ativo ? "default" : "outline"}
+                        className={`
+                          ${
+                            usuario.ativo
+                              ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-100"
+                              : "border-destructive/30 text-destructive bg-destructive/10"
+                          }
+                          flex items-center gap-1 w-fit
+                        `}
+                      >
+                        {usuario.ativo ? (
+                          <>
+                            <CheckCircle className="h-3 w-3" />
+                            Ativo
+                          </>
+                        ) : (
+                          <>
+                            <Ban className="h-3 w-3" />
+                            Inativo
+                          </>
+                        )}
+                      </Badge>
+                    </div>
+                    <div
+                      className={`
+                      text-sm pt-2 border-t border-border/50
+                      ${!usuario.ativo ? "text-muted-foreground" : "text-foreground"}
+                      flex items-start gap-2
+                    `}
+                    >
+                      <div className="min-w-0">
+                        <div className="font-medium text-xs text-muted-foreground mb-1">
+                          Email
+                        </div>
+                        <div className="truncate" title={usuario.email}>
+                          {usuario.email}
+                        </div>
+                      </div>
+                    </div>
                   </CardDescription>
                 </CardContent>
+                {!usuario.ativo && (
+                  <div className="absolute inset-0 bg-linear-to-t from-background/10 to-transparent pointer-events-none" />
+                )}
               </Card>
             </motion.div>
           ))}
@@ -199,8 +282,6 @@ export default function Usuarios() {
           Nenhum usuário encontrado.
         </Mensagem>
       )}
-
-      {/* Diálogo de Ações do Usuário */}
       <Dialog open={isActionsDialogOpen} onOpenChange={setIsActionsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -223,17 +304,33 @@ export default function Usuarios() {
             {hasPermission("usuarios:atualizar") && (
               <Button
                 variant="outline"
-                className="justify-start gap-2"
+                className={`
+                  justify-start gap-2
+                  ${
+                    selectedUser?.ativo
+                      ? "text-destructive hover:text-destructive"
+                      : "text-green-600 hover:text-green-600"
+                  }
+                `}
                 onClick={handleDisableUser}
               >
-                <UserX className="h-4 w-4" />
-                {selectedUser?.ativo ? "Desativar Usuário" : "Ativar Usuário"}
+                {selectedUser?.ativo ? (
+                  <>
+                    <Ban className="h-4 w-4" />
+                    Desativar Usuário
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="h-4 w-4" />
+                    Ativar Usuário
+                  </>
+                )}
               </Button>
             )}
             {hasPermission("usuarios:excluir") && (
               <Button
                 variant="outline"
-                className="justify-start gap-2 text-destructive"
+                className="justify-start gap-2 text-destructive hover:text-destructive"
                 onClick={handleDeleteUser}
               >
                 <Trash2 className="h-4 w-4" />
@@ -243,8 +340,6 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Diálogo de Mudança de Senha */}
       <Dialog
         open={isChangePasswordDialogOpen}
         onOpenChange={setIsChangePasswordDialogOpen}
@@ -262,8 +357,6 @@ export default function Usuarios() {
           />
         </DialogContent>
       </Dialog>
-
-      {/* Diálogo de Desativar/Ativar Usuário */}
       <Dialog open={isDisableDialogOpen} onOpenChange={setIsDisableDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -272,8 +365,8 @@ export default function Usuarios() {
             </DialogTitle>
             <DialogDescription>
               {selectedUser?.ativo
-                ? `Tem certeza que deseja desativar o usuário ${selectedUser?.nome}?`
-                : `Tem certeza que deseja ativar o usuário ${selectedUser?.nome}?`}
+                ? `Tem certeza que deseja desativar o usuário ${selectedUser?.nome}? O usuário não poderá mais acessar o sistema.`
+                : `Tem certeza que deseja ativar o usuário ${selectedUser?.nome}? O usuário voltará a ter acesso ao sistema.`}
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-2 justify-end">
@@ -286,14 +379,15 @@ export default function Usuarios() {
             <Button
               variant={selectedUser?.ativo ? "destructive" : "default"}
               onClick={() => handleUpdateUserStatus(!selectedUser?.ativo)}
+              className={
+                selectedUser?.ativo ? "" : "bg-green-600 hover:bg-green-700"
+              }
             >
               {selectedUser?.ativo ? "Desativar" : "Ativar"}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Diálogo de Excluir Usuário */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -316,8 +410,6 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Diálogos existentes para adicionar usuário */}
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="default" className="fixed bottom-5 right-5">
@@ -348,7 +440,6 @@ export default function Usuarios() {
           </Button>
         </DialogContent>
       </Dialog>
-
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent>
           <DialogHeader>
