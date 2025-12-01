@@ -43,7 +43,7 @@ export default function Agentes() {
     queryKey: ["agentes"],
     queryFn: async () => {
       const response = await api.get(
-        `${getHttpUrl(HTTP_ENDPOINTS_NAME.AGENTES)}?itens_por_pagina=100`
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.AGENTES)}?itens_por_pagina=100`,
       );
       return response.data;
     },
@@ -74,7 +74,6 @@ export default function Agentes() {
     return <Spinner />;
   }
 
-  // Se não tem permissão, não renderiza o conteúdo (já foi redirecionado)
   if (!hasPermission("agentes:ver")) {
     return null;
   }
@@ -93,7 +92,7 @@ export default function Agentes() {
           Erro ao carregar agentes
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Grid className="grid-cols-4 gap-6">
           {data.map((agente: Agente) => (
             <motion.div
               key={agente.id}
