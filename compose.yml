@@ -7,6 +7,11 @@ services:
         NEXT_PUBLIC_BASE_HTTP_URL: ${NEXT_PUBLIC_BASE_HTTP_URL}
         NEXT_PUBLIC_BASE_WS_URL: ${NEXT_PUBLIC_BASE_WS_URL}
     container_name: arceus-ui
+    environment:
+      NODE_ENV: "env"
+      COOKIE_SECURE: "false"
+      NEXT_PUBLIC_BASE_HTTP_URL: next_public_base_http_url aqui
+      NEXT_PUBLIC_BASE_WS_URL: next_public_base_ws_url aqui
     env_file:
       - .env
     ports:
