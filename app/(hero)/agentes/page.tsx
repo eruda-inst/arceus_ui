@@ -39,7 +39,7 @@ export default function Agentes() {
     }
   }, [loading, redirectIfNoPermission]);
 
-  const { data, isLoading, isError, error } = useQuery<Agente[]>({
+  const { data, isLoading, isError } = useQuery<Agente[]>({
     queryKey: ["agentes"],
     queryFn: async () => {
       const response = await api.get(

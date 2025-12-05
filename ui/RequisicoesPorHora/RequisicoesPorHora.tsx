@@ -1,56 +1,74 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
-import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
 import { Spinner } from "@/components/ui/spinner";
+import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
+import { useEffect, useState } from "react";
 
 interface RequisicaoPorHora {
   hora: string;
   total: number;
 }
 
-interface RequisicoesPorHoraOut {
-  requisicoes_por_hora: RequisicaoPorHora[];
-}
-
 export function RequisicoesPorHora() {
-  const {
-    data: reqPorHoraData,
-    isLoading: reqPorHoraIsLoading,
-    isError: reqPorHoraIsError,
-  } = useReactWebSocket<RequisicoesPorHoraOut>(
-    getWsUrl(WS_ENDPOINTS_NAME.REQUISICOES_POR_HORA)
-  );
+  const [requisicoesPorHora, setRequisicoesPorHora] = useState([]);
 
-  function filterAndProcessHourlyRequests(
-    data: RequisicaoPorHora[] | undefined
+  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+    onMessage: (data) => {
+      // Verificar qual resposta chegou
+      if (data.requisicoes_por_hora !== undefined) {
+        setRequisicoesPorHora(data.requisicoes_por_hora);
+      }
+    },
+    onOpen: () => {
+      // Solicitar métricas quando a conexão for estabelecida
+      sendMetricaRequest("requisicoes_por_hora");
+    },
+    autoConnect: true,
+  });
+
+  // Enviar requisição periodicamente
+  useEffect(() => {
+    if (!isConnected) return;
+
+    const idIntervalo = setInterval(() => {
+      sendMetricaRequest("requisicoes_por_hora");
+    }, 500);
+
+    return () => clearInterval(idIntervalo);
+  }, [isConnected]);
+
+  function filtrarEProcessarRequisicoesPorHora(
+    dados: RequisicaoPorHora[] | undefined,
   ) {
-    if (!data) return [];
+    if (!dados) return [];
 
-    const now = new Date();
-    const currentHour = now.getHours();
-    const fullDayData: RequisicaoPorHora[] = Array.from(
-      { length: currentHour + 1 },
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const dadosDiaCompleto: RequisicaoPorHora[] = Array.from(
+      { length: horaAtual + 1 },
       (_, i) => ({
         hora: `${String(i)}h`,
         total: 0,
-      })
+      }),
     );
 
-    data.forEach((item) => {
-      const itemHour = parseInt(String(item.hora).split(":")[0], 10);
-      if (itemHour <= currentHour) {
-        const index = fullDayData.findIndex(
-          (d) => d.hora === `${String(itemHour)}h`
+    dados.forEach((item) => {
+      const horaItem = parseInt(String(item.hora).split(":")[0], 10);
+      if (horaItem <= horaAtual) {
+        const indice = dadosDiaCompleto.findIndex(
+          (d) => d.hora === `${String(horaItem)}h`,
         );
-        if (index !== -1) {
-          fullDayData[index] = { ...item, hora: fullDayData[index].hora };
+        if (indice !== -1) {
+          dadosDiaCompleto[indice] = {
+            ...item,
+            hora: dadosDiaCompleto[indice].hora,
+          };
         }
       }
     });
 
-    return fullDayData;
+    return dadosDiaCompleto;
   }
 
   return (
@@ -59,19 +77,15 @@ export function RequisicoesPorHora() {
         <CardTitle>Requisições por Hora (hoje)</CardTitle>
       </CardHeader>
       <CardContent>
-        {reqPorHoraIsLoading ? (
-          <Spinner />
-        ) : reqPorHoraIsError ? (
-          <Mensagem className="text-destructive">Erro</Mensagem>
-        ) : (
+        {isConnected ? (
           <LineChartComponent
-            data={filterAndProcessHourlyRequests(
-              reqPorHoraData?.requisicoes_por_hora
-            )}
+            data={filtrarEProcessarRequisicoesPorHora(requisicoesPorHora)}
             xKey="hora"
             yKey="total"
             showDots={true}
           />
+        ) : (
+          <Spinner />
         )}
       </CardContent>
     </Card>

@@ -28,7 +28,7 @@ import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuario
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { Lock, UserX, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
+import { Lock, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
 
 interface Usuario {
   id: number;
@@ -66,7 +66,7 @@ export default function Usuarios() {
     }
   }, [loading, redirectIfNoPermission]);
 
-  const { data, isLoading, isError, error } = useQuery<Usuario[]>({
+  const { data, isLoading, isError } = useQuery<Usuario[]>({
     queryKey: ["usuarios"],
     queryFn: async () => {
       const response = await api.get(

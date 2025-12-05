@@ -4,8 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { LoadingState } from "@/ui/LoadingState/LoadingState";
 import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
 import { ControlesPaginacao } from "@/ui/ControlesPaginacao/ControlesPaginacao";
-import { useReactWebSocket } from "@/hooks/useReactWebSocket";
-import { getWsUrl, WS_ENDPOINTS_NAME } from "@/config/config";
+import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 import { Log } from "@/types/log";
 import { TabelaCompleta } from "@/ui/TabelaCompleta/TabelaCompleta";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,6 +30,7 @@ interface PaginatedLogsResponse {
 export default function LogsCompleto() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [data, setData] = useState<PaginatedLogsResponse | null>(null);
 
   const [filters, setFilters] = useState<{
     ip?: string;
@@ -43,13 +43,19 @@ export default function LogsCompleto() {
     protocol?: string;
   }>({});
 
-  const { data, isConnected, sendMessage, isLoading, isError } =
-    useReactWebSocket<PaginatedLogsResponse>(
-      getWsUrl(WS_ENDPOINTS_NAME.REGISTROS),
-      {
-        autoAck: false,
+  const {
+    isConnected,
+    error: wsError,
+    sendMetricaRequest,
+  } = useMetricaWebSocket({
+    onMessage: (data) => {
+      if (data.registros) {
+        setData(data as PaginatedLogsResponse);
       }
-    );
+    },
+    autoConnect: true,
+    requirePermission: "metricas:ver",
+  });
 
   function cleanFilters(f: typeof filters) {
     const out: Record<string, string> = {};
@@ -61,15 +67,33 @@ export default function LogsCompleto() {
     return out;
   }
 
+  // Enviar requisição quando parâmetros mudarem
   useEffect(() => {
     if (isConnected) {
-      sendMessage({
+      sendMetricaRequest("registros", undefined, {
         pagina: currentPage + 1,
         itens_por_pagina: itemsPerPage,
         filtros: cleanFilters(filters),
+        matched: true,
       });
     }
-  }, [currentPage, itemsPerPage, isConnected, sendMessage, filters]);
+  }, [currentPage, itemsPerPage, filters, isConnected, sendMetricaRequest]);
+
+  // Enviar requisição periodicamente
+  useEffect(() => {
+    if (!isConnected) return;
+
+    const intervalId = setInterval(() => {
+      sendMetricaRequest("registros", undefined, {
+        pagina: currentPage + 1,
+        itens_por_pagina: itemsPerPage,
+        filtros: cleanFilters(filters),
+        matched: true,
+      });
+    }, 500);
+
+    return () => clearInterval(intervalId);
+  }, [isConnected, currentPage, itemsPerPage, filters, sendMetricaRequest]);
 
   const handlePageClick = useCallback((event: { selected: number }) => {
     setCurrentPage(event.selected);
@@ -89,31 +113,21 @@ export default function LogsCompleto() {
       const newFilters = { ...filters, [key]: normalized };
       setFilters(newFilters);
       setCurrentPage(0);
-      if (isConnected) {
-        sendMessage({
-          pagina: 1,
-          itens_por_pagina: itemsPerPage,
-          filtros: cleanFilters(newFilters),
-        });
-      }
     },
-    [filters, isConnected, itemsPerPage, sendMessage]
+    [filters],
   );
 
   const handleClearFilters = useCallback(() => {
     const empty: typeof filters = {};
     setFilters(empty);
     setCurrentPage(0);
-    if (isConnected) {
-      sendMessage({
-        pagina: 1,
-        itens_por_pagina: itemsPerPage,
-        filtros: cleanFilters(empty),
-      });
-    }
-  }, [isConnected, itemsPerPage, sendMessage]);
+  }, []);
 
-  if (!data) {
+  // Estados de loading e error
+  const isLoading = !data && isConnected;
+  const isError = wsError !== null;
+
+  if (!data || isLoading) {
     return (
       <LoadingState
         isConnected={isConnected}
@@ -265,24 +279,6 @@ export default function LogsCompleto() {
           </div>
           <div className="mt-4 flex gap-2">
             <Button
-              variant="default"
-              className="hover:cursor-pointer"
-              onClick={() => {
-                setCurrentPage(0);
-                try {
-                  sendMessage({
-                    pagina: 1,
-                    itens_por_pagina: itemsPerPage,
-                    filtros: cleanFilters(filters),
-                  });
-                } catch (err) {
-                  console.warn("sendMessage failed", err);
-                }
-              }}
-            >
-              Aplicar filtros
-            </Button>
-            <Button
               variant="outline"
               className="hover:cursor-pointer"
               onClick={handleClearFilters}
@@ -302,7 +298,11 @@ export default function LogsCompleto() {
       />
       <Card>
         <CardContent>
-          <TabelaCompleta registros={registros} />
+          <TabelaCompleta
+            registros={registros}
+            isLoading={isLoading}
+            isError={isError}
+          />
         </CardContent>
       </Card>
       {total_paginas > 1 && (
