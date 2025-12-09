@@ -53,7 +53,7 @@ export function useAuth() {
   const buscarPermissoes = async (id_grupo: number): Promise<Permissao[]> => {
     try {
       const response = await api.get<Permissao[]>(
-        `/api/v1/grupos_permissoes/?id_grupo=${id_grupo}`
+        `/api/v1/grupos_permissoes/id/${id_grupo}`,
       );
       return response.data;
     } catch (error) {
@@ -82,7 +82,7 @@ export function useAuth() {
 
         // Buscar permissões do grupo do usuário
         const permissoesDoGrupo = await buscarPermissoes(
-          response.data.id_grupo
+          response.data.id_grupo,
         );
         setPermissoes(permissoesDoGrupo);
       }
@@ -129,7 +129,7 @@ export function useAuth() {
     }
 
     return permissionCodes.some((code) =>
-      permissoes.some((permissao) => permissao.codigo === code)
+      permissoes.some((permissao) => permissao.codigo === code),
     );
   };
 
@@ -140,7 +140,7 @@ export function useAuth() {
     }
 
     return permissionCodes.every((code) =>
-      permissoes.some((permissao) => permissao.codigo === code)
+      permissoes.some((permissao) => permissao.codigo === code),
     );
   };
 
