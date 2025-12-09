@@ -6,6 +6,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { obterTokenAutenticacao } from "@/helpers/misc";
+import { API_CONFIG } from "@/config/config";
 
 type WebSocketMessage = {
   [key: string]: any;
@@ -78,7 +79,10 @@ export const useMetricaWebSocket = (
     }
 
     // Construir URL com permissão se especificada
-    let wsUrl = `ws://localhost:8000/api/v1/ws/metricas/?token=${token}`;
+    let wsBaseUrl = API_CONFIG.WS.URL_BASE.endsWith("/")
+      ? API_CONFIG.WS.URL_BASE.slice(0, -1)
+      : API_CONFIG.WS.URL_BASE;
+    let wsUrl = `${wsBaseUrl}/api/v1/ws/metricas/?token=${token}`;
     if (requirePermission) {
       wsUrl += `&permission=${encodeURIComponent(requirePermission)}`;
     }
@@ -88,7 +92,6 @@ export const useMetricaWebSocket = (
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log("WebSocket conectado para métricas");
         setIsConnected(true);
         setError(null);
         reconnectAttemptsRef.current = 0;
@@ -123,7 +126,6 @@ export const useMetricaWebSocket = (
       };
 
       ws.onclose = (event) => {
-        console.log("WebSocket desconectado", event.code, event.reason);
         setIsConnected(false);
 
         if (callbacksRef.current.onClose) callbacksRef.current.onClose();
@@ -140,9 +142,6 @@ export const useMetricaWebSocket = (
           }
 
           reconnectTimeoutRef.current = setTimeout(() => {
-            console.log(
-              `Tentando reconectar... (${reconnectAttemptsRef.current}/${MAX_RECONNECT_ATTEMPTS})`,
-            );
             connect();
           }, RECONNECT_DELAY * reconnectAttemptsRef.current);
         }

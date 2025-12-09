@@ -16,7 +16,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -45,7 +45,7 @@ api.interceptors.response.use(
           getHttpUrl(HTTP_ENDPOINTS_NAME.REFRESH),
           {
             refresh_token: refreshToken,
-          }
+          },
         );
 
         // backend returns token and refresh_token (snake_case)
@@ -65,7 +65,7 @@ api.interceptors.response.use(
             } catch (e) {
               console.warn(
                 "Could not save new refresh token to localStorage:",
-                e
+                e,
               );
             }
           }
@@ -92,7 +92,7 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

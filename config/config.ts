@@ -99,7 +99,7 @@ export const WS_ENDPOINTS = {
 
 const createCompleteUrls = (
   baseUrl: string,
-  endpoints: Record<string, string>
+  endpoints: Record<string, string>,
 ): Record<string, string> => {
   const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
 
@@ -107,20 +107,20 @@ const createCompleteUrls = (
     Object.entries(endpoints).map(([key, endpoint]) => [
       key,
       `${normalizedBaseUrl}/${endpoint.replace(/^\//, "")}`,
-    ])
+    ]),
   );
 };
 
 const validateEnvironmentVariables = () => {
   if (!process.env.NEXT_PUBLIC_BASE_HTTP_URL) {
     console.warn(
-      `NEXT_PUBLIC_BASE_HTTP_URL não foi definido, usando valor padrão: ${DEFAULT_HTTP_BASE_URL}`
+      `NEXT_PUBLIC_BASE_HTTP_URL não foi definido, usando valor padrão: ${DEFAULT_HTTP_BASE_URL}`,
     );
   }
 
   if (!process.env.NEXT_PUBLIC_BASE_WS_URL) {
     console.warn(
-      `NEXT_PUBLIC_BASE_WS_URL não foi definido, usando valor padrão: ${DEFAULT_WS_BASE_URL}`
+      `NEXT_PUBLIC_BASE_WS_URL não foi definido, usando valor padrão: ${DEFAULT_WS_BASE_URL}`,
     );
   }
 };
