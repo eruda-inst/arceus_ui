@@ -44,8 +44,8 @@ export default function LogsCompleto() {
   }>({});
 
   const {
-    isConnected,
     error: wsError,
+    isConnected,
     sendMetricaRequest,
   } = useMetricaWebSocket({
     onMessage: (data) => {
@@ -67,7 +67,6 @@ export default function LogsCompleto() {
     return out;
   }
 
-  // Enviar requisição quando parâmetros mudarem
   useEffect(() => {
     if (isConnected) {
       sendMetricaRequest("registros", undefined, {
@@ -79,7 +78,6 @@ export default function LogsCompleto() {
     }
   }, [currentPage, itemsPerPage, filters, isConnected, sendMetricaRequest]);
 
-  // Enviar requisição periodicamente
   useEffect(() => {
     if (!isConnected) return;
 
@@ -123,7 +121,6 @@ export default function LogsCompleto() {
     setCurrentPage(0);
   }, []);
 
-  // Estados de loading e error
   const isLoading = !data && isConnected;
   const isError = wsError !== null;
 

@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
 import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
@@ -13,21 +12,18 @@ interface RequisicaoPorHora {
 export function RequisicoesPorHora() {
   const [requisicoesPorHora, setRequisicoesPorHora] = useState([]);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.requisicoes_por_hora !== undefined) {
         setRequisicoesPorHora(data.requisicoes_por_hora);
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("requisicoes_por_hora");
     },
     autoConnect: true,
   });
 
-  // Enviar requisição periodicamente
   useEffect(() => {
     if (!isConnected) return;
 
@@ -77,7 +73,7 @@ export function RequisicoesPorHora() {
         <CardTitle>Requisições por Hora (hoje)</CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected ? (
+        {isConnected && !isLoading ? (
           <LineChartComponent
             data={filtrarEProcessarRequisicoesPorHora(requisicoesPorHora)}
             xKey="hora"

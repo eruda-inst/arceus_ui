@@ -20,15 +20,13 @@ export function RequisicoesRecentes() {
   const [registros, setRegistros] = useState([]);
   const chavesEstaveis = useChavesEstaveis(registros?.length || 0);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.requisicoes_recentes !== undefined) {
         setRegistros(data.requisicoes_recentes);
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("requisicoes_recentes");
     },
     autoConnect: true,
@@ -64,7 +62,7 @@ export function RequisicoesRecentes() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isConnected ? (
+            {isConnected && !isLoading ? (
               registros.map((registro: Log, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>{registro.ip}</TableCell>

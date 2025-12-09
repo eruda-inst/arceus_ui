@@ -1,7 +1,3 @@
-// Atualize o hook abaixo para ficar requisitando a cada 500ms todas as métricas, para implementação de real-time (atualmente o back-end só realiza broadcast quando uma nova requisição chega, i.e., não é broadcast, apesar de ser websocket)
-
-// Tente implementar algum mecanismo inteligente aqui que não pese tanto na performance
-
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -37,12 +33,13 @@ export const useMetricaWebSocket = (
     onClose,
     onError,
     autoConnect = true,
-    requirePermission = "ver_metricas",
+    requirePermission = "metricas:ver",
   } = options;
 
   const [token, setToken] = useState(obterTokenAutenticacao());
   const wsRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef<number>(0);
@@ -78,13 +75,15 @@ export const useMetricaWebSocket = (
       return;
     }
 
+    setIsLoading(true);
+
     // Construir URL com permissão se especificada
     let wsBaseUrl = API_CONFIG.WS.URL_BASE.endsWith("/")
       ? API_CONFIG.WS.URL_BASE.slice(0, -1)
       : API_CONFIG.WS.URL_BASE;
     let wsUrl = `${wsBaseUrl}/api/v1/ws/metricas/?token=${token}`;
     if (requirePermission) {
-      wsUrl += `&permission=${encodeURIComponent(requirePermission)}`;
+      wsUrl += `&permissao=metricas:ver`;
     }
 
     try {
@@ -93,6 +92,7 @@ export const useMetricaWebSocket = (
 
       ws.onopen = () => {
         setIsConnected(true);
+        setIsLoading(false);
         setError(null);
         reconnectAttemptsRef.current = 0;
 
@@ -112,13 +112,12 @@ export const useMetricaWebSocket = (
             callbacksRef.current.onMessage(data);
           }
         } catch (err) {
-          console.error("Erro ao processar mensagem WebSocket:", err);
           setError("Erro ao processar resposta do servidor");
         }
       };
 
       ws.onerror = (errorEvent) => {
-        console.error("Erro no WebSocket:", errorEvent);
+        setIsLoading(false);
         setError("Erro na conexão com o servidor de métricas");
 
         if (callbacksRef.current.onError)
@@ -127,6 +126,7 @@ export const useMetricaWebSocket = (
 
       ws.onclose = (event) => {
         setIsConnected(false);
+        setIsLoading(false);
 
         if (callbacksRef.current.onClose) callbacksRef.current.onClose();
 
@@ -147,7 +147,7 @@ export const useMetricaWebSocket = (
         }
       };
     } catch (err) {
-      console.error("Erro ao criar WebSocket:", err);
+      setIsLoading(false);
       setError("Não foi possível criar a conexão WebSocket");
     }
   }, [requirePermission]);
@@ -165,6 +165,7 @@ export const useMetricaWebSocket = (
     }
 
     setIsConnected(false);
+    setIsLoading(false);
     reconnectAttemptsRef.current = 0;
   }, []);
 
@@ -179,7 +180,6 @@ export const useMetricaWebSocket = (
       wsRef.current.send(JSON.stringify(request));
       return true;
     } catch (err) {
-      console.error("Erro ao enviar mensagem WebSocket:", err);
       setError("Erro ao enviar solicitação");
       return false;
     }
@@ -232,6 +232,7 @@ export const useMetricaWebSocket = (
 
   return {
     isConnected,
+    isLoading,
     error,
     sendRequest,
     sendMetricaRequest,

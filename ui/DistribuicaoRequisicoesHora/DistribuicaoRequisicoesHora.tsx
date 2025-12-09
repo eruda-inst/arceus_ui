@@ -7,11 +7,9 @@ import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 export function DistribuicaoRequisicoesHora() {
   const [distribuicao, setDistribuicao] = useState([]);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.distribuicao_requisicoes_hora !== undefined) {
-        // Filter out items with total = 0 and transform the remaining ones
         const transformada = data.distribuicao_requisicoes_hora
           .filter(
             (distribuicao: Record<string, number>) => distribuicao.total > 0,
@@ -25,7 +23,6 @@ export function DistribuicaoRequisicoesHora() {
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("distribuicao_requisicoes_hora");
     },
     autoConnect: true,
@@ -49,7 +46,7 @@ export function DistribuicaoRequisicoesHora() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected ? (
+        {isConnected && !isLoading ? (
           <BarChartComponent
             data={distribuicao}
             xKey="hora"

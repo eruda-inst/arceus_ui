@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -12,9 +10,8 @@ export function TaxaSucesso() {
   const [totalSucessos, setTotalSucessos] = useState<number>(0);
   const [totalSucessosHoje, setTotalSucessosHoje] = useState<number>(0);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.taxa_sucesso !== undefined) {
         setValorGeral(data.taxa_sucesso);
       } else if (data.taxa_sucesso_hoje !== undefined) {
@@ -26,7 +23,6 @@ export function TaxaSucesso() {
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("taxa_sucesso", "geral");
       sendMetricaRequest("taxa_sucesso", "hoje");
       sendMetricaRequest("total_sucessos", "geral");
@@ -35,7 +31,6 @@ export function TaxaSucesso() {
     autoConnect: true,
   });
 
-  // Enviar requisição periodicamente
   useEffect(() => {
     if (!isConnected) return;
 
@@ -59,7 +54,7 @@ export function TaxaSucesso() {
           <div className="flex justify-between items-center p-3 bg-accent rounded-lg border">
             <span className="text-sm text-muted-foreground">Geral</span>
             <div className="text-xl font-bold text-muted-foreground flex items-center">
-              {isConnected ? (
+              {isConnected && !isLoading ? (
                 <div className="flex gap-x-1 items-end leading-tight">
                   <span>{formatarPorcentagem(valorGeral)}</span>
                   <span className="text-xs font-normal opacity-70">
@@ -74,7 +69,7 @@ export function TaxaSucesso() {
           <div className="flex justify-between items-center p-3 bg-bg-selected rounded-lg border">
             <span className="text-sm">Hoje</span>
             <div className="text-xl font-bold flex items-center">
-              {isConnected ? (
+              {isConnected && !isLoading ? (
                 <div className="flex gap-x-1 items-end leading-tight">
                   <span>{formatarPorcentagem(valorHoje)}</span>
                   <span className="text-xs font-normal opacity-70">

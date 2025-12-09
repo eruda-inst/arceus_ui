@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -9,9 +7,8 @@ export function TotalRequisicoes() {
   const [valorGeral, setValorGeral] = useState<number>(0);
   const [valorHoje, setValorHoje] = useState<number>(0);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.total_requisicoes !== undefined) {
         setValorGeral(data.total_requisicoes);
       } else if (data.total_requisicoes_hoje !== undefined) {
@@ -19,14 +16,12 @@ export function TotalRequisicoes() {
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("total_requisicoes", "geral");
       sendMetricaRequest("total_requisicoes", "hoje");
     },
     autoConnect: true,
   });
 
-  // Enviar requisição periodicamente
   useEffect(() => {
     if (!isConnected) return;
 
@@ -54,7 +49,7 @@ export function TotalRequisicoes() {
           <div className="flex justify-between items-center p-3 bg-bg-selected rounded-lg border">
             <span className="text-sm">Hoje</span>
             <div className="text-xl font-bold flex items-center">
-              {isConnected ? valorHoje : <Spinner />}
+              {isConnected && !isLoading ? valorHoje : <Spinner />}
             </div>
           </div>
         </div>

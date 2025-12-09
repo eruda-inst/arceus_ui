@@ -7,9 +7,8 @@ import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 export function DistribuicaoRequisicoesDiaSemana() {
   const [distribuicao, setDistribuicao] = useState([]);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.distribuicao_requisicoes_dia_semana !== undefined) {
         const weekdaysMap: Record<string, string> = {
           domingo: "Dom",
@@ -30,7 +29,6 @@ export function DistribuicaoRequisicoesDiaSemana() {
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("distribuicao_requisicoes_dia_semana");
     },
     autoConnect: true,
@@ -54,7 +52,7 @@ export function DistribuicaoRequisicoesDiaSemana() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected ? (
+        {isConnected && !isLoading ? (
           <BarChartComponent
             data={distribuicao}
             xKey="dia"

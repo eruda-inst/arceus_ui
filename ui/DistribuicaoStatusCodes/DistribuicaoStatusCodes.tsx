@@ -7,7 +7,7 @@ import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 export function DistribuicaoStatusCodes() {
   const [distribuicao, setDistribuicao] = useState([]);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       // Verificar qual resposta chegou
       if (data.distribuicao_status_codes !== undefined) {
@@ -37,7 +37,7 @@ export function DistribuicaoStatusCodes() {
         <CardTitle>Distribuição de Status Codes (todo o período)</CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected ? (
+        {isConnected && !isLoading ? (
           <BarChartComponent
             data={distribuicao}
             xKey="status_code"

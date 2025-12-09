@@ -22,15 +22,13 @@ export function EndpointsMaisRequisitados() {
     endpointsMaisRequisitados?.length || 0,
   );
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.top_endpoints !== undefined) {
         setEndpointsMaisRequisitados(data.top_endpoints);
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("top_endpoints");
     },
     autoConnect: true,
@@ -61,7 +59,7 @@ export function EndpointsMaisRequisitados() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isConnected ? (
+            {isConnected && !isLoading ? (
               endpointsMaisRequisitados?.map((item: any, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>

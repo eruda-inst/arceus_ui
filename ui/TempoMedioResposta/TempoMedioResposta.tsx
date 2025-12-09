@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -10,9 +8,8 @@ export function TempoMedioResposta() {
   const [valorGeral, setValorGeral] = useState<number>(0);
   const [valorHoje, setValorHoje] = useState<number>(0);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.tempo_medio_resposta !== undefined) {
         setValorGeral(data.tempo_medio_resposta);
       } else if (data.tempo_medio_resposta_hoje !== undefined) {
@@ -20,14 +17,12 @@ export function TempoMedioResposta() {
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("tempo_medio_resposta", "geral");
       sendMetricaRequest("tempo_medio_resposta", "hoje");
     },
     autoConnect: true,
   });
 
-  // Enviar requisição periodicamente
   useEffect(() => {
     if (!isConnected) return;
 
@@ -49,13 +44,21 @@ export function TempoMedioResposta() {
           <div className="flex justify-between items-center p-3 bg-accent rounded-lg border">
             <span className="text-sm text-muted-foreground">Geral</span>
             <div className="text-xl font-bold text-muted-foreground flex items-center">
-              {isConnected ? formatarTempo(valorGeral) : <Spinner />}
+              {isConnected && !isLoading ? (
+                formatarTempo(valorGeral)
+              ) : (
+                <Spinner />
+              )}
             </div>
           </div>
           <div className="flex justify-between items-center p-3 bg-bg-selected rounded-lg border">
             <span className="text-sm">Hoje</span>
             <div className="text-xl font-bold flex items-center">
-              {isConnected ? formatarTempo(valorHoje) : <Spinner />}
+              {isConnected && !isLoading ? (
+                formatarTempo(valorHoje)
+              ) : (
+                <Spinner />
+              )}
             </div>
           </div>
         </div>

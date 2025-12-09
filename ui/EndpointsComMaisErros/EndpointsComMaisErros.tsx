@@ -18,15 +18,13 @@ export function EndpointsComMaisErros() {
   const [endpointsComMaisErros, setEndpointsComMaisErros] = useState([]);
   const chavesEstaveis = useChavesEstaveis(endpointsComMaisErros?.length || 0);
 
-  const { isConnected, sendMetricaRequest } = useMetricaWebSocket({
+  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.endpoints_com_mais_erros !== undefined) {
         setEndpointsComMaisErros(data.endpoints_com_mais_erros);
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("endpoints_com_mais_erros");
     },
     autoConnect: true,
@@ -57,7 +55,7 @@ export function EndpointsComMaisErros() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isConnected ? (
+            {isConnected && !isLoading ? (
               endpointsComMaisErros?.map((item: any, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>
