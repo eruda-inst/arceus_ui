@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";

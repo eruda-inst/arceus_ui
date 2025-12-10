@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { obterTokenAutenticacao } from "@/helpers/misc";

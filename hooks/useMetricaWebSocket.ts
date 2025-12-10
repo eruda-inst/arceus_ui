@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState, useCallback } from "react";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { API_CONFIG } from "@/config/config";

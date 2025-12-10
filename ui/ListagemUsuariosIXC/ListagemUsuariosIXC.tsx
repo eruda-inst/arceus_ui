@@ -1,5 +1,3 @@
-"use client";
-
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { useQuery } from "@tanstack/react-query";
@@ -51,7 +49,7 @@ export function ListagemUsuariosIXC({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return response.data;
     },
@@ -63,7 +61,7 @@ export function ListagemUsuariosIXC({
 
     const existingSet = new Set(existingEmails.filter(Boolean));
     const availableUsers = data.usuarios_ixc.filter(
-      (u) => !existingSet.has(u.email)
+      (u) => !existingSet.has(u.email),
     );
 
     if (!searchTerm.trim()) {
@@ -75,7 +73,7 @@ export function ListagemUsuariosIXC({
       .filter(
         (u) =>
           u.nome.toLowerCase().includes(term) ||
-          u.email.toLowerCase().includes(term)
+          u.email.toLowerCase().includes(term),
       )
       .sort((a, b) => a.nome.localeCompare(b.nome));
   }, [data?.usuarios_ixc, existingEmails, searchTerm]);
@@ -158,7 +156,7 @@ export function ListagemUsuariosIXC({
                       "hover:border-primary hover:bg-accent/50",
                       isSelected
                         ? "border-primary bg-accent shadow-sm"
-                        : "border-transparent bg-card"
+                        : "border-transparent bg-card",
                     )}
                     onClick={() => onSelect?.(usuarioIXC)}
                   >
@@ -169,7 +167,7 @@ export function ListagemUsuariosIXC({
                             "p-2 rounded-full mt-1",
                             isSelected
                               ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
+                              : "bg-muted",
                           )}
                         >
                           <User className="h-4 w-4" />

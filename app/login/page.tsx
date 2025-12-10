@@ -67,7 +67,7 @@ function LoginContent() {
     mutationFn: async (credentials: LoginForm) => {
       const response = await api.post<LoginResponse>(
         getHttpUrl(HTTP_ENDPOINTS_NAME.LOGIN),
-        credentials
+        credentials,
       );
       return response.data;
     },
