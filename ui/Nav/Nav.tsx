@@ -135,7 +135,7 @@ export function Nav() {
         <Sidebar>
           <SidebarHeader>
             <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-2">
-              Arceus
+              Absol
             </h1>
           </SidebarHeader>
           <SidebarContent>

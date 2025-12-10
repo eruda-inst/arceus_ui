@@ -6,7 +6,7 @@ import { Provedores } from "@/ui/Provedores/Provedores";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Arceus",
+  title: "Absol",
   description: "Monitora requisições realizadas à API Aggregator.",
 };
 
