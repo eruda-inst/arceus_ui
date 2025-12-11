@@ -7,7 +7,7 @@ import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Absol",
-  description: "Monitora requisições realizadas à API Aggregator.",
+  description: "Monitora requisições realizadas ao Arceus.",
 };
 
 export default function RootLayout({

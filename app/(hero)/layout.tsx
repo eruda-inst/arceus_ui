@@ -5,8 +5,8 @@ import { Conteudo } from "@/ui/Conteudo/Conteudo";
 import { Nav } from "@/ui/Nav/Nav";
 
 export const metadata: Metadata = {
-  title: "Absol",
-  description: "Monitora requisições realizadas à API Aggregator.",
+  title: "Absol · Dashboard",
+  description: "Monitora requisições realizadas ao Arceus.",
 };
 
 export default function RootLayout({

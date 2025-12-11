@@ -20,6 +20,7 @@ import { Download, Calendar, RefreshCw } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTituloPagina } from "@/hooks/useTituloPagina";
 
 interface Agente {
   id: number;
@@ -32,6 +33,7 @@ interface Agente {
 }
 
 export default function Agentes() {
+  useTituloPagina({ titulo: "Absol · Agentes" });
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
 
   useEffect(() => {

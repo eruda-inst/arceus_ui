@@ -29,6 +29,7 @@ import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Lock, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTituloPagina } from "@/hooks/useTituloPagina";
 
 interface Usuario {
   id: number;
@@ -43,6 +44,7 @@ interface Usuarios {
 }
 
 export default function Usuarios() {
+  useTituloPagina({ titulo: "Absol · Usuários" });
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
