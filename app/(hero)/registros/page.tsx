@@ -78,21 +78,6 @@ export default function LogsCompleto() {
     }
   }, [currentPage, itemsPerPage, filters, isConnected, sendMetricaRequest]);
 
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const intervalId = setInterval(() => {
-      sendMetricaRequest("registros", undefined, {
-        pagina: currentPage + 1,
-        itens_por_pagina: itemsPerPage,
-        filtros: cleanFilters(filters),
-        matched: true,
-      });
-    }, 500);
-
-    return () => clearInterval(intervalId);
-  }, [isConnected, currentPage, itemsPerPage, filters, sendMetricaRequest]);
-
   const handlePageClick = useCallback((event: { selected: number }) => {
     setCurrentPage(event.selected);
   }, []);

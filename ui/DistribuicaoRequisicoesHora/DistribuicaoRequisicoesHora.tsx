@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChartComponent } from "@/ui/BarChartComponent/BarChartComponent";
 import { Spinner } from "@/components/ui/spinner";
@@ -27,16 +27,6 @@ export function DistribuicaoRequisicoesHora() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("distribuicao_requisicoes_hora");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>

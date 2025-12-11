@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
@@ -21,17 +21,6 @@ export function TotalAtendimentos() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("total_atendimentos", "geral");
-      sendMetricaRequest("total_atendimentos", "hoje");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>

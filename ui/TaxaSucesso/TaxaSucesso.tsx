@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
@@ -30,19 +30,6 @@ export function TaxaSucesso() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("taxa_sucesso", "geral");
-      sendMetricaRequest("taxa_sucesso", "hoje");
-      sendMetricaRequest("total_sucessos", "geral");
-      sendMetricaRequest("total_sucessos", "hoje");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>

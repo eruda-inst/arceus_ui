@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -31,16 +31,6 @@ export function RequisicoesRecentesComErro() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("requisicoes_recentes_erro");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>

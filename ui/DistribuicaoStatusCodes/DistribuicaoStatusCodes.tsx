@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChartComponent } from "@/ui/BarChartComponent/BarChartComponent";
 import { Spinner } from "@/components/ui/spinner";
@@ -9,27 +9,15 @@ export function DistribuicaoStatusCodes() {
 
   const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
-      // Verificar qual resposta chegou
       if (data.distribuicao_status_codes !== undefined) {
         setDistribuicao(data.distribuicao_status_codes);
       }
     },
     onOpen: () => {
-      // Solicitar métricas quando a conexão for estabelecida
       sendMetricaRequest("distribuicao_status_codes");
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("distribuicao_status_codes");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>

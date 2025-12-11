@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
 import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
-import { useEffect, useState } from "react";
 
 interface RequisicaoPorHora {
   hora: string;
@@ -23,16 +23,6 @@ export function RequisicoesPorHora() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("requisicoes_por_hora");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   function filtrarEProcessarRequisicoesPorHora(
     dados: RequisicaoPorHora[] | undefined,

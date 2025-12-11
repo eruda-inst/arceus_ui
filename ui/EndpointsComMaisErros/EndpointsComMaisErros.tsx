@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { obterCorMetodo } from "@/helpers/obterCor";
 import {
   Table,
@@ -12,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
-import { useEffect, useState } from "react";
 
 export function EndpointsComMaisErros() {
   const [endpointsComMaisErros, setEndpointsComMaisErros] = useState([]);
@@ -29,16 +29,6 @@ export function EndpointsComMaisErros() {
     },
     autoConnect: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    const idIntervalo = setInterval(() => {
-      sendMetricaRequest("endpoints_com_mais_erros");
-    }, 500);
-
-    return () => clearInterval(idIntervalo);
-  }, [isConnected]);
 
   return (
     <Card>
