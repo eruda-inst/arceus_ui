@@ -15,10 +15,12 @@ import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { formatarData, formatarTempo } from "@/helpers/formatar";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
 import { Log } from "@/types/log";
+import { useAuth } from "@/hooks/useAuth";
 
 export function RequisicoesRecentes() {
   const [registros, setRegistros] = useState([]);
   const chavesEstaveis = useChavesEstaveis(registros?.length || 0);
+  const { hasPermission } = useAuth();
 
   const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
@@ -31,6 +33,10 @@ export function RequisicoesRecentes() {
     },
     autoConnect: true,
   });
+
+  if (!hasPermission("registros:ver")) {
+    return null;
+  }
 
   return (
     <Card>

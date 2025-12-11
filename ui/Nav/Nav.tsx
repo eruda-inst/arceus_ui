@@ -46,17 +46,10 @@ interface Formulario {
   confirmarSenha: string;
 }
 
-const navItems = [
-  { path: "/", label: "Dashboard", icon: ChartLine },
-  { path: "/registros", label: "Registros", icon: Table },
-  { path: "/usuarios", label: "Usuários", icon: Users },
-  { path: "/agentes", label: "Agentes", icon: Bot },
-];
-
 export function Nav() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, loading, logout, isAdmin } = useAuth();
+  const { user, loading, logout, hasPermission } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
@@ -141,39 +134,62 @@ export function Nav() {
           <SidebarContent>
             <SidebarGroup>
               <SidebarMenu className="gap-y-2 mt-7">
-                {navItems
-                  .filter((item) => {
-                    // show the users tab only for administrators
-                    if (item.path === "/usuarios" || item.path === "/agentes") {
-                      return isAdmin() === true;
-                    }
-                    return true;
-                  })
-                  .map((item) => {
-                    const isActive = pathname === item.path;
-                    const IconComponent = item.icon;
-                    return (
-                      <SidebarMenuItem key={item.path}>
-                        <SidebarMenuButton
-                          className={`border py-6 px-3 rounded-lg transition-colors ${
-                            isActive ? "bg-bg-selected" : "bg-sidebar-accent"
-                          } hover:cursor-pointer hover:bg-bg-selected`}
-                          onClick={() => handleNavigation(item.path)}
-                          aria-current={isActive ? "page" : undefined}
-                          role="link"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              handleNavigation(item.path);
-                            }
-                          }}
-                        >
-                          <IconComponent aria-hidden="true" />
-                          {item.label}
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
+                {hasPermission("metricas:ver") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleNavigation("/")}
+                      className={`border py-6 px-3 rounded-lg transition-colors ${
+                        pathname === "/"
+                          ? "bg-bg-selected"
+                          : "bg-sidebar-accent"
+                      } hover:cursor-pointer hover:bg-bg-selected`}
+                    >
+                      <ChartLine /> Dashboard
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+                {hasPermission("registros:ver") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleNavigation("/registros")}
+                      className={`border py-6 px-3 rounded-lg transition-colors ${
+                        pathname === "/registros"
+                          ? "bg-bg-selected"
+                          : "bg-sidebar-accent"
+                      } hover:cursor-pointer hover:bg-bg-selected`}
+                    >
+                      <Table /> Registros
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+                {hasPermission("usuarios:ver") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleNavigation("/usuarios")}
+                      className={`border py-6 px-3 rounded-lg transition-colors ${
+                        pathname === "/usuarios"
+                          ? "bg-bg-selected"
+                          : "bg-sidebar-accent"
+                      } hover:cursor-pointer hover:bg-bg-selected`}
+                    >
+                      <Users /> Usuários
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+                {hasPermission("agentes:ver") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleNavigation("/agentes")}
+                      className={`border py-6 px-3 rounded-lg transition-colors ${
+                        pathname === "/agentes"
+                          ? "bg-bg-selected"
+                          : "bg-sidebar-accent"
+                      } hover:cursor-pointer hover:bg-bg-selected`}
+                    >
+                      <Bot /> Agentes
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>

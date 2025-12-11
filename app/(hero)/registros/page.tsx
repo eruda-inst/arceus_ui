@@ -18,6 +18,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 interface PaginatedLogsResponse {
   registros: Log[];
@@ -31,6 +32,7 @@ export default function LogsCompleto() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [data, setData] = useState<PaginatedLogsResponse | null>(null);
+  const { redirectIfNoPermission, loading } = useAuth();
 
   const [filters, setFilters] = useState<{
     ip?: string;
@@ -77,6 +79,12 @@ export default function LogsCompleto() {
       });
     }
   }, [currentPage, itemsPerPage, filters, isConnected, sendMetricaRequest]);
+
+  useEffect(() => {
+    if (!loading) {
+      redirectIfNoPermission("registros:ver");
+    }
+  }, [loading, redirectIfNoPermission]);
 
   const handlePageClick = useCallback((event: { selected: number }) => {
     setCurrentPage(event.selected);

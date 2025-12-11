@@ -15,8 +15,10 @@ import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { formatarData, formatarTempo } from "@/helpers/formatar";
 import { obterCorMetodo, obterCorStatusCode } from "@/helpers/obterCor";
 import { Log } from "@/types/log";
+import { useAuth } from "@/hooks/useAuth";
 
 export function RequisicoesRecentesComErro() {
+  const { hasPermission } = useAuth();
   const [registros, setRegistros] = useState([]);
   const chavesEstaveis = useChavesEstaveis(registros?.length || 0);
 
@@ -31,6 +33,10 @@ export function RequisicoesRecentesComErro() {
     },
     autoConnect: true,
   });
+
+  if (!hasPermission("registros:ver")) {
+    return null;
+  }
 
   return (
     <Card>

@@ -14,8 +14,18 @@ import { EndpointsMaisRequisitados } from "@/ui/EndpointsMaisRequisitados/Endpoi
 import { EndpointsComMaisErros } from "@/ui/EndpointsComMaisErros/EndpointsComMaisErros";
 import { RequisicoesRecentesComErro } from "@/ui/RequisicoesRecentesComErro/RequisicoesRecentesComErro";
 import { RequisicoesRecentes } from "@/ui/RequisicoesRecentes/RequisicoesRecentes";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
+  const { redirectIfNoPermission, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading) {
+      redirectIfNoPermission("metricas:ver");
+    }
+  }, [loading, redirectIfNoPermission]);
+
   return (
     <>
       <Grid className="grid-cols-3">
