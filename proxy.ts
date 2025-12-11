@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
   // Redirect to login if no token exists for protected routes
   if (!token) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
+    // loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
