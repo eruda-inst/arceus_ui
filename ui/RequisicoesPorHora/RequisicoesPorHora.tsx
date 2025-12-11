@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChartComponent } from "@/ui/LineChartComponent/LineChartComponent";
-import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 
 interface RequisicaoPorHora {
@@ -12,7 +12,7 @@ interface RequisicaoPorHora {
 export function RequisicoesPorHora() {
   const [requisicoesPorHora, setRequisicoesPorHora] = useState([]);
 
-  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
+  const { isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       if (data.requisicoes_por_hora !== undefined) {
         setRequisicoesPorHora(data.requisicoes_por_hora);
@@ -63,7 +63,7 @@ export function RequisicoesPorHora() {
         <CardTitle>Requisições por Hora (hoje)</CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected && !isLoading ? (
+        {!isLoading ? (
           <LineChartComponent
             data={filtrarEProcessarRequisicoesPorHora(requisicoesPorHora)}
             xKey="hora"
@@ -71,7 +71,7 @@ export function RequisicoesPorHora() {
             showDots={true}
           />
         ) : (
-          <Spinner />
+          <Skeleton className="h-[300px]" />
         )}
       </CardContent>
     </Card>

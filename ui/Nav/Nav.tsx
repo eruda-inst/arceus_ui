@@ -40,6 +40,7 @@ import api from "@/lib/api";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { toast } from "sonner";
 import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Formulario {
   senha: string;
@@ -134,61 +135,71 @@ export function Nav() {
           <SidebarContent>
             <SidebarGroup>
               <SidebarMenu className="gap-y-2 mt-7">
-                {hasPermission("metricas:ver") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => handleNavigation("/")}
-                      className={`border py-6 px-3 rounded-lg transition-colors ${
-                        pathname === "/"
-                          ? "bg-bg-selected"
-                          : "bg-sidebar-accent"
-                      } hover:cursor-pointer hover:bg-bg-selected`}
-                    >
-                      <ChartLine /> Dashboard
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-                {hasPermission("registros:ver") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => handleNavigation("/registros")}
-                      className={`border py-6 px-3 rounded-lg transition-colors ${
-                        pathname === "/registros"
-                          ? "bg-bg-selected"
-                          : "bg-sidebar-accent"
-                      } hover:cursor-pointer hover:bg-bg-selected`}
-                    >
-                      <Table /> Registros
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-                {hasPermission("usuarios:ver") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => handleNavigation("/usuarios")}
-                      className={`border py-6 px-3 rounded-lg transition-colors ${
-                        pathname === "/usuarios"
-                          ? "bg-bg-selected"
-                          : "bg-sidebar-accent"
-                      } hover:cursor-pointer hover:bg-bg-selected`}
-                    >
-                      <Users /> Usuários
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-                {hasPermission("agentes:ver") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => handleNavigation("/agentes")}
-                      className={`border py-6 px-3 rounded-lg transition-colors ${
-                        pathname === "/agentes"
-                          ? "bg-bg-selected"
-                          : "bg-sidebar-accent"
-                      } hover:cursor-pointer hover:bg-bg-selected`}
-                    >
-                      <Bot /> Agentes
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                {loading ? (
+                  <>
+                    <Skeleton className="h-13 w-full" />
+                    <Skeleton className="h-13 w-full" />
+                    <Skeleton className="h-13 w-full" />
+                  </>
+                ) : (
+                  <>
+                    {hasPermission("metricas:ver") && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => handleNavigation("/")}
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            pathname === "/"
+                              ? "bg-bg-selected"
+                              : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                        >
+                          <ChartLine /> Dashboard
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    {hasPermission("registros:ver") && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => handleNavigation("/registros")}
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            pathname === "/registros"
+                              ? "bg-bg-selected"
+                              : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                        >
+                          <Table /> Registros
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    {hasPermission("usuarios:ver") && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => handleNavigation("/usuarios")}
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            pathname === "/usuarios"
+                              ? "bg-bg-selected"
+                              : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                        >
+                          <Users /> Usuários
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    {hasPermission("agentes:ver") && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => handleNavigation("/agentes")}
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            pathname === "/agentes"
+                              ? "bg-bg-selected"
+                              : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                        >
+                          <Bot /> Agentes
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                  </>
                 )}
               </SidebarMenu>
             </SidebarGroup>
@@ -199,7 +210,7 @@ export function Nav() {
               <DropdownMenuTrigger asChild>
                 <div className="hover:cursor-pointer">
                   {loading ? (
-                    <Spinner />
+                    <Skeleton className="h-17 w-full" />
                   ) : (
                     user && (
                       <CartaoUsuario

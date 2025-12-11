@@ -44,27 +44,17 @@ export const useMetricaWebSocket = (
   const MAX_RECONNECT_ATTEMPTS = 5;
   const RECONNECT_DELAY = 3000;
 
-  // Armazenar as callbacks em refs para evitar reconstrução
-  const callbacksRef = useRef({
-    onMessage,
-    onOpen,
-    onClose,
-    onError,
-  });
+  const callbacksRef = useRef({ onMessage, onOpen, onClose, onError });
 
-  // Atualizar as callbacks quando mudarem
   useEffect(() => {
-    callbacksRef.current = {
-      onMessage,
-      onOpen,
-      onClose,
-      onError,
-    };
+    callbacksRef.current = { onMessage, onOpen, onClose, onError };
   }, [onMessage, onOpen, onClose, onError]);
 
-  // Função de conexão que não muda entre renderizações
   const connect = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
+    if (
+      wsRef.current?.readyState === WebSocket.OPEN ||
+      wsRef.current?.readyState === WebSocket.CONNECTING
+    ) {
       return;
     }
 
@@ -75,7 +65,6 @@ export const useMetricaWebSocket = (
 
     setIsLoading(true);
 
-    // Construir URL com permissão se especificada
     let wsBaseUrl = API_CONFIG.WS.URL_BASE.endsWith("/")
       ? API_CONFIG.WS.URL_BASE.slice(0, -1)
       : API_CONFIG.WS.URL_BASE;
@@ -89,6 +78,8 @@ export const useMetricaWebSocket = (
       wsRef.current = ws;
 
       ws.onopen = () => {
+        if (ws !== wsRef.current) return;
+
         setIsConnected(true);
         setIsLoading(false);
         setError(null);
@@ -98,6 +89,10 @@ export const useMetricaWebSocket = (
       };
 
       ws.onmessage = (event) => {
+        if (ws !== wsRef.current) return;
+
+        setIsLoading(false);
+
         try {
           const data = JSON.parse(event.data) as WebSocketMessage;
 
@@ -115,6 +110,8 @@ export const useMetricaWebSocket = (
       };
 
       ws.onerror = (errorEvent) => {
+        if (ws !== wsRef.current) return;
+
         setIsLoading(false);
         setError("Erro na conexão com o servidor de métricas");
 
@@ -123,21 +120,20 @@ export const useMetricaWebSocket = (
       };
 
       ws.onclose = (event) => {
+        if (ws !== wsRef.current) return;
+
         setIsConnected(false);
         setIsLoading(false);
 
         if (callbacksRef.current.onClose) callbacksRef.current.onClose();
 
-        // Tentar reconectar se não foi um fechamento intencional
         if (
           event.code !== 1000 &&
           reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS
         ) {
           reconnectAttemptsRef.current += 1;
-
-          if (reconnectTimeoutRef.current) {
+          if (reconnectTimeoutRef.current)
             clearTimeout(reconnectTimeoutRef.current);
-          }
 
           reconnectTimeoutRef.current = setTimeout(() => {
             connect();
@@ -148,9 +144,8 @@ export const useMetricaWebSocket = (
       setIsLoading(false);
       setError("Não foi possível criar a conexão WebSocket");
     }
-  }, [requirePermission]);
+  }, [requirePermission, token]);
 
-  // Função de desconexão que não muda
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
@@ -167,7 +162,6 @@ export const useMetricaWebSocket = (
     reconnectAttemptsRef.current = 0;
   }, []);
 
-  // Função para enviar requisições
   const sendRequest = useCallback((request: WebSocketRequest) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
       setError("WebSocket não está conectado");
@@ -175,15 +169,16 @@ export const useMetricaWebSocket = (
     }
 
     try {
+      setIsLoading(true);
       wsRef.current.send(JSON.stringify(request));
       return true;
     } catch (err) {
+      setIsLoading(false);
       setError("Erro ao enviar solicitação");
       return false;
     }
   }, []);
 
-  // Função especializada para enviar métricas
   const sendMetricaRequest = useCallback(
     (
       metrica: string,
@@ -195,34 +190,26 @@ export const useMetricaWebSocket = (
         ...(periodo && { periodo }),
         ...additionalParams,
       };
-
       return sendRequest(request);
     },
     [sendRequest],
   );
 
-  // Efeito para gerenciar a conexão
   useEffect(() => {
     let mounted = true;
-
     if (autoConnect && mounted) {
       connect();
     }
-
     return () => {
       mounted = false;
       disconnect();
     };
-    // Apenas autoConnect é dependência, as funções são estáveis
   }, [autoConnect, connect, disconnect]);
 
-  // Função para reconectar manualmente
   const reconectar = useCallback(() => {
     disconnect();
     reconnectAttemptsRef.current = 0;
     setError(null);
-
-    // Pequeno delay antes de reconectar
     setTimeout(() => {
       connect();
     }, 500);

@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Download, Calendar, RefreshCw } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Agente {
   id: number;
@@ -70,10 +71,6 @@ export default function Agentes() {
     });
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   if (!hasPermission("agentes:ver")) {
     return null;
   }
@@ -86,13 +83,17 @@ export default function Agentes() {
       className="relative"
     >
       {isLoading ? (
-        <Spinner />
+        <Grid className="grid-cols-4 gap-4">
+          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-[250px] w-full" />
+        </Grid>
       ) : isError ? (
         <Mensagem className="text-destructive">
           Erro ao carregar agentes
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-4 gap-6">
+        <Grid className="grid-cols-4 gap-4">
           {data.map((agente: Agente) => (
             <motion.div
               key={agente.id}

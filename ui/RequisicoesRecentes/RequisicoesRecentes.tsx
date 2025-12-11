@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
@@ -22,7 +22,7 @@ export function RequisicoesRecentes() {
   const chavesEstaveis = useChavesEstaveis(registros?.length || 0);
   const { hasPermission } = useAuth();
 
-  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
+  const { isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       if (data.requisicoes_recentes !== undefined) {
         setRegistros(data.requisicoes_recentes);
@@ -44,22 +44,22 @@ export function RequisicoesRecentes() {
         <CardTitle>Requisições Recentes (todo o período)</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>IP</TableHead>
-              <TableHead>Verbo</TableHead>
-              <TableHead>Endpoint</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Hora</TableHead>
-              <TableHead>Duração</TableHead>
-              <TableHead>Protocolo</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isConnected && !isLoading ? (
-              registros.map((registro: Log, indice: number) => (
+        {!isLoading ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>IP</TableHead>
+                <TableHead>Verbo</TableHead>
+                <TableHead>Endpoint</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Hora</TableHead>
+                <TableHead>Duração</TableHead>
+                <TableHead>Protocolo</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {registros.map((registro: Log, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>{registro.ip}</TableCell>
                   <TableCell>
@@ -86,16 +86,12 @@ export function RequisicoesRecentes() {
                   <TableCell>{formatarTempo(registro.duracao)}</TableCell>
                   <TableCell>{registro.protocolo}</TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8}>
-                  <Spinner />
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Skeleton className="h-[390px]" />
+        )}
       </CardContent>
     </Card>
   );

@@ -10,15 +10,15 @@ import {
 } from "@/components/ui/table";
 import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/ui/spinner";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 
 export function EndpointsComMaisErros() {
   const [endpointsComMaisErros, setEndpointsComMaisErros] = useState([]);
   const chavesEstaveis = useChavesEstaveis(endpointsComMaisErros?.length || 0);
 
-  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
+  const { isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       if (data.endpoints_com_mais_erros !== undefined) {
         setEndpointsComMaisErros(data.endpoints_com_mais_erros);
@@ -36,17 +36,17 @@ export function EndpointsComMaisErros() {
         <CardTitle>Endpoints com Mais Erros (todo o período)</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Verbo</TableHead>
-              <TableHead>Endpoint</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isConnected && !isLoading ? (
-              endpointsComMaisErros?.map((item: any, indice: number) => (
+        {!isLoading ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Verbo</TableHead>
+                <TableHead>Endpoint</TableHead>
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {endpointsComMaisErros?.map((item: any, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>
                     <Badge
@@ -64,16 +64,12 @@ export function EndpointsComMaisErros() {
                       : item.total_erros}
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Spinner />
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Skeleton className="h-[420px]" />
+        )}
       </CardContent>
     </Card>
   );

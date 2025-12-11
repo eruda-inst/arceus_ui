@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/ui/Grid/Grid";
-import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -29,6 +28,7 @@ import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIX
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Lock, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Usuario {
   id: number;
@@ -144,10 +144,6 @@ export default function Usuarios() {
     }
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   if (!hasPermission("usuarios:ver")) {
     return null;
   }
@@ -160,13 +156,17 @@ export default function Usuarios() {
       className="relative"
     >
       {isLoading ? (
-        <Spinner />
+        <Grid className="grid-cols-4 gap-4">
+          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-[250px] w-full" />
+        </Grid>
       ) : isError ? (
         <Mensagem className="text-destructive">
           Erro ao carregar usuários
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <Grid className="grid-cols-4 gap-4">
           {data.map((usuario: Usuario) => (
             <motion.div
               key={usuario.id}

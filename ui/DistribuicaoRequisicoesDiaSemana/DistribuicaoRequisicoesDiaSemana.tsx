@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChartComponent } from "@/ui/BarChartComponent/BarChartComponent";
-import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 
 export function DistribuicaoRequisicoesDiaSemana() {
   const [distribuicao, setDistribuicao] = useState([]);
 
-  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
+  const { isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       if (data.distribuicao_requisicoes_dia_semana !== undefined) {
         const weekdaysMap: Record<string, string> = {
@@ -42,7 +42,7 @@ export function DistribuicaoRequisicoesDiaSemana() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {isConnected && !isLoading ? (
+        {!isLoading ? (
           <BarChartComponent
             data={distribuicao}
             xKey="dia"
@@ -53,7 +53,7 @@ export function DistribuicaoRequisicoesDiaSemana() {
             labelText="Total"
           />
         ) : (
-          <Spinner />
+          <Skeleton className="h-[300px]" />
         )}
       </CardContent>
     </Card>

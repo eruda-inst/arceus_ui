@@ -11,7 +11,7 @@ import {
 import { useChavesEstaveis } from "@/hooks/useChavesEstaveis";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
 
 export function EndpointsMaisRequisitados() {
@@ -22,7 +22,7 @@ export function EndpointsMaisRequisitados() {
     endpointsMaisRequisitados?.length || 0,
   );
 
-  const { isConnected, isLoading, sendMetricaRequest } = useMetricaWebSocket({
+  const { isLoading, sendMetricaRequest } = useMetricaWebSocket({
     onMessage: (data) => {
       if (data.top_endpoints !== undefined) {
         setEndpointsMaisRequisitados(data.top_endpoints);
@@ -40,17 +40,17 @@ export function EndpointsMaisRequisitados() {
         <CardTitle>Endpoints Mais Requisitados (todo o período)</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Verbo</TableHead>
-              <TableHead>Endpoint</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isConnected && !isLoading ? (
-              endpointsMaisRequisitados?.map((item: any, indice: number) => (
+        {!isLoading ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Verbo</TableHead>
+                <TableHead>Endpoint</TableHead>
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {endpointsMaisRequisitados?.map((item: any, indice: number) => (
                 <TableRow key={chavesEstaveis[indice]}>
                   <TableCell>
                     <Badge
@@ -68,16 +68,12 @@ export function EndpointsMaisRequisitados() {
                       : item.total_erros}
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Spinner />
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Skeleton className="h-[420px]" />
+        )}
       </CardContent>
     </Card>
   );
