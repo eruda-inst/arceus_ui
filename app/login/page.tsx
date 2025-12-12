@@ -22,7 +22,6 @@ import {
   Eye,
   EyeOff,
   Rocket,
-  TriangleAlert,
   Lock,
   ChartBar,
   ShieldCheck,
@@ -31,6 +30,7 @@ import { Spinner } from "@/components/ui/spinner";
 import api from "@/lib/api";
 import { setCookie } from "cookies-next";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
+import CampoSenha from "@/ui/CampoSenha/CampoSenha";
 
 interface LoginForm {
   email: string;
@@ -117,10 +117,6 @@ function LoginContent() {
     mutation.mutate(data);
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Login Form */}
@@ -168,49 +164,17 @@ function LoginContent() {
                     </p>
                   )}
                 </Field>
-                <Field>
-                  <FieldLabel htmlFor="password">Senha</FieldLabel>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      autoComplete="current-password"
-                      {...register("senha", {
-                        required: "Senha é obrigatório.",
-                        minLength: {
-                          value: 6,
-                          message: "Senha deve ter pelo menos 6 caracteres. ",
-                        },
-                      })}
-                      className="pl-10 pr-12"
-                      placeholder="12ABab@"
-                      disabled={mutation.isPending}
-                    />
-                    <Button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="bg-inherit absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors hover:bg-inherit hover:cursor-pointer"
-                      disabled={mutation.isPending}
-                      aria-label={
-                        showPassword ? "Esconder senha" : "Mostrar senha"
-                      }
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  {errors.senha && (
-                    <p className="text-destructive text-sm mt-1">
-                      {errors.senha.message}
-                    </p>
-                  )}
-                </Field>
+                <CampoSenha
+                  id="senha"
+                  label="Senha"
+                  validation={{
+                    required: "Senha é obrigatório.",
+                  }}
+                  register={register}
+                  errors={errors}
+                  showPassword={showPassword}
+                  onToggleVisibility={() => setShowPassword(!showPassword)}
+                />
                 {/* Root Error Display */}
                 {errors.root && (
                   <p className="text-destructive text-sm mt-1">

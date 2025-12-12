@@ -16,7 +16,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, Lock } from "lucide-react";
+import CampoSenha from "../CampoSenha/CampoSenha";
 
 interface Formulario {
   id: number;
@@ -42,6 +44,8 @@ interface Props {
 }
 
 export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const queryClient = useQueryClient();
   const {
     formState: { errors },
@@ -52,7 +56,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
     control,
   } = useForm<Formulario>({
     defaultValues: {
-      id_grupo: 2, // Valor padrão definido aqui
+      id_grupo: 2,
     },
   });
 
@@ -64,7 +68,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        id_grupo: initialValues.id_grupo ?? 2, // Mantém o valor do initialValues ou usa 2 como padrão
+        id_grupo: initialValues.id_grupo ?? 2,
       });
     }
   }, [initialValues, reset]);
@@ -77,7 +81,6 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         return;
       }
 
-      // Garante que id_grupo será 2 se não for informado
       const formData = {
         nome: data.nome,
         email: data.email,
@@ -155,50 +158,40 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           </span>
         )}
       </Field>
-      <Field>
-        <FieldLabel htmlFor="senha">Senha</FieldLabel>
-        <Input
-          id="senha"
-          type="password"
-          autoComplete="current-password"
-          placeholder="abCD12@"
-          {...register("senha", {
-            required: "A senha é obrigatória.",
-            minLength: {
-              value: 6,
-              message: "A senha deve ter no mínimo 6 caracteres.",
-            },
-            maxLength: {
-              value: 50,
-              message: "A senha deve ter no máximo 50 caracteres.",
-            },
-          })}
-        />
-        {errors.senha && (
-          <span className="text-destructive text-sm">
-            {errors.senha.message}
-          </span>
-        )}
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="confirmarSenha">Confirmar Senha</FieldLabel>
-        <Input
-          id="confirmarSenha"
-          type="password"
-          autoComplete="current-password"
-          placeholder="abCD12@"
-          {...register("confirmarSenha", {
-            required: "A senha é obrigatória.",
-            validate: (value) =>
-              value === watch("senha") || "As senhas não coincidem.",
-          })}
-        />
-        {errors.confirmarSenha && (
-          <span className="text-destructive text-sm">
-            {errors.confirmarSenha.message}
-          </span>
-        )}
-      </Field>
+      <CampoSenha
+        id="senha"
+        label="Senha"
+        placeholder="Digite sua senha"
+        validation={{
+          required: "A senha é obrigatória.",
+          minLength: {
+            value: 6,
+            message: "A senha deve ter no mínimo 6 caracteres.",
+          },
+          maxLength: {
+            value: 50,
+            message: "A senha deve ter no máximo 50 caracteres.",
+          },
+        }}
+        register={register}
+        errors={errors}
+        showPassword={showPassword}
+        onToggleVisibility={() => setShowPassword(!showPassword)}
+      />
+      <CampoSenha
+        id="confirmarSenha"
+        label="Confirmar Senha"
+        placeholder="Confirme sua senha"
+        validation={{
+          required: "A confirmação de senha é obrigatória.",
+          validate: (value: string) =>
+            value === watch("senha") || "As senhas não coincidem.",
+        }}
+        register={register}
+        errors={errors}
+        showPassword={showConfirmPassword}
+        onToggleVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+      />
       <Field>
         <FieldLabel>Grupo</FieldLabel>
         <Controller
