@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Eye, EyeOff, Lock } from "lucide-react";
 import CampoSenha from "../CampoSenha/CampoSenha";
 
 interface Formulario {
@@ -26,7 +25,7 @@ interface Formulario {
   senha: string;
   confirmarSenha: string;
   nome: string;
-  id_grupo: number;
+  nome_grupo: string;
 }
 
 interface InitialValues {
@@ -35,7 +34,7 @@ interface InitialValues {
   nome?: string;
   senha?: string;
   confirmarSenha?: string;
-  id_grupo?: number;
+  nome_grupo?: string;
 }
 
 interface Props {
@@ -56,7 +55,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
     control,
   } = useForm<Formulario>({
     defaultValues: {
-      id_grupo: 2,
+      nome_grupo: "usuario",
     },
   });
 
@@ -68,7 +67,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        id_grupo: initialValues.id_grupo ?? 2,
+        nome_grupo: initialValues.nome_grupo ?? "usuario",
       });
     }
   }, [initialValues, reset]);
@@ -85,7 +84,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: data.nome,
         email: data.email,
         senha: data.senha,
-        id_grupo: data.id_grupo || 2,
+        nome_grupo: data.nome_grupo || 2,
       };
 
       await axios.post(getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS), formData, {
@@ -195,9 +194,9 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
       <Field>
         <FieldLabel>Grupo</FieldLabel>
         <Controller
-          name="id_grupo"
+          name="nome_grupo"
           control={control}
-          defaultValue={2} // Garante o valor padrão
+          defaultValue="usuario"
           render={({ field }) => (
             <Select
               onValueChange={(val: string) => field.onChange(Number(val))}
@@ -208,9 +207,9 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="1">Administrador</SelectItem>
+                  <SelectItem value="administrador">Administrador</SelectItem>
                   <SelectSeparator />
-                  <SelectItem value="2">Usuário</SelectItem>
+                  <SelectItem value="usuario">Usuário</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

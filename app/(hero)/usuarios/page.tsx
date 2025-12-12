@@ -35,7 +35,7 @@ interface Usuario {
   id: number;
   email: string;
   nome: string;
-  id_grupo: number;
+  nome_grupo: number;
   ativo: boolean;
 }
 
@@ -45,7 +45,7 @@ interface Usuarios {
 
 export default function Usuarios() {
   useTituloPagina({ titulo: "Absol · Usuários" });
-  const { hasPermission, redirectIfNoPermission, loading } = useAuth();
+  const { user, hasPermission, redirectIfNoPermission, loading } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -196,7 +196,7 @@ export default function Usuarios() {
                     <Ban className="h-5 w-5" />
                   )}
                 </div>
-                {usuario.id_grupo === 1 && (
+                {user?.nome_grupo === "administrador" && (
                   <div className="absolute top-2 left-2">
                     <UserCog className="h-4 w-4 text-primary" />
                   </div>
@@ -225,7 +225,7 @@ export default function Usuarios() {
                           `}
                         >
                           <UserCog className="h-3 w-3" />
-                          {usuario?.id_grupo === 1
+                          {user?.nome_grupo === "administrador"
                             ? "Administrador"
                             : "Usuário"}
                         </Badge>

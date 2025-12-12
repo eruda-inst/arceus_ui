@@ -216,7 +216,9 @@ export function Nav() {
                       <CartaoUsuario
                         nome={user.nome || "Erro"}
                         funcao={
-                          user?.id_grupo === 1 ? "Administrador" : "Usuário"
+                          user.nome_grupo === "administrador"
+                            ? "Administrador"
+                            : "Usuário"
                         }
                       />
                     )

@@ -10,7 +10,14 @@ export interface User {
   ativo: boolean;
   nome: string;
   criado_em: string;
-  id_grupo: number;
+  nome_grupo: string;
+}
+
+export interface Grupo {
+  id: number;
+  nome: string;
+  criado_em: string;
+  atualizado_em: string;
 }
 
 export interface Permissao {
@@ -47,11 +54,24 @@ export function useAuth() {
     };
   }, []);
 
-  // Função para buscar permissões do grupo
-  const buscarPermissoes = async (id_grupo: number): Promise<Permissao[]> => {
+  const buscarGrupoPorNome = async (
+    nome_grupo: string,
+  ): Promise<Grupo | null> => {
+    try {
+      const response = await api.get<Grupo>(
+        `/api/v1/grupos/nome/${nome_grupo}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar grupo:", error);
+      return null;
+    }
+  };
+
+  const buscarPermissoes = async (nome_grupo: string): Promise<Permissao[]> => {
     try {
       const response = await api.get<Permissao[]>(
-        `/api/v1/grupos_permissoes/id/${id_grupo}`,
+        `/api/v1/grupos_permissoes/nome/${nome_grupo}`,
       );
       return response.data;
     } catch (error) {
@@ -78,15 +98,15 @@ export function useAuth() {
         setUser(response.data);
         setError(null);
 
-        // Buscar permissões do grupo do usuário
         const permissoesDoGrupo = await buscarPermissoes(
-          response.data.id_grupo,
+          response.data.nome_grupo,
         );
         setPermissoes(permissoesDoGrupo);
       }
     } catch (err) {
       console.error("Erro ao verificar autenticação:", err);
       setError("Falha ao carregar dados do usuário");
+      setUser(null);
       setPermissoes([]);
     } finally {
       setLoading(false);
@@ -107,20 +127,17 @@ export function useAuth() {
   };
 
   const isAdmin = (): boolean => {
-    return user?.id_grupo === 1;
+    return user?.nome_grupo?.toLowerCase() === "administrador";
   };
 
   const hasPermission = (permissionCode: string): boolean => {
-    // Administradores têm todas as permissões
     if (isAdmin()) {
       return true;
     }
 
-    // Verificar se a permissão está na lista de permissões do grupo
     return permissoes.some((permissao) => permissao.codigo === permissionCode);
   };
 
-  // Nova função para verificar múltiplas permissões
   const hasAnyPermission = (permissionCodes: string[]): boolean => {
     if (isAdmin()) {
       return true;
@@ -131,7 +148,6 @@ export function useAuth() {
     );
   };
 
-  // Nova função para verificar se tem todas as permissões
   const hasAllPermissions = (permissionCodes: string[]): boolean => {
     if (isAdmin()) {
       return true;
@@ -142,7 +158,6 @@ export function useAuth() {
     );
   };
 
-  // Nova função para obter permissões específicas
   const getPermissions = (): string[] => {
     return permissoes.map((permissao) => permissao.codigo);
   };
@@ -160,8 +175,8 @@ export function useAuth() {
     getPermissions,
     checkAuth,
     redirectIfNoPermission,
+    buscarGrupoPorNome,
   };
 }
 
-// Evento customizado para notificar sobre mudanças de autenticação
 const AUTH_CHANGE_EVENT = "authChange";
