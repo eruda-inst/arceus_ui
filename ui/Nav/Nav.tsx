@@ -25,7 +25,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ChartLine, LogOut, Table, Smile, Users, Bot } from "lucide-react";
+import {
+  ChartLine,
+  LogOut,
+  Table,
+  Smile,
+  Users,
+  UserLock,
+  Bot,
+} from "lucide-react";
 import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
 import { CartaoUsuario } from "@/ui/CartaoUsuario/CartaoUsuario";
@@ -186,6 +194,21 @@ export function Nav() {
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     )}
+                    {hasPermission("grupos:ver") &&
+                      hasPermission("permissoes:ver") && (
+                        <SidebarMenuItem>
+                          <SidebarMenuButton
+                            onClick={() => handleNavigation("/permissoes")}
+                            className={`border py-6 px-3 rounded-lg transition-colors ${
+                              pathname === "/permissoes"
+                                ? "bg-bg-selected"
+                                : "bg-sidebar-accent"
+                            } hover:cursor-pointer hover:bg-bg-selected`}
+                          >
+                            <UserLock /> Permissões
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      )}
                     {hasPermission("agentes:ver") && (
                       <SidebarMenuItem>
                         <SidebarMenuButton
@@ -327,3 +350,5 @@ export function Nav() {
     </>
   );
 }
+
+Nav.displayName = "Nav";

@@ -21,6 +21,8 @@ export const enum HTTP_ENDPOINTS_NAME {
   USUARIOS = "USUARIOS",
   USUARIOS_IXC = "USUARIOS_IXC",
   AGENTES = "AGENTES",
+  PERMISSOES = "PERMISSOES",
+  GRUPOS = "GRUPOS",
 }
 
 export const HTTP_ENDPOINTS = {
@@ -30,6 +32,8 @@ export const HTTP_ENDPOINTS = {
   [HTTP_ENDPOINTS_NAME.USUARIOS]: "api/v1/usuarios/",
   [HTTP_ENDPOINTS_NAME.USUARIOS_IXC]: "api/v1/usuarios_ixc/",
   [HTTP_ENDPOINTS_NAME.AGENTES]: "api/v1/agentes/",
+  [HTTP_ENDPOINTS_NAME.PERMISSOES]: "api/v1/permissoes/",
+  [HTTP_ENDPOINTS_NAME.GRUPOS]: "api/v1/grupos/",
 } as const;
 
 export const enum WS_ENDPOINTS_NAME {
