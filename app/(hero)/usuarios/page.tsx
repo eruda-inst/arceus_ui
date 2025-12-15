@@ -17,6 +17,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/ui/Grid/Grid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
@@ -27,7 +34,7 @@ import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuario
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { Lock, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
+import { Lock, Trash2, Ban, CheckCircle, UserCog, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
 import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
@@ -38,6 +45,13 @@ interface Usuario {
   nome: string;
   nome_grupo: string;
   ativo: boolean;
+}
+
+interface Grupo {
+  id: number;
+  nome: string;
+  criado_em: string;
+  atualizado_em: string;
 }
 
 interface Usuarios {
@@ -60,6 +74,8 @@ export default function Usuarios() {
     useState(false);
   const [isDisableDialogOpen, setIsDisableDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isChangeGroupDialogOpen, setIsChangeGroupDialogOpen] = useState(false);
+  const [selectedNewGroup, setSelectedNewGroup] = useState<string>("");
 
   const queryClient = useQueryClient();
 
@@ -74,6 +90,18 @@ export default function Usuarios() {
     queryFn: async () => {
       const response = await api.get(
         `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}?itens_por_pagina=100`,
+      );
+      return response.data;
+    },
+    retry: false,
+  });
+
+  // Buscar grupos disponíveis
+  const { data: grupos, isLoading: isLoadingGrupos } = useQuery<Grupo[]>({
+    queryKey: ["grupos"],
+    queryFn: async () => {
+      const response = await api.get(
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.GRUPOS)}?itens_por_pagina=100`,
       );
       return response.data;
     },
@@ -98,6 +126,11 @@ export default function Usuarios() {
   const handleDeleteUser = () => {
     setIsActionsDialogOpen(false);
     setIsDeleteDialogOpen(true);
+  };
+
+  const handleChangeGroup = () => {
+    setIsActionsDialogOpen(false);
+    setIsChangeGroupDialogOpen(true);
   };
 
   const handleUpdateUserStatus = async (ativo: boolean) => {
@@ -144,6 +177,29 @@ export default function Usuarios() {
       setSelectedUser(null);
     } catch (error) {
       console.error("Erro ao alterar senha:", error);
+    }
+  };
+
+  const handleChangeGroupSubmit = async () => {
+    if (!selectedUser || !selectedNewGroup) return;
+
+    // Verificar se o usuário é administrador
+    if (selectedUser.nome_grupo?.toLowerCase() === GrupoUsuario.Administrador) {
+      alert("Usuários administradores não podem ter seu grupo alterado.");
+      return;
+    }
+
+    try {
+      await api.patch(
+        `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`,
+        { nome_grupo: selectedNewGroup },
+      );
+      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
+      setIsChangeGroupDialogOpen(false);
+      setSelectedUser(null);
+      setSelectedNewGroup("");
+    } catch (error) {
+      console.error("Erro ao alterar grupo do usuário:", error);
     }
   };
 
@@ -306,6 +362,18 @@ export default function Usuarios() {
                 Mudar Senha
               </Button>
             )}
+            {hasPermission("usuarios:atualizar") &&
+              selectedUser?.nome_grupo?.toLowerCase() !==
+                GrupoUsuario.Administrador && (
+                <Button
+                  variant="outline"
+                  className="justify-start gap-2"
+                  onClick={handleChangeGroup}
+                >
+                  <Users className="h-4 w-4" />
+                  Alterar Grupo
+                </Button>
+              )}
             {hasPermission("usuarios:atualizar") && (
               <Button
                 variant="outline"
@@ -332,16 +400,18 @@ export default function Usuarios() {
                 )}
               </Button>
             )}
-            {hasPermission("usuarios:excluir") && (
-              <Button
-                variant="outline"
-                className="justify-start gap-2 text-destructive hover:text-destructive"
-                onClick={handleDeleteUser}
-              >
-                <Trash2 className="h-4 w-4" />
-                Excluir Usuário
-              </Button>
-            )}
+            {hasPermission("usuarios:excluir") &&
+              selectedUser?.nome_grupo?.toLowerCase() !==
+                GrupoUsuario.Administrador && (
+                <Button
+                  variant="outline"
+                  className="justify-start gap-2 text-destructive hover:text-destructive"
+                  onClick={handleDeleteUser}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Excluir Usuário
+                </Button>
+              )}
           </div>
         </DialogContent>
       </Dialog>
@@ -411,6 +481,57 @@ export default function Usuarios() {
             </Button>
             <Button variant="destructive" onClick={handleDeleteUserConfirm}>
               Excluir
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={isChangeGroupDialogOpen}
+        onOpenChange={setIsChangeGroupDialogOpen}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Alterar Grupo do Usuário</DialogTitle>
+            <DialogDescription>
+              Selecione o novo grupo para {selectedUser?.nome}
+            </DialogDescription>
+          </DialogHeader>
+          {isLoadingGrupos ? (
+            <div>Carregando grupos...</div>
+          ) : (
+            <div className="space-y-4">
+              <Select
+                value={selectedNewGroup}
+                onValueChange={setSelectedNewGroup}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um grupo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {grupos?.map((grupo) => (
+                    <SelectItem key={grupo.id} value={grupo.nome}>
+                      {grupo.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <div className="flex gap-2 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsChangeGroupDialogOpen(false);
+                setSelectedNewGroup("");
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleChangeGroupSubmit}
+              disabled={!selectedNewGroup}
+            >
+              Alterar Grupo
             </Button>
           </div>
         </DialogContent>
