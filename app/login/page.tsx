@@ -17,15 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
-import {
-  User,
-  Eye,
-  EyeOff,
-  Rocket,
-  Lock,
-  ChartBar,
-  ShieldCheck,
-} from "lucide-react";
+import { User, Rocket, Lock, ChartBar, ShieldCheck } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import api from "@/lib/api";
 import { setCookie } from "cookies-next";
@@ -182,10 +174,13 @@ function LoginContent() {
                   </p>
                 )}
                 <Button
-                  type="submit"
+                  type="button"
                   variant="default"
                   className="w-full hover:cursor-pointer"
                   disabled={mutation.isPending}
+                  onClick={() => {
+                    handleSubmit(onSubmit)();
+                  }}
                 >
                   {mutation.isPending ? <Spinner /> : "Entrar"}
                 </Button>
