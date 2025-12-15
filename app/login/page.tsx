@@ -1,8 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Versao } from "@/ui/Versao/Versao";
@@ -34,11 +34,21 @@ interface LoginResponse {
   refresh_token: string;
 }
 
-function LoginContent() {
+export default function Login() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const [redirect, setRedirect] = useState<string>("/");
   const [showPassword, setShowPassword] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Extrair o parâmetro de redirecionamento do URL no cliente
+  useEffect(() => {
+    setIsClient(true);
+    const searchParams = new URLSearchParams(window.location.search);
+    const redirectParam = searchParams.get("redirect");
+    if (redirectParam) {
+      setRedirect(redirectParam);
+    }
+  }, []);
 
   const {
     register,
@@ -109,6 +119,15 @@ function LoginContent() {
     mutation.mutate(data);
   };
 
+  // Mostrar loading enquanto não estiver no cliente
+  if (!isClient) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Spinner className="w-lg" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Login Form */}
@@ -174,13 +193,10 @@ function LoginContent() {
                   </p>
                 )}
                 <Button
-                  type="button"
+                  type="submit"
                   variant="default"
                   className="w-full hover:cursor-pointer"
                   disabled={mutation.isPending}
-                  onClick={() => {
-                    handleSubmit(onSubmit)();
-                  }}
                 >
                   {mutation.isPending ? <Spinner /> : "Entrar"}
                 </Button>
@@ -256,14 +272,6 @@ function LoginContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function Login() {
-  return (
-    <Suspense>
-      <LoginContent />
-    </Suspense>
   );
 }
 
