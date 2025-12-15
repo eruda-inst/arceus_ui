@@ -16,6 +16,9 @@ import { RequisicoesRecentesComErro } from "@/ui/RequisicoesRecentesComErro/Requ
 import { RequisicoesRecentes } from "@/ui/RequisicoesRecentes/RequisicoesRecentes";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
+import TituloPagina from "@/ui/TituloPagina/TituloPagina";
+import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
 
 export default function Home() {
   const { redirectIfNoPermission, loading } = useAuth();
@@ -28,25 +31,33 @@ export default function Home() {
 
   return (
     <>
-      <Grid className="grid-cols-3">
-        <TotalRequisicoes />
-        <TempoMedioResposta />
-        <TaxaSucesso />
-        <TaxaErro />
-        <TotalAtendimentos />
-      </Grid>
-      <Grid>
-        <RequisicoesPorHora />
-        <DistribuicaoStatusCodes />
-        <DistribuicaoRequisicoesHora />
-        <DistribuicaoRequisicoesDiaSemana />
-      </Grid>
-      <Grid>
-        <EndpointsMaisRequisitados />
-        <EndpointsComMaisErros />
-      </Grid>
-      <RequisicoesRecentesComErro />
-      <RequisicoesRecentes />
+      <HeaderPagina>
+        <div>
+          <TituloPagina>Métricas de Uso</TituloPagina>
+          <DescricaoPagina>Exibição de métricas de uso da API</DescricaoPagina>
+        </div>
+      </HeaderPagina>
+      <div className="flex flex-col gap-y-4">
+        <Grid className="grid-cols-3">
+          <TotalRequisicoes />
+          <TempoMedioResposta />
+          <TaxaSucesso />
+          <TaxaErro />
+          <TotalAtendimentos />
+        </Grid>
+        <Grid>
+          <RequisicoesPorHora />
+          <DistribuicaoStatusCodes />
+          <DistribuicaoRequisicoesHora />
+          <DistribuicaoRequisicoesDiaSemana />
+        </Grid>
+        <Grid>
+          <EndpointsMaisRequisitados />
+          <EndpointsComMaisErros />
+        </Grid>
+        <RequisicoesRecentesComErro />
+        <RequisicoesRecentes />
+      </div>
     </>
   );
 }

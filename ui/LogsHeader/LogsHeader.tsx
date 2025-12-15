@@ -1,3 +1,7 @@
+import DescricaoPagina from "../DescricaoPagina/DescricaoPagina";
+import HeaderPagina from "../HeaderPagina/HeaderPagina";
+import TituloPagina from "../TituloPagina/TituloPagina";
+
 interface LogsHeaderProps {
   totalLogs: number;
   isConnected: boolean;
@@ -5,13 +9,13 @@ interface LogsHeaderProps {
 
 export function LogsHeader({ totalLogs, isConnected }: LogsHeaderProps) {
   return (
-    <div className="flex justify-between items-center gap-4">
+    <HeaderPagina>
       <div>
-        <h1 className="text-3xl font-semibold">Registros</h1>
-        <p className="text-sm mt-1">
+        <TituloPagina>Registros</TituloPagina>
+        <DescricaoPagina>
           Total de <span className="font-medium">{totalLogs}</span> requisições
           registradas
-        </p>
+        </DescricaoPagina>
       </div>
       <div className="flex items-center space-x-4">
         <div
@@ -23,7 +27,7 @@ export function LogsHeader({ totalLogs, isConnected }: LogsHeaderProps) {
           {isConnected ? "Conectado" : "Desconectado"}
         </span>
       </div>
-    </div>
+    </HeaderPagina>
   );
 }
 

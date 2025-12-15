@@ -38,6 +38,9 @@ import { Lock, Trash2, Ban, CheckCircle, UserCog, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
 import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
+import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
+import TituloPagina from "@/ui/TituloPagina/TituloPagina";
+import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
 
 interface Usuario {
   id: number;
@@ -60,7 +63,7 @@ interface Usuarios {
 
 export default function Usuarios() {
   useTituloPagina({ titulo: "Absol · Usuários" });
-  const { user, hasPermission, redirectIfNoPermission, loading } = useAuth();
+  const { hasPermission, redirectIfNoPermission, loading } = useAuth();
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -225,15 +228,22 @@ export default function Usuarios() {
           Erro ao carregar usuários
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-4 gap-4">
-          {data.map((usuario: Usuario) => (
-            <motion.div
-              key={usuario.id}
-              whileHover={usuario.ativo ? { y: "-5%" } : {}}
-              transition={{ type: "spring", bounce: 0 }}
-            >
-              <Card
-                className={`
+        <>
+          <HeaderPagina>
+            <div>
+              <TituloPagina>Usuários do Sistema</TituloPagina>
+              <DescricaoPagina>Gerencie usuários do sistema</DescricaoPagina>
+            </div>
+          </HeaderPagina>
+          <Grid className="grid-cols-4 gap-4">
+            {data.map((usuario: Usuario) => (
+              <motion.div
+                key={usuario.id}
+                whileHover={usuario.ativo ? { y: "-5%" } : {}}
+                transition={{ type: "spring", bounce: 0 }}
+              >
+                <Card
+                  className={`
                   hover:cursor-pointer relative overflow-hidden
                   transition-all duration-200
                   ${
@@ -242,56 +252,56 @@ export default function Usuarios() {
                       : "hover:shadow-md"
                   }
                 `}
-                onClick={() => handleUserClick(usuario)}
-              >
-                <div
-                  className={`absolute top-0 right-0 p-2 ${usuario.ativo ? "text-green-500" : "text-muted-foreground"}`}
+                  onClick={() => handleUserClick(usuario)}
                 >
-                  {usuario.ativo ? (
-                    <CheckCircle className="h-5 w-5" />
-                  ) : (
-                    <Ban className="h-5 w-5" />
-                  )}
-                </div>
-                {usuario?.nome_grupo?.toLowerCase() ===
-                  GrupoUsuario.Administrador && (
-                  <div className="absolute top-2 left-2">
-                    <UserCog className="h-4 w-4 text-primary" />
+                  <div
+                    className={`absolute top-0 right-0 p-2 ${usuario.ativo ? "text-green-500" : "text-muted-foreground"}`}
+                  >
+                    {usuario.ativo ? (
+                      <CheckCircle className="h-5 w-5" />
+                    ) : (
+                      <Ban className="h-5 w-5" />
+                    )}
                   </div>
-                )}
-                <CardHeader className="pt-6">
-                  <CardTitle
-                    className={`
+                  {usuario?.nome_grupo?.toLowerCase() ===
+                    GrupoUsuario.Administrador && (
+                    <div className="absolute top-2 left-2">
+                      <UserCog className="h-4 w-4 text-primary" />
+                    </div>
+                  )}
+                  <CardHeader className="pt-6">
+                    <CardTitle
+                      className={`
                     flex items-center gap-2
                     ${!usuario.ativo ? "text-muted-foreground" : ""}
                   `}
-                  >
-                    <div className="flex-1 truncate" title={usuario.nome}>
-                      {usuario.nome}
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="flex flex-col gap-3">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="secondary"
-                          className={`
+                    >
+                      <div className="flex-1 truncate" title={usuario.nome}>
+                        {usuario.nome}
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="flex flex-col gap-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="secondary"
+                            className={`
                             ${!usuario.ativo ? "opacity-75" : ""}
                             flex items-center gap-1
                           `}
-                        >
-                          <UserCog className="h-3 w-3" />
-                          {usuario?.nome_grupo?.toLowerCase() ===
-                          GrupoUsuario.Administrador
-                            ? GrupoUsuarioExibido.Administrador
-                            : GrupoUsuarioExibido.Usuario}
-                        </Badge>
-                      </div>
-                      <Badge
-                        variant={usuario.ativo ? "default" : "outline"}
-                        className={`
+                          >
+                            <UserCog className="h-3 w-3" />
+                            {usuario?.nome_grupo?.toLowerCase() ===
+                            GrupoUsuario.Administrador
+                              ? GrupoUsuarioExibido.Administrador
+                              : GrupoUsuarioExibido.Usuario}
+                          </Badge>
+                        </div>
+                        <Badge
+                          variant={usuario.ativo ? "default" : "outline"}
+                          className={`
                           ${
                             usuario.ativo
                               ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-100"
@@ -299,45 +309,46 @@ export default function Usuarios() {
                           }
                           flex items-center gap-1 w-fit
                         `}
-                      >
-                        {usuario.ativo ? (
-                          <>
-                            <CheckCircle className="h-3 w-3" />
-                            Ativo
-                          </>
-                        ) : (
-                          <>
-                            <Ban className="h-3 w-3" />
-                            Inativo
-                          </>
-                        )}
-                      </Badge>
-                    </div>
-                    <div
-                      className={`
+                        >
+                          {usuario.ativo ? (
+                            <>
+                              <CheckCircle className="h-3 w-3" />
+                              Ativo
+                            </>
+                          ) : (
+                            <>
+                              <Ban className="h-3 w-3" />
+                              Inativo
+                            </>
+                          )}
+                        </Badge>
+                      </div>
+                      <div
+                        className={`
                       text-sm pt-2 border-t border-border/50
                       ${!usuario.ativo ? "text-muted-foreground" : "text-foreground"}
                       flex items-start gap-2
                     `}
-                    >
-                      <div className="min-w-0">
-                        <div className="font-medium text-xs text-muted-foreground mb-1">
-                          Email
-                        </div>
-                        <div className="truncate" title={usuario.email}>
-                          {usuario.email}
+                      >
+                        <div className="min-w-0">
+                          <div className="font-medium text-xs text-muted-foreground mb-1">
+                            Email
+                          </div>
+                          <div className="truncate" title={usuario.email}>
+                            {usuario.email}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardDescription>
-                </CardContent>
-                {!usuario.ativo && (
-                  <div className="absolute inset-0 bg-linear-to-t from-background/10 to-transparent pointer-events-none" />
-                )}
-              </Card>
-            </motion.div>
-          ))}
-        </Grid>
+                    </CardDescription>
+                  </CardContent>
+                  {!usuario.ativo && (
+                    <div className="absolute inset-0 bg-linear-to-t from-background/10 to-transparent pointer-events-none" />
+                  )}
+                </Card>
+              </motion.div>
+            ))}
+          </Grid>
+        </>
       ) : (
         <Mensagem className="text-destructive">
           Nenhum usuário encontrado.

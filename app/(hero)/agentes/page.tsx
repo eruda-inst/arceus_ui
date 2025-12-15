@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/ui/Grid/Grid";
-import { Spinner } from "@/components/ui/spinner";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
@@ -21,6 +20,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
+import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
+import TituloPagina from "@/ui/TituloPagina/TituloPagina";
+import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
 
 interface Agente {
   id: number;
@@ -95,57 +97,67 @@ export default function Agentes() {
           Erro ao carregar agentes
         </Mensagem>
       ) : data && data.length > 0 ? (
-        <Grid className="grid-cols-4 gap-4">
-          {data.map((agente: Agente) => (
-            <motion.div
-              key={agente.id}
-              whileHover={{ y: -4 }}
-              transition={{ type: "spring", bounce: 0 }}
-            >
-              <Card className="h-80 flex flex-col hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3 shrink-0">
-                  <div className="flex justify-between items-start gap-2">
-                    <CardTitle className="text-lg leading-6">
-                      {agente.nome}
-                    </CardTitle>
-                    <Badge variant="secondary" className="shrink-0">
-                      {agente.setor}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-col flex-1 min-h-0">
-                  <div className="mb-4 shrink-0">
-                    <CardDescription className="text-sm line-clamp-3">
-                      {agente.descricao}
-                    </CardDescription>
-                  </div>
-                  <div className="space-y-2 text-sm text-muted-foreground mb-4 shrink-0">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-3 w-3" />
-                      <span>Criado: {formatarData(agente.criado_em)}</span>
+        <>
+          <HeaderPagina>
+            <div>
+              <TituloPagina>Agentes Virtuais</TituloPagina>
+              <DescricaoPagina>
+                Exporte configurações dos agentes virtuais disponíveis
+              </DescricaoPagina>
+            </div>
+          </HeaderPagina>
+          <Grid className="grid-cols-4 gap-4">
+            {data.map((agente: Agente) => (
+              <motion.div
+                key={agente.id}
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", bounce: 0 }}
+              >
+                <Card className="h-80 flex flex-col hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-3 shrink-0">
+                    <div className="flex justify-between items-start gap-2">
+                      <CardTitle className="text-lg leading-6">
+                        {agente.nome}
+                      </CardTitle>
+                      <Badge variant="secondary" className="shrink-0">
+                        {agente.setor}
+                      </Badge>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <RefreshCw className="h-3 w-3" />
-                      <span>
-                        Atualizado: {formatarData(agente.atualizado_em)}
-                      </span>
+                  </CardHeader>
+                  <CardContent className="flex flex-col flex-1 min-h-0">
+                    <div className="mb-4 shrink-0">
+                      <CardDescription className="text-sm line-clamp-3">
+                        {agente.descricao}
+                      </CardDescription>
                     </div>
-                  </div>
-                  <div className="mt-auto shrink-0">
-                    <Button
-                      onClick={() => handleDownloadConfig(agente)}
-                      className="w-full hover:cursor-pointer"
-                      size="sm"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Baixar configuração
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </Grid>
+                    <div className="space-y-2 text-sm text-muted-foreground mb-4 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-3 w-3" />
+                        <span>Criado: {formatarData(agente.criado_em)}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className="h-3 w-3" />
+                        <span>
+                          Atualizado: {formatarData(agente.atualizado_em)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-auto shrink-0">
+                      <Button
+                        onClick={() => handleDownloadConfig(agente)}
+                        className="w-full hover:cursor-pointer"
+                        size="sm"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Baixar configuração
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </Grid>
+        </>
       ) : (
         <Mensagem className="text-destructive">
           Nenhum agente encontrado.
