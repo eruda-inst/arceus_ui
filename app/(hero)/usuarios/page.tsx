@@ -30,12 +30,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { Lock, Trash2, Ban, CheckCircle, UserCog } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
 
 interface Usuario {
   id: number;
   email: string;
   nome: string;
-  nome_grupo: number;
+  nome_grupo: string;
   ativo: boolean;
 }
 
@@ -196,7 +197,8 @@ export default function Usuarios() {
                     <Ban className="h-5 w-5" />
                   )}
                 </div>
-                {user?.nome_grupo === "administrador" && (
+                {usuario?.nome_grupo?.toLowerCase() ===
+                  GrupoUsuario.Administrador && (
                   <div className="absolute top-2 left-2">
                     <UserCog className="h-4 w-4 text-primary" />
                   </div>
@@ -225,9 +227,10 @@ export default function Usuarios() {
                           `}
                         >
                           <UserCog className="h-3 w-3" />
-                          {user?.nome_grupo === "administrador"
-                            ? "Administrador"
-                            : "Usuário"}
+                          {usuario?.nome_grupo?.toLowerCase() ===
+                          GrupoUsuario.Administrador
+                            ? GrupoUsuarioExibido.Administrador
+                            : GrupoUsuarioExibido.Usuario}
                         </Badge>
                       </div>
                       <Badge

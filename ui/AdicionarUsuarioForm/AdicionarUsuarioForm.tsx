@@ -1,8 +1,8 @@
-import axios from "axios";
-import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
-import { obterTokenAutenticacao } from "@/helpers/misc";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -15,9 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import CampoSenha from "../CampoSenha/CampoSenha";
+import CampoSenha from "@/ui/CampoSenha/CampoSenha";
+import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
+import { obterTokenAutenticacao } from "@/helpers/misc";
+import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
 
 interface Formulario {
   id: number;
@@ -67,7 +68,8 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        nome_grupo: initialValues.nome_grupo ?? "usuario",
+        nome_grupo:
+          initialValues?.nome_grupo?.toLowerCase() ?? GrupoUsuario.Usuario,
       });
     }
   }, [initialValues, reset]);
@@ -81,10 +83,10 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
       }
 
       const formData = {
-        nome: data.nome,
-        email: data.email,
-        senha: data.senha,
-        nome_grupo: data.nome_grupo || 2,
+        nome: data?.nome,
+        email: data?.email,
+        senha: data?.senha,
+        nome_grupo: data?.nome_grupo?.toLowerCase(),
       };
 
       await axios.post(getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS), formData, {
@@ -101,7 +103,11 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
       if (onCreated) onCreated();
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
     } catch (error) {
-      console.error("Error updating password:", error);
+      console.error("Error creating user:", error);
+      toast.error("Erro!", {
+        position: "top-center",
+        description: "Ocorreu um erro ao criar o usuário.",
+      });
     }
   };
 
@@ -199,17 +205,21 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           defaultValue="usuario"
           render={({ field }) => (
             <Select
-              onValueChange={(val: string) => field.onChange(Number(val))}
-              value={String(field.value)}
+              onValueChange={(val: string) => field.onChange(val)}
+              value={field.value}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione um grupo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="administrador">Administrador</SelectItem>
+                  <SelectItem value={GrupoUsuario.Administrador}>
+                    {GrupoUsuarioExibido.Administrador}
+                  </SelectItem>
                   <SelectSeparator />
-                  <SelectItem value="usuario">Usuário</SelectItem>
+                  <SelectItem value={GrupoUsuario.Usuario}>
+                    {GrupoUsuarioExibido.Usuario}
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

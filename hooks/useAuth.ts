@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { getCookie, deleteCookie } from "cookies-next";
 import api from "@/lib/api";
+import { GrupoUsuario } from "@/types/grupo";
 
 export interface User {
   id: number;
@@ -99,7 +100,7 @@ export function useAuth() {
         setError(null);
 
         const permissoesDoGrupo = await buscarPermissoes(
-          response.data.nome_grupo,
+          response?.data?.nome_grupo?.toLowerCase(),
         );
         setPermissoes(permissoesDoGrupo);
       }
@@ -127,7 +128,7 @@ export function useAuth() {
   };
 
   const isAdmin = (): boolean => {
-    return user?.nome_grupo?.toLowerCase() === "administrador";
+    return user?.nome_grupo?.toLowerCase() === GrupoUsuario.Administrador;
   };
 
   const hasPermission = (permissionCode: string): boolean => {
