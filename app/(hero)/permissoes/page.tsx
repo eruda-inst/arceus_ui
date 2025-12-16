@@ -193,7 +193,7 @@ export default function Permissoes() {
     if (
       !selectedGroup ||
       !selectedPermission ||
-      !hasPermission("grupos_permissoes:remover")
+      !hasPermission("grupos_permissoes:excluir")
     )
       return;
 
@@ -344,7 +344,7 @@ export default function Permissoes() {
                                       {permissao.nome}
                                     </div>
                                     {hasPermission(
-                                      "grupos_permissoes:remover",
+                                      "grupos_permissoes:excluir",
                                     ) && (
                                       <button
                                         onClick={() =>

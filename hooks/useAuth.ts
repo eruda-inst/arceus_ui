@@ -132,28 +132,16 @@ export function useAuth() {
   };
 
   const hasPermission = (permissionCode: string): boolean => {
-    if (isAdmin()) {
-      return true;
-    }
-
     return permissoes.some((permissao) => permissao.codigo === permissionCode);
   };
 
   const hasAnyPermission = (permissionCodes: string[]): boolean => {
-    if (isAdmin()) {
-      return true;
-    }
-
     return permissionCodes.some((code) =>
       permissoes.some((permissao) => permissao.codigo === code),
     );
   };
 
   const hasAllPermissions = (permissionCodes: string[]): boolean => {
-    if (isAdmin()) {
-      return true;
-    }
-
     return permissionCodes.every((code) =>
       permissoes.some((permissao) => permissao.codigo === code),
     );

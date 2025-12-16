@@ -363,16 +363,18 @@ export default function Usuarios() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3">
-            {hasPermission("usuarios:atualizar") && (
-              <Button
-                variant="outline"
-                className="justify-start gap-2"
-                onClick={handleChangePassword}
-              >
-                <Lock className="h-4 w-4" />
-                Mudar Senha
-              </Button>
-            )}
+            {hasPermission("usuarios:atualizar") &&
+              selectedUser?.nome_grupo?.toLowerCase() !==
+                GrupoUsuario.Administrador && (
+                <Button
+                  variant="outline"
+                  className="justify-start gap-2"
+                  onClick={handleChangePassword}
+                >
+                  <Lock className="h-4 w-4" />
+                  Mudar Senha
+                </Button>
+              )}
             {hasPermission("usuarios:atualizar") &&
               selectedUser?.nome_grupo?.toLowerCase() !==
                 GrupoUsuario.Administrador && (
@@ -385,10 +387,11 @@ export default function Usuarios() {
                   Alterar Grupo
                 </Button>
               )}
-            {hasPermission("usuarios:atualizar") && (
-              <Button
-                variant="outline"
-                className={`
+            {hasPermission("usuarios:atualizar") &&
+              selectedUser?.nome_grupo !== GrupoUsuario.Administrador && (
+                <Button
+                  variant="outline"
+                  className={`
                   justify-start gap-2
                   ${
                     selectedUser?.ativo
@@ -396,21 +399,21 @@ export default function Usuarios() {
                       : "text-green-600 hover:text-green-600"
                   }
                 `}
-                onClick={handleDisableUser}
-              >
-                {selectedUser?.ativo ? (
-                  <>
-                    <Ban className="h-4 w-4" />
-                    Desativar Usuário
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="h-4 w-4" />
-                    Ativar Usuário
-                  </>
-                )}
-              </Button>
-            )}
+                  onClick={handleDisableUser}
+                >
+                  {selectedUser?.ativo ? (
+                    <>
+                      <Ban className="h-4 w-4" />
+                      Desativar Usuário
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4" />
+                      Ativar Usuário
+                    </>
+                  )}
+                </Button>
+              )}
             {hasPermission("usuarios:excluir") &&
               selectedUser?.nome_grupo?.toLowerCase() !==
                 GrupoUsuario.Administrador && (
