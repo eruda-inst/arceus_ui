@@ -11,7 +11,7 @@ export interface User {
   ativo: boolean;
   nome: string;
   criado_em: string;
-  nome_grupo: string;
+  nome_grupo: GrupoUsuario;
 }
 
 export interface Grupo {

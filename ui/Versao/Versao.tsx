@@ -8,7 +8,7 @@ export function Versao({
 
   return (
     <p className={twMerge(defaultStyle, className as ClassNameValue)}>
-      Versão: 1.23.4
+      Versão: 1.24.7
     </p>
   );
 }

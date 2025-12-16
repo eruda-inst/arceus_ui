@@ -28,7 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/ui/Grid/Grid";
 import { Mensagem } from "@/ui/Mensagem/Mensagem";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { AdicionarUsuarioForm } from "@/ui/AdicionarUsuarioForm/AdicionarUsuarioForm";
 import { ListagemUsuariosIXC } from "@/ui/ListagemUsuariosIXC/ListagemUsuariosIXC";
@@ -41,29 +41,32 @@ import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
+import { exibirGrupo } from "@/helpers/exibirGrupo";
 
 interface Usuario {
   id: number;
   email: string;
   nome: string;
-  nome_grupo: string;
+  nome_grupo: GrupoUsuario;
   ativo: boolean;
 }
 
 interface Grupo {
   id: number;
-  nome: string;
+  nome: GrupoUsuario;
   criado_em: string;
   atualizado_em: string;
 }
 
-interface Usuarios {
-  usuarios: Usuario[];
-}
-
 export default function Usuarios() {
   useTituloPagina({ titulo: "Absol · Usuários" });
-  const { hasPermission, redirectIfNoPermission, loading } = useAuth();
+  const {
+    hasPermission,
+    redirectIfNoPermission,
+    loading,
+    user, // O usuário logado
+  } = useAuth();
+
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -99,7 +102,6 @@ export default function Usuarios() {
     retry: false,
   });
 
-  // Buscar grupos disponíveis
   const { data: grupos, isLoading: isLoadingGrupos } = useQuery<Grupo[]>({
     queryKey: ["grupos"],
     queryFn: async () => {
@@ -110,6 +112,42 @@ export default function Usuarios() {
     },
     retry: false,
   });
+
+  // --- LÓGICA DE PERMISSÃO HIERÁRQUICA ---
+  // Verifica se o usuário logado (actor) pode modificar o usuário alvo (target)
+  const canManageTargetUser = useMemo(() => {
+    if (!user || !selectedUser) return false;
+
+    // 1. Ninguém altera a si mesmo nestas ações (Regra: "nem de si mesmo")
+    if (user.id === selectedUser.id) return false;
+
+    const actorGroup = user.nome_grupo?.toLowerCase();
+    const targetGroup = selectedUser.nome_grupo?.toLowerCase();
+
+    // Normalizando strings para comparação
+    const ADMIN = GrupoUsuario.Administrador.toLowerCase();
+    const SUPER_ADMIN = GrupoUsuario.SuperAdministrador.toLowerCase();
+
+    // Se sou Super Admin
+    if (actorGroup === SUPER_ADMIN) {
+      // Super Admin pode alterar qualquer um (exceto a si mesmo, já checado acima)
+      return true;
+    }
+
+    // Se sou Admin
+    if (actorGroup === ADMIN) {
+      // Admin NÃO pode alterar Super Admin
+      if (targetGroup === SUPER_ADMIN) return false;
+      // Admin NÃO pode alterar outro Admin
+      if (targetGroup === ADMIN) return false;
+
+      // Admin pode alterar demais usuários
+      return true;
+    }
+
+    // Demais usuários não podem alterar ninguém
+    return false;
+  }, [user, selectedUser]);
 
   const handleUserClick = (usuario: Usuario) => {
     setSelectedUser(usuario);
@@ -137,7 +175,7 @@ export default function Usuarios() {
   };
 
   const handleUpdateUserStatus = async (ativo: boolean) => {
-    if (!selectedUser) return;
+    if (!selectedUser || !canManageTargetUser) return;
 
     try {
       await api.patch(
@@ -153,7 +191,7 @@ export default function Usuarios() {
   };
 
   const handleDeleteUserConfirm = async () => {
-    if (!selectedUser) return;
+    if (!selectedUser || !canManageTargetUser) return;
 
     try {
       await api.delete(
@@ -168,7 +206,9 @@ export default function Usuarios() {
   };
 
   const handleChangePasswordSubmit = async (novaSenha: string) => {
-    if (!selectedUser) return;
+    // Permite mudar senha se tiver permissão de gestão OU se for lógica específica de reset
+    // Assumindo aqui que segue a mesma regra de hierarquia para segurança
+    if (!selectedUser || !canManageTargetUser) return;
 
     try {
       await api.patch(
@@ -186,9 +226,9 @@ export default function Usuarios() {
   const handleChangeGroupSubmit = async () => {
     if (!selectedUser || !selectedNewGroup) return;
 
-    // Verificar se o usuário é administrador
-    if (selectedUser.nome_grupo?.toLowerCase() === GrupoUsuario.Administrador) {
-      alert("Usuários administradores não podem ter seu grupo alterado.");
+    // Validação de segurança extra no submit
+    if (!canManageTargetUser) {
+      alert("Você não tem permissão para alterar o grupo deste usuário.");
       return;
     }
 
@@ -263,8 +303,11 @@ export default function Usuarios() {
                       <Ban className="h-5 w-5" />
                     )}
                   </div>
-                  {usuario?.nome_grupo?.toLowerCase() ===
-                    GrupoUsuario.Administrador && (
+                  {/* Ícone indicando Admin ou SuperAdmin */}
+                  {(usuario?.nome_grupo?.toLowerCase() ===
+                    GrupoUsuario.Administrador.toLowerCase() ||
+                    usuario?.nome_grupo?.toLowerCase() ===
+                      GrupoUsuario.SuperAdministrador.toLowerCase()) && (
                     <div className="absolute top-2 left-2">
                       <UserCog className="h-4 w-4 text-primary" />
                     </div>
@@ -293,10 +336,7 @@ export default function Usuarios() {
                           `}
                           >
                             <UserCog className="h-3 w-3" />
-                            {usuario?.nome_grupo?.toLowerCase() ===
-                            GrupoUsuario.Administrador
-                              ? GrupoUsuarioExibido.Administrador
-                              : GrupoUsuarioExibido.Usuario}
+                            {exibirGrupo(usuario?.nome_grupo)}
                           </Badge>
                         </div>
                         <Badge
@@ -354,6 +394,8 @@ export default function Usuarios() {
           Nenhum usuário encontrado.
         </Mensagem>
       )}
+
+      {/* --- DIALOG DE AÇÕES --- */}
       <Dialog open={isActionsDialogOpen} onOpenChange={setIsActionsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -363,9 +405,16 @@ export default function Usuarios() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3">
-            {hasPermission("usuarios:atualizar") &&
-              selectedUser?.nome_grupo?.toLowerCase() !==
-                GrupoUsuario.Administrador && (
+            {/* Se o usuário não tiver permissão hierárquica, mostra mensagem ou nada */}
+            {!canManageTargetUser && (
+              <div className="text-sm text-muted-foreground text-center py-2 bg-muted/50 rounded-md">
+                Você não possui permissões suficientes para gerenciar este
+                usuário ou ele possui o mesmo nível hierárquico que você.
+              </div>
+            )}
+
+            {canManageTargetUser && hasPermission("usuarios:atualizar") && (
+              <>
                 <Button
                   variant="outline"
                   className="justify-start gap-2"
@@ -374,10 +423,7 @@ export default function Usuarios() {
                   <Lock className="h-4 w-4" />
                   Mudar Senha
                 </Button>
-              )}
-            {hasPermission("usuarios:atualizar") &&
-              selectedUser?.nome_grupo?.toLowerCase() !==
-                GrupoUsuario.Administrador && (
+
                 <Button
                   variant="outline"
                   className="justify-start gap-2"
@@ -386,9 +432,7 @@ export default function Usuarios() {
                   <Users className="h-4 w-4" />
                   Alterar Grupo
                 </Button>
-              )}
-            {hasPermission("usuarios:atualizar") &&
-              selectedUser?.nome_grupo !== GrupoUsuario.Administrador && (
+
                 <Button
                   variant="outline"
                   className={`
@@ -413,22 +457,23 @@ export default function Usuarios() {
                     </>
                   )}
                 </Button>
-              )}
-            {hasPermission("usuarios:excluir") &&
-              selectedUser?.nome_grupo?.toLowerCase() !==
-                GrupoUsuario.Administrador && (
-                <Button
-                  variant="outline"
-                  className="justify-start gap-2 text-destructive hover:text-destructive"
-                  onClick={handleDeleteUser}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Excluir Usuário
-                </Button>
-              )}
+              </>
+            )}
+
+            {canManageTargetUser && hasPermission("usuarios:excluir") && (
+              <Button
+                variant="outline"
+                className="justify-start gap-2 text-destructive hover:text-destructive"
+                onClick={handleDeleteUser}
+              >
+                <Trash2 className="h-4 w-4" />
+                Excluir Usuário
+              </Button>
+            )}
           </div>
         </DialogContent>
       </Dialog>
+
       <Dialog
         open={isChangePasswordDialogOpen}
         onOpenChange={setIsChangePasswordDialogOpen}
@@ -446,6 +491,7 @@ export default function Usuarios() {
           />
         </DialogContent>
       </Dialog>
+
       <Dialog open={isDisableDialogOpen} onOpenChange={setIsDisableDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -477,6 +523,7 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
+
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -499,6 +546,7 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
+
       <Dialog
         open={isChangeGroupDialogOpen}
         onOpenChange={setIsChangeGroupDialogOpen}
@@ -524,7 +572,7 @@ export default function Usuarios() {
                 <SelectContent>
                   {grupos?.map((grupo) => (
                     <SelectItem key={grupo.id} value={grupo.nome}>
-                      {grupo.nome}
+                      {exibirGrupo(grupo?.nome)}
                     </SelectItem>
                   ))}
                 </SelectContent>

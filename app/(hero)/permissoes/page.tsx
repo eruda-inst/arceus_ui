@@ -178,11 +178,13 @@ export default function Permissoes() {
       setIsAddDialogOpen(false);
       setSelectedGroup(null);
       toast.success("Sucesso!", {
+        position: "top-center",
         description: `Permissão ${permissao.nome} adicionada ao grupo ${selectedGroup.nome}`,
       });
     } catch (error: any) {
       console.error("Erro ao adicionar permissão:", error);
       toast.error("Erro", {
+        position: "top-center",
         description:
           error.response?.data?.detail || "Erro ao adicionar permissão",
       });
@@ -206,11 +208,13 @@ export default function Permissoes() {
       setSelectedGroup(null);
       setSelectedPermission(null);
       toast.success("Sucesso!", {
+        position: "top-center",
         description: `Permissão removida do grupo ${selectedGroup.nome}`,
       });
     } catch (error: any) {
       console.error("Erro ao remover permissão:", error);
       toast.error("Erro", {
+        position: "top-center",
         description:
           error.response?.data?.detail || "Erro ao remover permissão",
       });

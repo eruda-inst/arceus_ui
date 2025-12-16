@@ -49,7 +49,7 @@ import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { toast } from "sonner";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
-import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
+import { exibirGrupo } from "@/helpers/exibirGrupo";
 
 interface Formulario {
   senha: string;
@@ -239,12 +239,7 @@ export function Nav() {
                     user && (
                       <CartaoUsuario
                         nome={user.nome || "Erro"}
-                        funcao={
-                          user?.nome_grupo?.toLowerCase() ===
-                          GrupoUsuario.Administrador
-                            ? GrupoUsuarioExibido.Administrador
-                            : GrupoUsuarioExibido.Usuario
-                        }
+                        funcao={exibirGrupo(user?.nome_grupo)}
                       />
                     )
                   )}
