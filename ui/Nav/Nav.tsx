@@ -33,6 +33,7 @@ import {
   Users,
   UserLock,
   Bot,
+  Group,
 } from "lucide-react";
 import { Versao } from "@/ui/Versao/Versao";
 import { usePathname, useRouter } from "next/navigation";
@@ -191,6 +192,20 @@ export function Nav() {
                           } hover:cursor-pointer hover:bg-bg-selected`}
                         >
                           <Users /> Usuários
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    {hasPermission("grupos:ver") && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => handleNavigation("/grupos")}
+                          className={`border py-6 px-3 rounded-lg transition-colors ${
+                            pathname === "/grupos"
+                              ? "bg-bg-selected"
+                              : "bg-sidebar-accent"
+                          } hover:cursor-pointer hover:bg-bg-selected`}
+                        >
+                          <Group /> Grupos
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     )}
