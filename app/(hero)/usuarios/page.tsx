@@ -59,12 +59,7 @@ interface Grupo {
 
 export default function Usuarios() {
   useTituloPagina({ titulo: "Absol · Usuários" });
-  const {
-    hasPermission,
-    redirectIfNoPermission,
-    loading,
-    user, // O usuário logado
-  } = useAuth();
+  const { hasPermission, redirectIfNoPermission, loading, user } = useAuth();
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
@@ -112,35 +107,25 @@ export default function Usuarios() {
     retry: false,
   });
 
-  // --- LÓGICA DE PERMISSÃO HIERÁRQUICA ---
-  // Verifica se o usuário logado (actor) pode modificar o usuário alvo (target)
   const canManageTargetUser = useMemo(() => {
     if (!user || !selectedUser) return false;
 
-    // 1. Ninguém altera a si mesmo nestas ações (Regra: "nem de si mesmo")
     if (user.id === selectedUser.id) return false;
 
     const actorGroup = user.nome_grupo;
     const targetGroup = selectedUser.nome_grupo;
 
-    // Se sou Super Admin
     if (actorGroup === NomeGrupos.SuperAdministrador) {
-      // Super Admin pode alterar qualquer um (exceto a si mesmo, já checado acima)
       return true;
     }
 
-    // Se sou Admin
     if (actorGroup === NomeGrupos.Administrador) {
-      // Admin NÃO pode alterar Super Admin
       if (targetGroup === NomeGrupos.SuperAdministrador) return false;
-      // Admin NÃO pode alterar outro Admin
       if (targetGroup === NomeGrupos.Administrador) return false;
 
-      // Admin pode alterar demais usuários
       return true;
     }
 
-    // Demais usuários não podem alterar ninguém
     return false;
   }, [user, selectedUser]);
 
@@ -201,8 +186,6 @@ export default function Usuarios() {
   };
 
   const handleChangePasswordSubmit = async (novaSenha: string) => {
-    // Permite mudar senha se tiver permissão de gestão OU se for lógica específica de reset
-    // Assumindo aqui que segue a mesma regra de hierarquia para segurança
     if (!selectedUser || !canManageTargetUser) return;
 
     try {
@@ -220,13 +203,10 @@ export default function Usuarios() {
 
   const handleChangeGroupSubmit = async () => {
     if (!selectedUser || !selectedNewGroup) return;
-
-    // Validação de segurança extra no submit
     if (!canManageTargetUser) {
       alert("Você não tem permissão para alterar o grupo deste usuário.");
       return;
     }
-
     try {
       await api.patch(
         `${getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS)}${selectedUser.id}`,
@@ -298,7 +278,6 @@ export default function Usuarios() {
                       <Ban className="h-5 w-5" />
                     )}
                   </div>
-                  {/* Ícone indicando Admin ou SuperAdmin */}
                   {(usuario?.nome_grupo === NomeGrupos.Administrador ||
                     usuario?.nome_grupo === NomeGrupos.SuperAdministrador) && (
                     <div className="absolute top-2 left-2">
@@ -387,8 +366,6 @@ export default function Usuarios() {
           Nenhum usuário encontrado.
         </Mensagem>
       )}
-
-      {/* --- DIALOG DE AÇÕES --- */}
       <Dialog open={isActionsDialogOpen} onOpenChange={setIsActionsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -398,7 +375,6 @@ export default function Usuarios() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3">
-            {/* Se o usuário não tiver permissão hierárquica, mostra mensagem ou nada */}
             {!canManageTargetUser && (
               <div className="text-sm text-muted-foreground text-center py-2 bg-muted/50 rounded-md">
                 Você não possui permissões suficientes para gerenciar este
@@ -466,7 +442,6 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
-
       <Dialog
         open={isChangePasswordDialogOpen}
         onOpenChange={setIsChangePasswordDialogOpen}
@@ -484,7 +459,6 @@ export default function Usuarios() {
           />
         </DialogContent>
       </Dialog>
-
       <Dialog open={isDisableDialogOpen} onOpenChange={setIsDisableDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -516,7 +490,6 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
-
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -539,7 +512,6 @@ export default function Usuarios() {
           </div>
         </DialogContent>
       </Dialog>
-
       <Dialog
         open={isChangeGroupDialogOpen}
         onOpenChange={setIsChangeGroupDialogOpen}
@@ -551,6 +523,7 @@ export default function Usuarios() {
               Selecione o novo grupo para {selectedUser?.nome}
             </DialogDescription>
           </DialogHeader>
+
           {isLoadingGrupos ? (
             <div>Carregando grupos...</div>
           ) : (
@@ -563,15 +536,26 @@ export default function Usuarios() {
                   <SelectValue placeholder="Selecione um grupo" />
                 </SelectTrigger>
                 <SelectContent>
-                  {grupos?.map((grupo) => (
-                    <SelectItem key={grupo.id} value={grupo.nome}>
-                      {grupo?.nome}
-                    </SelectItem>
-                  ))}
+                  {grupos
+                    ?.filter((grupo) => {
+                      if (user?.nome_grupo === NomeGrupos.SuperAdministrador) {
+                        return true;
+                      }
+                      if (user?.nome_grupo === NomeGrupos.Administrador) {
+                        return grupo.nome === NomeGrupos.Usuario;
+                      }
+                      return false;
+                    })
+                    .map((grupo) => (
+                      <SelectItem key={grupo.id} value={grupo.nome}>
+                        {grupo?.nome}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
           )}
+
           <div className="flex gap-2 justify-end">
             <Button
               variant="outline"

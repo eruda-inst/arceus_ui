@@ -19,6 +19,7 @@ import CampoSenha from "@/ui/CampoSenha/CampoSenha";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { NomeGrupos } from "@/types/grupo";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Formulario {
   id: number;
@@ -44,6 +45,7 @@ interface Props {
 }
 
 export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
+  const { user: usuarioLogado } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const queryClient = useQueryClient();
@@ -206,24 +208,54 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
             <Select
               onValueChange={(val: string) => field.onChange(val)}
               value={field.value}
+              disabled={!usuarioLogado}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione um grupo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={NomeGrupos.Administrador}>
-                    {NomeGrupos.Administrador}
-                  </SelectItem>
-                  <SelectSeparator />
-                  <SelectItem value={NomeGrupos.Usuario}>
-                    {NomeGrupos.Usuario}
-                  </SelectItem>
+                  {usuarioLogado?.nome_grupo ===
+                    NomeGrupos.SuperAdministrador && (
+                    <>
+                      <SelectItem value={NomeGrupos.SuperAdministrador}>
+                        {NomeGrupos.SuperAdministrador}
+                      </SelectItem>
+                      <SelectSeparator />
+                      <SelectItem value={NomeGrupos.Administrador}>
+                        {NomeGrupos.Administrador}
+                      </SelectItem>
+                      <SelectSeparator />
+                      <SelectItem value={NomeGrupos.Usuario}>
+                        {NomeGrupos.Usuario}
+                      </SelectItem>
+                    </>
+                  )}
+                  {usuarioLogado?.nome_grupo === NomeGrupos.Administrador && (
+                    <SelectItem value={NomeGrupos.Usuario}>
+                      {NomeGrupos.Usuario}
+                    </SelectItem>
+                  )}
+                  {usuarioLogado?.nome_grupo === NomeGrupos.Usuario && (
+                    <SelectItem value={NomeGrupos.Usuario}>
+                      {NomeGrupos.Usuario}
+                    </SelectItem>
+                  )}
+                  {!usuarioLogado && (
+                    <SelectItem value={NomeGrupos.Usuario}>
+                      {NomeGrupos.Usuario}
+                    </SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
           )}
         />
+        {errors.nome_grupo && (
+          <span className="text-destructive text-sm">
+            {errors.nome_grupo.message}
+          </span>
+        )}
       </Field>
       <Button type="submit" className="w-fit ml-auto">
         Criar usuário
