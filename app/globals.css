@@ -85,7 +85,7 @@
   /* My Variables */
   --sidebar-width: calc(var(--spacing) * 64);
   --page-header-height: calc(var(--spacing) * 16);
-  --bg-selected: var(--color-zinc-300);
+  --bg-selected: var(--color-zinc-200);
 }
 
 .dark {
