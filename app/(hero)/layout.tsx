@@ -5,7 +5,6 @@ import { Conteudo } from "@/ui/Conteudo/Conteudo";
 import { Nav } from "@/ui/Nav/Nav";
 
 export const metadata: Metadata = {
-  title: "Absol · Dashboard",
   description: "Monitora requisições realizadas ao Arceus.",
 };
 

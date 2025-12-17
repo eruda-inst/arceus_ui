@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 
 export default function NotFound() {
+  useTituloPaginaSimples("Absol · 404");
   const router = useRouter();
 
   const handleGoBack = () => {

@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 
 export default function Forbidden() {
+  useTituloPaginaSimples("Absol · 403");
   const router = useRouter();
 
   return (

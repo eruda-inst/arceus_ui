@@ -19,8 +19,10 @@ import { useAuth } from "@/hooks/useAuth";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 
 export default function Home() {
+  useTituloPaginaSimples("Absol · Dashboard");
   const { redirectIfNoPermission, loading } = useAuth();
 
   useEffect(() => {
