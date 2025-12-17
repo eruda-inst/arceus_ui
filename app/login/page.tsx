@@ -24,6 +24,8 @@ import { setCookie } from "cookies-next";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import CampoSenha from "@/ui/CampoSenha/CampoSenha";
 
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 dias
+
 interface LoginForm {
   email: string;
   senha: string;
@@ -77,7 +79,7 @@ export default function Login() {
       // Set the auth token cookie
       setCookie("auth-token", data.token, {
         path: "/",
-        maxAge: 60 * 30, // 30 minutes (matches TOKEN_EXPIRE_MINUTES in backend)
+        maxAge: COOKIE_MAX_AGE,
         sameSite: "strict",
       });
 

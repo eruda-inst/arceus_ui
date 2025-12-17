@@ -2,6 +2,8 @@ import axios from "axios";
 import { API_CONFIG, getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 dias
+
 const api = axios.create({
   baseURL: API_CONFIG.HTTP.URL_BASE,
 });
@@ -55,7 +57,7 @@ api.interceptors.response.use(
         if (newAccessToken) {
           setCookie("auth-token", newAccessToken, {
             path: "/",
-            maxAge: 60 * 30, // 30 minutes (matches backend TOKEN_EXPIRE_MINUTES)
+            maxAge: COOKIE_MAX_AGE,
             sameSite: "strict",
           });
 
@@ -75,7 +77,8 @@ api.interceptors.response.use(
             originalRequest.headers = {} as any;
           }
 
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
           return api(originalRequest);
         }
 
