@@ -18,7 +18,7 @@ import {
 import CampoSenha from "@/ui/CampoSenha/CampoSenha";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { obterTokenAutenticacao } from "@/helpers/misc";
-import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
+import { NomeGrupos } from "@/types/grupo";
 
 interface Formulario {
   id: number;
@@ -26,7 +26,7 @@ interface Formulario {
   senha: string;
   confirmarSenha: string;
   nome: string;
-  nome_grupo: string;
+  nome_grupo: NomeGrupos;
 }
 
 interface InitialValues {
@@ -35,7 +35,7 @@ interface InitialValues {
   nome?: string;
   senha?: string;
   confirmarSenha?: string;
-  nome_grupo?: string;
+  nome_grupo?: NomeGrupos;
 }
 
 interface Props {
@@ -56,7 +56,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
     control,
   } = useForm<Formulario>({
     defaultValues: {
-      nome_grupo: "usuario",
+      nome_grupo: NomeGrupos.Usuario,
     },
   });
 
@@ -68,8 +68,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: initialValues.nome ?? "",
         senha: "",
         confirmarSenha: "",
-        nome_grupo:
-          initialValues?.nome_grupo?.toLowerCase() ?? GrupoUsuario.Usuario,
+        nome_grupo: initialValues?.nome_grupo ?? NomeGrupos.Usuario,
       });
     }
   }, [initialValues, reset]);
@@ -86,7 +85,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         nome: data?.nome,
         email: data?.email,
         senha: data?.senha,
-        nome_grupo: data?.nome_grupo?.toLowerCase(),
+        nome_grupo: data?.nome_grupo,
       };
 
       await axios.post(getHttpUrl(HTTP_ENDPOINTS_NAME.USUARIOS), formData, {
@@ -202,7 +201,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
         <Controller
           name="nome_grupo"
           control={control}
-          defaultValue="usuario"
+          defaultValue={NomeGrupos.Usuario}
           render={({ field }) => (
             <Select
               onValueChange={(val: string) => field.onChange(val)}
@@ -213,12 +212,12 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={GrupoUsuario.Administrador}>
-                    {GrupoUsuarioExibido.Administrador}
+                  <SelectItem value={NomeGrupos.Administrador}>
+                    {NomeGrupos.Administrador}
                   </SelectItem>
                   <SelectSeparator />
-                  <SelectItem value={GrupoUsuario.Usuario}>
-                    {GrupoUsuarioExibido.Usuario}
+                  <SelectItem value={NomeGrupos.Usuario}>
+                    {NomeGrupos.Usuario}
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>

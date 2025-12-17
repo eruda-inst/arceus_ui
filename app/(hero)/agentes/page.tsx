@@ -289,7 +289,7 @@ export default function Agentes() {
       className="relative"
     >
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Adicionar Novo Agente</DialogTitle>
             <DialogDescription>
@@ -351,7 +351,7 @@ export default function Agentes() {
         </DialogContent>
       </Dialog>
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Agente</DialogTitle>
             <DialogDescription>Atualize os dados do agente</DialogDescription>
@@ -418,7 +418,7 @@ export default function Agentes() {
         </DialogContent>
       </Dialog>
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent className="sm:max-w-[450px]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Confirmar Exclusão</DialogTitle>
             <DialogDescription>
@@ -445,9 +445,9 @@ export default function Agentes() {
       </Dialog>
       {isLoading ? (
         <Grid className="grid-cols-4 gap-4">
-          <Skeleton className="h-[250px] w-full" />
-          <Skeleton className="h-[250px] w-full" />
-          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-62.5 w-full" />
+          <Skeleton className="h-62.5 w-full" />
+          <Skeleton className="h-62.5 w-full" />
         </Grid>
       ) : isError ? (
         <Mensagem className="text-destructive">

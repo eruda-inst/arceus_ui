@@ -37,23 +37,22 @@ import { useAuth } from "@/hooks/useAuth";
 import { Lock, Trash2, Ban, CheckCircle, UserCog, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
-import { GrupoUsuario, GrupoUsuarioExibido } from "@/types/grupo";
+import { NomeGrupos } from "@/types/grupo";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
-import { exibirGrupo } from "@/helpers/exibirGrupo";
 
 interface Usuario {
   id: number;
   email: string;
   nome: string;
-  nome_grupo: GrupoUsuario;
+  nome_grupo: NomeGrupos;
   ativo: boolean;
 }
 
 interface Grupo {
   id: number;
-  nome: GrupoUsuario;
+  nome: NomeGrupos;
   criado_em: string;
   atualizado_em: string;
 }
@@ -121,25 +120,21 @@ export default function Usuarios() {
     // 1. Ninguém altera a si mesmo nestas ações (Regra: "nem de si mesmo")
     if (user.id === selectedUser.id) return false;
 
-    const actorGroup = user.nome_grupo?.toLowerCase();
-    const targetGroup = selectedUser.nome_grupo?.toLowerCase();
-
-    // Normalizando strings para comparação
-    const ADMIN = GrupoUsuario.Administrador.toLowerCase();
-    const SUPER_ADMIN = GrupoUsuario.SuperAdministrador.toLowerCase();
+    const actorGroup = user.nome_grupo;
+    const targetGroup = selectedUser.nome_grupo;
 
     // Se sou Super Admin
-    if (actorGroup === SUPER_ADMIN) {
+    if (actorGroup === NomeGrupos.SuperAdministrador) {
       // Super Admin pode alterar qualquer um (exceto a si mesmo, já checado acima)
       return true;
     }
 
     // Se sou Admin
-    if (actorGroup === ADMIN) {
+    if (actorGroup === NomeGrupos.Administrador) {
       // Admin NÃO pode alterar Super Admin
-      if (targetGroup === SUPER_ADMIN) return false;
+      if (targetGroup === NomeGrupos.SuperAdministrador) return false;
       // Admin NÃO pode alterar outro Admin
-      if (targetGroup === ADMIN) return false;
+      if (targetGroup === NomeGrupos.Administrador) return false;
 
       // Admin pode alterar demais usuários
       return true;
@@ -259,9 +254,9 @@ export default function Usuarios() {
     >
       {isLoading ? (
         <Grid className="grid-cols-4 gap-4">
-          <Skeleton className="h-[250px] w-full" />
-          <Skeleton className="h-[250px] w-full" />
-          <Skeleton className="h-[250px] w-full" />
+          <Skeleton className="h-62.5 w-full" />
+          <Skeleton className="h-62.5 w-full" />
+          <Skeleton className="h-62.5 w-full" />
         </Grid>
       ) : isError ? (
         <Mensagem className="text-destructive">
@@ -304,10 +299,8 @@ export default function Usuarios() {
                     )}
                   </div>
                   {/* Ícone indicando Admin ou SuperAdmin */}
-                  {(usuario?.nome_grupo?.toLowerCase() ===
-                    GrupoUsuario.Administrador.toLowerCase() ||
-                    usuario?.nome_grupo?.toLowerCase() ===
-                      GrupoUsuario.SuperAdministrador.toLowerCase()) && (
+                  {(usuario?.nome_grupo === NomeGrupos.Administrador ||
+                    usuario?.nome_grupo === NomeGrupos.SuperAdministrador) && (
                     <div className="absolute top-2 left-2">
                       <UserCog className="h-4 w-4 text-primary" />
                     </div>
@@ -336,7 +329,7 @@ export default function Usuarios() {
                           `}
                           >
                             <UserCog className="h-3 w-3" />
-                            {exibirGrupo(usuario?.nome_grupo)}
+                            {usuario?.nome_grupo}
                           </Badge>
                         </div>
                         <Badge
@@ -572,7 +565,7 @@ export default function Usuarios() {
                 <SelectContent>
                   {grupos?.map((grupo) => (
                     <SelectItem key={grupo.id} value={grupo.nome}>
-                      {exibirGrupo(grupo?.nome)}
+                      {grupo?.nome}
                     </SelectItem>
                   ))}
                 </SelectContent>

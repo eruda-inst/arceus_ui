@@ -46,9 +46,6 @@ import {
   Calendar,
   Clock,
   Search,
-  Filter,
-  Check,
-  X,
 } from "lucide-react";
 import { useTituloPagina } from "@/hooks/useTituloPagina";
 import { toast } from "sonner";
@@ -56,16 +53,18 @@ import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
 import { Label } from "@/components/ui/label";
+import { NomeGrupos } from "@/types/grupo";
+import { formatarData, formatarDataHora } from "@/helpers/formatar";
 
 interface Grupo {
   id: number;
-  nome: string;
+  nome: NomeGrupos;
   criado_em: string;
   atualizado_em: string;
 }
 
 interface GrupoFormData {
-  nome: string;
+  nome: NomeGrupos | string;
 }
 
 export default function Grupos() {
@@ -240,20 +239,6 @@ export default function Grupos() {
     setFormErrors({});
   };
 
-  const formatarData = (data: string) => {
-    return new Date(data).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatarDataSimples = (data: string) => {
-    return new Date(data).toLocaleDateString("pt-BR");
-  };
-
   if (!hasPermission("grupos:ver")) {
     return null;
   }
@@ -384,14 +369,14 @@ export default function Grupos() {
                         <Calendar className="h-4 w-4" />
                         <span>Criado em:</span>
                         <span className="font-medium text-foreground">
-                          {formatarDataSimples(grupo.criado_em)}
+                          {formatarData(grupo.criado_em)}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Clock className="h-4 w-4" />
                         <span>Atualizado em:</span>
                         <span className="font-medium text-foreground">
-                          {formatarDataSimples(grupo.atualizado_em)}
+                          {formatarData(grupo.atualizado_em)}
                         </span>
                       </div>
                     </div>
@@ -400,7 +385,7 @@ export default function Grupos() {
                 <CardFooter className="pt-4 border-t">
                   <div className="flex items-center justify-between w-full">
                     <div className="text-xs text-muted-foreground">
-                      Detalhes: {formatarData(grupo.criado_em)}
+                      Detalhes: {formatarDataHora(grupo.criado_em)}
                     </div>
                     <div className="flex gap-2">
                       {hasPermission("grupos:atualizar") && (

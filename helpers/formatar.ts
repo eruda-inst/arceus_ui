@@ -7,6 +7,17 @@ function formatarData(data: string): string {
   });
 }
 
+const formatarDataHora = (data: string) => {
+  return new Date(data).toLocaleDateString("pt-BR", {
+    timeZone: "UTC",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 function formatarPorcentagem(valor: number | string): string {
   const numero = typeof valor === "string" ? parseFloat(valor) : valor;
   const arredondado = Math.round(numero * 100) / 100;
@@ -23,4 +34,4 @@ function formatarTempo(milissegundos: number): string {
   }
 }
 
-export { formatarData, formatarPorcentagem, formatarTempo };
+export { formatarData, formatarDataHora, formatarPorcentagem, formatarTempo };

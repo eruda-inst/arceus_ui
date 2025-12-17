@@ -290,7 +290,7 @@ export default function Permissoes() {
           Erro ao carregar grupos e permissões
         </Mensagem>
       ) : filteredGroups && filteredGroups.length > 0 ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
           {filteredGroups.map((grupo) => {
             const permissoesAgrupadas = agruparPermissoesPorCategoria(
               grupo.permissoes,
@@ -342,7 +342,7 @@ export default function Permissoes() {
                                     className="group relative pr-6"
                                   >
                                     <div
-                                      className="truncate max-w-[120px]"
+                                      className="truncate max-w-30"
                                       title={`${permissao.nome} (${permissao.codigo})`}
                                     >
                                       {permissao.nome}
