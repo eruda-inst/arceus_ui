@@ -27,7 +27,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
@@ -62,7 +62,7 @@ interface AgenteFormData {
 }
 
 export default function Agentes() {
-  useTituloPagina({ titulo: "Absol · Agentes" });
+  useTituloPaginaSimples("Absol · Agentes");
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
   const queryClient = useQueryClient();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

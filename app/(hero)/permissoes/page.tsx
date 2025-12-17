@@ -26,7 +26,7 @@ import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Plus, Users, X, Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -52,7 +52,7 @@ interface GrupoComPermissoes extends Grupo {
 }
 
 export default function Permissoes() {
-  useTituloPagina({ titulo: "Absol · Permissões" });
+  useTituloPaginaSimples("Absol · Permissões");
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);

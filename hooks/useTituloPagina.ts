@@ -7,11 +7,11 @@ type useTituloPaginaOptions = {
   prefixo?: string;
 };
 
-export function useTituloPagina({
+function useTituloPagina({
   titulo,
   restoraQuandoMontado = true,
-  sufixo,
-  prefixo,
+  sufixo = undefined,
+  prefixo = undefined,
 }: useTituloPaginaOptions): void {
   const tituloOriginal = useRef<string>("");
 
@@ -35,6 +35,8 @@ export function useTituloPagina({
   }, [titulo, restoraQuandoMontado, sufixo, prefixo]);
 }
 
-export function useTituloPaginaSimple(titulo: string): void {
+function useTituloPaginaSimples(titulo: string): void {
   useTituloPagina({ titulo });
 }
+
+export { useTituloPagina, useTituloPaginaSimples };

@@ -36,7 +36,7 @@ import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Lock, Trash2, Ban, CheckCircle, UserCog, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import { NomeGrupos } from "@/types/grupo";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
@@ -58,7 +58,7 @@ interface Grupo {
 }
 
 export default function Usuarios() {
-  useTituloPagina({ titulo: "Absol · Usuários" });
+  useTituloPaginaSimples("Absol · Usuários");
   const { hasPermission, redirectIfNoPermission, loading, user } = useAuth();
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);

@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 
 interface PaginatedLogsResponse {
   registros: Log[];
@@ -30,7 +30,7 @@ interface PaginatedLogsResponse {
 }
 
 export default function LogsCompleto() {
-  useTituloPagina({ titulo: "Absol · Registros" });
+  useTituloPaginaSimples("Absol · Registros");
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [data, setData] = useState<PaginatedLogsResponse | null>(null);

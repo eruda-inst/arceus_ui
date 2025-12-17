@@ -23,6 +23,7 @@ import api from "@/lib/api";
 import { setCookie } from "cookies-next";
 import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import CampoSenha from "@/ui/CampoSenha/CampoSenha";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 dias
 
@@ -37,6 +38,7 @@ interface LoginResponse {
 }
 
 export default function Login() {
+  useTituloPaginaSimples("Absol · Login");
   const router = useRouter();
   const [redirect, setRedirect] = useState<string>("/");
   const [showPassword, setShowPassword] = useState(false);

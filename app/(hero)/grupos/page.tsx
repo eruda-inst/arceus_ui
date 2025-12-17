@@ -47,7 +47,7 @@ import {
   Clock,
   Search,
 } from "lucide-react";
-import { useTituloPagina } from "@/hooks/useTituloPagina";
+import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import { toast } from "sonner";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
@@ -68,7 +68,7 @@ interface GrupoFormData {
 }
 
 export default function Grupos() {
-  useTituloPagina({ titulo: "Absol · Grupos" });
+  useTituloPaginaSimples("Absol · Grupos");
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
