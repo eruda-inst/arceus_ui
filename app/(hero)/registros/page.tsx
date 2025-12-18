@@ -215,6 +215,7 @@ export default function LogsCompleto() {
                         <SelectItem value="404">404</SelectItem>
                         <SelectItem value="422">422</SelectItem>
                         <SelectItem value="500">500</SelectItem>
+                        <SelectItem value="503">503</SelectItem>
                       </SelectContent>
                     </Select>
                   </FieldContent>
