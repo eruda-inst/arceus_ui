@@ -43,6 +43,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatarData } from "@/helpers/formatar";
 
 interface Agente {
   id: number;
@@ -253,14 +254,6 @@ export default function Agentes() {
     excluirAgenteMutation.mutate(selectedAgente.id);
   };
 
-  const formatarData = (data: string) => {
-    return new Date(data).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
   const openEditModal = (agente: Agente) => {
     setSelectedAgente(agente);
     setFormData({
@@ -338,12 +331,17 @@ export default function Agentes() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsAddModalOpen(false)}
+              className="cursor-pointer"
+            >
               Cancelar
             </Button>
             <Button
               onClick={handleAddAgente}
               disabled={adicionarAgenteMutation.isPending}
+              className="cursor-pointer"
             >
               {adicionarAgenteMutation.isPending ? "Salvando..." : "Salvar"}
             </Button>
@@ -403,12 +401,17 @@ export default function Agentes() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditModalOpen(false)}
+              className="cursor-pointer"
+            >
               Cancelar
             </Button>
             <Button
               onClick={handleEditAgente}
               disabled={atualizarAgenteMutation.isPending}
+              className="cursor-pointer"
             >
               {atualizarAgenteMutation.isPending
                 ? "Atualizando..."
@@ -430,6 +433,7 @@ export default function Agentes() {
             <Button
               variant="outline"
               onClick={() => setIsDeleteModalOpen(false)}
+              className="cursor-pointer"
             >
               Cancelar
             </Button>
@@ -437,23 +441,14 @@ export default function Agentes() {
               variant="destructive"
               onClick={handleDeleteAgente}
               disabled={excluirAgenteMutation.isPending}
+              className="cursor-pointer"
             >
               {excluirAgenteMutation.isPending ? "Excluindo..." : "Excluir"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      {isLoading ? (
-        <Grid className="grid-cols-4 gap-4">
-          <Skeleton className="h-62.5 w-full" />
-          <Skeleton className="h-62.5 w-full" />
-          <Skeleton className="h-62.5 w-full" />
-        </Grid>
-      ) : isError ? (
-        <Mensagem className="text-destructive">
-          Erro ao carregar agentes
-        </Mensagem>
-      ) : data && data.length > 0 ? (
+      {
         <>
           <HeaderPagina>
             <div>
@@ -463,101 +458,108 @@ export default function Agentes() {
               </DescricaoPagina>
             </div>
             {hasPermission("agentes:adicionar") && (
-              <Button onClick={() => setIsAddModalOpen(true)}>
+              <Button
+                onClick={() => setIsAddModalOpen(true)}
+                className="cursor-pointer"
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Agente
               </Button>
             )}
           </HeaderPagina>
-          <Grid className="grid-cols-4 gap-4">
-            {data.map((agente: Agente) => (
-              <motion.div
-                key={agente.id}
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", bounce: 0 }}
-              >
-                <Card className="h-100 flex flex-col hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-3 shrink-0">
-                    <div className="flex justify-between items-start gap-2">
-                      <CardTitle className="text-lg leading-6">
-                        {agente.nome}
-                      </CardTitle>
-                      <Badge variant="secondary" className="shrink-0">
-                        {agente.setor}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex flex-col flex-1 min-h-0">
-                    <div className="mb-4 shrink-0">
-                      <CardDescription className="text-sm line-clamp-3">
-                        {agente.descricao}
-                      </CardDescription>
-                    </div>
-                    <div className="space-y-2 text-sm text-muted-foreground mb-4 shrink-0">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-3 w-3" />
-                        <span>Criado: {formatarData(agente.criado_em)}</span>
+          {isLoading ? (
+            <Grid className="grid-cols-4 gap-4">
+              <Skeleton className="h-62.5 w-full" />
+              <Skeleton className="h-62.5 w-full" />
+              <Skeleton className="h-62.5 w-full" />
+            </Grid>
+          ) : isError ? (
+            <Mensagem className="text-destructive">
+              Erro ao carregar agentes
+            </Mensagem>
+          ) : data && data.length > 0 ? (
+            <Grid className="grid-cols-4 gap-4">
+              {data.map((agente: Agente) => (
+                <motion.div
+                  key={agente.id}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", bounce: 0 }}
+                >
+                  <Card className="h-100 flex flex-col hover:shadow-lg transition-shadow">
+                    <CardHeader className="pb-3 shrink-0">
+                      <div className="flex justify-between items-start gap-2">
+                        <CardTitle className="text-lg leading-6">
+                          {agente.nome}
+                        </CardTitle>
+                        <Badge variant="secondary" className="shrink-0">
+                          {agente.setor}
+                        </Badge>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <RefreshCw className="h-3 w-3" />
-                        <span>
-                          Atualizado: {formatarData(agente.atualizado_em)}
-                        </span>
+                    </CardHeader>
+                    <CardContent className="flex flex-col flex-1 min-h-0">
+                      <div className="mb-4 shrink-0">
+                        <CardDescription className="text-sm line-clamp-3">
+                          {agente.descricao}
+                        </CardDescription>
                       </div>
-                    </div>
-                    <div className="mt-auto shrink-0 space-y-2">
-                      <Button
-                        onClick={() => handleDownloadConfig(agente)}
-                        className="w-full hover:cursor-pointer"
-                        size="sm"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Baixar configuração
-                      </Button>
-                      <div className="flex space-x-2">
-                        {hasPermission("agentes:atualizar") && (
-                          <Button
-                            variant="outline"
-                            className="flex-1"
-                            size="sm"
-                            onClick={() => openEditModal(agente)}
-                          >
-                            <Edit className="w-4 h-4 mr-2" />
-                            Editar
-                          </Button>
-                        )}
-                        {hasPermission("agentes:excluir") && (
-                          <Button
-                            variant="destructive"
-                            className="flex-1"
-                            size="sm"
-                            onClick={() => openDeleteModal(agente)}
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Excluir
-                          </Button>
-                        )}
+                      <div className="space-y-2 text-sm text-muted-foreground mb-4 shrink-0">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-3 w-3" />
+                          <span>Criado: {formatarData(agente.criado_em)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <RefreshCw className="h-3 w-3" />
+                          <span>
+                            Atualizado: {formatarData(agente.atualizado_em)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </Grid>
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-full">
-          <Mensagem className="text-muted-foreground mb-4">
-            Nenhum agente encontrado.
-          </Mensagem>
-          {hasPermission("agentes:adicionar") && (
-            <Button onClick={() => setIsAddModalOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar seu primeiro agente
-            </Button>
+                      <div className="mt-auto shrink-0 space-y-2">
+                        <Button
+                          onClick={() => handleDownloadConfig(agente)}
+                          className="w-full hover:cursor-pointer"
+                          size="sm"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Baixar configuração
+                        </Button>
+                        <div className="flex space-x-2">
+                          {hasPermission("agentes:atualizar") && (
+                            <Button
+                              variant="outline"
+                              className="flex-1 hover:cursor-pointer"
+                              size="sm"
+                              onClick={() => openEditModal(agente)}
+                            >
+                              <Edit className="w-4 h-4 mr-2" />
+                              Editar
+                            </Button>
+                          )}
+                          {hasPermission("agentes:excluir") && (
+                            <Button
+                              variant="destructive"
+                              className="flex-1 hover:cursor-pointer"
+                              size="sm"
+                              onClick={() => openDeleteModal(agente)}
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Excluir
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </Grid>
+          ) : (
+            <Mensagem className="text-muted-foreground mb-4">
+              Nenhum agente encontrado.
+            </Mensagem>
           )}
-        </div>
-      )}
+        </>
+      }
     </div>
   );
 }

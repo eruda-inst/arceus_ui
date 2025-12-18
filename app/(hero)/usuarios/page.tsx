@@ -60,7 +60,6 @@ interface Grupo {
 export default function Usuarios() {
   useTituloPaginaSimples("Absol · Usuários");
   const { hasPermission, redirectIfNoPermission, loading, user } = useAuth();
-
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -232,33 +231,32 @@ export default function Usuarios() {
       }}
       className="relative"
     >
-      {isLoading ? (
-        <Grid className="grid-cols-4 gap-4">
-          <Skeleton className="h-62.5 w-full" />
-          <Skeleton className="h-62.5 w-full" />
-          <Skeleton className="h-62.5 w-full" />
-        </Grid>
-      ) : isError ? (
-        <Mensagem className="text-destructive">
-          Erro ao carregar usuários
-        </Mensagem>
-      ) : data && data.length > 0 ? (
-        <>
-          <HeaderPagina>
-            <div>
-              <TituloPagina>Usuários do Sistema</TituloPagina>
-              <DescricaoPagina>Gerencie usuários do sistema</DescricaoPagina>
-            </div>
-          </HeaderPagina>
-          <Grid className="grid-cols-4 gap-4">
-            {data.map((usuario: Usuario) => (
-              <motion.div
-                key={usuario.id}
-                whileHover={usuario.ativo ? { y: "-5%" } : {}}
-                transition={{ type: "spring", bounce: 0 }}
-              >
-                <Card
-                  className={`
+      <HeaderPagina>
+        <div>
+          <TituloPagina>Usuários do Sistema</TituloPagina>
+          <DescricaoPagina>Gerencie usuários do sistema</DescricaoPagina>
+        </div>
+      </HeaderPagina>
+      <Grid className="grid-cols-4 gap-4">
+        {isLoading ? (
+          <>
+            <Skeleton className="h-62.5 w-full" />
+            <Skeleton className="h-62.5 w-full" />
+            <Skeleton className="h-62.5 w-full" />
+          </>
+        ) : isError ? (
+          <Mensagem className="text-destructive">
+            Erro ao carregar usuários
+          </Mensagem>
+        ) : (
+          data?.map((usuario: Usuario) => (
+            <motion.div
+              key={usuario.id}
+              whileHover={usuario.ativo ? { y: "-5%" } : {}}
+              transition={{ type: "spring", bounce: 0 }}
+            >
+              <Card
+                className={`
                   hover:cursor-pointer relative overflow-hidden
                   transition-all duration-200
                   ${
@@ -267,53 +265,53 @@ export default function Usuarios() {
                       : "hover:shadow-md"
                   }
                 `}
-                  onClick={() => handleUserClick(usuario)}
+                onClick={() => handleUserClick(usuario)}
+              >
+                <div
+                  className={`absolute top-0 right-0 p-2 ${usuario.ativo ? "text-green-500" : "text-muted-foreground"}`}
                 >
-                  <div
-                    className={`absolute top-0 right-0 p-2 ${usuario.ativo ? "text-green-500" : "text-muted-foreground"}`}
-                  >
-                    {usuario.ativo ? (
-                      <CheckCircle className="h-5 w-5" />
-                    ) : (
-                      <Ban className="h-5 w-5" />
-                    )}
-                  </div>
-                  {(usuario?.nome_grupo === NomeGrupos.Administrador ||
-                    usuario?.nome_grupo === NomeGrupos.SuperAdministrador) && (
-                    <div className="absolute top-2 left-2">
-                      <UserCog className="h-4 w-4 text-primary" />
-                    </div>
+                  {usuario.ativo ? (
+                    <CheckCircle className="h-5 w-5" />
+                  ) : (
+                    <Ban className="h-5 w-5" />
                   )}
-                  <CardHeader className="pt-6">
-                    <CardTitle
-                      className={`
+                </div>
+                {(usuario?.nome_grupo === NomeGrupos.Administrador ||
+                  usuario?.nome_grupo === NomeGrupos.SuperAdministrador) && (
+                  <div className="absolute top-2 left-2">
+                    <UserCog className="h-4 w-4 text-primary" />
+                  </div>
+                )}
+                <CardHeader className="pt-6">
+                  <CardTitle
+                    className={`
                     flex items-center gap-2
                     ${!usuario.ativo ? "text-muted-foreground" : ""}
                   `}
-                    >
-                      <div className="flex-1 truncate" title={usuario.nome}>
-                        {usuario.nome}
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="flex flex-col gap-3">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant="secondary"
-                            className={`
+                  >
+                    <div className="flex-1 truncate" title={usuario.nome}>
+                      {usuario.nome}
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="flex flex-col gap-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="secondary"
+                          className={`
                             ${!usuario.ativo ? "opacity-75" : ""}
                             flex items-center gap-1
                           `}
-                          >
-                            <UserCog className="h-3 w-3" />
-                            {usuario?.nome_grupo}
-                          </Badge>
-                        </div>
-                        <Badge
-                          variant={usuario.ativo ? "default" : "outline"}
-                          className={`
+                        >
+                          <UserCog className="h-3 w-3" />
+                          {usuario?.nome_grupo}
+                        </Badge>
+                      </div>
+                      <Badge
+                        variant={usuario.ativo ? "default" : "outline"}
+                        className={`
                           ${
                             usuario.ativo
                               ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-100"
@@ -321,51 +319,47 @@ export default function Usuarios() {
                           }
                           flex items-center gap-1 w-fit
                         `}
-                        >
-                          {usuario.ativo ? (
-                            <>
-                              <CheckCircle className="h-3 w-3" />
-                              Ativo
-                            </>
-                          ) : (
-                            <>
-                              <Ban className="h-3 w-3" />
-                              Inativo
-                            </>
-                          )}
-                        </Badge>
-                      </div>
-                      <div
-                        className={`
+                      >
+                        {usuario.ativo ? (
+                          <>
+                            <CheckCircle className="h-3 w-3" />
+                            Ativo
+                          </>
+                        ) : (
+                          <>
+                            <Ban className="h-3 w-3" />
+                            Inativo
+                          </>
+                        )}
+                      </Badge>
+                    </div>
+                    <div
+                      className={`
                       text-sm pt-2 border-t border-border/50
                       ${!usuario.ativo ? "text-muted-foreground" : "text-foreground"}
                       flex items-start gap-2
                     `}
-                      >
-                        <div className="min-w-0">
-                          <div className="font-medium text-xs text-muted-foreground mb-1">
-                            Email
-                          </div>
-                          <div className="truncate" title={usuario.email}>
-                            {usuario.email}
-                          </div>
+                    >
+                      <div className="min-w-0">
+                        <div className="font-medium text-xs text-muted-foreground mb-1">
+                          Email
+                        </div>
+                        <div className="truncate" title={usuario.email}>
+                          {usuario.email}
                         </div>
                       </div>
-                    </CardDescription>
-                  </CardContent>
-                  {!usuario.ativo && (
-                    <div className="absolute inset-0 bg-linear-to-t from-background/10 to-transparent pointer-events-none" />
-                  )}
-                </Card>
-              </motion.div>
-            ))}
-          </Grid>
-        </>
-      ) : (
-        <Mensagem className="text-destructive">
-          Nenhum usuário encontrado.
-        </Mensagem>
-      )}
+                    </div>
+                  </CardDescription>
+                </CardContent>
+                {!usuario.ativo && (
+                  <div className="absolute inset-0 bg-linear-to-t from-background/10 to-transparent pointer-events-none" />
+                )}
+              </Card>
+            </motion.div>
+          ))
+        )}
+      </Grid>
+
       <Dialog open={isActionsDialogOpen} onOpenChange={setIsActionsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -386,7 +380,7 @@ export default function Usuarios() {
               <>
                 <Button
                   variant="outline"
-                  className="justify-start gap-2"
+                  className="justify-start gap-2 hover:cursor-pointer"
                   onClick={handleChangePassword}
                 >
                   <Lock className="h-4 w-4" />
@@ -395,7 +389,7 @@ export default function Usuarios() {
 
                 <Button
                   variant="outline"
-                  className="justify-start gap-2"
+                  className="justify-start gap-2 hover:cursor-pointer"
                   onClick={handleChangeGroup}
                 >
                   <Users className="h-4 w-4" />
@@ -405,8 +399,7 @@ export default function Usuarios() {
                 <Button
                   variant="outline"
                   className={`
-                  justify-start gap-2
-                  ${
+                  justify-start gap-2 hover:cursor-pointer ${
                     selectedUser?.ativo
                       ? "text-destructive hover:text-destructive"
                       : "text-green-600 hover:text-green-600"
@@ -432,7 +425,7 @@ export default function Usuarios() {
             {canManageTargetUser && hasPermission("usuarios:excluir") && (
               <Button
                 variant="outline"
-                className="justify-start gap-2 text-destructive hover:text-destructive"
+                className="justify-start gap-2 text-destructive hover:text-destructive  hover:cursor-pointer"
                 onClick={handleDeleteUser}
               >
                 <Trash2 className="h-4 w-4" />
@@ -475,6 +468,7 @@ export default function Usuarios() {
             <Button
               variant="outline"
               onClick={() => setIsDisableDialogOpen(false)}
+              className="hover:cursor-pointer"
             >
               Cancelar
             </Button>
@@ -482,7 +476,9 @@ export default function Usuarios() {
               variant={selectedUser?.ativo ? "destructive" : "default"}
               onClick={() => handleUpdateUserStatus(!selectedUser?.ativo)}
               className={
-                selectedUser?.ativo ? "" : "bg-green-600 hover:bg-green-700"
+                selectedUser?.ativo
+                  ? ""
+                  : "bg-green-600 hover:bg-green-700 hover:cursor-pointer"
               }
             >
               {selectedUser?.ativo ? "Desativar" : "Ativar"}
@@ -503,10 +499,15 @@ export default function Usuarios() {
             <Button
               variant="outline"
               onClick={() => setIsDeleteDialogOpen(false)}
+              className="hover:cursor-pointer"
             >
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={handleDeleteUserConfirm}>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteUserConfirm}
+              className="hover:cursor-pointer"
+            >
               Excluir
             </Button>
           </div>
@@ -563,12 +564,14 @@ export default function Usuarios() {
                 setIsChangeGroupDialogOpen(false);
                 setSelectedNewGroup("");
               }}
+              className="hover:cursor-pointer"
             >
               Cancelar
             </Button>
             <Button
               onClick={handleChangeGroupSubmit}
               disabled={!selectedNewGroup}
+              className="hover:cursor-pointer"
             >
               Alterar Grupo
             </Button>
@@ -577,7 +580,10 @@ export default function Usuarios() {
       </Dialog>
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="default" className="fixed bottom-5 right-5">
+          <Button
+            variant="default"
+            className="fixed bottom-5 right-5 hover:cursor-pointer"
+          >
             Novo usuário
           </Button>
         </DialogTrigger>
@@ -680,10 +686,17 @@ const ChangePasswordForm = ({
         />
       </div>
       <div className="flex gap-2 justify-end">
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          className="hover:cursor-pointer"
+        >
           Cancelar
         </Button>
-        <Button type="submit">Alterar Senha</Button>
+        <Button type="submit" className="hover:cursor-pointer">
+          Alterar Senha
+        </Button>
       </div>
     </form>
   );

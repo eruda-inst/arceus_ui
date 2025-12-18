@@ -70,7 +70,6 @@ interface GrupoFormData {
 export default function Grupos() {
   useTituloPaginaSimples("Absol · Grupos");
   const { hasPermission, redirectIfNoPermission, loading } = useAuth();
-
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -311,10 +310,15 @@ export default function Grupos() {
                         setIsCreateDialogOpen(false);
                         resetForm();
                       }}
+                      className="hover:cursor-pointer"
                     >
                       Cancelar
                     </Button>
-                    <Button type="submit" disabled={createMutation.isPending}>
+                    <Button
+                      type="submit"
+                      disabled={createMutation.isPending}
+                      className="hover:cursor-pointer"
+                    >
                       {createMutation.isPending ? "Criando..." : "Criar Grupo"}
                     </Button>
                   </div>
@@ -324,19 +328,18 @@ export default function Grupos() {
           )}
         </div>
       </HeaderPagina>
-
       {isLoading ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+        <Grid className="grid-cols-3 gap-4 pb-6">
+          {[1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-64 w-full" />
           ))}
         </Grid>
       ) : isError ? (
         <Mensagem className="text-destructive">
-          {error instanceof Error ? error.message : "Erro ao carregar grupos"}
+          {error instanceof Error ? error?.message : "Erro ao carregar grupos"}
         </Mensagem>
       ) : filteredGroups && filteredGroups.length > 0 ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Grid className="grid-cols-3 gap-4 pb-6">
           {filteredGroups.map((grupo) => (
             <motion.div
               key={grupo.id}
@@ -456,10 +459,15 @@ export default function Grupos() {
                   setIsEditDialogOpen(false);
                   resetForm();
                 }}
+                className="hover:cursor-pointer"
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={updateMutation.isPending}>
+              <Button
+                type="submit"
+                disabled={updateMutation.isPending}
+                className="hover:cursor-pointer"
+              >
                 {updateMutation.isPending ? "Salvando..." : "Salvar Alterações"}
               </Button>
             </div>

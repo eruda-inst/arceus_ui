@@ -280,8 +280,8 @@ export default function Permissoes() {
       </HeaderPagina>
 
       {isLoading ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+        <Grid className="grid-cols-3 gap-4 pb-6">
+          {[1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-96 w-full" />
           ))}
         </Grid>
@@ -290,7 +290,7 @@ export default function Permissoes() {
           Erro ao carregar grupos e permissões
         </Mensagem>
       ) : filteredGroups && filteredGroups.length > 0 ? (
-        <Grid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
+        <Grid className="grid-cols-3 gap-4 pb-6">
           {filteredGroups.map((grupo) => {
             const permissoesAgrupadas = agruparPermissoesPorCategoria(
               grupo.permissoes,
@@ -357,7 +357,7 @@ export default function Permissoes() {
                                             permissao,
                                           )
                                         }
-                                        className="absolute right-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive"
+                                        className="absolute right-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive hover:cursor-pointer"
                                       >
                                         <X className="h-3 w-3" />
                                       </button>
@@ -469,12 +469,14 @@ export default function Permissoes() {
             <Button
               variant="outline"
               onClick={() => setIsRemoveDialogOpen(false)}
+              className="hover:cursor-pointer"
             >
               Cancelar
             </Button>
             <Button
               variant="destructive"
               onClick={handleRemovePermissionConfirm}
+              className="hover:cursor-pointer"
             >
               Remover
             </Button>

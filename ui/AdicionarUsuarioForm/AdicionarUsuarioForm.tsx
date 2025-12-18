@@ -257,7 +257,7 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           </span>
         )}
       </Field>
-      <Button type="submit" className="w-fit ml-auto">
+      <Button type="submit" className="w-fit ml-auto hover:cursor-pointer">
         Criar usuário
       </Button>
     </form>

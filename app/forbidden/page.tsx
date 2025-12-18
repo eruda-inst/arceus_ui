@@ -39,7 +39,7 @@ export default function Forbidden() {
         </CardContent>
         <CardFooter className="flex justify-center gap-4 pt-6">
           <Link href="/">
-            <Button>
+            <Button className="hover:cursor-pointer">
               <House className="mr-2 h-4 w-4" />
               Página Inicial
             </Button>

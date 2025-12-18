@@ -42,12 +42,16 @@ export default function NotFound() {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center gap-4 pt-6">
-          <Button onClick={handleGoBack} variant="outline">
+          <Button
+            onClick={handleGoBack}
+            variant="outline"
+            className="cursor-pointer"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
           <Link href="/">
-            <Button>
+            <Button className="cursor-pointer">
               <House className="mr-2 h-4 w-4" />
               Página Inicial
             </Button>
