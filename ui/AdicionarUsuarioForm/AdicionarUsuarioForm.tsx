@@ -19,6 +19,7 @@ import { getHttpUrl, HTTP_ENDPOINTS_NAME } from "@/config/config";
 import { obterTokenAutenticacao } from "@/helpers/misc";
 import { NomeGrupos } from "@/types/grupo";
 import { useAuth } from "@/hooks/useAuth";
+import { useGruposDisponiveis } from "@/hooks/useGruposDisponiveis";
 
 interface Formulario {
   id: number;
@@ -45,6 +46,8 @@ interface Props {
 
 export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
   const { user: usuarioLogado } = useAuth();
+  const { gruposDisponiveis, isLoading: isLoadingGrupos } =
+    useGruposDisponiveis(usuarioLogado?.nome_grupo);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const queryClient = useQueryClient();
@@ -203,48 +206,30 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           name="nome_grupo"
           control={control}
           defaultValue={NomeGrupos.Usuario}
-          render={({ field }) => {
-            const getAvailableGroups = (): NomeGrupos[] => {
-              if (!usuarioLogado) return [NomeGrupos.Usuario];
-
-              if (usuarioLogado.nome_grupo === NomeGrupos.SuperAdministrador) {
-                return [
-                  NomeGrupos.SuperAdministrador,
-                  NomeGrupos.Administrador,
-                  NomeGrupos.Usuario,
-                ];
+          render={({ field }) => (
+            <Select
+              onValueChange={(val: string) => field.onChange(val)}
+              value={field.value || ""}
+              disabled={
+                !usuarioLogado ||
+                isLoadingGrupos ||
+                gruposDisponiveis.length === 0
               }
-
-              if (usuarioLogado.nome_grupo === NomeGrupos.Administrador) {
-                return [NomeGrupos.Usuario];
-              }
-
-              return [NomeGrupos.Usuario];
-            };
-
-            const availableGroups = getAvailableGroups();
-
-            return (
-              <Select
-                onValueChange={(val: string) => field.onChange(val)}
-                value={field.value || ""}
-                disabled={!usuarioLogado || availableGroups.length === 0}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um grupo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {availableGroups.map((grupo) => (
-                      <SelectItem key={grupo} value={grupo}>
-                        {grupo}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            );
-          }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione um grupo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {gruposDisponiveis.map((grupo) => (
+                    <SelectItem key={grupo} value={grupo}>
+                      {grupo}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
         />
         {errors.nome_grupo && (
           <span className="text-destructive text-sm">

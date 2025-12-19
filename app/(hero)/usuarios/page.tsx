@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
+import { useGruposDisponiveis } from "@/hooks/useGruposDisponiveis";
 
 interface Usuario {
   id: number;
@@ -61,6 +62,7 @@ interface Grupo {
 export default function Usuarios() {
   useTituloPaginaSimples("Absol · Usuários");
   const { hasPermission, redirectIfNoPermission, loading, user } = useAuth();
+  const { gruposDisponiveis } = useGruposDisponiveis(user?.nome_grupo);
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [selectedIXCUser, setSelectedIXCUser] = useState<{
     id: number;
@@ -610,21 +612,11 @@ export default function Usuarios() {
                   <SelectValue placeholder="Selecione um grupo" />
                 </SelectTrigger>
                 <SelectContent>
-                  {grupos
-                    ?.filter((grupo) => {
-                      if (user?.nome_grupo === NomeGrupos.SuperAdministrador) {
-                        return true;
-                      }
-                      if (user?.nome_grupo === NomeGrupos.Administrador) {
-                        return grupo.nome === NomeGrupos.Usuario;
-                      }
-                      return false;
-                    })
-                    .map((grupo) => (
-                      <SelectItem key={grupo.id} value={grupo.nome}>
-                        {grupo.nome}
-                      </SelectItem>
-                    ))}
+                  {gruposDisponiveis.map((grupo) => (
+                    <SelectItem key={grupo} value={grupo}>
+                      {grupo}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
