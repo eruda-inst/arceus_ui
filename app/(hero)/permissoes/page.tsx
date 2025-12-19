@@ -311,8 +311,10 @@ export default function Permissoes() {
                           {grupo.nome}
                         </CardTitle>
                         <CardDescription className="mt-2">
-                          {grupo.permissoes.length} permissão
-                          {grupo.permissoes.length !== 1 ? "es" : ""}
+                          {grupo.permissoes.length}{" "}
+                          {grupo.permissoes.length > 1
+                            ? "permissões"
+                            : "permissão"}
                         </CardDescription>
                       </div>
                       <Badge variant="outline" className="shrink-0">

@@ -37,7 +37,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth, GRUPO_CHANGE_EVENT } from "@/hooks/useAuth";
 import {
   Plus,
   Users,
@@ -157,6 +157,7 @@ export default function Grupos() {
       toast.success("Grupo atualizado com sucesso!", {
         position: "top-center",
       });
+      window.dispatchEvent(new CustomEvent(GRUPO_CHANGE_EVENT));
     },
     onError: (error: any) => {
       console.error("Erro ao atualizar grupo:", error);

@@ -146,9 +146,9 @@ export function Nav() {
               <SidebarMenu className="gap-y-2 mt-7">
                 {loading ? (
                   <>
-                    <Skeleton className="h-13 w-full" />
-                    <Skeleton className="h-13 w-full" />
-                    <Skeleton className="h-13 w-full" />
+                    {[1, 2, 3].map((id) => (
+                      <Skeleton key={id} className="h-13 w-full" />
+                    ))}
                   </>
                 ) : (
                   <>

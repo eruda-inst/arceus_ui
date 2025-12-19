@@ -49,9 +49,15 @@ export function useAuth() {
       checkAuth();
     };
 
+    const handleGrupoChange = () => {
+      checkAuth();
+    };
+
     window.addEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+    window.addEventListener(GRUPO_CHANGE_EVENT, handleGrupoChange);
     return () => {
       window.removeEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+      window.removeEventListener(GRUPO_CHANGE_EVENT, handleGrupoChange);
     };
   }, []);
 
@@ -151,6 +157,10 @@ export function useAuth() {
     return permissoes.map((permissao) => permissao.codigo);
   };
 
+  const notifyGrupoChange = () => {
+    window.dispatchEvent(new CustomEvent(GRUPO_CHANGE_EVENT));
+  };
+
   return {
     user,
     permissoes,
@@ -165,7 +175,11 @@ export function useAuth() {
     checkAuth,
     redirectIfNoPermission,
     buscarGrupoPorNome,
+    notifyGrupoChange,
   };
 }
 
 const AUTH_CHANGE_EVENT = "authChange";
+const GRUPO_CHANGE_EVENT = "grupoChange";
+
+export { AUTH_CHANGE_EVENT, GRUPO_CHANGE_EVENT };
