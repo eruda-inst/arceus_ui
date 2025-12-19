@@ -1,6 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
+
 import { LogsHeader } from "@/ui/LogsHeader/LogsHeader";
 import { ControlesPaginacao } from "@/ui/ControlesPaginacao/ControlesPaginacao";
 import { useMetricaWebSocket } from "@/hooks/useMetricaWebSocket";
@@ -17,9 +22,16 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface PaginatedLogsResponse {
   registros: Log[];
@@ -36,15 +48,18 @@ export default function LogsCompleto() {
   const [data, setData] = useState<PaginatedLogsResponse | null>(null);
   const { redirectIfNoPermission, loading } = useAuth();
 
+  // Estado separado para o Range de Datas
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
   const [filters, setFilters] = useState<{
     ip?: string;
     verb?: string;
     endpoint?: string;
     status?: string;
-    date?: string;
     hour?: string;
     duration?: string;
     protocol?: string;
+    // Removemos 'date' daqui pois agora é controlado pelo dateRange
   }>({});
 
   const {
@@ -61,13 +76,24 @@ export default function LogsCompleto() {
     requirePermission: "registros:ver",
   });
 
-  function cleanFilters(f: typeof filters) {
+  function cleanFilters(f: typeof filters, dRange: DateRange | undefined) {
     const out: Record<string, string> = {};
+
+    // Processa filtros de texto padrão
     Object.entries(f).forEach(([k, v]) => {
       if (v !== undefined && v !== null && String(v).trim() !== "") {
         out[k] = String(v).trim();
       }
     });
+
+    // Processa o intervalo de datas
+    if (dRange?.from) {
+      out["start_date"] = format(dRange.from, "yyyy-MM-dd");
+    }
+    if (dRange?.to) {
+      out["end_date"] = format(dRange.to, "yyyy-MM-dd");
+    }
+
     return out;
   }
 
@@ -76,11 +102,19 @@ export default function LogsCompleto() {
       sendMetricaRequest("registros", undefined, {
         pagina: currentPage + 1,
         itens_por_pagina: itemsPerPage,
-        filtros: cleanFilters(filters),
+        filtros: cleanFilters(filters, dateRange),
         matched: true,
       });
     }
-  }, [currentPage, itemsPerPage, filters, isConnected, sendMetricaRequest]);
+    // Adicionamos dateRange às dependências
+  }, [
+    currentPage,
+    itemsPerPage,
+    filters,
+    dateRange,
+    isConnected,
+    sendMetricaRequest,
+  ]);
 
   useEffect(() => {
     if (!loading) {
@@ -113,6 +147,7 @@ export default function LogsCompleto() {
   const handleClearFilters = useCallback(() => {
     const empty: typeof filters = {};
     setFilters(empty);
+    setDateRange(undefined); // Limpa também o range de datas
     setCurrentPage(0);
   }, []);
 
@@ -182,7 +217,7 @@ export default function LogsCompleto() {
                   <FieldContent>
                     <Input
                       id="endpoint"
-                      placeholder="/api/v1/financeiro/chave_pix"
+                      placeholder="/api/v1/..."
                       value={filters.endpoint ?? ""}
                       onChange={(e) =>
                         handleFilterChange("endpoint", e.target.value)
@@ -220,20 +255,61 @@ export default function LogsCompleto() {
                     </Select>
                   </FieldContent>
                 </Field>
+
+                {/* Novo Componente de Intervalo de Datas */}
                 <Field>
-                  <FieldLabel htmlFor="data">Data</FieldLabel>
+                  <FieldLabel htmlFor="date-range">Período</FieldLabel>
                   <FieldContent>
-                    <Input
-                      id="data"
-                      type="date"
-                      value={filters.date ?? ""}
-                      max={new Date().toISOString().split("T")[0]}
-                      onChange={(e) =>
-                        handleFilterChange("date", e.target.value)
-                      }
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="date-range"
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !dateRange && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {dateRange?.from ? (
+                            dateRange.to ? (
+                              <>
+                                {format(dateRange.from, "dd/MM/y", {
+                                  locale: ptBR,
+                                })}{" "}
+                                -{" "}
+                                {format(dateRange.to, "dd/MM/y", {
+                                  locale: ptBR,
+                                })}
+                              </>
+                            ) : (
+                              format(dateRange.from, "dd/MM/y", {
+                                locale: ptBR,
+                              })
+                            )
+                          ) : (
+                            <span>Selecione datas</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          initialFocus
+                          mode="range"
+                          defaultMonth={dateRange?.from}
+                          selected={dateRange}
+                          onSelect={(range) => {
+                            setDateRange(range);
+                            setCurrentPage(0);
+                          }}
+                          numberOfMonths={2}
+                          locale={ptBR}
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </FieldContent>
                 </Field>
+
                 <Field>
                   <FieldLabel htmlFor="hora">Hora</FieldLabel>
                   <FieldContent>
@@ -248,7 +324,7 @@ export default function LogsCompleto() {
                   </FieldContent>
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="duracao">Duration</FieldLabel>
+                  <FieldLabel htmlFor="duracao">Duração</FieldLabel>
                   <FieldContent>
                     <Input
                       id="duracao"
@@ -265,7 +341,7 @@ export default function LogsCompleto() {
                   <FieldContent>
                     <Input
                       id="protocolo"
-                      placeholder="NWT202512345"
+                      placeholder="NWT..."
                       value={filters.protocol ?? ""}
                       onChange={(e) =>
                         handleFilterChange("protocol", e.target.value)
