@@ -38,6 +38,7 @@ import { Lock, Trash2, Ban, CheckCircle, UserCog, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTituloPaginaSimples } from "@/hooks/useTituloPagina";
 import { NomeGrupos } from "@/types/grupo";
+import { toast } from "sonner";
 import HeaderPagina from "@/ui/HeaderPagina/HeaderPagina";
 import TituloPagina from "@/ui/TituloPagina/TituloPagina";
 import DescricaoPagina from "@/ui/DescricaoPagina/DescricaoPagina";
@@ -164,8 +165,18 @@ export default function Usuarios() {
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsDisableDialogOpen(false);
       setSelectedUser(null);
-    } catch (error) {
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: `Usuário ${ativo ? "ativado" : "desativado"} com sucesso.`,
+      });
+    } catch (error: any) {
       console.error("Erro ao atualizar status do usuário:", error);
+      toast.error("Erro!", {
+        position: "top-center",
+        description:
+          error.response?.data?.detail ||
+          "Erro ao atualizar status do usuário.",
+      });
     }
   };
 
@@ -179,8 +190,17 @@ export default function Usuarios() {
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsDeleteDialogOpen(false);
       setSelectedUser(null);
-    } catch (error) {
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: `Usuário ${selectedUser.nome} excluído com sucesso.`,
+      });
+    } catch (error: any) {
       console.error("Erro ao excluir usuário:", error);
+      toast.error("Erro!", {
+        position: "top-center",
+        description:
+          error.response?.data?.detail || "Erro ao excluir o usuário.",
+      });
     }
   };
 
@@ -195,15 +215,27 @@ export default function Usuarios() {
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       setIsChangePasswordDialogOpen(false);
       setSelectedUser(null);
-    } catch (error) {
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: "Senha alterada com sucesso.",
+      });
+    } catch (error: any) {
       console.error("Erro ao alterar senha:", error);
+      toast.error("Erro!", {
+        position: "top-center",
+        description: error.response?.data?.detail || "Erro ao alterar a senha.",
+      });
     }
   };
 
   const handleChangeGroupSubmit = async () => {
     if (!selectedUser || !selectedNewGroup) return;
     if (!canManageTargetUser) {
-      alert("Você não tem permissão para alterar o grupo deste usuário.");
+      toast.error("Erro!", {
+        position: "top-center",
+        description:
+          "Você não tem permissão para alterar o grupo deste usuário.",
+      });
       return;
     }
     try {
@@ -212,11 +244,21 @@ export default function Usuarios() {
         { nome_grupo: selectedNewGroup },
       );
       queryClient.invalidateQueries({ queryKey: ["usuarios"] });
+      queryClient.invalidateQueries({ queryKey: ["grupos"] });
       setIsChangeGroupDialogOpen(false);
       setSelectedUser(null);
       setSelectedNewGroup("");
-    } catch (error) {
+      toast.success("Sucesso!", {
+        position: "top-center",
+        description: `Grupo do usuário alterado para ${selectedNewGroup}.`,
+      });
+    } catch (error: any) {
       console.error("Erro ao alterar grupo do usuário:", error);
+      toast.error("Erro!", {
+        position: "top-center",
+        description:
+          error.response?.data?.detail || "Erro ao alterar o grupo do usuário.",
+      });
     }
   };
 
@@ -368,6 +410,35 @@ export default function Usuarios() {
               Selecione uma ação para o usuário {selectedUser?.nome}
             </DialogDescription>
           </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-2 p-3 bg-muted/50 rounded-md text-sm">
+              <div>
+                <span className="font-medium">Nome: </span>
+                <span className="text-foreground">{selectedUser.nome}</span>
+              </div>
+              <div>
+                <span className="font-medium">Email: </span>
+                <span className="text-foreground">{selectedUser.email}</span>
+              </div>
+              <div>
+                <span className="font-medium">Função: </span>
+                <Badge className="ml-2">{selectedUser.nome_grupo}</Badge>
+              </div>
+              <div>
+                <span className="font-medium">Status: </span>
+                <Badge
+                  variant={selectedUser.ativo ? "default" : "outline"}
+                  className={`ml-2 ${
+                    selectedUser.ativo
+                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                      : "border-destructive/30 text-destructive bg-destructive/10"
+                  }`}
+                >
+                  {selectedUser.ativo ? "Ativo" : "Inativo"}
+                </Badge>
+              </div>
+            </div>
+          )}
           <div className="flex flex-col gap-3">
             {!canManageTargetUser && (
               <div className="text-sm text-muted-foreground text-center py-2 bg-muted/50 rounded-md">
@@ -526,11 +597,13 @@ export default function Usuarios() {
           </DialogHeader>
 
           {isLoadingGrupos ? (
-            <div>Carregando grupos...</div>
+            <div className="text-center py-4 text-muted-foreground">
+              Carregando grupos...
+            </div>
           ) : (
             <div className="space-y-4">
               <Select
-                value={selectedNewGroup}
+                value={selectedNewGroup || selectedUser?.nome_grupo || ""}
                 onValueChange={setSelectedNewGroup}
               >
                 <SelectTrigger>
@@ -549,7 +622,7 @@ export default function Usuarios() {
                     })
                     .map((grupo) => (
                       <SelectItem key={grupo.id} value={grupo.nome}>
-                        {grupo?.nome}
+                        {grupo.nome}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -653,7 +726,10 @@ const ChangePasswordForm = ({
     if (novaSenha === confirmarSenha) {
       onSubmit(novaSenha);
     } else {
-      alert("As senhas não coincidem!");
+      toast.error("Erro!", {
+        position: "top-center",
+        description: "As senhas não coincidem!",
+      });
     }
   };
 

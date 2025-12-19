@@ -11,7 +11,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -204,52 +203,48 @@ export function AdicionarUsuarioForm({ initialValues, onCreated }: Props) {
           name="nome_grupo"
           control={control}
           defaultValue={NomeGrupos.Usuario}
-          render={({ field }) => (
-            <Select
-              onValueChange={(val: string) => field.onChange(val)}
-              value={field.value}
-              disabled={!usuarioLogado}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione um grupo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {usuarioLogado?.nome_grupo ===
-                    NomeGrupos.SuperAdministrador && (
-                    <>
-                      <SelectItem value={NomeGrupos.SuperAdministrador}>
-                        {NomeGrupos.SuperAdministrador}
+          render={({ field }) => {
+            const getAvailableGroups = (): NomeGrupos[] => {
+              if (!usuarioLogado) return [NomeGrupos.Usuario];
+
+              if (usuarioLogado.nome_grupo === NomeGrupos.SuperAdministrador) {
+                return [
+                  NomeGrupos.SuperAdministrador,
+                  NomeGrupos.Administrador,
+                  NomeGrupos.Usuario,
+                ];
+              }
+
+              if (usuarioLogado.nome_grupo === NomeGrupos.Administrador) {
+                return [NomeGrupos.Usuario];
+              }
+
+              return [NomeGrupos.Usuario];
+            };
+
+            const availableGroups = getAvailableGroups();
+
+            return (
+              <Select
+                onValueChange={(val: string) => field.onChange(val)}
+                value={field.value || ""}
+                disabled={!usuarioLogado || availableGroups.length === 0}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um grupo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {availableGroups.map((grupo) => (
+                      <SelectItem key={grupo} value={grupo}>
+                        {grupo}
                       </SelectItem>
-                      <SelectSeparator />
-                      <SelectItem value={NomeGrupos.Administrador}>
-                        {NomeGrupos.Administrador}
-                      </SelectItem>
-                      <SelectSeparator />
-                      <SelectItem value={NomeGrupos.Usuario}>
-                        {NomeGrupos.Usuario}
-                      </SelectItem>
-                    </>
-                  )}
-                  {usuarioLogado?.nome_grupo === NomeGrupos.Administrador && (
-                    <SelectItem value={NomeGrupos.Usuario}>
-                      {NomeGrupos.Usuario}
-                    </SelectItem>
-                  )}
-                  {usuarioLogado?.nome_grupo === NomeGrupos.Usuario && (
-                    <SelectItem value={NomeGrupos.Usuario}>
-                      {NomeGrupos.Usuario}
-                    </SelectItem>
-                  )}
-                  {!usuarioLogado && (
-                    <SelectItem value={NomeGrupos.Usuario}>
-                      {NomeGrupos.Usuario}
-                    </SelectItem>
-                  )}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          )}
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            );
+          }}
         />
         {errors.nome_grupo && (
           <span className="text-destructive text-sm">
