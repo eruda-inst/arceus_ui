@@ -1,27 +1,24 @@
-import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Toaster } from "sonner";
-import { inter } from "@/config/fonts";
-import { Provedores } from "@/ui/Provedores/Provedores";
+import { fontInter } from "@/configs/fontConfig";
+import Providers from "@/app/providers";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  description: "Monitora requisições realizadas ao Arceus.",
+  title: "Absol · Login",
+  description:
+    "Plataforma para monitoramento de requisições HTTP realizadas ao Arceus, exibição de métricas e dashboards.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: ReactNode;
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
-      <body className={`${inter.className} antialiased`}>
-        <Provedores>{children}</Provedores>
-        <Toaster />
+    <html lang="pt-br" className="dark bg-black">
+      <body className={`${fontInter.className} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
 }
-
-RootLayout.displayName = "RootLayout";

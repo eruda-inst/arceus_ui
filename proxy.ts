@@ -1,42 +1,85 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { AuthenticationService } from "@/services/Authentication";
+import { PermissionService } from "@/services/Permission";
+import { PermissionOut } from "./types/permissionType";
 
-export function proxy(request: NextRequest) {
-  const token = request.cookies.get("auth-token")?.value;
-  const { pathname } = request.nextUrl;
+// Don't need authentication
+const publicRoutes = ["/login"];
 
-  // Define public routes that don't require authentication
-  const publicRoutes = ["/login"];
+// Route-permission mapping
+const routePermissions: Record<string, string> = {
+  "/": "ver:metricas",
+  "/usuarios": "ver:usuarios",
+};
 
-  // Allow public routes and static assets
+export default async function proxy(request: NextRequest) {
+  const url = request.nextUrl;
+  const { pathname } = url;
+
+  // 1. Ignore authentication on static files and Next.js internal routes
   if (
-    publicRoutes.includes(pathname) ||
+    url.searchParams.has("_rsc") ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/") ||
-    pathname.includes(".")
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/api") ||
+    pathname.includes(".") // For static files with extensions
   ) {
-    // If user is authenticated and tries to access login, redirect to home
-    if (token && pathname === "/login") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
     return NextResponse.next();
   }
 
-  // Redirect to login if no token exists for protected routes
-  if (!token) {
+  // Get the token
+  const accessToken = request.cookies.get("access_token")?.value;
+  const hasToken = !!accessToken;
+
+  // Verify if the current route is public
+  const isPublicRoute = publicRoutes.some((route) => pathname === route);
+
+  // MAIN LOGIC:
+
+  // 1. If there is no token and we are trying to access a protected route -> redirect to /login
+  if (!hasToken && !isPublicRoute) {
     const loginUrl = new URL("/login", request.url);
-    // loginUrl.searchParams.set("redirect", pathname);
+    loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
+  }
+
+  // 2. If there is token and it is trying to access a public route (login/registro) -> redirect to home
+  if (hasToken && isPublicRoute) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // 3. Check permissions for protected routes when user has token
+  if (hasToken && !isPublicRoute) {
+    try {
+      const currentUser = await AuthenticationService.getMe(accessToken);
+      const permissions = await PermissionService.getByUserId(currentUser.id);
+
+      // Check if the current route requires a specific permission
+      const requiredPermission = routePermissions[pathname];
+
+      if (requiredPermission) {
+        // Check if user has the required permission
+        const hasPermission = permissions.some(
+          (permission: PermissionOut) =>
+            permission.codigo === requiredPermission,
+        );
+
+        if (!hasPermission) {
+          // User doesn't have required permission, redirect to home
+          return NextResponse.redirect(new URL("/", request.url));
+        }
+      }
+    } catch (error: unknown) {
+      // If there's an error getting user info, redirect to login
+      const loginUrl = new URL("/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
-
-// Export default for compatibility with some Next.js setups
-export default proxy;
