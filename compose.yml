@@ -4,14 +4,12 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_BASE_HTTP_URL: ${NEXT_PUBLIC_BASE_HTTP_URL}
-        NEXT_PUBLIC_BASE_WS_URL: ${NEXT_PUBLIC_BASE_WS_URL}
-    container_name: arceus-ui
+        NEXT_PUBLIC_BASE_API_URL: ${NEXT_PUBLIC_BASE_API_URL}
+    container_name: absol-ui
     environment:
       NODE_ENV: "env"
       COOKIE_SECURE: "false"
-      NEXT_PUBLIC_BASE_HTTP_URL: next_public_base_http_url aqui
-      NEXT_PUBLIC_BASE_WS_URL: next_public_base_ws_url aqui
+      NEXT_PUBLIC_BASE_API_URL: ${NEXT_PUBLIC_BASE_API_URL}
     env_file:
       - .env
     ports:

@@ -30,8 +30,7 @@ else
       # echo "Processing $file..." # (Descomente para debug pesado)
       
       # Roda a substituição
-      sed -i "s|__NEXT_PUBLIC_BASE_HTTP_URL_PLACEHOLDER__|${NEXT_PUBLIC_BASE_HTTP_URL}|g" "$file"
-      sed -i "s|__NEXT_PUBLIC_BASE_WS_URL_PLACEHOLDER__|${NEXT_PUBLIC_BASE_WS_URL}|g" "$file"
+      sed -i "s|__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__|${NEXT_PUBLIC_BASE_API_URL}|g" "$file"
     fi
   done
   
