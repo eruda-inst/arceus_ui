@@ -44,8 +44,16 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. If there is token and it is trying to access a public route (login/registro) -> redirect to home
+  // 2. If there is token and it is trying to access a public route (login)
+  //    EXCEPT when it's /login with error=unauthorized (show access denied)
   if (hasToken && isPublicRoute) {
+    if (
+      pathname === "/login" &&
+      url.searchParams.get("error") === "unauthorized"
+    ) {
+      // Allow the request to go through so login page can display the message
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -66,8 +74,10 @@ export default async function proxy(request: NextRequest) {
         );
 
         if (!hasPermission) {
-          // User doesn't have required permission, redirect to home
-          return NextResponse.redirect(new URL("/", request.url));
+          // → Redireciona para /login?error=unauthorized (sem loop!)
+          const deniedUrl = new URL("/login", request.url);
+          deniedUrl.searchParams.set("error", "unauthorized");
+          return NextResponse.redirect(deniedUrl);
         }
       }
     } catch (error: unknown) {
