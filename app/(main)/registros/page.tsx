@@ -51,32 +51,37 @@ function Logs() {
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
+    try {
+      const serviceFilters = {
+        method: filters.metodo,
+        code: filters.codigo !== undefined ? String(filters.codigo) : undefined,
+        client: filters.cliente,
+        department: filters.setor,
+        ip: filters.ip,
+        endpoint: filters.endpoint,
+        data_inicio: filters.data_inicio,
+        data_fim: filters.data_fim,
+        hora_inicio: filters.hora_inicio,
+        hora_fim: filters.hora_fim,
+        protocol: filters.protocolo,
+      };
 
-    const serviceFilters = {
-      method: filters.metodo,
-      code: filters.codigo !== undefined ? String(filters.codigo) : undefined,
-      client: filters.cliente,
-      department: filters.setor,
-      ip: filters.ip,
-      endpoint: filters.endpoint,
-      data_inicio: filters.data_inicio,
-      data_fim: filters.data_fim,
-      hora_inicio: filters.hora_inicio,
-      hora_fim: filters.hora_fim,
-      protocol: filters.protocolo,
-    };
+      const logs = await getAll({
+        page,
+        itemsPerPage,
+        ...serviceFilters,
+      });
 
-    const logs = await getAll({
-      page,
-      itemsPerPage,
-      ...serviceFilters,
-    });
-
-    setLogs(logs?.dados || []);
-    if (logs) {
-      setLogPagination(logs);
+      setLogs(logs?.dados || []);
+      if (logs) {
+        setLogPagination(logs);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar logs:", error);
+      toast.danger("Falha ao carregar registros.");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, [page, itemsPerPage, filters, getAll]);
 
   useEffect(() => {

@@ -69,14 +69,20 @@ function Home() {
         getTotalSuccesses(),
       ]);
       const topHours = {
-        hoje: topHoursRaw?.hoje?.map((item: any) => ({
-          ...item,
-          hora: `${item.hora} h`,
-        })),
-        sempre: topHoursRaw?.sempre?.map((item: any) => ({
-          ...item,
-          hora: `${item.hora} h`,
-        })),
+        hoje: topHoursRaw?.hoje
+          ?.slice()
+          .sort((a: any, b: any) => a.hora - b.hora)
+          .map((item: any) => ({
+            ...item,
+            hora: `${item.hora} h`,
+          })),
+        sempre: topHoursRaw?.sempre
+          ?.slice()
+          .sort((a: any, b: any) => a.hora - b.hora)
+          .map((item: any) => ({
+            ...item,
+            hora: `${item.hora} h`,
+          })),
       };
       setTopHours(topHours);
       setTopWeekdays(topWeekdays);
@@ -250,7 +256,7 @@ function Home() {
           dataKey="weekday"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Dias da Semana Hoje"
+          label="Top Dias da Semana"
           isLoading={isLoading}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"

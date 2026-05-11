@@ -134,8 +134,8 @@ const API_ROUTES = {
   metric: {
     totalReqs: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
     avgResTime: () => `${API_ENDPOINT_BASES.metric}/tempo-medio-resposta`,
-    successRate: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
-    errorRate: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
+    successRate: () => `${API_ENDPOINT_BASES.metric}/taxa-sucesso`,
+    errorRate: () => `${API_ENDPOINT_BASES.metric}/taxa-erro`,
     totalErrors: () => `${API_ENDPOINT_BASES.metric}/total-erros`,
     totalSuccesses: () => `${API_ENDPOINT_BASES.metric}/total-sucessos`,
     totalServices: () => `${API_ENDPOINT_BASES.metric}/total-atendimentos`,

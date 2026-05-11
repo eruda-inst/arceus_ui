@@ -28,7 +28,7 @@ class LogService {
   ): Promise<LogPaginationOut | undefined> {
     try {
       const response = await axiosClient.get(API_ROUTES.log.getAll(filters), {
-        withCredentials: false,
+        withCredentials: true,
       });
       const data = response.data;
       console.log(data);
