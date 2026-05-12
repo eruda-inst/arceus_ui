@@ -36,6 +36,7 @@ import { useLogFilter } from "@/stores/logFilterStore";
 const EmptyFilterSchema = z.object({
   metodo: z.undefined(),
   codigo: z.undefined(),
+  protocolo: z.undefined(),
   data_inicio: z.undefined(),
   data_fim: z.undefined(),
   ip: z.undefined(),
@@ -45,7 +46,13 @@ const EmptyFilterSchema = z.object({
 });
 
 // Enum de departamentos (exemplo; substitua pelo import real)
-const Departments = ["TI", "RH", "Financeiro", "Marketing", "Vendas"] as const;
+const Departments = [
+  "Suporte",
+  "Financeiro",
+  "Comercial",
+  "Triagem",
+  "Cobrança",
+] as const;
 
 function LogFilters() {
   const filters = useLogFilter((state) => state.filters);
@@ -95,7 +102,7 @@ function LogFilters() {
   }, [localFilters]);
 
   return (
-    <Card className="mb-6" suppressHydrationWarning>
+    <Card className="mb-6">
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">
@@ -184,7 +191,7 @@ function LogFilters() {
                     </Select.Trigger>
                     <Select.Popover>
                       <ListBox>
-                        {[200, 201, 401, 403, 404, 422, 500].map((code) => (
+                        {[200, 201, 403, 404, 422, 500].map((code) => (
                           <ListBox.Item key={code} id={String(code)}>
                             <Label>{code}</Label>
                             <ListBox.ItemIndicator />
