@@ -31,7 +31,7 @@ import { useAuthentication } from "@/hooks/useAuthentication";
 import Misc from "@/helpers/Misc";
 import z from "zod";
 import { useEffect, useState } from "react";
-import { UserOut, UserUpdate } from "@/types/userType";
+import { UserOut } from "@/types/userType";
 import { axiosClient } from "@/libs/axiosClientLib";
 import { API_ROUTES } from "@/configs/apiConfig";
 import InfoItem from "@/components/InfoItem/InfoItem";
@@ -97,13 +97,9 @@ function Sidebar() {
     setIsSaving(true);
 
     try {
-      const userToEdit: UserUpdate = {
-        senha: form.senha || undefined,
-      };
-
       await axiosClient.patch<UserOut>(
-        API_ROUTES.user.updateById(currentUser.id),
-        userToEdit,
+        API_ROUTES.user.updatePasswordById(currentUser.id),
+        { nova_senha: form.senha },
       );
 
       await refreshUserData();
@@ -255,7 +251,6 @@ function Sidebar() {
                       <h3 className="text-lg font-semibold">Perfil e Conta</h3>
                       <Button
                         onPress={() => setIsEditingUser(true)}
-                        isDisabled={!hasAllPermissions(["alterar:usuarios"])}
                         size="sm"
                         className="bg-accent-soft text-accent-soft-foreground hover:bg-accent-soft-hover"
                       >

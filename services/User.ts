@@ -44,6 +44,7 @@ class UserService {
       const response = await withRetry(() =>
         axiosClient.get(API_ROUTES.user.getAll(filters)),
       );
+
       const data = response.data;
       UserPaginationOutSchema.parse(data);
       return data;
@@ -131,6 +132,30 @@ class UserService {
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error("Reactivate error details:", error.response?.data);
+      }
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return undefined;
+      }
+      throw error;
+    }
+  }
+
+  static async updatePasswordById(
+    id: number,
+    nova_senha: string,
+  ): Promise<UserOut | undefined> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.patch(API_ROUTES.user.updatePasswordById(id), {
+          nova_senha,
+        }),
+      );
+      const user = response.data;
+      UserOutSchema.parse(user);
+      return user;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Update password error details:", error.response?.data);
       }
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return undefined;

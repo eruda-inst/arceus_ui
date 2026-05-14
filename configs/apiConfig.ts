@@ -61,6 +61,8 @@ const API_ROUTES = {
   },
   user: {
     create: () => `${API_ENDPOINT_BASES.user}/`,
+    updatePasswordById: (id: number) =>
+      `${API_ENDPOINT_BASES.user}/mudar-senha/id/${id}`,
     updateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,
     inactivateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}/inativar`,
     reactivateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}/reativar`,
