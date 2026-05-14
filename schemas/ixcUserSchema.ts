@@ -15,8 +15,8 @@ export const IXCUserPaginationOutSchema = z.object({
   dados: z.array(IXCUserOutSchema),
   pagina_atual: z.number().positive(),
   itens_por_pagina: z.number().positive(),
-  total_paginas: z.number().positive(),
-  total_itens: z.number().gte(0),
+  total_paginas: z.number().nonnegative(),
+  total_itens: z.number().nonnegative(),
 });
 
 export { IXCUserStatusEnum, IXCUserAccessTypeEnum };
