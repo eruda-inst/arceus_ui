@@ -146,7 +146,10 @@ function Home() {
           metric1Value={errorRate}
           metric2Label="Total"
           metric2Value={totalErrors}
-          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
+          formatMetric1={(v) => {
+            v = v === 1 ? v * 100 : v;
+            return `${v.toFixed(2).replace(".", ",")}%`;
+          }}
           isLoading={isLoading}
         />
         <DualMetricCard
@@ -156,7 +159,10 @@ function Home() {
           metric1Value={successRate}
           metric2Label="Total"
           metric2Value={totalSuccesses}
-          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
+          formatMetric1={(v) => {
+            v = v === 1 ? v * 100 : v;
+            return `${v.toFixed(2).replace(".", ",")}%`;
+          }}
           isLoading={isLoading}
         />
         <DualMetricCard
