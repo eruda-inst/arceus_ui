@@ -147,6 +147,7 @@ const API_ROUTES = {
     topWeekdays: () => `${API_ENDPOINT_BASES.metric}/top-dias-semana`,
     topWorstEndpoints: () =>
       `${API_ENDPOINT_BASES.metric}/top-piores-endpoints`,
+    topMonthDays: () => `${API_ENDPOINT_BASES.metric}/top-dias-mes`,
   },
 };
 

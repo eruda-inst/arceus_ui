@@ -21,6 +21,7 @@ function Home() {
     getTotalReqs,
     getTotalServices,
     getTotalSuccesses,
+    getTopMonthDays,
   } = MetricService;
 
   const [topWeekdays, setTopWeekdays] = useState<any>({});
@@ -35,6 +36,7 @@ function Home() {
   const [totalReqs, setTotalReqs] = useState<any>({});
   const [totalServices, setTotalServices] = useState<any>({});
   const [totalSuccesses, setTotalSuccesses] = useState<any>({});
+  const [topMonthDays, setTopMonthDays] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
@@ -54,6 +56,7 @@ function Home() {
         totalReqs,
         totalServices,
         totalSuccesses,
+        topMonthDaysRaw,
       ] = await Promise.all([
         getTopWeekdays(),
         getTopEndpoints(),
@@ -67,6 +70,7 @@ function Home() {
         getTotalReqs(),
         getTotalServices(),
         getTotalSuccesses(),
+        getTopMonthDays(),
       ]);
       const topHours = {
         hoje: topHoursRaw?.hoje
@@ -84,6 +88,14 @@ function Home() {
             hora: `${item.hora} h`,
           })),
       };
+      const topMonthDays = {
+        hoje: topMonthDaysRaw?.hoje
+          ?.slice()
+          .sort((a: any, b: any) => a.day - b.day),
+        sempre: topMonthDaysRaw?.sempre
+          ?.slice()
+          .sort((a: any, b: any) => a.day - b.day),
+      };
       setTopHours(topHours);
       setTopWeekdays(topWeekdays);
       setTopEndpoints(topEndpoints);
@@ -96,6 +108,7 @@ function Home() {
       setTotalReqs(totalReqs);
       setTotalServices(totalServices);
       setTotalSuccesses(totalSuccesses);
+      setTopMonthDays(topMonthDays);
     } catch (err: unknown) {
       throw err;
     } finally {
@@ -277,6 +290,32 @@ function Home() {
           isLoading={isLoading}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
+          layout="vertical"
+        />
+
+        {/* Top Dias do Mês – laranja queimado */}
+        <VerticalBarChart
+          data={topMonthDays?.hoje}
+          dataKey="day"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Dias do Mês – Hoje"
+          isLoading={isLoading}
+          barColor="#f97316"
+          activeBarColor="#16F99C"
+          hideXAxis
+          layout="vertical"
+        />
+        <VerticalBarChart
+          data={topMonthDays?.sempre}
+          dataKey="day"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Dias do Mês – Sempre"
+          isLoading={isLoading}
+          barColor="#f97316"
+          activeBarColor="#16F99C"
+          hideXAxis
           layout="vertical"
         />
 

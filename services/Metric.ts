@@ -166,6 +166,19 @@ class MetricService {
       throw err;
     }
   }
+
+  static async getTopMonthDays(): Promise<any> {
+    try {
+      const response = await axiosClient.get(API_ROUTES.metric.topMonthDays());
+      const data = response.data;
+      return data;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 404) {
+        return {};
+      }
+      throw err;
+    }
+  }
 }
 
 export { MetricService };
