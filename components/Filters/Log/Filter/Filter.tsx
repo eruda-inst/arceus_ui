@@ -191,12 +191,14 @@ function LogFilters() {
                     </Select.Trigger>
                     <Select.Popover>
                       <ListBox>
-                        {[200, 201, 403, 404, 422, 500].map((code) => (
-                          <ListBox.Item key={code} id={String(code)}>
-                            <Label>{code}</Label>
-                            <ListBox.ItemIndicator />
-                          </ListBox.Item>
-                        ))}
+                        {[200, 201, 400, 404, 405, 422, 500, 503].map(
+                          (code) => (
+                            <ListBox.Item key={code} id={String(code)}>
+                              <Label>{code}</Label>
+                              <ListBox.ItemIndicator />
+                            </ListBox.Item>
+                          ),
+                        )}
                       </ListBox>
                     </Select.Popover>
                   </Select>
