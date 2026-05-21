@@ -42,7 +42,7 @@ function OneLineChart({
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
           </Card.Header>
           <Card.Content>
-            {data.length > 0 ? (
+            {data && data.length > 0 ? (
               <LineChart
                 style={{
                   width: "100%",

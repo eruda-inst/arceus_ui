@@ -40,7 +40,7 @@ function VerticalBarChart({
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
           </Card.Header>
           <Card.Content>
-            {data.length > 0 ? (
+            {data && data.length > 0 ? (
               <BarChart
                 layout={layout}
                 style={{
