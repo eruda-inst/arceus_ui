@@ -209,7 +209,7 @@ function Home() {
           dataKey="endpoint"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Endpoints Hoje"
+          label="Top Endpoints — Hoje"
           isLoading={isLoading}
           hideXAxis
         />
@@ -218,7 +218,7 @@ function Home() {
           dataKey="endpoint"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Endpoints Sempre"
+          label="Top Endpoints — Sempre"
           isLoading={isLoading}
           hideXAxis
         />
@@ -229,7 +229,7 @@ function Home() {
           dataKey="status_code"
           barDataKey="total_respostas"
           name="Total de respostas"
-          label="Top Status Codes Hoje"
+          label="Top Status Codes — Hoje"
           isLoading={isLoading}
           barColor="#10b981"
           activeBarColor="#ef467e"
@@ -240,7 +240,7 @@ function Home() {
           dataKey="status_code"
           barDataKey="total_respostas"
           name="Total de respostas"
-          label="Top Status Codes Sempre"
+          label="Top Status Codes — Sempre"
           isLoading={isLoading}
           barColor="#10b981"
           activeBarColor="#ef467e"
@@ -253,7 +253,7 @@ function Home() {
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Horas de Pico Hoje"
+          label="Horas de Pico — Hoje"
           isLoading={isLoading}
           lineColor="#8b5cf6"
           activeDotColor="#74a309"
@@ -263,7 +263,7 @@ function Home() {
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Horas de Pico Sempre"
+          label="Horas de Pico — Sempre"
           isLoading={isLoading}
           lineColor="#8b5cf6"
           activeDotColor="#74a309"
@@ -286,7 +286,7 @@ function Home() {
           dataKey="weekday"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Dias da Semana Sempre"
+          label="Top Dias da Semana — Sempre"
           isLoading={isLoading}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
@@ -299,7 +299,7 @@ function Home() {
           dataKey="day"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Dias do Mês – Hoje"
+          label="Top Dias do Mês"
           isLoading={isLoading}
           barColor="#f97316"
           activeBarColor="#16F99C"
@@ -311,7 +311,7 @@ function Home() {
           dataKey="day"
           barDataKey="total_requisicoes"
           name="Total de requisições"
-          label="Top Dias do Mês – Sempre"
+          label="Top Dias do Mês — Sempre"
           isLoading={isLoading}
           barColor="#f97316"
           activeBarColor="#16F99C"
@@ -325,7 +325,7 @@ function Home() {
           dataKey="endpoint"
           name="Total de erros"
           barDataKey="total_erros"
-          label="Piores Endpoints Hoje"
+          label="Piores Endpoints — Hoje"
           isLoading={isLoading}
           hideXAxis
           barColor="#ef4444"
@@ -336,7 +336,7 @@ function Home() {
           dataKey="endpoint"
           name="Total de erros"
           barDataKey="total_erros"
-          label="Piores Endpoints Sempre"
+          label="Piores Endpoints — Sempre"
           isLoading={isLoading}
           hideXAxis
           barColor="#ef4444"
