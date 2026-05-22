@@ -272,7 +272,7 @@ function Home() {
         {/* Top Dias da Semana – amarelo/laranja escuro */}
         <VerticalBarChart
           data={topWeekdays?.hoje}
-          dataKey="weekday"
+          dataKey="dia_semana"
           barDataKey="total_requisicoes"
           name="Total de requisições"
           label="Top Dias da Semana"
@@ -283,7 +283,7 @@ function Home() {
         />
         <VerticalBarChart
           data={topWeekdays?.sempre}
-          dataKey="weekday"
+          dataKey="dia_semana"
           barDataKey="total_requisicoes"
           name="Total de requisições"
           label="Top Dias da Semana — Sempre"
@@ -296,7 +296,7 @@ function Home() {
         {/* Top Dias do Mês – laranja queimado */}
         <VerticalBarChart
           data={topMonthDays?.hoje}
-          dataKey="day"
+          dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
           label="Top Dias do Mês"
@@ -308,7 +308,7 @@ function Home() {
         />
         <VerticalBarChart
           data={topMonthDays?.sempre}
-          dataKey="day"
+          dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
           label="Top Dias do Mês — Sempre"
