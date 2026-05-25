@@ -101,6 +101,7 @@ function LogTable({ data, isLoading, onRowClick }: LogTableProps) {
         <Table className="rounded-none p-0 max-h-195.5 overflow-auto">
           <Table.ScrollContainer>
             <Table.Content
+              aria-label="Registros de requisições"
               onRowAction={(key) => {
                 const log = data.find((l) => l.id === key);
                 if (log) onRowClick(log);

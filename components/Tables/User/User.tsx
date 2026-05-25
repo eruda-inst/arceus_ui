@@ -64,6 +64,7 @@ function UserTable({ data, isLoading, onRowClick }: UserTableProps) {
         <Table className="rounded-none p-0 max-h-195.5 overflow-auto">
           <Table.ScrollContainer>
             <Table.Content
+              aria-label="Usuários"
               onRowAction={(key) => {
                 const user = data.find((u) => u.id === Number(key));
                 if (user) onRowClick(user);
