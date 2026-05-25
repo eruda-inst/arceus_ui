@@ -54,7 +54,7 @@ const API_ROUTES = {
       params.append("itens_por_pagina", itemsPerPage.toString());
       if (filters.name) params.append("nome", filters.name);
       if (filters.email) params.append("email", filters.email);
-      return `${API_ENDPOINT_BASES.ixc_user}?${params.toString()}`;
+      return `${API_ENDPOINT_BASES.ixc_user}/?${params.toString()}`;
     },
     getByEmail: (email: string) =>
       `${API_ENDPOINT_BASES.ixc_user}/email/${email}`,
@@ -83,7 +83,7 @@ const API_ROUTES = {
       if (filters.name) params.append("nome", filters.name);
       if (filters.email) params.append("email", filters.email);
       if (filters.groupName) params.append("nome_grupo", filters.groupName);
-      return `${API_ENDPOINT_BASES.user}?${params.toString()}`;
+      return `${API_ENDPOINT_BASES.user}/?${params.toString()}`;
     },
   },
   log: {
@@ -130,7 +130,7 @@ const API_ROUTES = {
       if (filters.client) params.append("cliente", filters.client);
       if (filters.domain) params.append("dominio", filters.domain);
       if (filters.department) params.append("setor", filters.department);
-      return `${API_ENDPOINT_BASES.log}?${params.toString()}`;
+      return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;
     },
   },
   metric: {

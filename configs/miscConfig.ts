@@ -1,1 +1,1 @@
-export const CURRENT_VERSION = "Mark II (2.5.4)";
+export const CURRENT_VERSION = "Mark II (2.5.7)";
