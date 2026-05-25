@@ -106,14 +106,17 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
 
       <DeleteUser
         isOpen={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
       />
       <InactivateUser
         isOpen={isInactivateOpen}
+        onOpenChange={setIsInactivateOpen}
         onClose={() => setIsInactivateOpen(false)}
       />
       <ReactivateUser
         isOpen={isReactivateOpen}
+        onOpenChange={setIsReactivateOpen}
         onClose={() => setIsReactivateOpen(false)}
       />
     </Modal>

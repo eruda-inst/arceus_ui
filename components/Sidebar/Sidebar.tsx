@@ -214,7 +214,7 @@ function Sidebar() {
         </div>
       </div>
 
-      <Modal isOpen={isProfileModalOpen}>
+      <Modal isOpen={isProfileModalOpen} onOpenChange={setIsProfileModalOpen}>
         <Modal.Backdrop variant="blur">
           <Modal.Container size="cover">
             <Modal.Dialog>
@@ -273,8 +273,8 @@ function Sidebar() {
                   <>
                     <div className="mb-4 space-y-2">
                       <div className="flex items-center gap-2 mt-2">
-                        <div className="p-2 bg-purple-500 rounded-lg">
-                          <FaPencil className="w-5 h-5 text-purple-500" />
+                        <div className="p-2 bg-accent-soft rounded-lg">
+                          <FaPencil className="w-5 h-5 text-accent-soft-foreground" />
                         </div>
                         <h4 className="font-semibold text-gray-300">
                           Alterar senha

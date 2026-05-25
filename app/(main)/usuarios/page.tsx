@@ -123,11 +123,16 @@ function Users() {
         <Details
           isOpen={isDetailsOpen}
           user={selectedUser}
+          onOpenChange={setIsDetailsOpen}
           handleClose={() => setIsDetailsOpen(false)}
         />
       )}
 
-      <Add isOpen={isAddOpen} handleClose={() => setIsAddOpen(false)} />
+      <Add
+        isOpen={isAddOpen}
+        onOpenChange={setIsAddOpen}
+        handleClose={() => setIsAddOpen(false)}
+      />
     </div>
   );
 }

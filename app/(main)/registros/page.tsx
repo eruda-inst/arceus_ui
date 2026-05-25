@@ -136,6 +136,7 @@ function Logs() {
       {selectedLog && (
         <Details
           isOpen={isDetailsOpen}
+          onOpenChange={setIsDetailsOpen}
           log={selectedLog}
           handleClose={() => setIsDetailsOpen(false)}
         />
