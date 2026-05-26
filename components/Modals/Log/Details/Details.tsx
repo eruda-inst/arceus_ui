@@ -35,9 +35,11 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <InfoItem label="Duração" value={log.duracao} />
+                <InfoItem
+                  label="Duração"
+                  value={log.duracao.toFixed(3).toString().replace(".", ",")}
+                />
                 <InfoItem label="Protocolo" value={log.protocolo} />
-                {/* <InfoItem label="Payload" value={log.payload} /> */}
                 <InfoItem label="URL" value={log.url} />
                 <InfoItem label="Cliente" value={log.cliente} />
                 <InfoItem label="Domínio" value={log.dominio} />
