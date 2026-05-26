@@ -16,7 +16,7 @@ function ActiveLogFilters() {
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
-      let displayValue = String(value);
+      const displayValue = String(value);
 
       const labelMap: Record<string, string> = {
         metodo: "Método",

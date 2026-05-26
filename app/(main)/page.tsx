@@ -6,6 +6,16 @@ import VerticalBarChart from "@/components/Charts/VerticalBar";
 import OneLineChart from "@/components/Charts/OneLine";
 import DualMetricCard from "@/components/DualMetricCard/DualMetricCard";
 import { MetricService } from "@/services/Metric";
+import {
+  TodayAlwaysOut,
+  TopEndpoint,
+  TopHour,
+  TopHourFormatted,
+  TopMonthDay,
+  TopStatusCode,
+  TopWeekday,
+  TopWorstEndpoint,
+} from "@/types/metricType";
 
 function Home() {
   const {
@@ -24,19 +34,45 @@ function Home() {
     getTopMonthDays,
   } = MetricService;
 
-  const [topWeekdays, setTopWeekdays] = useState<any>({});
-  const [topEndpoints, setTopEndpoints] = useState<any>({});
-  const [topHours, setTopHours] = useState<any>({});
-  const [topStatusCodes, setTopStatusCodes] = useState<any>({});
-  const [topWorstEndpoints, setTopWorstEndpoints] = useState<any>({});
-  const [avgResTime, setAvgResTime] = useState<any>({});
-  const [errorRate, setErrorRate] = useState<any>({});
-  const [successRate, setSuccessRate] = useState<any>({});
-  const [totalErrors, setTotalErrors] = useState<any>({});
-  const [totalReqs, setTotalReqs] = useState<any>({});
-  const [totalServices, setTotalServices] = useState<any>({});
-  const [totalSuccesses, setTotalSuccesses] = useState<any>({});
-  const [topMonthDays, setTopMonthDays] = useState<any>({});
+  const [topWeekdays, setTopWeekdays] = useState<TodayAlwaysOut<TopWeekday[]>>(
+    {} as TodayAlwaysOut<TopWeekday[]>,
+  );
+  const [topEndpoints, setTopEndpoints] = useState<
+    TodayAlwaysOut<TopEndpoint[]>
+  >({} as TodayAlwaysOut<TopEndpoint[]>);
+  const [topHours, setTopHours] = useState<TodayAlwaysOut<TopHourFormatted[]>>(
+    {} as TodayAlwaysOut<TopHourFormatted[]>,
+  );
+  const [topStatusCodes, setTopStatusCodes] = useState<
+    TodayAlwaysOut<TopStatusCode[]>
+  >({} as TodayAlwaysOut<TopStatusCode[]>);
+  const [topWorstEndpoints, setTopWorstEndpoints] = useState<
+    TodayAlwaysOut<TopWorstEndpoint[]>
+  >({} as TodayAlwaysOut<TopWorstEndpoint[]>);
+  const [avgResTime, setAvgResTime] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [errorRate, setErrorRate] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [successRate, setSuccessRate] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [totalErrors, setTotalErrors] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [totalReqs, setTotalReqs] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [totalServices, setTotalServices] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [totalSuccesses, setTotalSuccesses] = useState<TodayAlwaysOut<number>>(
+    {} as TodayAlwaysOut<number>,
+  );
+  const [topMonthDays, setTopMonthDays] = useState<
+    TodayAlwaysOut<TopMonthDay[]>
+  >({} as TodayAlwaysOut<TopMonthDay[]>);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
@@ -44,73 +80,77 @@ function Home() {
     setIsLoading(true);
     try {
       const [
-        topWeekdays,
-        topEndpoints,
+        topWeekdaysRaw,
+        topEndpointsRaw,
         topHoursRaw,
-        topStatusCodes,
-        topWorstEndpoints,
-        avgResTime,
-        errorRate,
-        successRate,
-        totalErrors,
-        totalReqs,
-        totalServices,
-        totalSuccesses,
+        topStatusCodesRaw,
+        topWorstEndpointsRaw,
+        avgResTimeRaw,
+        errorRateRaw,
+        successRateRaw,
+        totalErrorsRaw,
+        totalReqsRaw,
+        totalServicesRaw,
+        totalSuccessesRaw,
         topMonthDaysRaw,
       ] = await Promise.all([
-        getTopWeekdays(),
-        getTopEndpoints(),
-        getTopHours(),
-        getTopStatusCodes(),
-        getTopWorstEndpoints(),
-        getAvgResTime(),
-        getErrorRate(),
-        getSuccessRate(),
-        getTotalErrors(),
-        getTotalReqs(),
-        getTotalServices(),
-        getTotalSuccesses(),
-        getTopMonthDays(),
+        getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
+        getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
+        getTopHours() as Promise<TodayAlwaysOut<TopHour[]>>,
+        getTopStatusCodes() as Promise<TodayAlwaysOut<TopStatusCode[]>>,
+        getTopWorstEndpoints() as Promise<TodayAlwaysOut<TopWorstEndpoint[]>>,
+        getAvgResTime() as Promise<TodayAlwaysOut<number>>,
+        getErrorRate() as Promise<TodayAlwaysOut<number>>,
+        getSuccessRate() as Promise<TodayAlwaysOut<number>>,
+        getTotalErrors() as Promise<TodayAlwaysOut<number>>,
+        getTotalReqs() as Promise<TodayAlwaysOut<number>>,
+        getTotalServices() as Promise<TodayAlwaysOut<number>>,
+        getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
+        getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
       ]);
-      const topHours = {
-        hoje: topHoursRaw?.hoje
-          ?.slice()
-          .sort((a: any, b: any) => a.hora - b.hora)
-          .map((item: any) => ({
-            ...item,
-            hora: `${item.hora} h`,
-          })),
-        sempre: topHoursRaw?.sempre
-          ?.slice()
-          .sort((a: any, b: any) => a.hora - b.hora)
-          .map((item: any) => ({
-            ...item,
-            hora: `${item.hora} h`,
-          })),
+      const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
+        hoje:
+          topHoursRaw.hoje
+            ?.slice()
+            .sort((a, b) => a.hora - b.hora)
+            .map((item) => ({
+              ...item,
+              hora: `${item.hora} h`,
+            })) ?? [],
+        sempre:
+          topHoursRaw.sempre
+            ?.slice()
+            .sort((a, b) => a.hora - b.hora)
+            .map((item) => ({
+              ...item,
+              hora: `${item.hora} h`,
+            })) ?? [],
       };
-      const topMonthDays = {
-        hoje: topMonthDaysRaw?.hoje
-          ?.slice()
-          .sort((a: any, b: any) => a.day - b.day),
-        sempre: topMonthDaysRaw?.sempre
-          ?.slice()
-          .sort((a: any, b: any) => a.day - b.day),
+      const topMonthDaysFormatted: TodayAlwaysOut<TopMonthDay[]> = {
+        hoje:
+          topMonthDaysRaw.hoje?.slice().sort((a, b) => a.dia_mes - b.dia_mes) ??
+          [],
+        sempre:
+          topMonthDaysRaw.sempre
+            ?.slice()
+            .sort((a, b) => a.dia_mes - b.dia_mes) ?? [],
       };
-      setTopHours(topHours);
-      setTopWeekdays(topWeekdays);
-      setTopEndpoints(topEndpoints);
-      setTopStatusCodes(topStatusCodes);
-      setTopWorstEndpoints(topWorstEndpoints);
-      setAvgResTime(avgResTime);
-      setErrorRate(errorRate);
-      setSuccessRate(successRate);
-      setTotalErrors(totalErrors);
-      setTotalReqs(totalReqs);
-      setTotalServices(totalServices);
-      setTotalSuccesses(totalSuccesses);
-      setTopMonthDays(topMonthDays);
+      setTopHours(topHoursFormatted);
+      setTopWeekdays(topWeekdaysRaw);
+      setTopEndpoints(topEndpointsRaw);
+      setTopStatusCodes(topStatusCodesRaw);
+      setTopWorstEndpoints(topWorstEndpointsRaw);
+      setAvgResTime(avgResTimeRaw);
+      setErrorRate(errorRateRaw);
+      setSuccessRate(successRateRaw);
+      setTotalErrors(totalErrorsRaw);
+      setTotalReqs(totalReqsRaw);
+      setTotalServices(totalServicesRaw);
+      setTotalSuccesses(totalSuccessesRaw);
+      setTopMonthDays(topMonthDaysFormatted);
     } catch (err: unknown) {
-      throw err;
+      console.error(err);
+      toast.danger("Erro ao carregar métricas");
     } finally {
       setIsLoading(false);
     }

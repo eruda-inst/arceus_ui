@@ -83,6 +83,7 @@ export default async function proxy(request: NextRequest) {
     } catch (error: unknown) {
       // If there's an error getting user info, redirect to login
       const loginUrl = new URL("/login", request.url);
+      console.error(error);
       return NextResponse.redirect(loginUrl);
     }
   }

@@ -74,7 +74,6 @@ function Add({ handleClose, ...props }: AddProps) {
     (state) => state.setSelectedIxcUser,
   );
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
   const [registeredEmails, setRegisteredEmails] = useState<Set<string>>(
     new Set(),
@@ -111,8 +110,6 @@ function Add({ handleClose, ...props }: AddProps) {
   };
 
   const fetchAll = useCallback(async () => {
-    setIsLoading(true);
-
     try {
       const [ixcRes, userRes, groups] = await Promise.all([
         getAllIxcUsers({ itemsPerPage: 9999 }),
@@ -130,8 +127,6 @@ function Add({ handleClose, ...props }: AddProps) {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 

@@ -111,6 +111,7 @@ function Sidebar() {
       setIsEditingUser(false);
     } catch (error: unknown) {
       toast.danger("Erro ao atualizar perfil.");
+      console.error(error);
     } finally {
       setIsSaving(false);
     }
