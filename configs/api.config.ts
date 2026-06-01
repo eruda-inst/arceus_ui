@@ -102,6 +102,7 @@ const API_ROUTES = {
         duration?: number;
         protocol?: string;
         payload?: string;
+        response?: string;
         url?: string;
         client?: string;
         domain?: string;
@@ -126,6 +127,7 @@ const API_ROUTES = {
         params.append("duracao", filters.duration.toString());
       if (filters.protocol) params.append("protocolo", filters.protocol);
       if (filters.payload) params.append("payload", filters.payload);
+      if (filters.response) params.append("resposta", filters.response);
       if (filters.url) params.append("url", filters.url);
       if (filters.client) params.append("cliente", filters.client);
       if (filters.domain) params.append("dominio", filters.domain);

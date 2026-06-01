@@ -12,6 +12,7 @@ const LogOutSchema = z.object({
   duracao: z.float64(),
   protocolo: z.string(),
   payload: z.string(),
+  resposta: z.string().nullable(),
   url: z.string(),
   cliente: z.string(),
   dominio: z.string(),

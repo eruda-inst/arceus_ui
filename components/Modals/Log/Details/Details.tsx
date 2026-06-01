@@ -59,6 +59,21 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                   })()}
                   isCode
                 />
+                <InfoItem
+                  label="Resposta"
+                  value={(() => {
+                    try {
+                      const obj =
+                        typeof log.resposta === "string"
+                          ? JSON.parse(log.resposta)
+                          : log.resposta;
+                      return JSON.stringify(obj, null, 2);
+                    } catch {
+                      return String(log.resposta);
+                    }
+                  })()}
+                  isCode
+                />
               </div>
             </Modal.Body>
           </Modal.Dialog>

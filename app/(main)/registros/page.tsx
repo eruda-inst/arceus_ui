@@ -89,7 +89,7 @@ function Logs() {
   }, [fetchLogs]);
 
   useEffect(() => {
-    setPage(1); // volta para a página 1 ao alterar filtros
+    setPage(1);
   }, [filters]);
 
   return (

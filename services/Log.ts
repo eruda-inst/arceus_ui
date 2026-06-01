@@ -20,6 +20,7 @@ class LogService {
       duration?: number;
       protocol?: string;
       payload?: string;
+      response?: string;
       url?: string;
       client?: string;
       domain?: string;
@@ -31,7 +32,6 @@ class LogService {
         withCredentials: true,
       });
       const data = response.data;
-      console.log(data);
       LogPaginationOutSchema.parse(data);
       return data;
     } catch (error: unknown) {
