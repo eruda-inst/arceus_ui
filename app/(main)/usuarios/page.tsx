@@ -7,15 +7,17 @@ import UserTable from "@/components/Tables/User/User";
 import { useUserFilter } from "@/stores/userFilter.store";
 import ActiveUserFilters from "@/components/Filters/User/Active/Active";
 import UserFilters from "@/components/Filters/User/Filter/Filter";
-import { Button, toast } from "@heroui/react";
+import { Button, Skeleton, toast } from "@heroui/react";
 import Details from "@/components/Modals/User/Details/Details";
 import { useUserStore } from "@/stores/user.store";
 import PaginationControls from "@/components/PaginationControls/PaginationControls";
 import Add from "@/components/Modals/User/Add/Add";
 import { usePermissions } from "@/contexts/perm.context";
+import { useAuthentication } from "@/hooks/authentication.hook";
 
 function Users() {
   const { hasAllPermissions } = usePermissions();
+  const { currentUser } = useAuthentication();
 
   const users = useUserStore((state) => state.users);
   const setUsers = useUserStore((state) => state.setUsers);
@@ -87,14 +89,19 @@ function Users() {
             Visualize, adicione, remova, inative e reative usuários do IXC
           </p>
         </div>
-        <Button
-          className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
-          size="md"
-          onPress={() => setIsAddOpen(true)}
-          isDisabled={!hasAllPermissions(["criar:usuarios"])}
-        >
-          Adicionar
-        </Button>
+
+        {currentUser ? (
+          <Button
+            className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
+            size="md"
+            onPress={() => setIsAddOpen(true)}
+            isDisabled={!hasAllPermissions(["criar:usuarios"])}
+          >
+            Adicionar
+          </Button>
+        ) : (
+          <Skeleton className="rounded-3xl w-30 h-10" />
+        )}
       </div>
 
       <UserFilters />

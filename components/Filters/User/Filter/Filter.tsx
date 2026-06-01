@@ -1,5 +1,5 @@
 // src/components/UserFilters.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Button,
   InputGroup,
@@ -42,8 +42,9 @@ function UserFilters() {
     setLocalFilters(filters);
   }, [filters]);
 
-  const isFiltersEmpty =
-    !localFilters.name && !localFilters.email && !localFilters.groupName;
+  const isFiltersEmpty = useMemo(() => {
+    return !localFilters.name && !localFilters.email && !localFilters.groupName;
+  }, []);
 
   return (
     <Card className="mb-6">

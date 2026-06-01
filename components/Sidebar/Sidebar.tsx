@@ -141,29 +141,41 @@ function Sidebar() {
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2">
-          <Button
-            className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/" ? "bg-indigo-500" : "bg-inherit"}`}
-            onPress={() => router.push("/")}
-            isDisabled={!hasAllPermissions(["ver:metricas"])}
-          >
-            <FaHouseChimney className="size-5" /> Métricas
-          </Button>
+          {currentUser ? (
+            <Button
+              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/" ? "bg-indigo-500" : "bg-inherit"}`}
+              onPress={() => router.push("/")}
+              isDisabled={!hasAllPermissions(["ver:metricas"])}
+            >
+              <FaHouseChimney className="size-5" /> Métricas
+            </Button>
+          ) : (
+            <Skeleton className="w-full h-12 rounded-3xl" />
+          )}
 
-          <Button
-            className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/registros" ? "bg-indigo-500" : "bg-inherit"}`}
-            onPress={() => router.push("/registros")}
-            isDisabled={!hasAllPermissions(["ver:logs"])}
-          >
-            <FaClipboardList className="size-5" /> Registros
-          </Button>
+          {currentUser ? (
+            <Button
+              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/registros" ? "bg-indigo-500" : "bg-inherit"}`}
+              onPress={() => router.push("/registros")}
+              isDisabled={!hasAllPermissions(["ver:logs"])}
+            >
+              <FaClipboardList className="size-5" /> Registros
+            </Button>
+          ) : (
+            <Skeleton className="w-full h-12 rounded-3xl" />
+          )}
 
-          <Button
-            className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit"}`}
-            onPress={() => router.push("/usuarios")}
-            isDisabled={!hasAllPermissions(["ver:usuarios"])}
-          >
-            <FaUsers className="size-5" /> Usuários
-          </Button>
+          {currentUser ? (
+            <Button
+              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit"}`}
+              onPress={() => router.push("/usuarios")}
+              isDisabled={!hasAllPermissions(["ver:usuarios"])}
+            >
+              <FaUsers className="size-5" /> Usuários
+            </Button>
+          ) : (
+            <Skeleton className="w-full h-12 rounded-3xl" />
+          )}
         </nav>
 
         <div className="p-4 border-t space-y-4">
