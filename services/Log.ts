@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { LogPaginationOut } from "@/types/logType";
-import { LogPaginationOutSchema } from "@/schemas/logSchema";
+import { API_ROUTES } from "@/configs/api.config";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { LogPaginationOut } from "@/types/log.type";
+import { LogPaginationOutSchema } from "@/schemas/log.schema";
 
 class LogService {
   static async getAll(

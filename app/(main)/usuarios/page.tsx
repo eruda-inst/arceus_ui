@@ -2,17 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { UserService } from "@/services/User";
-import type { UserOut, UserPaginationOut } from "@/types/userType";
+import type { UserOut, UserPaginationOut } from "@/types/user.type";
 import UserTable from "@/components/Tables/User/User";
-import { useUserFilter } from "@/stores/userFilterStore";
+import { useUserFilter } from "@/stores/userFilter.store";
 import ActiveUserFilters from "@/components/Filters/User/Active/Active";
 import UserFilters from "@/components/Filters/User/Filter/Filter";
 import { Button, toast } from "@heroui/react";
 import Details from "@/components/Modals/User/Details/Details";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/user.store";
 import PaginationControls from "@/components/PaginationControls/PaginationControls";
 import Add from "@/components/Modals/User/Add/Add";
-import { usePermissions } from "@/contexts/permissionContext";
+import { usePermissions } from "@/contexts/perm.context";
 
 function Users() {
   const { hasAllPermissions } = usePermissions();

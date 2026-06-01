@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IXCUserOut } from "@/types/ixcUserType";
+import { IXCUserOut } from "@/types/ixcUser.type";
 
 type IxcUserStore = {
   // IXC users

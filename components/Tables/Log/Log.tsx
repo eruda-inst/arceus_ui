@@ -14,7 +14,7 @@ import {
   FaCalendar,
   FaClock,
 } from "react-icons/fa6";
-import { Code, LogOut, Method } from "@/types/logType";
+import { Code, LogOut, Method } from "@/types/log.type";
 import Formatter from "@/helpers/Formatter";
 import { twMerge } from "tailwind-merge";
 

@@ -1,7 +1,7 @@
 // Metric.ts
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { axiosClient } from "@/libs/axiosClientLib";
+import { API_ROUTES } from "@/configs/api.config";
+import { axiosClient } from "@/libs/axiosClient.lib";
 import {
   TodayAlwaysOut,
   TopEndpoint,
@@ -10,7 +10,7 @@ import {
   TopWeekday,
   TopWorstEndpoint,
   TopMonthDay,
-} from "@/types/metricType";
+} from "@/types/metric.type";
 import {
   TotalReqsSchema,
   AvgResTimeSchema,
@@ -25,7 +25,7 @@ import {
   TopWeekdaysSchema,
   TopWorstEndpointsSchema,
   TopMonthDaysSchema,
-} from "@/schemas/metricSchema";
+} from "@/schemas/metric.schema";
 
 // Retry helper (extracted from UserService)
 async function withRetry<T>(

@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { PermissionOut } from "@/types/permissionType";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { PermissionOutSchema } from "@/schemas/permissionSchema";
+import { API_ROUTES } from "@/configs/api.config";
+import { PermissionOut } from "@/types/perm.type";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { PermissionOutSchema } from "@/schemas/perm.schema";
 
 class PermissionService {
   static async getByUserId(userId: number): Promise<PermissionOut[]> {

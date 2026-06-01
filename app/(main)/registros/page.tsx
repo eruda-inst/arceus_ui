@@ -6,9 +6,9 @@ import PaginationControls from "@/components/PaginationControls/PaginationContro
 import LogTable from "@/components/Tables/Log/Log";
 import LogFilters from "@/components/Filters/Log/Filter/Filter";
 import ActiveLogFilters from "@/components/Filters/Log/Active/Active";
-import { useLogFilter } from "@/stores/logFilterStore";
+import { useLogFilter } from "@/stores/logFilter.store";
 import { LogService } from "@/services/Log";
-import { LogOut, LogPaginationOut } from "@/types/logType";
+import { LogOut, LogPaginationOut } from "@/types/log.type";
 import { Button, toast } from "@heroui/react";
 
 function Logs() {

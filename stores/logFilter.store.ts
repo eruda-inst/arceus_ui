@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { LogFilterIn } from "@/types/logType";
+import { LogFilterIn } from "@/types/log.type";
 
 type LogFilterStore = {
   filters: LogFilterIn;

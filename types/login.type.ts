@@ -1,5 +1,5 @@
 import z from "zod";
-import { LoginInSchema, LoginOutSchema } from "@/schemas/loginSchema";
+import { LoginInSchema, LoginOutSchema } from "@/schemas/login.schema";
 
 type LoginIn = z.infer<typeof LoginInSchema>;
 type LoginOut = z.infer<typeof LoginOutSchema>;

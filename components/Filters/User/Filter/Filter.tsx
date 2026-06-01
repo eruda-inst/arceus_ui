@@ -12,8 +12,8 @@ import {
   toast,
 } from "@heroui/react";
 import { FaFilter, FaUser, FaEnvelope, FaUsers } from "react-icons/fa6";
-import { useUserFilter } from "@/stores/userFilterStore";
-import type { UserFilterIn } from "@/types/userType";
+import { useUserFilter } from "@/stores/userFilter.store";
+import type { UserFilterIn } from "@/types/user.type";
 
 function UserFilters() {
   const filters = useUserFilter((state) => state.filters);

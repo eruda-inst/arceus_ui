@@ -1,6 +1,6 @@
 import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
-import { LogOut } from "@/types/logType";
+import { LogOut } from "@/types/log.type";
 import InfoItem from "@/components/InfoItem/InfoItem";
 
 interface DetailsProps extends Omit<ModalProps, "children"> {

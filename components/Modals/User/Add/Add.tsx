@@ -25,15 +25,15 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa6";
-import { IXCUserOut } from "@/types/ixcUserType";
+import { IXCUserOut } from "@/types/ixcUser.type";
 import { useCallback, useEffect, useState } from "react";
 import { IxcUserService } from "@/services/IxcUser";
 import { UserService } from "@/services/User";
-import { useIxcUserStore } from "@/stores/ixcUserStore";
+import { useIxcUserStore } from "@/stores/ixcUser.store";
 import { GroupService } from "@/services/Group";
-import { GroupOut } from "@/types/groupType";
+import { GroupOut } from "@/types/group.type";
 import z from "zod";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/user.store";
 
 interface AddProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;

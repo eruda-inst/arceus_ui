@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { UserFilterIn } from "@/types/userType";
+import type { UserFilterIn } from "@/types/user.type";
 
 type UserFilterStore = {
   filters: UserFilterIn;

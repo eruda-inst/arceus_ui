@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogProps, Button, toast } from "@heroui/react";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/user.store";
 import { UserService } from "@/services/User";
 
 interface InactivateUserProps extends Omit<AlertDialogProps, "children"> {

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserOut, UserUpdate } from "@/types/userType";
+import { UserOut, UserUpdate } from "@/types/user.type";
 
 type UserStore = {
   // Users

@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { UserOut, UserPaginationOut, UserUpdate } from "@/types/userType";
-import { UserOutSchema, UserPaginationOutSchema } from "@/schemas/userSchema";
+import { API_ROUTES } from "@/configs/api.config";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { UserOut, UserPaginationOut, UserUpdate } from "@/types/user.type";
+import { UserOutSchema, UserPaginationOutSchema } from "@/schemas/user.schema";
 
 // Helper: retry automático para erros 5xx
 async function withRetry<T>(

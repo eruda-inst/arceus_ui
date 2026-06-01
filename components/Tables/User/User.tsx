@@ -17,7 +17,7 @@ import {
   FaUsers,
 } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
-import type { UserOut } from "@/types/userType";
+import type { UserOut } from "@/types/user.type";
 
 interface UserTableProps {
   data: UserOut[];

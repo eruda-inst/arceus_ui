@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { AuthenticationService } from "@/services/Authentication";
 import { PermissionService } from "@/services/Permission";
-import { PermissionOut } from "./types/permissionType";
+import { PermissionOut } from "./types/perm.type";
 
 // Don't need authentication
 const publicRoutes = ["/login"];

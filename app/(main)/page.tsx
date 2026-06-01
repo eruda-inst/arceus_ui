@@ -15,7 +15,7 @@ import {
   TopStatusCode,
   TopWeekday,
   TopWorstEndpoint,
-} from "@/types/metricType";
+} from "@/types/metric.type";
 
 function Home() {
   const {

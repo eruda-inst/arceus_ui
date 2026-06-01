@@ -5,7 +5,7 @@ import {
   UserUpdateSchema,
   UserFilterInSchema,
   UserInSchema,
-} from "@/schemas/userSchema";
+} from "@/schemas/user.schema";
 
 type UserOut = z.infer<typeof UserOutSchema>;
 

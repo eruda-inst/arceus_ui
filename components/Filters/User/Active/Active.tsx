@@ -1,7 +1,7 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import { useUserFilter } from "@/stores/userFilterStore";
-import type { UserFilterIn } from "@/types/userType";
+import { useUserFilter } from "@/stores/userFilter.store";
+import type { UserFilterIn } from "@/types/user.type";
 
 function ActiveUserFilters() {
   const filters = useUserFilter((state) => state.filters);

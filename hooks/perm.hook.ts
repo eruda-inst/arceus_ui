@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { PermissionOut } from "@/types/permissionType";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { API_ROUTES } from "@/configs/api.config";
+import { PermissionOut } from "@/types/perm.type";
 
 export function usePermission() {
   const [isLoading, setIsLoading] = useState(false);

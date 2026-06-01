@@ -2,8 +2,8 @@
 
 import { Toast } from "@heroui/react";
 import TokenRefreshProvider from "@/components/TokenRefreshProvider/TokenRefreshProvider";
-import { PermissionsProvider } from "@/contexts/permissionContext";
-import { AuthProvider } from "@/contexts/authenticationContext";
+import { PermissionsProvider } from "@/contexts/perm.context";
+import { AuthProvider } from "@/contexts/authentication.context";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (

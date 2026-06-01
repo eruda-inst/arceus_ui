@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { IXCUserPaginationOut, IXCUserOut } from "@/types/ixcUserType";
+import { API_ROUTES } from "@/configs/api.config";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { IXCUserPaginationOut, IXCUserOut } from "@/types/ixcUser.type";
 import {
   IXCUserPaginationOutSchema,
   IXCUserOutSchema,
-} from "@/schemas/ixcUserSchema";
+} from "@/schemas/ixcUser.schema";
 
 class IxcUserService {
   static async getAll(

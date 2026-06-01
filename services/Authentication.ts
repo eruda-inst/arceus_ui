@@ -1,6 +1,6 @@
-import { axiosClient } from "@/libs/axiosClientLib";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { UserOut } from "@/types/userType";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { API_ROUTES } from "@/configs/api.config";
+import { UserOut } from "@/types/user.type";
 
 class AuthenticationService {
   static async getMe(accessToken: string) {

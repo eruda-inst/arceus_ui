@@ -18,7 +18,7 @@ import {
   TopWeekdaysSchema,
   TopWorstEndpointsSchema,
   TopMonthDaysSchema,
-} from "@/schemas/metricSchema";
+} from "@/schemas/metric.schema";
 import type z from "zod";
 
 export type TopEndpoint = z.infer<typeof TopEndpointSchema>;

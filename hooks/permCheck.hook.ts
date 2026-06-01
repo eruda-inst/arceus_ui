@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePermissions } from "@/contexts/permissionContext";
+import { usePermissions } from "@/contexts/perm.context";
 
 export function usePermissionCheck(permissionCode: string) {
   const { hasPermission, isLoading } = usePermissions();

@@ -1,14 +1,14 @@
 import { FaUser } from "react-icons/fa6";
 import { Button, Modal, ModalProps } from "@heroui/react";
 import InfoItem from "@/components/InfoItem/InfoItem";
-import { UserOut } from "@/types/userType";
+import { UserOut } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter";
-import { useAuthContext } from "@/contexts/authenticationContext";
+import { useAuthContext } from "@/contexts/authentication.context";
 import DeleteUser from "@/components/AlertDialog/User/Delete/DeleteUser";
 import InactivateUser from "@/components/AlertDialog/User/Inactivate/InactivateUser";
 import ReactivateUser from "@/components/AlertDialog/User/Reactivate/ReactivateUser";
 import { useState } from "react";
-import { usePermissions } from "@/contexts/permissionContext";
+import { usePermissions } from "@/contexts/perm.context";
 
 interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;

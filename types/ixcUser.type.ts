@@ -4,7 +4,7 @@ import {
   IXCUserPaginationOutSchema,
   IXCUserStatusEnum,
   IXCUserAccessTypeEnum,
-} from "@/schemas/ixcUserSchema";
+} from "@/schemas/ixcUser.schema";
 
 type IXCUserOut = z.infer<typeof IXCUserOutSchema>;
 type IXCUserPaginationOut = z.infer<typeof IXCUserPaginationOutSchema>;

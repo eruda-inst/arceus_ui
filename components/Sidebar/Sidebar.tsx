@@ -27,15 +27,15 @@ import {
   TextField,
   toast,
 } from "@heroui/react";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import { useAuthentication } from "@/hooks/authentication.hook";
 import Misc from "@/helpers/Misc";
 import z from "zod";
 import { useEffect, useState } from "react";
-import { UserOut } from "@/types/userType";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { API_ROUTES } from "@/configs/apiConfig";
+import { UserOut } from "@/types/user.type";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { API_ROUTES } from "@/configs/api.config";
 import InfoItem from "@/components/InfoItem/InfoItem";
-import { usePermissions } from "@/contexts/permissionContext";
+import { usePermissions } from "@/contexts/perm.context";
 
 const FormSchema = z.object({
   senha: z.string().min(8).nullable(),

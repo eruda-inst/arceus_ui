@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { usePermission } from "@/hooks/usePermission";
-import { PermissionOut } from "@/types/permissionType";
+import { useAuthentication } from "@/hooks/authentication.hook";
+import { usePermission } from "@/hooks/perm.hook";
+import { PermissionOut } from "@/types/perm.type";
 
 interface PermissionsContextType {
   permissions: PermissionOut[];

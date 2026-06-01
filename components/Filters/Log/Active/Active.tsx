@@ -1,7 +1,7 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import { useLogFilter } from "@/stores/logFilterStore";
-import { LogFilterIn } from "@/types/logType";
+import { useLogFilter } from "@/stores/logFilter.store";
+import { LogFilterIn } from "@/types/log.type";
 
 function ActiveLogFilters() {
   const filters = useLogFilter((state) => state.filters);

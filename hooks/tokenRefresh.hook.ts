@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
+import { API_ROUTES } from "@/configs/api.config";
 
 const ACCESS_TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";

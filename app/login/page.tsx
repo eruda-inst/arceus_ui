@@ -21,11 +21,11 @@ import {
   FaArrowRightToBracket,
 } from "react-icons/fa6";
 import axios from "axios";
-import { CURRENT_VERSION } from "@/configs/miscConfig";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { LoginIn } from "@/types/loginType";
-import { LoginInSchema } from "@/schemas/loginSchema";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import { CURRENT_VERSION } from "@/configs/misc.config";
+import { API_ROUTES } from "@/configs/api.config";
+import { LoginIn } from "@/types/login.type";
+import { LoginInSchema } from "@/schemas/login.schema";
+import { useAuthentication } from "@/hooks/authentication.hook";
 import Validator from "@/helpers/Validator";
 import logo from "@/public/logo.png";
 

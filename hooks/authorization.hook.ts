@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { usePermissions } from "@/contexts/permissionContext";
+import { usePermissions } from "@/contexts/perm.context";
 
 export function useAuthorization() {
   const { hasPermission, hasAnyPermission, hasAllPermissions } =

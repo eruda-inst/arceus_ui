@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_ROUTES } from "@/configs/apiConfig";
-import { axiosClient } from "@/libs/axiosClientLib";
-import { GroupOut } from "@/types/groupType";
-import { GroupOutSchema } from "@/schemas/groupSchema";
+import { API_ROUTES } from "@/configs/api.config";
+import { axiosClient } from "@/libs/axiosClient.lib";
+import { GroupOut } from "@/types/group.type";
+import { GroupOutSchema } from "@/schemas/group.schema";
 
 class GroupService {
   static async getByName(name: string): Promise<GroupOut | undefined> {

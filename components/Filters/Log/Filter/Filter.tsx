@@ -30,8 +30,8 @@ import {
   FaFileCode,
 } from "react-icons/fa6";
 import z from "zod";
-import { LogFilterIn } from "@/types/logType";
-import { useLogFilter } from "@/stores/logFilterStore";
+import { LogFilterIn } from "@/types/log.type";
+import { useLogFilter } from "@/stores/logFilter.store";
 
 const EmptyFilterSchema = z.object({
   metodo: z.undefined(),

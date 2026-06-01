@@ -3,7 +3,7 @@ import {
   LogOutSchema,
   LogPaginationOutSchema,
   LogFilterInSchema,
-} from "@/schemas/logSchema";
+} from "@/schemas/log.schema";
 
 type Method = "GET" | "POST" | "PUT";
 type Code = 200 | 201 | 401 | 403 | 404 | 422 | 500;

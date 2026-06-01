@@ -1,5 +1,5 @@
 import z from "zod";
-import { Departments } from "@/types/departmentType";
+import { Departments } from "@/types/department.type";
 
 const LogOutSchema = z.object({
   id: z.number().positive(),
