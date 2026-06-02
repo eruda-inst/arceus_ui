@@ -2,6 +2,10 @@ import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
 import { LogOut } from "@/types/log.type";
 import InfoItem from "@/components/InfoItem/InfoItem";
+import {
+  a11yDark,
+  coldarkDark,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;
@@ -57,7 +61,8 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                       return String(log.payload);
                     }
                   })()}
-                  isCode
+                  isCode={log.payload !== "---" && log.payload !== "{}"}
+                  codeStyle={a11yDark}
                 />
                 <InfoItem
                   label="Resposta"
@@ -72,7 +77,8 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                       return String(log.resposta);
                     }
                   })()}
-                  isCode
+                  isCode={log.resposta !== "---" && log.resposta !== "{}"}
+                  codeStyle={coldarkDark}
                 />
               </div>
             </Modal.Body>
