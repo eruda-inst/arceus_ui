@@ -11,13 +11,13 @@ if (ENV_BASE_API_URL) {
 }
 
 const API_ENDPOINT_BASES = {
-  authentication: `${BASE_API_URL}/api/v2/autenticacao`,
-  group: `${BASE_API_URL}/api/v2/grupos`,
-  perm: `${BASE_API_URL}/api/v2/permissoes`,
-  ixc_user: `${BASE_API_URL}/api/v2/usuarios-ixc`,
-  user: `${BASE_API_URL}/api/v2/usuarios`,
-  log: `${BASE_API_URL}/api/v2/logs`,
-  metric: `${BASE_API_URL}/api/v2/metricas`,
+  authentication: `${BASE_API_URL}/api/v1/autenticacao`,
+  group: `${BASE_API_URL}/api/v1/grupos`,
+  perm: `${BASE_API_URL}/api/v1/permissoes`,
+  ixc_user: `${BASE_API_URL}/api/v1/usuarios-ixc`,
+  user: `${BASE_API_URL}/api/v1/usuarios`,
+  log: `${BASE_API_URL}/api/v1/logs`,
+  metric: `${BASE_API_URL}/api/v1/metricas`,
 };
 
 const API_ROUTES = {
