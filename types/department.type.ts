@@ -4,6 +4,7 @@ enum Departments {
   Finance = "Financeiro",
   Screening = "Triagem",
   Collection = "Cobrança",
+  Upgrade = "Upgrade",
 }
 
 export { Departments };
