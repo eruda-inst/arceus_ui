@@ -53,6 +53,7 @@ const Departments = [
   "Triagem",
   "Cobrança",
   "Upgrade",
+  "Vila",
 ] as const;
 
 function LogFilters() {

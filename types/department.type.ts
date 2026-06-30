@@ -5,6 +5,7 @@ enum Departments {
   Screening = "Triagem",
   Collection = "Cobrança",
   Upgrade = "Upgrade",
+  Village = "Vila",
 }
 
 export { Departments };
