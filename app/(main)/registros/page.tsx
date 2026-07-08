@@ -103,15 +103,6 @@ function Logs() {
             Visualize registros de requisições
           </p>
         </div>
-        <Button
-          className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
-          onPress={handleRefreshLogs}
-          size="md"
-          isPending={isRefreshing}
-          isDisabled={isLoading || isRefreshing}
-        >
-          {({ isPending }) => (isPending ? "Atualizado..." : "Atualizar")}
-        </Button>
       </div>
 
       <LogFilters />
@@ -129,6 +120,8 @@ function Logs() {
         <LogTable
           data={logs}
           isLoading={isLoading}
+          isRefreshing={isRefreshing}
+          onRefreshLogs={handleRefreshLogs}
           onRowClick={handleRowClick}
         />
       </div>

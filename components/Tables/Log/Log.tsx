@@ -5,6 +5,7 @@ import {
   EmptyState,
   Chip,
   ChipProps,
+  Button,
 } from "@heroui/react";
 import {
   FaServer,
@@ -21,6 +22,8 @@ import { twMerge } from "tailwind-merge";
 interface LogTableProps {
   data: LogOut[];
   isLoading: boolean;
+  isRefreshing: boolean;
+  onRefreshLogs: () => {};
   onRowClick: (data: LogOut) => void;
 }
 
@@ -77,7 +80,13 @@ function ChipCode({ code, className, children, ...props }: ChipCodeProps) {
   );
 }
 
-function LogTable({ data, isLoading, onRowClick }: LogTableProps) {
+function LogTable({
+  data,
+  isLoading,
+  isRefreshing,
+  onRefreshLogs,
+  onRowClick,
+}: LogTableProps) {
   if (isLoading) {
     return <Skeleton className="h-80 rounded-lg" />;
   }
@@ -85,7 +94,7 @@ function LogTable({ data, isLoading, onRowClick }: LogTableProps) {
   return (
     <Card className="p-0">
       <Card.Header className="p-4">
-        <Card.Title>
+        <Card.Title className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-lg bg-linear-to-r from-purple-700 to-indigo-700">
               <FaServer className="size-5 text-white" />
@@ -94,6 +103,15 @@ function LogTable({ data, isLoading, onRowClick }: LogTableProps) {
               Registros de requisições
             </h2>
           </div>
+          <Button
+            className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
+            onPress={onRefreshLogs}
+            size="md"
+            isPending={isRefreshing}
+            isDisabled={isLoading || isRefreshing}
+          >
+            {({ isPending }) => (isPending ? "Atualizado..." : "Atualizar")}
+          </Button>
         </Card.Title>
       </Card.Header>
 
