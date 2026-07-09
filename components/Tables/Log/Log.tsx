@@ -127,12 +127,12 @@ function LogTable({
             >
               <Table.Header className="sticky top-0 z-10">
                 {/* IP */}
-                <Table.Column isRowHeader>
+                {/* <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
                     <FaServer className="w-3.5 h-3.5 text-gray-400" />
                     <span className="text-gray-300 uppercase">IP</span>
                   </div>
-                </Table.Column>
+                </Table.Column> */}
 
                 {/* Método */}
                 <Table.Column>
@@ -189,7 +189,7 @@ function LogTable({
                     className="hover:cursor-pointer"
                   >
                     {/* IP */}
-                    <Table.Cell className="py-4">
+                    {/* <Table.Cell className="py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaServer className="w-4 h-4 text-indigo-400" />
@@ -198,7 +198,7 @@ function LogTable({
                           {log.ip}
                         </span>
                       </div>
-                    </Table.Cell>
+                    </Table.Cell> */}
 
                     {/* Método */}
                     <Table.Cell className="py-4">
