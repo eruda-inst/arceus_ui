@@ -200,7 +200,7 @@ function Home() {
           metric2Label="Total"
           metric2Value={totalErrors}
           formatMetric1={(v) => {
-            v = v === 1 ? v * 100 : v;
+            v = v < 1 ? v * 100 : 100;
             return `${v.toFixed(2).replace(".", ",")}%`;
           }}
           isLoading={isLoading}
@@ -213,7 +213,7 @@ function Home() {
           metric2Label="Total"
           metric2Value={totalSuccesses}
           formatMetric1={(v) => {
-            v = v === 1 ? v * 100 : v;
+            v = v < 1 ? v * 100 : 100;
             return `${v.toFixed(2).replace(".", ",")}%`;
           }}
           isLoading={isLoading}
