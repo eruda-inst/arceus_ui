@@ -28,8 +28,11 @@ function VerticalBarChart({
   isLoading = false,
   hideXAxis = false,
   hideYAxis = false,
-  layout = "horizontal",
+  layout = "vertical",
 }: ChartBarProps) {
+  const rechartsLayout = layout === "vertical" ? "horizontal" : "vertical";
+  const isVertical = layout === "vertical";
+
   return (
     <>
       {isLoading ? (
@@ -42,7 +45,7 @@ function VerticalBarChart({
           <Card.Content>
             {data && data.length > 0 ? (
               <BarChart
-                layout={layout}
+                layout={rechartsLayout}
                 style={{
                   width: "100%",
                   maxWidth: "700px",
@@ -54,14 +57,14 @@ function VerticalBarChart({
                 margin={{ top: 50, right: 5, left: 5 }}
               >
                 <XAxis
-                  type={layout === "vertical" ? "number" : "category"}
-                  dataKey={layout === "horizontal" ? dataKey : undefined}
+                  type={isVertical ? "category" : "number"}
+                  dataKey={isVertical ? dataKey : undefined}
                   hide={hideXAxis}
                   width="auto"
                 />
                 <YAxis
-                  type={layout === "vertical" ? "category" : "number"}
-                  dataKey={layout === "vertical" ? dataKey : undefined}
+                  type={isVertical ? "number" : "category"}
+                  dataKey={isVertical ? undefined : dataKey}
                   hide={hideYAxis}
                   width="auto"
                 />
@@ -86,10 +89,10 @@ function VerticalBarChart({
                   fill={barColor}
                   activeBar={{ fill: activeBarColor }}
                   label={{
-                    position: layout === "vertical" ? "right" : "top",
+                    position: isVertical ? "top" : "right",
                     fontSize: 12,
                   }}
-                  radius={layout === "vertical" ? [0, 5, 5, 0] : [5, 5, 0, 0]}
+                  radius={isVertical ? [5, 5, 0, 0] : [0, 5, 5, 0]}
                   maxBarSize={75}
                   name={name}
                 />

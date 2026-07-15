@@ -2,7 +2,7 @@
 
 import { Button, toast } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import VerticalBarChart from "@/components/Charts/VerticalBar";
+import CustomBar from "@/components/Charts/CustomBar";
 import OneLineChart from "@/components/Charts/OneLine";
 import DualMetricCard from "@/components/DualMetricCard/DualMetricCard";
 import { MetricService } from "@/services/Metric";
@@ -233,7 +233,7 @@ function Home() {
 
       {/* Top endpoints */}
       <div className="grid grid-cols-2 gap-4">
-        <VerticalBarChart
+        <CustomBar
           data={topEndpoints?.hoje}
           dataKey="endpoint"
           barDataKey="total_requisicoes"
@@ -242,7 +242,7 @@ function Home() {
           isLoading={isLoading}
           hideXAxis
         />
-        <VerticalBarChart
+        <CustomBar
           data={topEndpoints?.sempre}
           dataKey="endpoint"
           barDataKey="total_requisicoes"
@@ -253,7 +253,7 @@ function Home() {
         />
 
         {/* Top status codes */}
-        <VerticalBarChart
+        <CustomBar
           data={topStatusCodes?.hoje}
           dataKey="status_code"
           barDataKey="total_respostas"
@@ -262,9 +262,9 @@ function Home() {
           isLoading={isLoading}
           barColor="#10b981"
           activeBarColor="#ef467e"
-          layout="vertical"
+          layout="horizontal"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topStatusCodes?.sempre}
           dataKey="status_code"
           barDataKey="total_respostas"
@@ -273,11 +273,11 @@ function Home() {
           isLoading={isLoading}
           barColor="#10b981"
           activeBarColor="#ef467e"
-          layout="vertical"
+          layout="horizontal"
         />
 
         {/* Top métodos HTTP */}
-        <VerticalBarChart
+        <CustomBar
           data={topHttpMethods?.hoje}
           dataKey="metodo_http"
           barDataKey="total_requisicoes"
@@ -286,9 +286,9 @@ function Home() {
           isLoading={isLoading}
           barColor="#06b6d4"
           activeBarColor="#ec4899"
-          layout="vertical"
+          layout="horizontal"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topHttpMethods?.sempre}
           dataKey="metodo_http"
           barDataKey="total_requisicoes"
@@ -297,11 +297,11 @@ function Home() {
           isLoading={isLoading}
           barColor="#06b6d4"
           activeBarColor="#ec4899"
-          layout="vertical"
+          layout="horizontal"
         />
 
         {/* Top setores */}
-        <VerticalBarChart
+        <CustomBar
           data={topDepartments?.hoje}
           dataKey="setor"
           barDataKey="total_requisicoes"
@@ -310,9 +310,9 @@ function Home() {
           isLoading={isLoading}
           barColor="#3b82f6"
           activeBarColor="#34d399"
-          layout="vertical"
+          layout="horizontal"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topDepartments?.sempre}
           dataKey="setor"
           barDataKey="total_requisicoes"
@@ -321,7 +321,7 @@ function Home() {
           isLoading={isLoading}
           barColor="#3b82f6"
           activeBarColor="#34d399"
-          layout="vertical"
+          layout="horizontal"
         />
 
         {/* Horas de pico */}
@@ -347,7 +347,7 @@ function Home() {
         />
 
         {/* Top dias da semana */}
-        <VerticalBarChart
+        <CustomBar
           data={topWeekdays?.hoje}
           dataKey="dia_semana"
           barDataKey="total_requisicoes"
@@ -356,9 +356,9 @@ function Home() {
           isLoading={isLoading}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
-          layout="vertical"
+          layout="horizontal"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topWeekdays?.sempre}
           dataKey="dia_semana"
           barDataKey="total_requisicoes"
@@ -367,11 +367,11 @@ function Home() {
           isLoading={isLoading}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
-          layout="vertical"
+          layout="horizontal"
         />
 
         {/* Top dias do mês */}
-        <VerticalBarChart
+        <CustomBar
           data={topMonthDays?.hoje}
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
@@ -381,9 +381,8 @@ function Home() {
           barColor="#f97316"
           activeBarColor="#16F99C"
           hideXAxis
-          layout="vertical"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topMonthDays?.sempre}
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
@@ -393,11 +392,10 @@ function Home() {
           barColor="#f97316"
           activeBarColor="#16F99C"
           hideXAxis
-          layout="vertical"
         />
 
         {/* Top piores endpoints */}
-        <VerticalBarChart
+        <CustomBar
           data={topWorstEndpoints?.hoje}
           dataKey="endpoint"
           name="Total de erros"
@@ -408,7 +406,7 @@ function Home() {
           barColor="#ef4444"
           activeBarColor="#10bbbb"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topWorstEndpoints?.sempre}
           dataKey="endpoint"
           name="Total de erros"
@@ -421,7 +419,7 @@ function Home() {
         />
 
         {/* Top endpoints mais lentos */}
-        <VerticalBarChart
+        <CustomBar
           data={topSlowestEndpoints?.hoje}
           dataKey="endpoint"
           name="Tempo médio de resposta"
@@ -432,7 +430,7 @@ function Home() {
           barColor="#6c5ce7"
           activeBarColor="#fdcb6e"
         />
-        <VerticalBarChart
+        <CustomBar
           data={topSlowestEndpoints?.sempre}
           dataKey="endpoint"
           name="Tempo médio de resposta"
