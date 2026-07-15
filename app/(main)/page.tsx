@@ -16,6 +16,7 @@ import {
   TopWeekday,
   TopWorstEndpoint,
   TopSlowestEndpoint,
+  TopHttpMethod,
 } from "@/types/metric.type";
 
 const fetchAllMetrics = async () => {
@@ -34,6 +35,7 @@ const fetchAllMetrics = async () => {
     getTotalSuccesses,
     getTopMonthDays,
     getTopSlowestEndpoints,
+    getTopHttpMethods,
   } = MetricService;
 
   const [
@@ -51,6 +53,7 @@ const fetchAllMetrics = async () => {
     totalSuccessesRaw,
     topMonthDaysRaw,
     topSlowestEndpointsRaw,
+    topHttpMethodsRaw,
   ] = await Promise.all([
     getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
     getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
@@ -66,6 +69,7 @@ const fetchAllMetrics = async () => {
     getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
     getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
     getTopSlowestEndpoints() as Promise<TodayAlwaysOut<TopSlowestEndpoint[]>>,
+    getTopHttpMethods() as Promise<TodayAlwaysOut<TopHttpMethod[]>>,
   ]);
 
   const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
@@ -110,6 +114,7 @@ const fetchAllMetrics = async () => {
     totalSuccesses: totalSuccessesRaw,
     topMonthDays: topMonthDaysFormatted,
     topSlowestEndpoints: topSlowestEndpointsRaw,
+    topHttpMethods: topHttpMethodsRaw,
   };
 };
 
@@ -146,6 +151,7 @@ function Home() {
     totalSuccesses = {} as TodayAlwaysOut<number>,
     topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
     topSlowestEndpoints = {} as TodayAlwaysOut<TopSlowestEndpoint[]>,
+    topHttpMethods = {} as TodayAlwaysOut<TopHttpMethod[]>,
   } = data ?? {};
 
   return (
@@ -265,6 +271,28 @@ function Home() {
         />
 
         {/* Top métodos HTTP */}
+        <VerticalBarChart
+          data={topHttpMethods?.hoje}
+          dataKey="metodo_http"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Métodos HTTP — Hoje"
+          isLoading={isLoading}
+          barColor="#06b6d4"
+          activeBarColor="#ec4899"
+          layout="vertical"
+        />
+        <VerticalBarChart
+          data={topHttpMethods?.sempre}
+          dataKey="metodo_http"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Métodos HTTP — Sempre"
+          isLoading={isLoading}
+          barColor="#06b6d4"
+          activeBarColor="#ec4899"
+          layout="vertical"
+        />
 
         {/* Horas de pico */}
         <OneLineChart

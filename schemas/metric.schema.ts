@@ -29,6 +29,10 @@ export const TopSlowestEndpointSchema = z.object({
   endpoint: z.string(),
   duracao: z.number(),
 });
+export const TopHttpMethodSchema = z.object({
+  metodo_http: z.string(),
+  total_requisicoes: z.number(),
+});
 export const TodayAlwaysOutSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   z.object({
     hoje: itemSchema,
@@ -63,4 +67,7 @@ export const TopMonthDaysSchema = TodayAlwaysOutSchema(
 );
 export const TopSlowestEndpointsSchema = TodayAlwaysOutSchema(
   z.array(TopSlowestEndpointSchema),
+);
+export const TopHttpMethodsSchema = TodayAlwaysOutSchema(
+  z.array(TopHttpMethodSchema),
 );

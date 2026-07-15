@@ -1,4 +1,3 @@
-// Metric.ts
 import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
 import { axiosClient } from "@/libs/axiosClient.lib";
@@ -11,7 +10,7 @@ import {
   TopWorstEndpoint,
   TopMonthDay,
   TopSlowestEndpoint,
-  TopSlowestEndpoints,
+  TopHttpMethod,
 } from "@/types/metric.type";
 import {
   TotalReqsSchema,
@@ -28,9 +27,9 @@ import {
   TopWorstEndpointsSchema,
   TopMonthDaysSchema,
   TopSlowestEndpointsSchema,
+  TopHttpMethodsSchema,
 } from "@/schemas/metric.schema";
 
-// Retry helper (extracted from UserService)
 async function withRetry<T>(
   fn: () => Promise<T>,
   retries = 1,
@@ -268,6 +267,21 @@ class MetricService {
         return { hoje: [], sempre: [] };
       }
       console.error("Failed to fetch top slowest endpoints:", error);
+      throw error;
+    }
+  }
+
+  static async getTopHttpMethods(): Promise<TodayAlwaysOut<TopHttpMethod[]>> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.topHttpMethods()),
+      );
+      return TopHttpMethodsSchema.parse(response.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return { hoje: [], sempre: [] };
+      }
+      console.error("Failed to fetch top http methods:", error);
       throw error;
     }
   }
