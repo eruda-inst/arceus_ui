@@ -7,10 +7,6 @@ import {
   TopMonthDaySchema,
   TotalReqsSchema,
   AvgResTimeSchema,
-  SuccessRateSchema,
-  ErrorRateSchema,
-  TotalErrorsSchema,
-  TotalSuccessesSchema,
   TotalServicesSchema,
   TopEndpointsSchema,
   TopStatusCodesSchema,
@@ -50,10 +46,6 @@ export interface TopHourFormatted {
 }
 export type TotalReqs = z.infer<typeof TotalReqsSchema>;
 export type AvgResTime = z.infer<typeof AvgResTimeSchema>;
-export type SuccessRate = z.infer<typeof SuccessRateSchema>;
-export type ErrorRate = z.infer<typeof ErrorRateSchema>;
-export type TotalErrors = z.infer<typeof TotalErrorsSchema>;
-export type TotalSuccesses = z.infer<typeof TotalSuccessesSchema>;
 export type TotalServices = z.infer<typeof TotalServicesSchema>;
 export type TopEndpoints = z.infer<typeof TopEndpointsSchema>;
 export type TopStatusCodes = z.infer<typeof TopStatusCodesSchema>;

@@ -51,12 +51,6 @@ export const TodayAlwaysOutSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   });
 export const TotalReqsSchema = TodayAlwaysOutSchema(z.number().nonnegative());
 export const AvgResTimeSchema = TodayAlwaysOutSchema(z.number());
-export const SuccessRateSchema = TodayAlwaysOutSchema(z.number());
-export const ErrorRateSchema = TodayAlwaysOutSchema(z.number());
-export const TotalErrorsSchema = TodayAlwaysOutSchema(z.number().nonnegative());
-export const TotalSuccessesSchema = TodayAlwaysOutSchema(
-  z.number().nonnegative(),
-);
 export const TotalServicesSchema = TodayAlwaysOutSchema(
   z.number().nonnegative(),
 );
