@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import { Button, toast } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
 import VerticalBarChart from "@/components/Charts/VerticalBar";
 import OneLineChart from "@/components/Charts/OneLine";
 import DualMetricCard from "@/components/DualMetricCard/DualMetricCard";
@@ -17,7 +17,7 @@ import {
   TopWorstEndpoint,
 } from "@/types/metric.type";
 
-function Home() {
+const fetchAllMetrics = async () => {
   const {
     getTopWeekdays,
     getTopEndpoints,
@@ -34,142 +34,113 @@ function Home() {
     getTopMonthDays,
   } = MetricService;
 
-  const [topWeekdays, setTopWeekdays] = useState<TodayAlwaysOut<TopWeekday[]>>(
-    {} as TodayAlwaysOut<TopWeekday[]>,
-  );
-  const [topEndpoints, setTopEndpoints] = useState<
-    TodayAlwaysOut<TopEndpoint[]>
-  >({} as TodayAlwaysOut<TopEndpoint[]>);
-  const [topHours, setTopHours] = useState<TodayAlwaysOut<TopHourFormatted[]>>(
-    {} as TodayAlwaysOut<TopHourFormatted[]>,
-  );
-  const [topStatusCodes, setTopStatusCodes] = useState<
-    TodayAlwaysOut<TopStatusCode[]>
-  >({} as TodayAlwaysOut<TopStatusCode[]>);
-  const [topWorstEndpoints, setTopWorstEndpoints] = useState<
-    TodayAlwaysOut<TopWorstEndpoint[]>
-  >({} as TodayAlwaysOut<TopWorstEndpoint[]>);
-  const [avgResTime, setAvgResTime] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [errorRate, setErrorRate] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [successRate, setSuccessRate] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [totalErrors, setTotalErrors] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [totalReqs, setTotalReqs] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [totalServices, setTotalServices] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [totalSuccesses, setTotalSuccesses] = useState<TodayAlwaysOut<number>>(
-    {} as TodayAlwaysOut<number>,
-  );
-  const [topMonthDays, setTopMonthDays] = useState<
-    TodayAlwaysOut<TopMonthDay[]>
-  >({} as TodayAlwaysOut<TopMonthDay[]>);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [
+    topWeekdaysRaw,
+    topEndpointsRaw,
+    topHoursRaw,
+    topStatusCodesRaw,
+    topWorstEndpointsRaw,
+    avgResTimeRaw,
+    errorRateRaw,
+    successRateRaw,
+    totalErrorsRaw,
+    totalReqsRaw,
+    totalServicesRaw,
+    totalSuccessesRaw,
+    topMonthDaysRaw,
+  ] = await Promise.all([
+    getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
+    getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
+    getTopHours() as Promise<TodayAlwaysOut<TopHour[]>>,
+    getTopStatusCodes() as Promise<TodayAlwaysOut<TopStatusCode[]>>,
+    getTopWorstEndpoints() as Promise<TodayAlwaysOut<TopWorstEndpoint[]>>,
+    getAvgResTime() as Promise<TodayAlwaysOut<number>>,
+    getErrorRate() as Promise<TodayAlwaysOut<number>>,
+    getSuccessRate() as Promise<TodayAlwaysOut<number>>,
+    getTotalErrors() as Promise<TodayAlwaysOut<number>>,
+    getTotalReqs() as Promise<TodayAlwaysOut<number>>,
+    getTotalServices() as Promise<TodayAlwaysOut<number>>,
+    getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
+    getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
+  ]);
 
-  const fetchAll = async () => {
-    setIsLoading(true);
-    try {
-      const [
-        topWeekdaysRaw,
-        topEndpointsRaw,
-        topHoursRaw,
-        topStatusCodesRaw,
-        topWorstEndpointsRaw,
-        avgResTimeRaw,
-        errorRateRaw,
-        successRateRaw,
-        totalErrorsRaw,
-        totalReqsRaw,
-        totalServicesRaw,
-        totalSuccessesRaw,
-        topMonthDaysRaw,
-      ] = await Promise.all([
-        getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
-        getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
-        getTopHours() as Promise<TodayAlwaysOut<TopHour[]>>,
-        getTopStatusCodes() as Promise<TodayAlwaysOut<TopStatusCode[]>>,
-        getTopWorstEndpoints() as Promise<TodayAlwaysOut<TopWorstEndpoint[]>>,
-        getAvgResTime() as Promise<TodayAlwaysOut<number>>,
-        getErrorRate() as Promise<TodayAlwaysOut<number>>,
-        getSuccessRate() as Promise<TodayAlwaysOut<number>>,
-        getTotalErrors() as Promise<TodayAlwaysOut<number>>,
-        getTotalReqs() as Promise<TodayAlwaysOut<number>>,
-        getTotalServices() as Promise<TodayAlwaysOut<number>>,
-        getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
-        getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
-      ]);
-      const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
-        hoje:
-          topHoursRaw.hoje
-            ?.slice()
-            .sort((a, b) => a.hora - b.hora)
-            .map((item) => ({
-              ...item,
-              hora: `${item.hora} h`,
-            })) ?? [],
-        sempre:
-          topHoursRaw.sempre
-            ?.slice()
-            .sort((a, b) => a.hora - b.hora)
-            .map((item) => ({
-              ...item,
-              hora: `${item.hora} h`,
-            })) ?? [],
-      };
-      const topMonthDaysFormatted: TodayAlwaysOut<TopMonthDay[]> = {
-        hoje:
-          topMonthDaysRaw.hoje?.slice().sort((a, b) => a.dia_mes - b.dia_mes) ??
-          [],
-        sempre:
-          topMonthDaysRaw.sempre
-            ?.slice()
-            .sort((a, b) => a.dia_mes - b.dia_mes) ?? [],
-      };
-      setTopHours(topHoursFormatted);
-      setTopWeekdays(topWeekdaysRaw);
-      setTopEndpoints(topEndpointsRaw);
-      setTopStatusCodes(topStatusCodesRaw);
-      setTopWorstEndpoints(topWorstEndpointsRaw);
-      setAvgResTime(avgResTimeRaw);
-      setErrorRate(errorRateRaw);
-      setSuccessRate(successRateRaw);
-      setTotalErrors(totalErrorsRaw);
-      setTotalReqs(totalReqsRaw);
-      setTotalServices(totalServicesRaw);
-      setTotalSuccesses(totalSuccessesRaw);
-      setTopMonthDays(topMonthDaysFormatted);
-    } catch (err: unknown) {
-      console.error(err);
-      toast.danger("Erro ao carregar métricas");
-    } finally {
-      setIsLoading(false);
-    }
+  const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
+    hoje:
+      topHoursRaw.hoje
+        ?.slice()
+        .sort((a, b) => a.hora - b.hora)
+        .map((item) => ({
+          ...item,
+          hora: `${item.hora} h`,
+        })) ?? [],
+    sempre:
+      topHoursRaw.sempre
+        ?.slice()
+        .sort((a, b) => a.hora - b.hora)
+        .map((item) => ({
+          ...item,
+          hora: `${item.hora} h`,
+        })) ?? [],
   };
 
-  const loadInitialData = useCallback(async () => {
-    await fetchAll();
-  }, []);
+  const topMonthDaysFormatted: TodayAlwaysOut<TopMonthDay[]> = {
+    hoje:
+      topMonthDaysRaw.hoje?.slice().sort((a, b) => a.dia_mes - b.dia_mes) ?? [],
+    sempre:
+      topMonthDaysRaw.sempre?.slice().sort((a, b) => a.dia_mes - b.dia_mes) ??
+      [],
+  };
+
+  return {
+    topWeekdays: topWeekdaysRaw,
+    topEndpoints: topEndpointsRaw,
+    topHours: topHoursFormatted,
+    topStatusCodes: topStatusCodesRaw,
+    topWorstEndpoints: topWorstEndpointsRaw,
+    avgResTime: avgResTimeRaw,
+    errorRate: errorRateRaw,
+    successRate: successRateRaw,
+    totalErrors: totalErrorsRaw,
+    totalReqs: totalReqsRaw,
+    totalServices: totalServicesRaw,
+    totalSuccesses: totalSuccessesRaw,
+    topMonthDays: topMonthDaysFormatted,
+  };
+};
+
+function Home() {
+  const { data, isLoading, isRefetching, error, refetch } = useQuery({
+    queryKey: ["metrics"],
+    queryFn: fetchAllMetrics,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
+
+  if (error) {
+    toast.danger("Erro ao carregar métricas");
+    console.error(error);
+  }
 
   const handleRefreshMetrics = async () => {
-    setIsRefreshing(true);
-    await fetchAll();
-    setIsRefreshing(false);
+    await refetch();
     toast.success("Métricas atualizadas!");
   };
 
-  useEffect(() => {
-    loadInitialData();
-  }, []);
+  const {
+    topWeekdays = {} as TodayAlwaysOut<TopWeekday[]>,
+    topEndpoints = {} as TodayAlwaysOut<TopEndpoint[]>,
+    topHours = {} as TodayAlwaysOut<TopHourFormatted[]>,
+    topStatusCodes = {} as TodayAlwaysOut<TopStatusCode[]>,
+    topWorstEndpoints = {} as TodayAlwaysOut<TopWorstEndpoint[]>,
+    avgResTime = {} as TodayAlwaysOut<number>,
+    errorRate = {} as TodayAlwaysOut<number>,
+    successRate = {} as TodayAlwaysOut<number>,
+    totalErrors = {} as TodayAlwaysOut<number>,
+    totalReqs = {} as TodayAlwaysOut<number>,
+    totalServices = {} as TodayAlwaysOut<number>,
+    totalSuccesses = {} as TodayAlwaysOut<number>,
+    topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
+  } = data ?? {};
 
   return (
     <>
@@ -184,10 +155,10 @@ function Home() {
           className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
           onPress={handleRefreshMetrics}
           size="md"
-          isPending={isRefreshing}
-          isDisabled={isLoading || isRefreshing}
+          isPending={isRefetching}
+          isDisabled={isLoading || isRefetching}
         >
-          {({ isPending }) => (isPending ? "Atualizado..." : "Atualizar")}
+          {isRefetching ? "Atualizando..." : "Atualizar"}
         </Button>
       </div>
 
@@ -243,7 +214,6 @@ function Home() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* Top Endpoints – cores padrão (ciano e laranja) */}
         <VerticalBarChart
           data={topEndpoints?.hoje}
           dataKey="endpoint"
@@ -263,7 +233,6 @@ function Home() {
           hideXAxis
         />
 
-        {/* Top Status Codes – verde */}
         <VerticalBarChart
           data={topStatusCodes?.hoje}
           dataKey="status_code"
@@ -287,7 +256,6 @@ function Home() {
           layout="vertical"
         />
 
-        {/* Horas de Pico – roxo/rosa */}
         <OneLineChart
           data={topHours?.hoje}
           dataKey="hora"
@@ -309,7 +277,6 @@ function Home() {
           activeDotColor="#74a309"
         />
 
-        {/* Top Dias da Semana – amarelo/laranja escuro */}
         <VerticalBarChart
           data={topWeekdays?.hoje}
           dataKey="dia_semana"
@@ -333,7 +300,6 @@ function Home() {
           layout="vertical"
         />
 
-        {/* Top Dias do Mês – laranja queimado */}
         <VerticalBarChart
           data={topMonthDays?.hoje}
           dataKey="dia_mes"
@@ -359,7 +325,6 @@ function Home() {
           layout="vertical"
         />
 
-        {/* Piores Endpoints – vermelho */}
         <VerticalBarChart
           data={topWorstEndpoints?.hoje}
           dataKey="endpoint"
