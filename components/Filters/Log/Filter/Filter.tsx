@@ -39,13 +39,11 @@ const EmptyFilterSchema = z.object({
   protocolo: z.undefined(),
   data_inicio: z.undefined(),
   data_fim: z.undefined(),
-  ip: z.undefined(),
   endpoint: z.undefined(),
   cliente: z.undefined(),
   setor: z.undefined(),
 });
 
-// Enum de departamentos (exemplo; substitua pelo import real)
 const Departments = [
   "Suporte",
   "Financeiro",
@@ -254,21 +252,6 @@ function LogFilters() {
                 <Form className="grid grid-cols-2 gap-4">
                   <TextField
                     variant="secondary"
-                    value={localFilters.ip ?? ""}
-                    onChange={(value) => handleChange("ip", value)}
-                  >
-                    <Label>IP</Label>
-                    <InputGroup>
-                      <InputGroup.Prefix>
-                        <FaGlobe className="size-4 text-gray-400" />
-                      </InputGroup.Prefix>
-                      <InputGroup.Input placeholder="192.168.0.1" />
-                    </InputGroup>
-                    <FieldError />
-                  </TextField>
-
-                  <TextField
-                    variant="secondary"
                     value={localFilters.cliente ?? ""}
                     onChange={(value) => handleChange("cliente", value)}
                   >
@@ -399,7 +382,7 @@ function LogFilters() {
             <Accordion.Heading>
               <Accordion.Trigger>
                 <div className="flex items-center gap-x-2">
-                  <FaClock className="size-5" /> {/* ícone de relógio */}
+                  <FaClock className="size-5" />
                   <span>Hora</span>
                 </div>
                 <Accordion.Indicator />

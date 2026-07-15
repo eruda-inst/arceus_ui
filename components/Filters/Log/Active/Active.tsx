@@ -25,7 +25,6 @@ function ActiveLogFilters() {
         data_fim: "Data fim",
         hora_inicio: "Hora início",
         hora_fim: "Hora fim",
-        ip: "IP",
         endpoint: "Endpoint",
         cliente: "Cliente",
         setor: "Setor",
