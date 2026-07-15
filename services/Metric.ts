@@ -14,9 +14,10 @@ import {
   TopDepartment,
   ErrorStatsResponse,
   SuccessStatsResponse,
+  AvgResTime,
 } from "@/types/metric.type";
 import {
-  AvgResTimeSchema,
+  ResTimeSchema,
   ErrorStatsResponseSchema,
   SuccessStatsResponseSchema,
   TopDepartmentsSchema,
@@ -74,15 +75,18 @@ class MetricService {
     }
   }
 
-  static async getAvgResTime(): Promise<TodayAlwaysOut<number>> {
+  static async getResTime(): Promise<AvgResTime> {
     try {
       const response = await withRetry(() =>
-        axiosClient.get(API_ROUTES.metric.avgResTime()),
+        axiosClient.get(API_ROUTES.metric.resTime()),
       );
-      return AvgResTimeSchema.parse(response.data);
+      return ResTimeSchema.parse(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return { hoje: 0, sempre: 0 };
+        return {
+          hoje: { min: 0, avg: 0, max: 0 },
+          sempre: { min: 0, avg: 0, max: 0 },
+        };
       }
       console.error("Failed to fetch average response time:", error);
       throw error;

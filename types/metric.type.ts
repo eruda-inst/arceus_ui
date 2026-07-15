@@ -6,7 +6,7 @@ import {
   TopWorstEndpointSchema,
   TopMonthDaySchema,
   TotalReqsSchema,
-  AvgResTimeSchema,
+  ResTimeSchema,
   TotalServicesSchema,
   TopEndpointsSchema,
   TopStatusCodesSchema,
@@ -24,6 +24,7 @@ import {
   ErrorStatsSchema,
   SuccessStatsResponseSchema,
   ErrorStatsResponseSchema,
+  ResponseTimeStatsSchema,
 } from "@/schemas/metric.schema";
 import type z from "zod";
 
@@ -45,7 +46,6 @@ export interface TopHourFormatted {
   total_requisicoes: number;
 }
 export type TotalReqs = z.infer<typeof TotalReqsSchema>;
-export type AvgResTime = z.infer<typeof AvgResTimeSchema>;
 export type TotalServices = z.infer<typeof TotalServicesSchema>;
 export type TopEndpoints = z.infer<typeof TopEndpointsSchema>;
 export type TopStatusCodes = z.infer<typeof TopStatusCodesSchema>;
@@ -60,3 +60,5 @@ export type SuccessStats = z.infer<typeof SuccessStatsSchema>;
 export type ErrorStats = z.infer<typeof ErrorStatsSchema>;
 export type SuccessStatsResponse = z.infer<typeof SuccessStatsResponseSchema>;
 export type ErrorStatsResponse = z.infer<typeof ErrorStatsResponseSchema>;
+export type ResponseTimeStats = z.infer<typeof ResponseTimeStatsSchema>;
+export type AvgResTime = z.infer<typeof ResTimeSchema>;

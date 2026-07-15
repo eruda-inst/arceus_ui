@@ -4,7 +4,7 @@ import { Button, toast } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import CustomBar from "@/components/Charts/CustomBar";
 import OneLineChart from "@/components/Charts/OneLine";
-import DualMetricCard from "@/components/DualMetricCard/DualMetricCard";
+import { DualMetricCard } from "@/components/DualMetricCard/DualMetricCard";
 import { MetricService } from "@/services/Metric";
 import {
   TodayAlwaysOut,
@@ -28,7 +28,7 @@ const fetchAllMetrics = async () => {
     getTopHours,
     getTopStatusCodes,
     getTopWorstEndpoints,
-    getAvgResTime,
+    getResTime,
     getTotalReqs,
     getTotalServices,
     getTopMonthDays,
@@ -45,7 +45,7 @@ const fetchAllMetrics = async () => {
     topHoursRaw,
     topStatusCodesRaw,
     topWorstEndpointsRaw,
-    avgResTimeRaw,
+    resTimeRaw,
     totalReqsRaw,
     totalServicesRaw,
     topMonthDaysRaw,
@@ -60,7 +60,7 @@ const fetchAllMetrics = async () => {
     getTopHours(),
     getTopStatusCodes(),
     getTopWorstEndpoints(),
-    getAvgResTime(),
+    getResTime(),
     getTotalReqs(),
     getTotalServices(),
     getTopMonthDays(),
@@ -104,7 +104,7 @@ const fetchAllMetrics = async () => {
     topHours: topHoursFormatted,
     topStatusCodes: topStatusCodesRaw,
     topWorstEndpoints: topWorstEndpointsRaw,
-    avgResTime: avgResTimeRaw,
+    resTime: resTimeRaw,
     totalReqs: totalReqsRaw,
     totalServices: totalServicesRaw,
     topMonthDays: topMonthDaysFormatted,
@@ -140,7 +140,7 @@ function Home() {
     topHours = {} as TodayAlwaysOut<TopHourFormatted[]>,
     topStatusCodes = {} as TodayAlwaysOut<TopStatusCode[]>,
     topWorstEndpoints = {} as TodayAlwaysOut<TopWorstEndpoint[]>,
-    avgResTime = {} as TodayAlwaysOut<number>,
+    resTime = {} as TodayAlwaysOut<{ min: number; avg: number; max: number }>,
     totalReqs = {} as TodayAlwaysOut<number>,
     totalServices = {} as TodayAlwaysOut<number>,
     topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
@@ -172,58 +172,116 @@ function Home() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
+        {/* Erros */}
         <DualMetricCard
           title="Erros"
-          description="Total de requisições mal-sucedidas"
-          metric1Label="Taxa"
-          metric1Value={{
-            hoje: errorStats?.hoje?.percentual ?? 0,
-            sempre: errorStats?.sempre?.percentual ?? 0,
-          }}
-          metric2Label="Total"
-          metric2Value={{
-            hoje: errorStats?.hoje?.total ?? 0,
-            sempre: errorStats?.sempre?.total ?? 0,
-          }}
-          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
+          description="Total de requisições malsucedidas"
+          metrics={[
+            {
+              label: "Taxa",
+              value: {
+                hoje: errorStats?.hoje?.percentual ?? 0,
+                sempre: errorStats?.sempre?.percentual ?? 0,
+              },
+              format: (v: Number) => `${v.toFixed(2).replace(".", ",")}%`,
+            },
+            {
+              label: "Total",
+              value: {
+                hoje: errorStats?.hoje?.total ?? 0,
+                sempre: errorStats?.sempre?.total ?? 0,
+              },
+            },
+          ]}
           isLoading={isLoading}
         />
+
+        {/* Sucessos */}
         <DualMetricCard
           title="Sucessos"
           description="Total de requisições bem-sucedidas"
-          metric1Label="Taxa"
-          metric1Value={{
-            hoje: successStats?.hoje?.percentual ?? 0,
-            sempre: successStats?.sempre?.percentual ?? 0,
-          }}
-          metric2Label="Total"
-          metric2Value={{
-            hoje: successStats?.hoje?.total ?? 0,
-            sempre: successStats?.sempre?.total ?? 0,
-          }}
-          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
+          metrics={[
+            {
+              label: "Taxa",
+              value: {
+                hoje: successStats?.hoje?.percentual ?? 0,
+                sempre: successStats?.sempre?.percentual ?? 0,
+              },
+              format: (v: Number) => `${v.toFixed(2).replace(".", ",")}%`,
+            },
+            {
+              label: "Total",
+              value: {
+                hoje: successStats?.hoje?.total ?? 0,
+                sempre: successStats?.sempre?.total ?? 0,
+              },
+            },
+          ]}
           isLoading={isLoading}
         />
+
+        {/* Tempo de Resposta (agora com 3 métricas) */}
         <DualMetricCard
-          title="Tempo Médio de Resposta"
-          description="Tempo médio de resposta entre requisições e respostas"
-          metric1Label="Segundos"
-          metric1Value={avgResTime}
+          title="Tempo de Resposta"
+          description="Mínimo, média e máximo (em segundos)"
+          metrics={[
+            {
+              label: "Mín",
+              value: {
+                hoje: resTime?.hoje?.min ?? 0,
+                sempre: resTime?.sempre?.min ?? 0,
+              },
+              format: (v: Number) => v.toFixed(3).replace(".", ","),
+            },
+            {
+              label: "Méd",
+              value: {
+                hoje: resTime?.hoje?.avg ?? 0,
+                sempre: resTime?.sempre?.avg ?? 0,
+              },
+              format: (v: Number) => v.toFixed(3).replace(".", ","),
+            },
+            {
+              label: "Máx",
+              value: {
+                hoje: resTime?.hoje?.max ?? 0,
+                sempre: resTime?.sempre?.max ?? 0,
+              },
+              format: (v: Number) => v.toFixed(3).replace(".", ","),
+            },
+          ]}
           isLoading={isLoading}
-          formatMetric1={(v) => `${v.toFixed(3).replace(".", ",")}`}
         />
+
+        {/* Requisições (apenas Total) */}
         <DualMetricCard
           title="Requisições"
           description="Total de requisições realizadas"
-          metric1Label="Total"
-          metric1Value={totalReqs}
+          metrics={[
+            {
+              label: "Total",
+              value: {
+                hoje: totalReqs?.hoje ?? 0,
+                sempre: totalReqs?.sempre ?? 0,
+              },
+            },
+          ]}
           isLoading={isLoading}
         />
+
+        {/* Atendimentos (apenas Total) */}
         <DualMetricCard
           title="Atendimentos"
           description="Total de atendimentos realizados"
-          metric1Label="Total"
-          metric1Value={totalServices}
+          metrics={[
+            {
+              label: "Total",
+              value: {
+                hoje: totalServices?.hoje ?? 0,
+                sempre: totalServices?.sempre ?? 0,
+              },
+            },
+          ]}
           isLoading={isLoading}
         />
       </div>

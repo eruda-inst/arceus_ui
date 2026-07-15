@@ -1,34 +1,33 @@
-import { Card, Skeleton } from "@heroui/react";
+"use client";
+
+import { Card, Skeleton, Spinner } from "@heroui/react";
+
+interface MetricItem {
+  label: string;
+  value: { hoje: number; sempre: number };
+  format?: (v: number) => string;
+}
 
 interface DualMetricCardProps {
   title: string;
   description: string;
-  metric1Label: string;
-  metric1Value: { hoje: number; sempre: number };
-  metric2Label?: string;
-  metric2Value?: { hoje: number; sempre: number };
-  formatMetric1?: (value: number) => string;
-  formatMetric2?: (value: number) => string;
-  isLoading: boolean;
+  metrics: MetricItem[];
+  isLoading?: boolean;
 }
 
-function DualMetricCard({
+export function DualMetricCard({
   title,
   description,
-  metric1Label,
-  metric1Value,
-  metric2Label,
-  metric2Value,
-  formatMetric1,
-  formatMetric2,
-  isLoading,
+  metrics,
+  isLoading = false,
 }: DualMetricCardProps) {
   return (
-    <Card className="h-40">
+    <Card>
       <Card.Header>
         <Card.Title className="text-lg font-bold">{title}</Card.Title>
         <Card.Description>{description}</Card.Description>
       </Card.Header>
+
       <Card.Content>
         {isLoading ? (
           <div className="space-y-2">
@@ -38,38 +37,37 @@ function DualMetricCard({
         ) : (
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm font-medium">Hoje</p>
-              <p>
-                {metric1Label}:{" "}
-                {formatMetric1
-                  ? formatMetric1(metric1Value?.hoje ?? 0)
-                  : metric1Value?.hoje}
-              </p>
-              {metric2Label && (
-                <p>
-                  {metric2Label}:{" "}
-                  {formatMetric2
-                    ? formatMetric2(metric2Value?.hoje ?? 0)
-                    : metric2Value?.hoje}
-                </p>
-              )}
+              <p className="text-md font-medium">Hoje</p>
+
+              <div className="flex flex-col gap-1 mt-1 text-sm">
+                {metrics.map((metric, idx) => (
+                  <div key={idx}>
+                    <span>{metric.label}: </span>
+                    <span className="font-mono">
+                      {metric.format
+                        ? metric.format(metric.value.hoje)
+                        : metric.value.hoje.toString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium">Sempre</p>
-              <p>
-                {metric1Label}:{" "}
-                {formatMetric1
-                  ? formatMetric1(metric1Value?.sempre ?? 0)
-                  : metric1Value?.sempre}
-              </p>
-              {metric2Label && (
-                <p>
-                  {metric2Label}:{" "}
-                  {formatMetric2
-                    ? formatMetric2(metric2Value?.sempre ?? 0)
-                    : metric2Value?.sempre}
-                </p>
-              )}
+
+            <div className="flex flex-col gap-1 mt-1">
+              <p className="text-md font-medium">Sempre</p>
+
+              <div className="flex flex-col gap-1 mt-1 text-sm">
+                {metrics.map((metric, idx) => (
+                  <div key={idx}>
+                    <span>{metric.label}: </span>
+                    <span className="font-mono">
+                      {metric.format
+                        ? metric.format(metric.value.sempre)
+                        : metric.value.sempre.toString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -77,5 +75,3 @@ function DualMetricCard({
     </Card>
   );
 }
-
-export default DualMetricCard;

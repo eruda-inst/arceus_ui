@@ -137,7 +137,6 @@ const API_ROUTES = {
   },
   metric: {
     totalReqs: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
-    avgResTime: () => `${API_ENDPOINT_BASES.metric}/tempo-medio-resposta`,
     totalServices: () => `${API_ENDPOINT_BASES.metric}/total-atendimentos`,
     topEndpoints: () => `${API_ENDPOINT_BASES.metric}/top-endpoints`,
     topStatusCodes: () => `${API_ENDPOINT_BASES.metric}/top-status-codes`,
@@ -152,6 +151,7 @@ const API_ROUTES = {
     topDepartments: () => `${API_ENDPOINT_BASES.metric}/top-setores`,
     sucessos: () => `${API_ENDPOINT_BASES.metric}/sucessos`,
     erros: () => `${API_ENDPOINT_BASES.metric}/erros`,
+    resTime: () => `${API_ENDPOINT_BASES.metric}/tempo-resposta`,
   },
 };
 
