@@ -138,10 +138,6 @@ const API_ROUTES = {
   metric: {
     totalReqs: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
     avgResTime: () => `${API_ENDPOINT_BASES.metric}/tempo-medio-resposta`,
-    successRate: () => `${API_ENDPOINT_BASES.metric}/taxa-sucesso`,
-    errorRate: () => `${API_ENDPOINT_BASES.metric}/taxa-erro`,
-    totalErrors: () => `${API_ENDPOINT_BASES.metric}/total-erros`,
-    totalSuccesses: () => `${API_ENDPOINT_BASES.metric}/total-sucessos`,
     totalServices: () => `${API_ENDPOINT_BASES.metric}/total-atendimentos`,
     topEndpoints: () => `${API_ENDPOINT_BASES.metric}/top-endpoints`,
     topStatusCodes: () => `${API_ENDPOINT_BASES.metric}/top-status-codes`,
@@ -154,6 +150,8 @@ const API_ROUTES = {
       `${API_ENDPOINT_BASES.metric}/top-endpoints-mais-lentos`,
     topHttpMethods: () => `${API_ENDPOINT_BASES.metric}/top-metodos-http`,
     topDepartments: () => `${API_ENDPOINT_BASES.metric}/top-setores`,
+    sucessos: () => `${API_ENDPOINT_BASES.metric}/sucessos`,
+    erros: () => `${API_ENDPOINT_BASES.metric}/erros`,
   },
 };
 

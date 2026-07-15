@@ -12,24 +12,24 @@ import {
   TopSlowestEndpoint,
   TopHttpMethod,
   TopDepartment,
+  ErrorStatsResponse,
+  SuccessStatsResponse,
 } from "@/types/metric.type";
 import {
-  TotalReqsSchema,
   AvgResTimeSchema,
-  SuccessRateSchema,
-  ErrorRateSchema,
-  TotalErrorsSchema,
-  TotalSuccessesSchema,
-  TotalServicesSchema,
+  ErrorStatsResponseSchema,
+  SuccessStatsResponseSchema,
+  TopDepartmentsSchema,
   TopEndpointsSchema,
-  TopStatusCodesSchema,
   TopHoursSchema,
-  TopWeekdaysSchema,
-  TopWorstEndpointsSchema,
+  TopHttpMethodsSchema,
   TopMonthDaysSchema,
   TopSlowestEndpointsSchema,
-  TopHttpMethodsSchema,
-  TopDepartmentsSchema,
+  TopStatusCodesSchema,
+  TopWorstEndpointsSchema,
+  TotalReqsSchema,
+  TotalServicesSchema,
+  TopWeekdaysSchema,
 } from "@/schemas/metric.schema";
 
 async function withRetry<T>(
@@ -85,66 +85,6 @@ class MetricService {
         return { hoje: 0, sempre: 0 };
       }
       console.error("Failed to fetch average response time:", error);
-      throw error;
-    }
-  }
-
-  static async getSuccessRate(): Promise<TodayAlwaysOut<number>> {
-    try {
-      const response = await withRetry(() =>
-        axiosClient.get(API_ROUTES.metric.successRate()),
-      );
-      return SuccessRateSchema.parse(response.data);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return { hoje: 0, sempre: 0 };
-      }
-      console.error("Failed to fetch success rate:", error);
-      throw error;
-    }
-  }
-
-  static async getErrorRate(): Promise<TodayAlwaysOut<number>> {
-    try {
-      const response = await withRetry(() =>
-        axiosClient.get(API_ROUTES.metric.errorRate()),
-      );
-      return ErrorRateSchema.parse(response.data);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return { hoje: 0, sempre: 0 };
-      }
-      console.error("Failed to fetch error rate:", error);
-      throw error;
-    }
-  }
-
-  static async getTotalErrors(): Promise<TodayAlwaysOut<number>> {
-    try {
-      const response = await withRetry(() =>
-        axiosClient.get(API_ROUTES.metric.totalErrors()),
-      );
-      return TotalErrorsSchema.parse(response.data);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return { hoje: 0, sempre: 0 };
-      }
-      console.error("Failed to fetch total errors:", error);
-      throw error;
-    }
-  }
-
-  static async getTotalSuccesses(): Promise<TodayAlwaysOut<number>> {
-    try {
-      const response = await withRetry(() =>
-        axiosClient.get(API_ROUTES.metric.totalSuccesses()),
-      );
-      return TotalSuccessesSchema.parse(response.data);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return { hoje: 0, sempre: 0 };
-      }
-      console.error("Failed to fetch total successes:", error);
       throw error;
     }
   }
@@ -299,6 +239,42 @@ class MetricService {
         return { hoje: [], sempre: [] };
       }
       console.error("Failed to fetch top http methods:", error);
+      throw error;
+    }
+  }
+
+  static async getSuccessStats(): Promise<SuccessStatsResponse> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.sucessos()),
+      );
+      return SuccessStatsResponseSchema.parse(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return {
+          hoje: { total: 0, percentual: 0 },
+          sempre: { total: 0, percentual: 0 },
+        };
+      }
+      console.error("Failed to fetch success stats:", error);
+      throw error;
+    }
+  }
+
+  static async getErrorStats(): Promise<ErrorStatsResponse> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.erros()),
+      );
+      return ErrorStatsResponseSchema.parse(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return {
+          hoje: { total: 0, percentual: 0 },
+          sempre: { total: 0, percentual: 0 },
+        };
+      }
+      console.error("Failed to fetch error stats:", error);
       throw error;
     }
   }

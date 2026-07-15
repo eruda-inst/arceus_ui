@@ -9,7 +9,6 @@ import { MetricService } from "@/services/Metric";
 import {
   TodayAlwaysOut,
   TopEndpoint,
-  TopHour,
   TopHourFormatted,
   TopMonthDay,
   TopStatusCode,
@@ -18,6 +17,8 @@ import {
   TopSlowestEndpoint,
   TopHttpMethod,
   TopDepartment,
+  SuccessStats,
+  ErrorStats,
 } from "@/types/metric.type";
 
 const fetchAllMetrics = async () => {
@@ -28,16 +29,14 @@ const fetchAllMetrics = async () => {
     getTopStatusCodes,
     getTopWorstEndpoints,
     getAvgResTime,
-    getErrorRate,
-    getSuccessRate,
-    getTotalErrors,
     getTotalReqs,
     getTotalServices,
-    getTotalSuccesses,
     getTopMonthDays,
     getTopSlowestEndpoints,
     getTopHttpMethods,
     getTopDepartments,
+    getSuccessStats,
+    getErrorStats,
   } = MetricService;
 
   const [
@@ -47,33 +46,29 @@ const fetchAllMetrics = async () => {
     topStatusCodesRaw,
     topWorstEndpointsRaw,
     avgResTimeRaw,
-    errorRateRaw,
-    successRateRaw,
-    totalErrorsRaw,
     totalReqsRaw,
     totalServicesRaw,
-    totalSuccessesRaw,
     topMonthDaysRaw,
     topSlowestEndpointsRaw,
     topHttpMethodsRaw,
     topDepartmentsRaw,
+    successStatsRaw,
+    errorStatsRaw,
   ] = await Promise.all([
-    getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
-    getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
-    getTopHours() as Promise<TodayAlwaysOut<TopHour[]>>,
-    getTopStatusCodes() as Promise<TodayAlwaysOut<TopStatusCode[]>>,
-    getTopWorstEndpoints() as Promise<TodayAlwaysOut<TopWorstEndpoint[]>>,
-    getAvgResTime() as Promise<TodayAlwaysOut<number>>,
-    getErrorRate() as Promise<TodayAlwaysOut<number>>,
-    getSuccessRate() as Promise<TodayAlwaysOut<number>>,
-    getTotalErrors() as Promise<TodayAlwaysOut<number>>,
-    getTotalReqs() as Promise<TodayAlwaysOut<number>>,
-    getTotalServices() as Promise<TodayAlwaysOut<number>>,
-    getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
-    getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
-    getTopSlowestEndpoints() as Promise<TodayAlwaysOut<TopSlowestEndpoint[]>>,
-    getTopHttpMethods() as Promise<TodayAlwaysOut<TopHttpMethod[]>>,
-    getTopDepartments() as Promise<TodayAlwaysOut<TopDepartment[]>>,
+    getTopWeekdays(),
+    getTopEndpoints(),
+    getTopHours(),
+    getTopStatusCodes(),
+    getTopWorstEndpoints(),
+    getAvgResTime(),
+    getTotalReqs(),
+    getTotalServices(),
+    getTopMonthDays(),
+    getTopSlowestEndpoints(),
+    getTopHttpMethods(),
+    getTopDepartments(),
+    getSuccessStats(),
+    getErrorStats(),
   ]);
 
   const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
@@ -110,16 +105,14 @@ const fetchAllMetrics = async () => {
     topStatusCodes: topStatusCodesRaw,
     topWorstEndpoints: topWorstEndpointsRaw,
     avgResTime: avgResTimeRaw,
-    errorRate: errorRateRaw,
-    successRate: successRateRaw,
-    totalErrors: totalErrorsRaw,
     totalReqs: totalReqsRaw,
     totalServices: totalServicesRaw,
-    totalSuccesses: totalSuccessesRaw,
     topMonthDays: topMonthDaysFormatted,
     topSlowestEndpoints: topSlowestEndpointsRaw,
     topHttpMethods: topHttpMethodsRaw,
     topDepartments: topDepartmentsRaw,
+    successStats: successStatsRaw,
+    errorStats: errorStatsRaw,
   };
 };
 
@@ -148,16 +141,14 @@ function Home() {
     topStatusCodes = {} as TodayAlwaysOut<TopStatusCode[]>,
     topWorstEndpoints = {} as TodayAlwaysOut<TopWorstEndpoint[]>,
     avgResTime = {} as TodayAlwaysOut<number>,
-    errorRate = {} as TodayAlwaysOut<number>,
-    successRate = {} as TodayAlwaysOut<number>,
-    totalErrors = {} as TodayAlwaysOut<number>,
     totalReqs = {} as TodayAlwaysOut<number>,
     totalServices = {} as TodayAlwaysOut<number>,
-    totalSuccesses = {} as TodayAlwaysOut<number>,
     topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
     topSlowestEndpoints = {} as TodayAlwaysOut<TopSlowestEndpoint[]>,
     topHttpMethods = {} as TodayAlwaysOut<TopHttpMethod[]>,
     topDepartments = {} as TodayAlwaysOut<TopDepartment[]>,
+    successStats = {} as TodayAlwaysOut<SuccessStats>,
+    errorStats = {} as TodayAlwaysOut<ErrorStats>,
   } = data ?? {};
 
   return (
@@ -185,26 +176,32 @@ function Home() {
           title="Erros"
           description="Total de requisições mal-sucedidas"
           metric1Label="Taxa"
-          metric1Value={errorRate}
-          metric2Label="Total"
-          metric2Value={totalErrors}
-          formatMetric1={(v) => {
-            v = v < 1 ? v * 100 : 100;
-            return `${v.toFixed(2).replace(".", ",")}%`;
+          metric1Value={{
+            hoje: errorStats?.hoje?.percentual ?? 0,
+            sempre: errorStats?.sempre?.percentual ?? 0,
           }}
+          metric2Label="Total"
+          metric2Value={{
+            hoje: errorStats?.hoje?.total ?? 0,
+            sempre: errorStats?.sempre?.total ?? 0,
+          }}
+          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
           isLoading={isLoading}
         />
         <DualMetricCard
           title="Sucessos"
           description="Total de requisições bem-sucedidas"
           metric1Label="Taxa"
-          metric1Value={successRate}
-          metric2Label="Total"
-          metric2Value={totalSuccesses}
-          formatMetric1={(v) => {
-            v = v < 1 ? v * 100 : 100;
-            return `${v.toFixed(2).replace(".", ",")}%`;
+          metric1Value={{
+            hoje: successStats?.hoje?.percentual ?? 0,
+            sempre: successStats?.sempre?.percentual ?? 0,
           }}
+          metric2Label="Total"
+          metric2Value={{
+            hoje: successStats?.hoje?.total ?? 0,
+            sempre: successStats?.sempre?.total ?? 0,
+          }}
+          formatMetric1={(v) => `${v.toFixed(2).replace(".", ",")}%`}
           isLoading={isLoading}
         />
         <DualMetricCard

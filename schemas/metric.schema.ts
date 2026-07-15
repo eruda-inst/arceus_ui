@@ -36,6 +36,14 @@ export const TopDepartmentSchema = z.object({
   setor: z.string(),
   total_requisicoes: z.number(),
 });
+export const SuccessStatsSchema = z.object({
+  total: z.number().int().nonnegative(),
+  percentual: z.number(),
+});
+export const ErrorStatsSchema = z.object({
+  total: z.number().int().nonnegative(),
+  percentual: z.number(),
+});
 export const TodayAlwaysOutSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   z.object({
     hoje: itemSchema,
@@ -77,3 +85,6 @@ export const TopHttpMethodsSchema = TodayAlwaysOutSchema(
 export const TopDepartmentsSchema = TodayAlwaysOutSchema(
   z.array(TopDepartmentSchema),
 );
+export const SuccessStatsResponseSchema =
+  TodayAlwaysOutSchema(SuccessStatsSchema);
+export const ErrorStatsResponseSchema = TodayAlwaysOutSchema(ErrorStatsSchema);
