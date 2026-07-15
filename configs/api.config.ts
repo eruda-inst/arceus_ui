@@ -150,6 +150,8 @@ const API_ROUTES = {
     topWorstEndpoints: () =>
       `${API_ENDPOINT_BASES.metric}/top-piores-endpoints`,
     topMonthDays: () => `${API_ENDPOINT_BASES.metric}/top-dias-mes`,
+    topSlowestEndpoints: () =>
+      `${API_ENDPOINT_BASES.metric}/top-endpoints-mais-lentos`,
   },
 };
 

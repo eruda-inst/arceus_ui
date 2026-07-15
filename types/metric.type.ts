@@ -18,6 +18,8 @@ import {
   TopWeekdaysSchema,
   TopWorstEndpointsSchema,
   TopMonthDaysSchema,
+  TopSlowestEndpointSchema,
+  TopSlowestEndpointsSchema,
 } from "@/schemas/metric.schema";
 import type z from "zod";
 
@@ -27,6 +29,7 @@ export type TopHour = z.infer<typeof TopHourSchema>;
 export type TopWeekday = z.infer<typeof TopWeekdaySchema>;
 export type TopWorstEndpoint = z.infer<typeof TopWorstEndpointSchema>;
 export type TopMonthDay = z.infer<typeof TopMonthDaySchema>;
+export type TopSlowestEndpoint = z.infer<typeof TopSlowestEndpointSchema>;
 export interface TodayAlwaysOut<T> {
   hoje: T;
   sempre: T;
@@ -48,3 +51,4 @@ export type TopHours = z.infer<typeof TopHoursSchema>;
 export type TopWeekdays = z.infer<typeof TopWeekdaysSchema>;
 export type TopWorstEndpoints = z.infer<typeof TopWorstEndpointsSchema>;
 export type TopMonthDays = z.infer<typeof TopMonthDaysSchema>;
+export type TopSlowestEndpoints = z.infer<typeof TopSlowestEndpointsSchema>;

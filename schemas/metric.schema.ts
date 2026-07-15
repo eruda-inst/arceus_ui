@@ -25,6 +25,10 @@ export const TopMonthDaySchema = z.object({
   dia_mes: z.number().int().min(1).max(31),
   total_requisicoes: z.number().int().nonnegative(),
 });
+export const TopSlowestEndpointSchema = z.object({
+  endpoint: z.string(),
+  duracao: z.number(),
+});
 export const TodayAlwaysOutSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   z.object({
     hoje: itemSchema,
@@ -56,4 +60,7 @@ export const TopWorstEndpointsSchema = TodayAlwaysOutSchema(
 );
 export const TopMonthDaysSchema = TodayAlwaysOutSchema(
   z.array(TopMonthDaySchema),
+);
+export const TopSlowestEndpointsSchema = TodayAlwaysOutSchema(
+  z.array(TopSlowestEndpointSchema),
 );

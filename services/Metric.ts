@@ -10,6 +10,8 @@ import {
   TopWeekday,
   TopWorstEndpoint,
   TopMonthDay,
+  TopSlowestEndpoint,
+  TopSlowestEndpoints,
 } from "@/types/metric.type";
 import {
   TotalReqsSchema,
@@ -25,6 +27,7 @@ import {
   TopWeekdaysSchema,
   TopWorstEndpointsSchema,
   TopMonthDaysSchema,
+  TopSlowestEndpointsSchema,
 } from "@/schemas/metric.schema";
 
 // Retry helper (extracted from UserService)
@@ -248,6 +251,23 @@ class MetricService {
         return { hoje: [], sempre: [] };
       }
       console.error("Failed to fetch top month days:", error);
+      throw error;
+    }
+  }
+
+  static async getTopSlowestEndpoints(): Promise<
+    TodayAlwaysOut<TopSlowestEndpoint[]>
+  > {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.topSlowestEndpoints()),
+      );
+      return TopSlowestEndpointsSchema.parse(response.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return { hoje: [], sempre: [] };
+      }
+      console.error("Failed to fetch top slowest endpoints:", error);
       throw error;
     }
   }

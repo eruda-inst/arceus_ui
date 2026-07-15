@@ -15,6 +15,7 @@ import {
   TopStatusCode,
   TopWeekday,
   TopWorstEndpoint,
+  TopSlowestEndpoint,
 } from "@/types/metric.type";
 
 const fetchAllMetrics = async () => {
@@ -32,6 +33,7 @@ const fetchAllMetrics = async () => {
     getTotalServices,
     getTotalSuccesses,
     getTopMonthDays,
+    getTopSlowestEndpoints,
   } = MetricService;
 
   const [
@@ -48,6 +50,7 @@ const fetchAllMetrics = async () => {
     totalServicesRaw,
     totalSuccessesRaw,
     topMonthDaysRaw,
+    topSlowestEndpointsRaw,
   ] = await Promise.all([
     getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
     getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
@@ -62,6 +65,7 @@ const fetchAllMetrics = async () => {
     getTotalServices() as Promise<TodayAlwaysOut<number>>,
     getTotalSuccesses() as Promise<TodayAlwaysOut<number>>,
     getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
+    getTopSlowestEndpoints() as Promise<TodayAlwaysOut<TopSlowestEndpoint[]>>,
   ]);
 
   const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
@@ -105,6 +109,7 @@ const fetchAllMetrics = async () => {
     totalServices: totalServicesRaw,
     totalSuccesses: totalSuccessesRaw,
     topMonthDays: topMonthDaysFormatted,
+    topSlowestEndpoints: topSlowestEndpointsRaw,
   };
 };
 
@@ -140,6 +145,7 @@ function Home() {
     totalServices = {} as TodayAlwaysOut<number>,
     totalSuccesses = {} as TodayAlwaysOut<number>,
     topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
+    topSlowestEndpoints = {} as TodayAlwaysOut<TopSlowestEndpoint[]>,
   } = data ?? {};
 
   return (
@@ -213,6 +219,7 @@ function Home() {
         />
       </div>
 
+      {/* Top endpoints */}
       <div className="grid grid-cols-2 gap-4">
         <VerticalBarChart
           data={topEndpoints?.hoje}
@@ -233,6 +240,7 @@ function Home() {
           hideXAxis
         />
 
+        {/* Top status codes */}
         <VerticalBarChart
           data={topStatusCodes?.hoje}
           dataKey="status_code"
@@ -256,6 +264,9 @@ function Home() {
           layout="vertical"
         />
 
+        {/* Top métodos HTTP */}
+
+        {/* Horas de pico */}
         <OneLineChart
           data={topHours?.hoje}
           dataKey="hora"
@@ -277,6 +288,7 @@ function Home() {
           activeDotColor="#74a309"
         />
 
+        {/* Top dias da semana */}
         <VerticalBarChart
           data={topWeekdays?.hoje}
           dataKey="dia_semana"
@@ -300,6 +312,7 @@ function Home() {
           layout="vertical"
         />
 
+        {/* Top dias do mês */}
         <VerticalBarChart
           data={topMonthDays?.hoje}
           dataKey="dia_mes"
@@ -325,6 +338,7 @@ function Home() {
           layout="vertical"
         />
 
+        {/* Top piores endpoints */}
         <VerticalBarChart
           data={topWorstEndpoints?.hoje}
           dataKey="endpoint"
@@ -346,6 +360,30 @@ function Home() {
           hideXAxis
           barColor="#ef4444"
           activeBarColor="#10bbbb"
+        />
+
+        {/* Top endpoints mais lentos */}
+        <VerticalBarChart
+          data={topSlowestEndpoints?.hoje}
+          dataKey="endpoint"
+          name="Tempo médio de resposta"
+          barDataKey="duracao"
+          label="Endpoints mais Lentos — Hoje"
+          isLoading={isLoading}
+          hideXAxis
+          barColor="#6c5ce7"
+          activeBarColor="#fdcb6e"
+        />
+        <VerticalBarChart
+          data={topSlowestEndpoints?.sempre}
+          dataKey="endpoint"
+          name="Tempo médio de resposta"
+          barDataKey="duracao"
+          label="Endpoints mais Lentos — Sempre"
+          isLoading={isLoading}
+          hideXAxis
+          barColor="#6c5ce7"
+          activeBarColor="#fdcb6e"
         />
       </div>
     </>
