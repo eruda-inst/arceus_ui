@@ -153,6 +153,7 @@ const API_ROUTES = {
     topSlowestEndpoints: () =>
       `${API_ENDPOINT_BASES.metric}/top-endpoints-mais-lentos`,
     topHttpMethods: () => `${API_ENDPOINT_BASES.metric}/top-metodos-http`,
+    topDepartments: () => `${API_ENDPOINT_BASES.metric}/top-setores`,
   },
 };
 

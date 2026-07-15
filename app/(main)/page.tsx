@@ -17,6 +17,7 @@ import {
   TopWorstEndpoint,
   TopSlowestEndpoint,
   TopHttpMethod,
+  TopDepartment,
 } from "@/types/metric.type";
 
 const fetchAllMetrics = async () => {
@@ -36,6 +37,7 @@ const fetchAllMetrics = async () => {
     getTopMonthDays,
     getTopSlowestEndpoints,
     getTopHttpMethods,
+    getTopDepartments,
   } = MetricService;
 
   const [
@@ -54,6 +56,7 @@ const fetchAllMetrics = async () => {
     topMonthDaysRaw,
     topSlowestEndpointsRaw,
     topHttpMethodsRaw,
+    topDepartmentsRaw,
   ] = await Promise.all([
     getTopWeekdays() as Promise<TodayAlwaysOut<TopWeekday[]>>,
     getTopEndpoints() as Promise<TodayAlwaysOut<TopEndpoint[]>>,
@@ -70,6 +73,7 @@ const fetchAllMetrics = async () => {
     getTopMonthDays() as Promise<TodayAlwaysOut<TopMonthDay[]>>,
     getTopSlowestEndpoints() as Promise<TodayAlwaysOut<TopSlowestEndpoint[]>>,
     getTopHttpMethods() as Promise<TodayAlwaysOut<TopHttpMethod[]>>,
+    getTopDepartments() as Promise<TodayAlwaysOut<TopDepartment[]>>,
   ]);
 
   const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
@@ -115,6 +119,7 @@ const fetchAllMetrics = async () => {
     topMonthDays: topMonthDaysFormatted,
     topSlowestEndpoints: topSlowestEndpointsRaw,
     topHttpMethods: topHttpMethodsRaw,
+    topDepartments: topDepartmentsRaw,
   };
 };
 
@@ -152,6 +157,7 @@ function Home() {
     topMonthDays = {} as TodayAlwaysOut<TopMonthDay[]>,
     topSlowestEndpoints = {} as TodayAlwaysOut<TopSlowestEndpoint[]>,
     topHttpMethods = {} as TodayAlwaysOut<TopHttpMethod[]>,
+    topDepartments = {} as TodayAlwaysOut<TopDepartment[]>,
   } = data ?? {};
 
   return (
@@ -291,6 +297,30 @@ function Home() {
           isLoading={isLoading}
           barColor="#06b6d4"
           activeBarColor="#ec4899"
+          layout="vertical"
+        />
+
+        {/* Top setores */}
+        <VerticalBarChart
+          data={topDepartments?.hoje}
+          dataKey="setor"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Setores — Hoje"
+          isLoading={isLoading}
+          barColor="#3b82f6"
+          activeBarColor="#34d399"
+          layout="vertical"
+        />
+        <VerticalBarChart
+          data={topDepartments?.sempre}
+          dataKey="setor"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          label="Top Setores — Sempre"
+          isLoading={isLoading}
+          barColor="#3b82f6"
+          activeBarColor="#34d399"
           layout="vertical"
         />
 

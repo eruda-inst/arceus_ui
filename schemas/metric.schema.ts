@@ -1,4 +1,3 @@
-// metricSchema.ts (extended)
 import z from "zod";
 
 export const TopEndpointSchema = z.object({
@@ -31,6 +30,10 @@ export const TopSlowestEndpointSchema = z.object({
 });
 export const TopHttpMethodSchema = z.object({
   metodo_http: z.string(),
+  total_requisicoes: z.number(),
+});
+export const TopDepartmentSchema = z.object({
+  setor: z.string(),
   total_requisicoes: z.number(),
 });
 export const TodayAlwaysOutSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
@@ -70,4 +73,7 @@ export const TopSlowestEndpointsSchema = TodayAlwaysOutSchema(
 );
 export const TopHttpMethodsSchema = TodayAlwaysOutSchema(
   z.array(TopHttpMethodSchema),
+);
+export const TopDepartmentsSchema = TodayAlwaysOutSchema(
+  z.array(TopDepartmentSchema),
 );

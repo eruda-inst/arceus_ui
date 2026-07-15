@@ -11,6 +11,7 @@ import {
   TopMonthDay,
   TopSlowestEndpoint,
   TopHttpMethod,
+  TopDepartment,
 } from "@/types/metric.type";
 import {
   TotalReqsSchema,
@@ -28,6 +29,7 @@ import {
   TopMonthDaysSchema,
   TopSlowestEndpointsSchema,
   TopHttpMethodsSchema,
+  TopDepartmentsSchema,
 } from "@/schemas/metric.schema";
 
 async function withRetry<T>(
@@ -277,6 +279,21 @@ class MetricService {
         axiosClient.get(API_ROUTES.metric.topHttpMethods()),
       );
       return TopHttpMethodsSchema.parse(response.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return { hoje: [], sempre: [] };
+      }
+      console.error("Failed to fetch top http methods:", error);
+      throw error;
+    }
+  }
+
+  static async getTopDepartments(): Promise<TodayAlwaysOut<TopDepartment[]>> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.topDepartments()),
+      );
+      return TopDepartmentsSchema.parse(response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return { hoje: [], sempre: [] };
