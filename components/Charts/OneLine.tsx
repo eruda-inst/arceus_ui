@@ -39,7 +39,7 @@ function OneLineChart({
       {isLoading ? (
         <Skeleton className="h-80 rounded-3xl" />
       ) : (
-        <Card>
+        <Card className="border bg-surface">
           <Card.Header className="space-y-3">
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
             <Card.Description>{description}</Card.Description>

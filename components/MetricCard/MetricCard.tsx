@@ -22,7 +22,7 @@ export function MetricCard({
   isLoading = false,
 }: MetricCardProps) {
   return (
-    <Card>
+    <Card className="border bg-surface">
       <Card.Header className="space-y-3">
         <Card.Title className="text-lg font-bold">{title}</Card.Title>
         <Card.Description>{description}</Card.Description>
@@ -35,15 +35,15 @@ export function MetricCard({
             <Skeleton className="h-4 w-1/2" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex justify-between">
             <div>
               <p className="text-md font-medium">Hoje</p>
 
               <div className="flex flex-col gap-1 mt-1 text-sm">
                 {metrics.map((metric, idx) => (
-                  <div key={idx}>
+                  <div key={idx} className="font-mono">
                     <span>{metric.label}: </span>
-                    <span className="font-mono">
+                    <span>
                       {metric.format
                         ? metric.format(metric.value.hoje)
                         : metric.value.hoje.toString()}
@@ -53,14 +53,14 @@ export function MetricCard({
               </div>
             </div>
 
-            <div className="flex flex-col gap-1 mt-1">
+            <div>
               <p className="text-md font-medium">Sempre</p>
 
               <div className="flex flex-col gap-1 mt-1 text-sm">
                 {metrics.map((metric, idx) => (
-                  <div key={idx}>
+                  <div key={idx} className="font-mono">
                     <span>{metric.label}: </span>
-                    <span className="font-mono">
+                    <span>
                       {metric.format
                         ? metric.format(metric.value.sempre)
                         : metric.value.sempre.toString()}
