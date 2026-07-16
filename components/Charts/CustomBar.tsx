@@ -7,6 +7,7 @@ interface ChartBarProps {
   data: Record<string, any>[];
   label: string;
   name?: string;
+  description: string;
   dataKey: string;
   barDataKey?: string;
   barColor?: string;
@@ -21,6 +22,7 @@ function VerticalBarChart({
   data,
   label,
   name = "Total de requisições",
+  description,
   dataKey,
   barDataKey = "total_requisicoes",
   barColor = "#0ea5e9",
@@ -39,9 +41,11 @@ function VerticalBarChart({
         <Skeleton className="h-80 rounded-3xl" />
       ) : (
         <Card>
-          <Card.Header>
+          <Card.Header className="space-y-3">
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
+            <Card.Description>{description}</Card.Description>
           </Card.Header>
+
           <Card.Content>
             {data && data.length > 0 ? (
               <BarChart

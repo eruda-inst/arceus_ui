@@ -8,19 +8,19 @@ interface MetricItem {
   format?: (v: number) => string;
 }
 
-interface DualMetricCardProps {
+interface MetricCardProps {
   title: string;
   description: string;
   metrics: MetricItem[];
   isLoading?: boolean;
 }
 
-export function DualMetricCard({
+export function MetricCard({
   title,
   description,
   metrics,
   isLoading = false,
-}: DualMetricCardProps) {
+}: MetricCardProps) {
   return (
     <Card>
       <Card.Header>

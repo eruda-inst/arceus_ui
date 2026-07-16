@@ -13,6 +13,7 @@ interface OneLineChartProps {
   data: Record<string, any>[];
   label: string;
   name?: string;
+  description: string;
   dataKey: string;
   lineDataKey?: string;
   lineColor?: string;
@@ -25,6 +26,7 @@ function OneLineChart({
   data,
   label,
   name = "Total de requisições",
+  description = "",
   dataKey,
   lineDataKey = "total_requisicoes",
   lineColor = "#21e8fa",
@@ -38,9 +40,11 @@ function OneLineChart({
         <Skeleton className="h-80 rounded-3xl" />
       ) : (
         <Card>
-          <Card.Header>
+          <Card.Header className="space-y-3">
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
+            <Card.Description>{description}</Card.Description>
           </Card.Header>
+
           <Card.Content>
             {data && data.length > 0 ? (
               <LineChart

@@ -4,7 +4,7 @@ import { Button, toast } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import CustomBar from "@/components/Charts/CustomBar";
 import OneLineChart from "@/components/Charts/OneLine";
-import { DualMetricCard } from "@/components/DualMetricCard/DualMetricCard";
+import { MetricCard } from "@/components/MetricCard/MetricCard";
 import { MetricService } from "@/services/Metric";
 import {
   TodayAlwaysOut,
@@ -173,7 +173,7 @@ function Home() {
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         {/* Erros */}
-        <DualMetricCard
+        <MetricCard
           title="Erros"
           description="Total de requisições malsucedidas"
           metrics={[
@@ -197,7 +197,7 @@ function Home() {
         />
 
         {/* Sucessos */}
-        <DualMetricCard
+        <MetricCard
           title="Sucessos"
           description="Total de requisições bem-sucedidas"
           metrics={[
@@ -221,7 +221,7 @@ function Home() {
         />
 
         {/* Tempo de Resposta (agora com 3 métricas) */}
-        <DualMetricCard
+        <MetricCard
           title="Tempo de Resposta"
           description="Mínimo, média e máximo (em segundos)"
           metrics={[
@@ -254,7 +254,7 @@ function Home() {
         />
 
         {/* Requisições (apenas Total) */}
-        <DualMetricCard
+        <MetricCard
           title="Requisições"
           description="Total de requisições realizadas"
           metrics={[
@@ -270,7 +270,7 @@ function Home() {
         />
 
         {/* Atendimentos (apenas Total) */}
-        <DualMetricCard
+        <MetricCard
           title="Atendimentos"
           description="Total de atendimentos realizados"
           metrics={[
@@ -293,6 +293,7 @@ function Home() {
           dataKey="endpoint"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Endpoints mais acessados no período"
           label="Top Endpoints — Hoje"
           isLoading={isLoading}
           hideXAxis
@@ -302,6 +303,7 @@ function Home() {
           dataKey="endpoint"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Endpoints mais acessados no período"
           label="Top Endpoints — Sempre"
           isLoading={isLoading}
           hideXAxis
@@ -312,6 +314,7 @@ function Home() {
           data={topStatusCodes?.hoje}
           dataKey="status_code"
           barDataKey="total_respostas"
+          description="Códigos de status mais frequentes"
           name="Total de respostas"
           label="Top Status Codes — Hoje"
           isLoading={isLoading}
@@ -324,6 +327,7 @@ function Home() {
           dataKey="status_code"
           barDataKey="total_respostas"
           name="Total de respostas"
+          description="Códigos de status mais frequentes"
           label="Top Status Codes — Sempre"
           isLoading={isLoading}
           barColor="#10b981"
@@ -337,6 +341,7 @@ function Home() {
           dataKey="metodo_http"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Métodos HTTP mais utilizados"
           label="Top Métodos HTTP — Hoje"
           isLoading={isLoading}
           barColor="#06b6d4"
@@ -348,6 +353,7 @@ function Home() {
           dataKey="metodo_http"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Métodos HTTP mais utilizados"
           label="Top Métodos HTTP — Sempre"
           isLoading={isLoading}
           barColor="#06b6d4"
@@ -361,6 +367,7 @@ function Home() {
           dataKey="setor"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Setores com maior volume de requisições"
           label="Top Setores — Hoje"
           isLoading={isLoading}
           barColor="#3b82f6"
@@ -372,6 +379,7 @@ function Home() {
           dataKey="setor"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Setores com maior volume de requisições"
           label="Top Setores — Sempre"
           isLoading={isLoading}
           barColor="#3b82f6"
@@ -385,6 +393,7 @@ function Home() {
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Distribuição de requisições por hora do dia"
           label="Horas de Pico — Hoje"
           isLoading={isLoading}
           lineColor="#8b5cf6"
@@ -395,6 +404,7 @@ function Home() {
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Distribuição de requisições por hora do dia"
           label="Horas de Pico — Sempre"
           isLoading={isLoading}
           lineColor="#8b5cf6"
@@ -407,6 +417,7 @@ function Home() {
           dataKey="dia_semana"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Dias com maior concentração de acessos"
           label="Top Dias da Semana"
           isLoading={isLoading}
           barColor="#f59e0b"
@@ -418,6 +429,7 @@ function Home() {
           dataKey="dia_semana"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Dias com maior concentração de acessos"
           label="Top Dias da Semana — Sempre"
           isLoading={isLoading}
           barColor="#f59e0b"
@@ -431,6 +443,7 @@ function Home() {
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Dias do mês com mais requisições"
           label="Top Dias do Mês"
           isLoading={isLoading}
           barColor="#f97316"
@@ -442,6 +455,7 @@ function Home() {
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
+          description="Dias do mês com mais requisições"
           label="Top Dias do Mês — Sempre"
           isLoading={isLoading}
           barColor="#f97316"
@@ -455,6 +469,7 @@ function Home() {
           dataKey="endpoint"
           name="Total de erros"
           barDataKey="total_erros"
+          description="Endpoints com maior número de erros"
           label="Piores Endpoints — Hoje"
           isLoading={isLoading}
           hideXAxis
@@ -466,6 +481,7 @@ function Home() {
           dataKey="endpoint"
           name="Total de erros"
           barDataKey="total_erros"
+          description="Endpoints com maior número de erros"
           label="Piores Endpoints — Sempre"
           isLoading={isLoading}
           hideXAxis
@@ -479,6 +495,7 @@ function Home() {
           dataKey="endpoint"
           name="Tempo médio de resposta"
           barDataKey="duracao"
+          description="Endpoints com maior tempo médio de resposta"
           label="Endpoints mais Lentos — Hoje"
           isLoading={isLoading}
           hideXAxis
@@ -490,6 +507,7 @@ function Home() {
           dataKey="endpoint"
           name="Tempo médio de resposta"
           barDataKey="duracao"
+          description="Endpoints com maior tempo médio de resposta"
           label="Endpoints mais Lentos — Sempre"
           isLoading={isLoading}
           hideXAxis
