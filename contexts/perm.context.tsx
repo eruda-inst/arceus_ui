@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "@/hooks/authentication.hook";
 import { usePermission } from "@/hooks/perm.hook";

@@ -92,7 +92,7 @@ function LogTable({
   }
 
   return (
-    <Card className="p-0">
+    <Card className="p-0 border">
       <Card.Header className="p-4">
         <Card.Title className="flex items-center justify-between">
           <div className="flex items-center gap-3">

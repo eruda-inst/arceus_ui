@@ -1,5 +1,3 @@
-"use client";
-
 import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, Skeleton } from "@heroui/react";
 

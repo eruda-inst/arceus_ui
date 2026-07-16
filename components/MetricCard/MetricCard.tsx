@@ -1,6 +1,4 @@
-"use client";
-
-import { Card, Skeleton, Spinner } from "@heroui/react";
+import { Card, Skeleton } from "@heroui/react";
 
 interface MetricItem {
   label: string;

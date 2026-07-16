@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Table,
   Skeleton,
@@ -48,7 +46,7 @@ function UserTable({ data, isLoading, onRowClick }: UserTableProps) {
   }
 
   return (
-    <Card className="p-0">
+    <Card className="p-0 border">
       <Card.Header className="p-4">
         <Card.Title>
           <div className="flex items-center gap-3">

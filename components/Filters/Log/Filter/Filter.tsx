@@ -102,7 +102,7 @@ function LogFilters() {
   }, [localFilters]);
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 border">
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">

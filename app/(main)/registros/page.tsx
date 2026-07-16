@@ -9,7 +9,7 @@ import ActiveLogFilters from "@/components/Filters/Log/Active/Active";
 import { useLogFilter } from "@/stores/logFilter.store";
 import { LogService } from "@/services/Log";
 import { LogOut, LogPaginationOut } from "@/types/log.type";
-import { Button, toast } from "@heroui/react";
+import { toast } from "@heroui/react";
 
 function Logs() {
   const getAll = LogService.getAll;

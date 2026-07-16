@@ -53,7 +53,7 @@ function PaginationControls({
   const endItem = Math.min(page * itemsPerPage, totalItems);
 
   return (
-    <Card>
+    <Card className="border">
       <Card.Content>
         <div className="flex items-center justify-between gap-4">
           <Select
