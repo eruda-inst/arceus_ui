@@ -20,6 +20,7 @@ function UserFilters() {
   const resetFilters = useUserFilter((state) => state.resetFilters);
 
   const [localFilters, setLocalFilters] = useState<UserFilterIn>(filters);
+  const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
   const handleChange = (key: keyof UserFilterIn, value?: string) => {
     const cleanValue = value?.trim() === "" ? undefined : value;
@@ -41,9 +42,11 @@ function UserFilters() {
     setLocalFilters(filters);
   }, [filters]);
 
-  const isFiltersEmpty = useMemo(() => {
-    return !localFilters.name && !localFilters.email && !localFilters.groupName;
-  }, []);
+  useEffect(() => {
+    setIsFiltersEmpty(
+      !localFilters.name && !localFilters.email && !localFilters.groupName,
+    );
+  }, [localFilters]);
 
   return (
     <Card className="mb-6 border">

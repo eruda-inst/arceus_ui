@@ -39,7 +39,6 @@ const LogFilterInSchema = z.object({
   data_fim: z.string().optional(),
   hora_inicio: z.string().optional(),
   hora_fim: z.string().optional(),
-  ip: z.string().optional(),
   endpoint: z.string().optional(),
   cliente: z.string().optional(),
   setor: z.enum(Departments).optional(),

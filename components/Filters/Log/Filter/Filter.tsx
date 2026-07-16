@@ -23,26 +23,12 @@ import {
   FaServer,
   FaGlobe,
   FaUser,
-  FaArrowRotateRight,
-  FaMagnifyingGlass,
   FaCode,
   FaClock,
   FaFileCode,
 } from "react-icons/fa6";
-import z from "zod";
 import { LogFilterIn } from "@/types/log.type";
 import { useLogFilter } from "@/stores/logFilter.store";
-
-const EmptyFilterSchema = z.object({
-  metodo: z.undefined(),
-  codigo: z.undefined(),
-  protocolo: z.undefined(),
-  data_inicio: z.undefined(),
-  data_fim: z.undefined(),
-  endpoint: z.undefined(),
-  cliente: z.undefined(),
-  setor: z.undefined(),
-});
 
 const Departments = [
   "Suporte",
@@ -60,7 +46,7 @@ function LogFilters() {
   const resetFilters = useLogFilter((state) => state.resetFilters);
 
   const [localFilters, setLocalFilters] = useState<LogFilterIn>(filters);
-  const [isLocalFiltersEmpty, setIsLocalFiltersEmpty] = useState<boolean>(true);
+  const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
   const handleChange = (
     key: keyof LogFilterIn,
@@ -98,7 +84,18 @@ function LogFilters() {
   }, [filters]);
 
   useEffect(() => {
-    setIsLocalFiltersEmpty(EmptyFilterSchema.safeParse(localFilters).success);
+    setIsFiltersEmpty(
+      localFilters.metodo === undefined &&
+        localFilters.codigo === undefined &&
+        localFilters.endpoint === undefined &&
+        localFilters.protocolo === undefined &&
+        localFilters.cliente === undefined &&
+        localFilters.setor === undefined &&
+        localFilters.data_inicio === undefined &&
+        localFilters.data_fim === undefined &&
+        localFilters.hora_inicio === undefined &&
+        localFilters.hora_fim === undefined,
+    );
   }, [localFilters]);
 
   return (
@@ -119,17 +116,17 @@ function LogFilters() {
         <div className="flex gap-3">
           <Button
             onPress={handleReset}
-            isDisabled={isLocalFiltersEmpty}
+            isDisabled={isFiltersEmpty}
             className="bg-linear-to-r from-gray-700 to-gray-800 text-gray-200 hover:shadow-md transition-shadow"
           >
-            <FaArrowRotateRight className="size-4" /> Limpar
+            Limpar
           </Button>
           <Button
             onPress={handleApply}
-            isDisabled={isLocalFiltersEmpty}
+            isDisabled={isFiltersEmpty}
             className="bg-linear-to-r from-purple-600 to-indigo-600 text-white hover:shadow-md transition-shadow"
           >
-            <FaMagnifyingGlass className="size-4" /> Aplicar Filtros
+            Aplicar Filtros
           </Button>
         </div>
       </Card.Header>
