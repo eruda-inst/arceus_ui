@@ -113,7 +113,6 @@ const API_ROUTES = {
       const params = new URLSearchParams();
       params.append("pagina", page.toString());
       params.append("itens_por_pagina", itemsPerPage.toString());
-      if (filters.ip) params.append("ip", filters.ip);
       if (filters.method) params.append("metodo", filters.method);
       if (filters.endpoint) params.append("endpoint", filters.endpoint);
       if (filters.code) params.append("codigo", filters.code);

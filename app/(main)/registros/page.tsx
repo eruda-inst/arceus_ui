@@ -57,7 +57,6 @@ function Logs() {
         code: filters.codigo !== undefined ? String(filters.codigo) : undefined,
         client: filters.cliente,
         department: filters.setor,
-        ip: filters.ip,
         endpoint: filters.endpoint,
         data_inicio: filters.data_inicio,
         data_fim: filters.data_fim,
