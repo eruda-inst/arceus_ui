@@ -174,7 +174,7 @@ function Home() {
       <div className="grid grid-cols-2 gap-4 mb-6">
         {/* Erros */}
         <MetricCard
-          title="Erros"
+          title="Malsucedidas"
           description="Total de requisições malsucedidas"
           metrics={[
             {
@@ -198,7 +198,7 @@ function Home() {
 
         {/* Sucessos */}
         <MetricCard
-          title="Sucessos"
+          title="Bem-sucedidas"
           description="Total de requisições bem-sucedidas"
           metrics={[
             {

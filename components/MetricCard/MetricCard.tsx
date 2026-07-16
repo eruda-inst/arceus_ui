@@ -23,7 +23,7 @@ export function MetricCard({
 }: MetricCardProps) {
   return (
     <Card>
-      <Card.Header>
+      <Card.Header className="space-y-3">
         <Card.Title className="text-lg font-bold">{title}</Card.Title>
         <Card.Description>{description}</Card.Description>
       </Card.Header>
