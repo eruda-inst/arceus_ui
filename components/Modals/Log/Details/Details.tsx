@@ -57,10 +57,10 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                           : log.payload;
                       return JSON.stringify(obj, null, 2);
                     } catch {
-                      return String(log.payload);
+                      return String(log.payload !== null);
                     }
                   })()}
-                  isCode={log.payload !== "---" && log.payload !== "{}"}
+                  isCode={log.payload !== null}
                   codeStyle={a11yDark}
                 />
                 <InfoItem
@@ -76,7 +76,7 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                       return String(log.resposta);
                     }
                   })()}
-                  isCode={log.resposta !== "---" && log.resposta !== "{}"}
+                  isCode={log.resposta !== null}
                   codeStyle={coldarkDark}
                 />
               </div>

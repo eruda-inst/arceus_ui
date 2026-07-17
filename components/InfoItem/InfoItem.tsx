@@ -3,7 +3,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface InfoItemProps {
   label: string;
-  value: string | number;
+  value: string | number | null;
   isCode?: boolean;
   language?: string;
   codeStyle?: any;
@@ -32,7 +32,7 @@ function InfoItem({
           }}
           codeTagProps={{ className: "font-mono text-sm" }}
         >
-          {String(value)}
+          {value ? String(value) : "---"}
         </Prism>
       ) : (
         <p className="font-medium">{value}</p>
