@@ -43,23 +43,30 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                   label="Duração"
                   value={log.duracao.toFixed(3).toString().replace(".", ",")}
                 />
-                <InfoItem label="Protocolo" value={log.protocolo} />
+                <InfoItem
+                  label="Protocolo"
+                  value={log.protocolo ? log.protocolo : "---"}
+                />
                 <InfoItem label="URL" value={log.url} />
                 <InfoItem label="Domínio" value={log.dominio} />
                 <InfoItem label="Setor" value={log.setor} />
                 <InfoItem
                   label="Payload"
-                  value={(() => {
-                    try {
-                      const obj =
-                        typeof log.payload === "string"
-                          ? JSON.parse(log.payload)
-                          : log.payload;
-                      return JSON.stringify(obj, null, 2);
-                    } catch {
-                      return String(log.payload !== null);
-                    }
-                  })()}
+                  value={
+                    log.payload
+                      ? (() => {
+                          try {
+                            const obj =
+                              typeof log.payload === "string"
+                                ? JSON.parse(log.payload)
+                                : log.payload;
+                            return JSON.stringify(obj, null, 2);
+                          } catch {
+                            return String(log.payload);
+                          }
+                        })()
+                      : "---"
+                  }
                   isCode={log.payload !== null}
                   codeStyle={a11yDark}
                 />
