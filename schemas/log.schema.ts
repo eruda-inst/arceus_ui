@@ -6,8 +6,6 @@ const LogOutSchema = z.object({
   metodo: z.string(),
   endpoint: z.string(),
   codigo: z.number().positive(),
-  data: z.string(),
-  hora: z.string(),
   duracao: z.float64(),
   protocolo: z.string(),
   payload: z.string(),
@@ -15,6 +13,7 @@ const LogOutSchema = z.object({
   url: z.string(),
   dominio: z.string(),
   setor: z.enum(Departments),
+  criado_em: z.string(),
 });
 
 const LogPaginationOutSchema = z.object({

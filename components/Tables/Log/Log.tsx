@@ -230,7 +230,7 @@ function LogTable({
                           <FaCalendar className="w-4 h-4 text-indigo-400" />
                         </div>
                         <span className="font-semibold text-gray-100">
-                          {Formatter.isoDate(log.data)}
+                          {Formatter.isoDate(log.criado_em.split("T")[0])}
                         </span>
                       </div>
                     </Table.Cell>
@@ -242,7 +242,7 @@ function LogTable({
                           <FaClock className="w-4 h-4 text-indigo-400" />
                         </div>
                         <span className="font-semibold text-gray-100">
-                          {Formatter.isoHour(log.hora)}
+                          {Formatter.isoHour(log.criado_em.split("T")[1])}
                         </span>
                       </div>
                     </Table.Cell>
