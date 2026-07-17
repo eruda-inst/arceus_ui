@@ -9,7 +9,6 @@ class LogService {
     filters: {
       page?: number;
       itemsPerPage?: number;
-      ip?: string;
       method?: string;
       endpoint?: string;
       code?: string;
@@ -22,7 +21,6 @@ class LogService {
       payload?: string;
       response?: string;
       url?: string;
-      client?: string;
       domain?: string;
       department?: string;
     } = {},

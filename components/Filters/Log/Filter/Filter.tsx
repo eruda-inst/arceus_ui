@@ -22,7 +22,6 @@ import {
   FaCalendar,
   FaServer,
   FaGlobe,
-  FaUser,
   FaCode,
   FaClock,
   FaFileCode,
@@ -89,7 +88,6 @@ function LogFilters() {
         localFilters.codigo === undefined &&
         localFilters.endpoint === undefined &&
         localFilters.protocolo === undefined &&
-        localFilters.cliente === undefined &&
         localFilters.setor === undefined &&
         localFilters.data_inicio === undefined &&
         localFilters.data_fim === undefined &&
@@ -247,21 +245,6 @@ function LogFilters() {
             <Accordion.Panel>
               <Accordion.Body>
                 <Form className="grid grid-cols-2 gap-4">
-                  <TextField
-                    variant="secondary"
-                    value={localFilters.cliente ?? ""}
-                    onChange={(value) => handleChange("cliente", value)}
-                  >
-                    <Label>Cliente</Label>
-                    <InputGroup>
-                      <InputGroup.Prefix>
-                        <FaUser className="size-4 text-gray-400" />
-                      </InputGroup.Prefix>
-                      <InputGroup.Input placeholder="Postman, navegador..." />
-                    </InputGroup>
-                    <FieldError />
-                  </TextField>
-
                   <Select
                     variant="secondary"
                     placeholder="Departamento"

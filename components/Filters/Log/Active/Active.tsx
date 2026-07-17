@@ -26,7 +26,6 @@ function ActiveLogFilters() {
         hora_inicio: "Hora início",
         hora_fim: "Hora fim",
         endpoint: "Endpoint",
-        cliente: "Cliente",
         setor: "Setor",
         protocolo: "Protocolo",
       };

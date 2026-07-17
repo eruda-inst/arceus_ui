@@ -91,7 +91,6 @@ const API_ROUTES = {
       filters: {
         page?: number;
         itemsPerPage?: number;
-        ip?: string;
         method?: string;
         endpoint?: string;
         code?: string;
@@ -104,7 +103,6 @@ const API_ROUTES = {
         payload?: string;
         response?: string;
         url?: string;
-        client?: string;
         domain?: string;
         department?: string;
       } = {},
@@ -128,7 +126,6 @@ const API_ROUTES = {
       if (filters.payload) params.append("payload", filters.payload);
       if (filters.response) params.append("resposta", filters.response);
       if (filters.url) params.append("url", filters.url);
-      if (filters.client) params.append("cliente", filters.client);
       if (filters.domain) params.append("dominio", filters.domain);
       if (filters.department) params.append("setor", filters.department);
       return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;

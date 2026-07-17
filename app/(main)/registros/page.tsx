@@ -55,7 +55,6 @@ function Logs() {
       const serviceFilters = {
         method: filters.metodo,
         code: filters.codigo !== undefined ? String(filters.codigo) : undefined,
-        client: filters.cliente,
         department: filters.setor,
         endpoint: filters.endpoint,
         data_inicio: filters.data_inicio,

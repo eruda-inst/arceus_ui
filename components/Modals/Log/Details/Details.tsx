@@ -45,7 +45,6 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                 />
                 <InfoItem label="Protocolo" value={log.protocolo} />
                 <InfoItem label="URL" value={log.url} />
-                <InfoItem label="Cliente" value={log.cliente} />
                 <InfoItem label="Domínio" value={log.dominio} />
                 <InfoItem label="Setor" value={log.setor} />
                 <InfoItem

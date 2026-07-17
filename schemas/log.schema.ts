@@ -3,7 +3,6 @@ import { Departments } from "@/types/department.type";
 
 const LogOutSchema = z.object({
   id: z.number().positive(),
-  ip: z.string(),
   metodo: z.string(),
   endpoint: z.string(),
   codigo: z.number().positive(),
@@ -14,7 +13,6 @@ const LogOutSchema = z.object({
   payload: z.string(),
   resposta: z.string().nullable(),
   url: z.string(),
-  cliente: z.string(),
   dominio: z.string(),
   setor: z.enum(Departments),
 });
@@ -40,7 +38,6 @@ const LogFilterInSchema = z.object({
   hora_inicio: z.string().optional(),
   hora_fim: z.string().optional(),
   endpoint: z.string().optional(),
-  cliente: z.string().optional(),
   setor: z.enum(Departments).optional(),
   protocolo: z.string().optional(),
 });
