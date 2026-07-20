@@ -48,7 +48,6 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                   value={log.protocolo ? log.protocolo : "---"}
                 />
                 <InfoItem label="URL" value={log.url} />
-                <InfoItem label="Domínio" value={log.dominio} />
                 <InfoItem label="Setor" value={log.setor} />
                 <InfoItem
                   label="Payload"

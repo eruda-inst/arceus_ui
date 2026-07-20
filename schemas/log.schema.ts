@@ -11,7 +11,6 @@ const LogOutSchema = z.object({
   payload: z.string().nullable(),
   resposta: z.string().nullable(),
   url: z.string(),
-  dominio: z.string(),
   setor: z.enum(Departments),
   criado_em: z.string(),
 });

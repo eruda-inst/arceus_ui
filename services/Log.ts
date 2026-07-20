@@ -21,7 +21,6 @@ class LogService {
       payload?: string;
       response?: string;
       url?: string;
-      domain?: string;
       department?: string;
     } = {},
   ): Promise<LogPaginationOut | undefined> {
