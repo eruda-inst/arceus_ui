@@ -13,11 +13,11 @@ import { useUserStore } from "@/stores/user.store";
 import PaginationControls from "@/components/PaginationControls/PaginationControls";
 import Add from "@/components/Modals/User/Add/Add";
 import { useAuthorization } from "@/hooks/authorization.hook";
-import { useAuthentication } from "@/hooks/authentication.hook";
+import { useAuthStore } from "@/stores/authentication.store";
 
 function Users() {
   const { checkAllPermissions } = useAuthorization();
-  const { currentUser } = useAuthentication();
+  const { currentUser } = useAuthStore();
 
   const users = useUserStore((state) => state.users);
   const setUsers = useUserStore((state) => state.setUsers);

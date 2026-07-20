@@ -102,7 +102,6 @@ function Add({ handleClose, ...props }: AddProps) {
       setSelectedIxcUser(null);
       handleClearForm();
     } catch (error) {
-      console.log(error);
       toast.danger("Erro ao adicionar usuário");
     } finally {
       setIsAdding(false);
@@ -125,9 +124,7 @@ function Add({ handleClose, ...props }: AddProps) {
       } else {
         setRegisteredEmails(new Set());
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch {}
   }, []);
 
   const handleClearForm = () => {

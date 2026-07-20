@@ -27,8 +27,8 @@ import {
   TextField,
   toast,
 } from "@heroui/react";
-import { useAuthentication } from "@/hooks/authentication.hook";
-import { useAuthorization } from "@/hooks/authorization.hook"; // substituído
+import { useAuthStore } from "@/stores/authentication.store";
+import { useAuthorization } from "@/hooks/authorization.hook";
 import Misc from "@/helpers/Misc";
 import z from "zod";
 import { useEffect, useState } from "react";
@@ -52,21 +52,23 @@ type FormType = z.infer<typeof FormSchema>;
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { checkAllPermissions } = useAuthorization(); // substituído
+  const { checkAllPermissions } = useAuthorization();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+
   const {
     currentUser,
     loadingUser,
     logout,
-    refreshUserData,
+    fetchCurrentUser,
     isAuthenticated,
     groupName,
-  } = useAuthentication();
+  } = useAuthStore();
+
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [form, setForm] = useState<FormType>({
     senha: "",
@@ -102,7 +104,7 @@ function Sidebar() {
         { nova_senha: form.senha },
       );
 
-      await refreshUserData();
+      await fetchCurrentUser(); // substituído refreshUserData
 
       toast.success("Sucesso", {
         description: "Perfil atualizado com sucesso!",

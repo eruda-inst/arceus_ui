@@ -25,13 +25,13 @@ import { CURRENT_VERSION } from "@/configs/misc.config";
 import { API_ROUTES } from "@/configs/api.config";
 import { LoginIn } from "@/types/login.type";
 import { LoginInSchema } from "@/schemas/login.schema";
-import { useAuthentication } from "@/hooks/authentication.hook";
+import { useAuthStore } from "@/stores/authentication.store";
 import Validator from "@/helpers/Validator";
 import logo from "@/public/logo.png";
 
 export default function Login() {
   const router = useRouter();
-  const { storeTokens } = useAuthentication();
+  const { setTokens } = useAuthStore();
   const [login, setLogin] = useState<LoginIn>({ email: "", senha: "" });
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -55,8 +55,8 @@ export default function Login() {
 
       const { access_token, refresh_token } = data;
 
-      storeTokens(access_token, refresh_token);
-      router.push("/");
+      setTokens(access_token, refresh_token);
+      router.replace("/");
     } catch {
       toast.danger("Erro ao fazer login");
     } finally {

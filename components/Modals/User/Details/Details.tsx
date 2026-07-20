@@ -3,7 +3,7 @@ import { Button, Modal, ModalProps } from "@heroui/react";
 import InfoItem from "@/components/InfoItem/InfoItem";
 import { UserOut } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter";
-import { useAuthContext } from "@/contexts/authentication.context";
+import { useAuthStore } from "@/stores/authentication.store";
 import DeleteUser from "@/components/AlertDialog/User/Delete/DeleteUser";
 import InactivateUser from "@/components/AlertDialog/User/Inactivate/InactivateUser";
 import ReactivateUser from "@/components/AlertDialog/User/Reactivate/ReactivateUser";
@@ -17,8 +17,7 @@ interface DetailsProps extends Omit<ModalProps, "children"> {
 
 function Details({ handleClose, user, ...props }: DetailsProps) {
   const { hasAllPermissions } = usePermissionStore();
-
-  const { currentUser } = useAuthContext();
+  const { currentUser } = useAuthStore();
 
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isInactivateOpen, setIsInactivateOpen] = useState<boolean>(false);
