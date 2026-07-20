@@ -59,7 +59,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const cookieOptions = {
       maxAge: expiresIn,
       path: "/",
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "strict" as const,
     };
     setCookie(ACCESS_TOKEN_KEY, access, cookieOptions);

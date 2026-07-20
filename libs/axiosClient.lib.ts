@@ -129,7 +129,7 @@ const createAxiosClient = (
             setCookie(REFRESH_TOKEN_KEY, newRefreshToken, {
               maxAge: 7 * 24 * 60 * 60,
               path: "/",
-              secure: process.env.NODE_ENV === "production",
+              secure: false,
               sameSite: "strict" as const,
             });
           }
