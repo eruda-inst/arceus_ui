@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useCallback } from "react";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import axios from "axios";

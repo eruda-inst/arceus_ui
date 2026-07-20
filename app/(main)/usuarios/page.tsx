@@ -12,11 +12,11 @@ import Details from "@/components/Modals/User/Details/Details";
 import { useUserStore } from "@/stores/user.store";
 import PaginationControls from "@/components/PaginationControls/PaginationControls";
 import Add from "@/components/Modals/User/Add/Add";
-import { usePermissions } from "@/contexts/perm.context";
+import { useAuthorization } from "@/hooks/authorization.hook";
 import { useAuthentication } from "@/hooks/authentication.hook";
 
 function Users() {
-  const { hasAllPermissions } = usePermissions();
+  const { checkAllPermissions } = useAuthorization();
   const { currentUser } = useAuthentication();
 
   const users = useUserStore((state) => state.users);
@@ -95,7 +95,7 @@ function Users() {
             className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
             size="md"
             onPress={() => setIsAddOpen(true)}
-            isDisabled={!hasAllPermissions(["criar:usuarios"])}
+            isDisabled={!checkAllPermissions(["criar:usuarios"])}
           >
             Adicionar
           </Button>

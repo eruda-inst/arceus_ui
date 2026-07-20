@@ -2,7 +2,7 @@
 
 import { Toast } from "@heroui/react";
 import TokenRefreshProvider from "@/components/TokenRefreshProvider/TokenRefreshProvider";
-import { PermissionsProvider } from "@/contexts/perm.context";
+import { PermissionsInitializer } from "@/components/PermInitializer/PermInitializer";
 import { AuthProvider } from "@/contexts/authentication.context";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -12,12 +12,11 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <TokenRefreshProvider>
       <AuthProvider>
-        <PermissionsProvider>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-          <Toast.Provider />
-        </PermissionsProvider>
+        <QueryClientProvider client={queryClient}>
+          {children}
+          <PermissionsInitializer />
+        </QueryClientProvider>
+        <Toast.Provider />
       </AuthProvider>
     </TokenRefreshProvider>
   );

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { usePermissions } from "@/contexts/perm.context";
+import { usePermissionStore } from "@/stores/perm.store";
 
 export function usePermissionCheck(permissionCode: string) {
-  const { hasPermission, isLoading } = usePermissions();
+  const { hasPermission, isLoading } = usePermissionStore();
   const [hasPerm, setHasPerm] = useState(false);
 
   useEffect(() => {
@@ -11,14 +11,11 @@ export function usePermissionCheck(permissionCode: string) {
     }
   }, [hasPermission, isLoading, permissionCode]);
 
-  return {
-    hasPermission: hasPerm,
-    isLoading,
-  };
+  return { hasPermission: hasPerm, isLoading };
 }
 
 export function useAnyPermissionCheck(permissionCodes: string[]) {
-  const { hasAnyPermission, isLoading } = usePermissions();
+  const { hasAnyPermission, isLoading } = usePermissionStore();
   const [hasAnyPerm, setHasAnyPerm] = useState(false);
 
   useEffect(() => {
@@ -27,14 +24,11 @@ export function useAnyPermissionCheck(permissionCodes: string[]) {
     }
   }, [hasAnyPermission, isLoading, permissionCodes]);
 
-  return {
-    hasAnyPermission: hasAnyPerm,
-    isLoading,
-  };
+  return { hasAnyPermission: hasAnyPerm, isLoading };
 }
 
 export function useAllPermissionsCheck(permissionCodes: string[]) {
-  const { hasAllPermissions, isLoading } = usePermissions();
+  const { hasAllPermissions, isLoading } = usePermissionStore();
   const [hasAllPerms, setHasAllPerms] = useState(false);
 
   useEffect(() => {
@@ -43,8 +37,5 @@ export function useAllPermissionsCheck(permissionCodes: string[]) {
     }
   }, [hasAllPermissions, isLoading, permissionCodes]);
 
-  return {
-    hasAllPermissions: hasAllPerms,
-    isLoading,
-  };
+  return { hasAllPermissions: hasAllPerms, isLoading };
 }

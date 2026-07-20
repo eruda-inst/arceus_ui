@@ -8,7 +8,7 @@ import DeleteUser from "@/components/AlertDialog/User/Delete/DeleteUser";
 import InactivateUser from "@/components/AlertDialog/User/Inactivate/InactivateUser";
 import ReactivateUser from "@/components/AlertDialog/User/Reactivate/ReactivateUser";
 import { useState } from "react";
-import { usePermissions } from "@/contexts/perm.context";
+import { usePermissionStore } from "@/stores/perm.store";
 
 interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;
@@ -16,7 +16,7 @@ interface DetailsProps extends Omit<ModalProps, "children"> {
 }
 
 function Details({ handleClose, user, ...props }: DetailsProps) {
-  const { hasAllPermissions } = usePermissions();
+  const { hasAllPermissions } = usePermissionStore();
 
   const { currentUser } = useAuthContext();
 
