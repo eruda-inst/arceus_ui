@@ -25,6 +25,7 @@ import {
   FaCode,
   FaClock,
   FaFileCode,
+  FaUser,
 } from "react-icons/fa6";
 import { LogFilterIn } from "@/types/log.type";
 import { useLogFilter } from "@/stores/logFilter.store";
@@ -92,7 +93,8 @@ function LogFilters() {
         localFilters.data_inicio === undefined &&
         localFilters.data_fim === undefined &&
         localFilters.hora_inicio === undefined &&
-        localFilters.hora_fim === undefined,
+        localFilters.hora_fim === undefined &&
+        localFilters.nome_cliente === undefined,
     );
   }, [localFilters]);
 
@@ -267,6 +269,21 @@ function LogFilters() {
                       </ListBox>
                     </Select.Popover>
                   </Select>
+
+                  <TextField
+                    variant="secondary"
+                    value={localFilters.nome_cliente ?? ""}
+                    onChange={(value) => handleChange("nome_cliente", value)}
+                  >
+                    <Label>Nome do cliente</Label>
+                    <InputGroup>
+                      <InputGroup.Prefix>
+                        <FaUser className="size-4 text-gray-400" />
+                      </InputGroup.Prefix>
+                      <InputGroup.Input placeholder="John Doe" />
+                    </InputGroup>
+                    <FieldError />
+                  </TextField>
                 </Form>
               </Accordion.Body>
             </Accordion.Panel>

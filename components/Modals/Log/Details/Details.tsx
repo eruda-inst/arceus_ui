@@ -50,6 +50,10 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
                 <InfoItem label="URL" value={log.url} />
                 <InfoItem label="Setor" value={log.setor} />
                 <InfoItem
+                  label="Nome do cliente"
+                  value={log.nome_cliente ? log.nome_cliente : "---"}
+                />
+                <InfoItem
                   label="Payload"
                   value={
                     log.payload

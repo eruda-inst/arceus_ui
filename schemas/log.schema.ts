@@ -13,6 +13,7 @@ const LogOutSchema = z.object({
   url: z.string(),
   setor: z.enum(Departments),
   criado_em: z.string(),
+  nome_cliente: z.string().nullable(),
 });
 
 const LogPaginationOutSchema = z.object({
@@ -38,6 +39,7 @@ const LogFilterInSchema = z.object({
   endpoint: z.string().optional(),
   setor: z.enum(Departments).optional(),
   protocolo: z.string().optional(),
+  nome_cliente: z.string().optional(),
 });
 
 export { LogOutSchema, LogPaginationOutSchema, LogFilterInSchema };

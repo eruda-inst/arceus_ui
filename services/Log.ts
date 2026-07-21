@@ -22,6 +22,7 @@ class LogService {
       response?: string;
       url?: string;
       department?: string;
+      nome_cliente?: string;
     } = {},
   ): Promise<LogPaginationOut | undefined> {
     try {

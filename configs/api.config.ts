@@ -104,6 +104,7 @@ const API_ROUTES = {
         response?: string;
         url?: string;
         department?: string;
+        nome_cliente?: string;
       } = {},
     ) => {
       const { page = 1, itemsPerPage = 10 } = filters;
@@ -126,6 +127,8 @@ const API_ROUTES = {
       if (filters.response) params.append("resposta", filters.response);
       if (filters.url) params.append("url", filters.url);
       if (filters.department) params.append("setor", filters.department);
+      if (filters.nome_cliente)
+        params.append("nome_cliente", filters.nome_cliente);
       return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;
     },
   },

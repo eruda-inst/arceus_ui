@@ -28,6 +28,7 @@ function ActiveLogFilters() {
         endpoint: "Endpoint",
         setor: "Setor",
         protocolo: "Protocolo",
+        nome_cliente: "Nome cliente",
       };
 
       activeFilters.push({
