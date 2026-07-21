@@ -129,6 +129,7 @@ const API_ROUTES = {
       if (filters.department) params.append("setor", filters.department);
       if (filters.nome_cliente)
         params.append("nome_cliente", filters.nome_cliente);
+      console.log(`${API_ENDPOINT_BASES.log}/?${params.toString()}`);
       return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;
     },
   },
@@ -149,6 +150,7 @@ const API_ROUTES = {
     sucessos: () => `${API_ENDPOINT_BASES.metric}/sucessos`,
     erros: () => `${API_ENDPOINT_BASES.metric}/erros`,
     resTime: () => `${API_ENDPOINT_BASES.metric}/tempo-resposta`,
+    getTopClients: () => `${API_ENDPOINT_BASES.metric}/top-clientes`,
   },
 };
 

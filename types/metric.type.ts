@@ -25,10 +25,13 @@ import {
   SuccessStatsResponseSchema,
   ErrorStatsResponseSchema,
   ResponseTimeStatsSchema,
+  TopClientSchema,
+  TopClientsSchema,
 } from "@/schemas/metric.schema";
 import type z from "zod";
 
 export type TopEndpoint = z.infer<typeof TopEndpointSchema>;
+export type TopClient = z.infer<typeof TopClientSchema>;
 export type TopStatusCode = z.infer<typeof TopStatusCodeSchema>;
 export type TopHour = z.infer<typeof TopHourSchema>;
 export type TopWeekday = z.infer<typeof TopWeekdaySchema>;
@@ -62,3 +65,4 @@ export type SuccessStatsResponse = z.infer<typeof SuccessStatsResponseSchema>;
 export type ErrorStatsResponse = z.infer<typeof ErrorStatsResponseSchema>;
 export type ResponseTimeStats = z.infer<typeof ResponseTimeStatsSchema>;
 export type AvgResTime = z.infer<typeof ResTimeSchema>;
+export type TopClients = z.infer<typeof TopClientsSchema>;

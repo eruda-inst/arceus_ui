@@ -36,6 +36,10 @@ export const TopDepartmentSchema = z.object({
   setor: z.string(),
   total_requisicoes: z.number(),
 });
+export const TopClientSchema = z.object({
+  nome_cliente: z.string(),
+  total_requisicoes: z.number(),
+});
 export const SuccessStatsSchema = z.object({
   total: z.number().int().nonnegative(),
   percentual: z.number(),
@@ -87,3 +91,4 @@ export const ResponseTimeStatsSchema = z.object({
   max: z.number(),
 });
 export const ResTimeSchema = TodayAlwaysOutSchema(ResponseTimeStatsSchema);
+export const TopClientsSchema = TodayAlwaysOutSchema(z.array(TopClientSchema));

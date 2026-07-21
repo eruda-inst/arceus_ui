@@ -62,6 +62,7 @@ function Logs() {
         hora_inicio: filters.hora_inicio,
         hora_fim: filters.hora_fim,
         protocol: filters.protocolo,
+        nome_cliente: filters.nome_cliente,
       };
 
       const logs = await getAll({

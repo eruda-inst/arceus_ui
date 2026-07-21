@@ -19,6 +19,7 @@ import {
   TopDepartment,
   SuccessStats,
   ErrorStats,
+  TopClient,
 } from "@/types/metric.type";
 
 const fetchAllMetrics = async () => {
@@ -37,6 +38,7 @@ const fetchAllMetrics = async () => {
     getTopDepartments,
     getSuccessStats,
     getErrorStats,
+    getTopClients,
   } = MetricService;
 
   const [
@@ -54,6 +56,7 @@ const fetchAllMetrics = async () => {
     topDepartmentsRaw,
     successStatsRaw,
     errorStatsRaw,
+    topClientsRaw,
   ] = await Promise.all([
     getTopWeekdays(),
     getTopEndpoints(),
@@ -69,6 +72,7 @@ const fetchAllMetrics = async () => {
     getTopDepartments(),
     getSuccessStats(),
     getErrorStats(),
+    getTopClients(),
   ]);
 
   const topHoursFormatted: TodayAlwaysOut<TopHourFormatted[]> = {
@@ -113,6 +117,7 @@ const fetchAllMetrics = async () => {
     topDepartments: topDepartmentsRaw,
     successStats: successStatsRaw,
     errorStats: errorStatsRaw,
+    topClients: topClientsRaw,
   };
 };
 
@@ -149,6 +154,7 @@ function Home() {
     topDepartments = {} as TodayAlwaysOut<TopDepartment[]>,
     successStats = {} as TodayAlwaysOut<SuccessStats>,
     errorStats = {} as TodayAlwaysOut<ErrorStats>,
+    topClients = {} as TodayAlwaysOut<TopClient[]>,
   } = data ?? {};
 
   return (
@@ -286,8 +292,8 @@ function Home() {
         />
       </div>
 
-      {/* Top endpoints */}
       <div className="grid grid-cols-2 gap-4">
+        {/* Top endpoints */}
         <CustomBar
           data={topEndpoints?.hoje}
           dataKey="endpoint"
@@ -385,6 +391,32 @@ function Home() {
           barColor="#3b82f6"
           activeBarColor="#34d399"
           layout="horizontal"
+        />
+
+        {/* Top clientes */}
+        <CustomBar
+          data={topClients?.hoje}
+          dataKey="nome_cliente"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          description="Clientes que mais realizaram requisições"
+          label="Top Clientes — Hoje"
+          isLoading={isLoading}
+          hideXAxis
+          barColor="#d946ef"
+          activeBarColor="#84cc16"
+        />
+        <CustomBar
+          data={topClients?.sempre}
+          dataKey="nome_cliente"
+          barDataKey="total_requisicoes"
+          name="Total de requisições"
+          description="Clientes que mais realizaram requisições"
+          label="Top Clientes — Sempre"
+          isLoading={isLoading}
+          hideXAxis
+          barColor="#d946ef"
+          activeBarColor="#84cc16"
         />
 
         {/* Horas de pico */}

@@ -15,6 +15,7 @@ import {
   ErrorStatsResponse,
   SuccessStatsResponse,
   AvgResTime,
+  TopClient,
 } from "@/types/metric.type";
 import {
   ResTimeSchema,
@@ -31,6 +32,7 @@ import {
   TotalReqsSchema,
   TotalServicesSchema,
   TopWeekdaysSchema,
+  TopClientsSchema,
 } from "@/schemas/metric.schema";
 
 async function withRetry<T>(
@@ -276,6 +278,24 @@ class MetricService {
         return {
           hoje: { total: 0, percentual: 0 },
           sempre: { total: 0, percentual: 0 },
+        };
+      }
+      console.error("Failed to fetch error stats:", error);
+      throw error;
+    }
+  }
+
+  static async getTopClients(): Promise<TodayAlwaysOut<TopClient[]>> {
+    try {
+      const response = await withRetry(() =>
+        axiosClient.get(API_ROUTES.metric.getTopClients()),
+      );
+      return TopClientsSchema.parse(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return {
+          hoje: [],
+          sempre: [],
         };
       }
       console.error("Failed to fetch error stats:", error);
