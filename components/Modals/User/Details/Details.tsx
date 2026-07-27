@@ -94,7 +94,11 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
                 />
                 <InfoItem
                   label="Atualizado em"
-                  value={Formatter.isoDate(user.atualizado_em.split("T")[0])}
+                  value={
+                    user.atualizado_em
+                      ? Formatter.isoDate(user.atualizado_em.split("T")[0])
+                      : "---"
+                  }
                 />
                 <InfoItem label="Grupo" value={user.nome_grupo} />
               </div>
