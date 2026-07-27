@@ -5,7 +5,6 @@ const PermissionOutSchema = z.object({
   nome: z.string(),
   codigo: z.string(),
   criado_em: z.string(),
-  atualizado_em: z.string(),
 });
 
 export { PermissionOutSchema };

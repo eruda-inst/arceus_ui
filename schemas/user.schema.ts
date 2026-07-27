@@ -6,7 +6,7 @@ const UserOutSchema = z.object({
   email: z.email(),
   ativo: z.boolean(),
   criado_em: z.string(),
-  atualizado_em: z.string(),
+  atualizado_em: z.string().nullable(),
   id_grupo: z.number().positive(),
   nome_grupo: z.enum(["Administrador", "Analista"]),
 });
