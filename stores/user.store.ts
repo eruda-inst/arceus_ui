@@ -14,8 +14,7 @@ type UserStore = {
   setSelectedUser: (data: UserOut) => void;
   updateSelectedUser: (data: UserUpdate) => void;
   deleteSelectedUser: () => void;
-  inactivateSelectedUser: () => void;
-  reactivateSelectedUser: () => void;
+  toggleSelectedUserStatus: () => void;
 };
 
 const useUserStore = create<UserStore>()((set) => ({
@@ -51,25 +50,19 @@ const useUserStore = create<UserStore>()((set) => ({
       users: state.users.filter((user) => user.id !== state.selectedUser?.id),
     }));
   },
-  inactivateSelectedUser: () => {
-    set((state) => ({
-      selectedUser: state.selectedUser
-        ? { ...state.selectedUser, ativo: false }
-        : null,
-      users: state.users.map((user) =>
-        user.id === state.selectedUser?.id ? { ...user, ativo: false } : user,
-      ),
-    }));
-  },
-  reactivateSelectedUser: () => {
-    set((state) => ({
-      selectedUser: state.selectedUser
-        ? { ...state.selectedUser, ativo: true }
-        : null,
-      users: state.users.map((user) =>
-        user.id === state.selectedUser?.id ? { ...user, ativo: true } : user,
-      ),
-    }));
+  toggleSelectedUserStatus: () => {
+    set((state) => {
+      if (!state.selectedUser) return {};
+      const toggledStatus = !state.selectedUser.ativo;
+      const updatedUser = { ...state.selectedUser, ativo: toggledStatus };
+      const updatedUsers = state.users.map((user) =>
+        user.id === updatedUser.id ? updatedUser : user,
+      );
+      return {
+        selectedUser: updatedUser,
+        users: updatedUsers,
+      };
+    });
   },
 }));
 

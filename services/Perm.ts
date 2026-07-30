@@ -1,18 +1,19 @@
 import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
-import { PermissionOut } from "@/types/perm.type";
+import { PermOut } from "@/types/perm.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
-import { PermissionOutSchema } from "@/schemas/perm.schema";
+import { PermOutSchema } from "@/schemas/perm.schema";
 
-class PermissionService {
-  static async getByUserId(userId: number): Promise<PermissionOut[]> {
+class PermService {
+  static async getByUserId(userId: number): Promise<PermOut[]> {
     try {
       const response = await axiosClient.get(
         API_ROUTES.perm.getByUserId(userId),
       );
       const data = response.data;
-      PermissionOutSchema.array().parse(data);
-      return data;
+      const perms = data.data;
+      PermOutSchema.array().parse(perms);
+      return perms;
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         return [];
@@ -22,4 +23,4 @@ class PermissionService {
   }
 }
 
-export { PermissionService };
+export { PermService };

@@ -1,11 +1,11 @@
 import z from "zod";
-import { PermissionOutSchema } from "@/schemas/perm.schema";
+import { PermOutSchema } from "@/schemas/perm.schema";
 
-type PermissionOut = z.infer<typeof PermissionOutSchema>;
+type PermOut = z.infer<typeof PermOutSchema>;
 
-type PermissionCheck = {
-  hasPermission: boolean;
+type PermCheck = {
+  hasPerm: boolean;
   isLoading: boolean;
 };
 
-export type { PermissionOut, PermissionCheck };
+export type { PermOut, PermCheck };

@@ -1,14 +1,14 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { AuthenticationService } from "@/services/Authentication";
-import { PermissionService } from "@/services/Permission";
-import { PermissionOut } from "./types/perm.type";
+import { PermService } from "@/services/Perm";
+import { PermOut } from "./types/perm.type";
 
 // Don't need authentication
 const publicRoutes = ["/login"];
 
 // Route-permission mapping
-const routePermissions: Record<string, string> = {
+const routePerms: Record<string, string> = {
   "/": "ver:metricas",
   "/usuarios": "ver:usuarios",
 };
@@ -61,19 +61,16 @@ export default async function proxy(request: NextRequest) {
   if (hasToken && !isPublicRoute) {
     try {
       const currentUser = await AuthenticationService.getMe(accessToken);
-      const permissions = await PermissionService.getByUserId(currentUser.id);
+      const perms = await PermService.getByUserId(currentUser.id);
 
       // Check if the current route requires a specific permission
-      const requiredPermission = routePermissions[pathname];
+      const reqPerm = routePerms[pathname];
 
-      if (requiredPermission) {
+      if (reqPerm) {
         // Check if user has the required permission
-        const hasPermission = permissions.some(
-          (permission: PermissionOut) =>
-            permission.codigo === requiredPermission,
-        );
+        const hasPerm = perms.some((perm: PermOut) => perm.codigo === reqPerm);
 
-        if (!hasPermission) {
+        if (!hasPerm) {
           // → Redireciona para /login?error=unauthorized (sem loop!)
           const deniedUrl = new URL("/login", request.url);
           deniedUrl.searchParams.set("error", "unauthorized");

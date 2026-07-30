@@ -14,10 +14,14 @@ import PaginationControls from "@/components/PaginationControls/PaginationContro
 import Add from "@/components/Modals/User/Add/Add";
 import { useAuthorization } from "@/hooks/authorization.hook";
 import { useAuthStore } from "@/stores/authentication.store";
+import { GroupService } from "@/services/Group";
+import { useGroupStore } from "@/stores/group.store";
 
 function Users() {
-  const { checkAllPermissions } = useAuthorization();
+  const { CheckAllPerms } = useAuthorization();
   const { currentUser } = useAuthStore();
+  const groups = useGroupStore((state) => state.groups);
+  const setGroups = useGroupStore((state) => state.setGroups);
 
   const users = useUserStore((state) => state.users);
   const setUsers = useUserStore((state) => state.setUsers);
@@ -46,7 +50,7 @@ function Users() {
         groupName: filters.groupName,
       });
       if (result) {
-        setUsers(result.dados);
+        setUsers(result.data);
         setUserPagination(result);
       }
     } catch (error: unknown) {
@@ -65,6 +69,12 @@ function Users() {
     setPage(1);
   }, [filters]);
 
+  useEffect(() => {
+    GroupService.getAll().then((data) => {
+      if (data) setGroups(data);
+    });
+  }, []);
+
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
     setPage(1);
@@ -75,8 +85,8 @@ function Users() {
     setSelectedUser(user);
   };
 
-  const totalItems = userPagination?.total_itens ?? 0;
-  const totalPages = userPagination?.total_paginas ?? 1;
+  const totalItems = userPagination?.meta?.total_itens ?? 0;
+  const totalPages = userPagination?.meta?.total_paginas ?? 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -95,7 +105,7 @@ function Users() {
             className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
             size="md"
             onPress={() => setIsAddOpen(true)}
-            isDisabled={!checkAllPermissions(["criar:usuarios"])}
+            isDisabled={!CheckAllPerms(["criar:usuarios"])}
           >
             Adicionar
           </Button>
@@ -124,6 +134,7 @@ function Users() {
         data={users}
         isLoading={isLoading}
         onRowClick={handleRowClick}
+        groups={groups}
       />
 
       {selectedUser && (

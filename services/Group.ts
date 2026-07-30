@@ -27,8 +27,9 @@ class GroupService {
         withCredentials: false,
       });
       const data = response.data;
-      GroupOutSchema.array().parse(data);
-      return data;
+      const groups = data.data;
+      GroupOutSchema.array().parse(groups);
+      return groups;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return;

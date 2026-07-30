@@ -11,16 +11,12 @@ class LogService {
       itemsPerPage?: number;
       method?: string;
       endpoint?: string;
-      code?: string;
+      code?: number;
       data_inicio?: string;
       data_fim?: string;
       hora_inicio?: string;
       hora_fim?: string;
-      duration?: number;
       protocol?: string;
-      payload?: string;
-      response?: string;
-      url?: string;
       department?: string;
       nome_cliente?: string;
     } = {},

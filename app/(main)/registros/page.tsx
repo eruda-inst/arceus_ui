@@ -54,7 +54,7 @@ function Logs() {
     try {
       const serviceFilters = {
         method: filters.metodo,
-        code: filters.codigo !== undefined ? String(filters.codigo) : undefined,
+        code: filters.codigo,
         department: filters.setor,
         endpoint: filters.endpoint,
         data_inicio: filters.data_inicio,
@@ -65,15 +65,15 @@ function Logs() {
         nome_cliente: filters.nome_cliente,
       };
 
-      const logs = await getAll({
+      const result = await getAll({
         page,
         itemsPerPage,
         ...serviceFilters,
       });
 
-      setLogs(logs?.dados || []);
-      if (logs) {
-        setLogPagination(logs);
+      setLogs(result?.data || []);
+      if (result) {
+        setLogPagination(result);
       }
     } catch (error) {
       console.error("Erro ao buscar logs:", error);
@@ -110,8 +110,8 @@ function Logs() {
       <div className="space-y-6">
         <PaginationControls
           page={page}
-          totalPages={logPagination?.total_paginas || 1}
-          totalItems={logPagination?.total_itens || 0}
+          totalPages={logPagination?.meta?.total_paginas || 1}
+          totalItems={logPagination?.meta?.total_itens || 0}
           onPageChange={setPage}
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={handleItemsPerPageChange}

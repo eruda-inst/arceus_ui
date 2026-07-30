@@ -1,58 +1,58 @@
 import { create } from "zustand";
-import { PermissionOut } from "@/types/perm.type";
-import { PermissionService } from "@/services/Permission";
+import { PermOut } from "@/types/perm.type";
+import { PermService } from "@/services/Perm";
 
-interface PermissionStore {
-  permissions: PermissionOut[];
+interface PermStore {
+  perms: PermOut[];
   isLoading: boolean;
   error: string | null;
   userId: number | null;
   setUserId: (userId: number | null) => void;
-  fetchPermissions: (userId: number) => Promise<void>;
-  refreshPermissions: () => Promise<void>;
-  hasPermission: (permissionCode: string) => boolean;
-  hasAnyPermission: (permissionCodes: string[]) => boolean;
-  hasAllPermissions: (permissionCodes: string[]) => boolean;
+  fetchPerms: (userId: number) => Promise<void>;
+  refreshPerms: () => Promise<void>;
+  hasPerm: (permCode: string) => boolean;
+  hasAnyPerm: (permCodes: string[]) => boolean;
+  hasAllPerms: (permCodes: string[]) => boolean;
   reset: () => void;
 }
 
-export const usePermissionStore = create<PermissionStore>((set, get) => ({
-  permissions: [],
+export const usePermStore = create<PermStore>((set, get) => ({
+  perms: [],
   isLoading: false,
   error: null,
   userId: null,
 
   setUserId: (userId) => set({ userId }),
 
-  fetchPermissions: async (userId) => {
+  fetchPerms: async (userId) => {
     set({ isLoading: true, error: null });
     try {
-      const perms = await PermissionService.getByUserId(userId);
-      set({ permissions: perms, isLoading: false });
+      const perms = await PermService.getByUserId(userId);
+      set({ perms: perms, isLoading: false });
     } catch (err) {
       set({ error: "Erro ao buscar permissões", isLoading: false });
       throw err;
     }
   },
 
-  refreshPermissions: async () => {
+  refreshPerms: async () => {
     const { userId } = get();
     if (!userId) {
-      set({ permissions: [], error: null });
+      set({ perms: [], error: null });
       return;
     }
-    await get().fetchPermissions(userId);
+    await get().fetchPerms(userId);
   },
 
-  hasPermission: (permissionCode) =>
-    get().permissions.some((perm) => perm.codigo === permissionCode),
+  hasPerm: (permCode) =>
+    get().perms.some((perm) => perm.codigo === permCode),
 
-  hasAnyPermission: (permissionCodes) =>
-    permissionCodes.some((code) => get().hasPermission(code)),
+  hasAnyPerm: (permCodes) =>
+    permCodes.some((code) => get().hasPerm(code)),
 
-  hasAllPermissions: (permissionCodes) =>
-    permissionCodes.every((code) => get().hasPermission(code)),
+  hasAllPerms: (permCodes) =>
+    permCodes.every((code) => get().hasPerm(code)),
 
   reset: () =>
-    set({ permissions: [], isLoading: false, error: null, userId: null }),
+    set({ perms: [], isLoading: false, error: null, userId: null }),
 }));

@@ -52,7 +52,7 @@ type FormType = z.infer<typeof FormSchema>;
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { checkAllPermissions } = useAuthorization();
+  const { CheckAllPerms } = useAuthorization();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -147,7 +147,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/")}
-              isDisabled={!checkAllPermissions(["ver:metricas"])}
+              isDisabled={!CheckAllPerms(["ver:metricas"])}
             >
               <FaHouseChimney className="size-5" /> Métricas
             </Button>
@@ -159,7 +159,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/registros" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/registros")}
-              isDisabled={!checkAllPermissions(["ver:logs"])}
+              isDisabled={!CheckAllPerms(["ver:logs"])}
             >
               <FaClipboardList className="size-5" /> Registros
             </Button>
@@ -171,7 +171,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/usuarios")}
-              isDisabled={!checkAllPermissions(["ver:usuarios"])}
+              isDisabled={!CheckAllPerms(["ver:usuarios"])}
             >
               <FaUsers className="size-5" /> Usuários
             </Button>

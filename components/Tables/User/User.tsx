@@ -16,11 +16,13 @@ import {
 } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
 import type { UserOut } from "@/types/user.type";
+import { GroupOut } from "@/types/group.type";
 
 interface UserTableProps {
   data: UserOut[];
   isLoading: boolean;
   onRowClick: (user: UserOut) => void;
+    groups?: GroupOut[];
 }
 
 function ChipStatus({
@@ -40,7 +42,13 @@ function ChipStatus({
   );
 }
 
-function UserTable({ data, isLoading, onRowClick }: UserTableProps) {
+function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
+
+  const getGroupName = (id: number) => {
+      const group = groups?.find((g) => g.id === id);
+      return group?.nome || String(id);
+    };
+
   if (isLoading) {
     return <Skeleton className="h-80 rounded-lg" />;
   }
@@ -167,14 +175,13 @@ function UserTable({ data, isLoading, onRowClick }: UserTableProps) {
                       </div>
                     </Table.Cell>
 
-                    {/* Grupo (exibindo ID do grupo; idealmente buscaríamos o nome) */}
                     <Table.Cell className="py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaUsers className="w-4 h-4 text-indigo-400" />
                         </div>
                         <span className="font-semibold text-gray-100">
-                          {user.nome_grupo}
+                          {getGroupName(user.id_grupo)}
                         </span>
                       </div>
                     </Table.Cell>

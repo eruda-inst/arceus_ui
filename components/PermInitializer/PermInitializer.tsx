@@ -2,20 +2,20 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/authentication.store";
-import { usePermissionStore } from "@/stores/perm.store";
+import { usePermStore } from "@/stores/perm.store";
 
-export function PermissionsInitializer() {
+export function PermInitializer() {
   const { currentUser, accessToken } = useAuthStore();
-  const { setUserId, fetchPermissions } = usePermissionStore();
+  const { setUserId, fetchPerms } = usePermStore();
 
   useEffect(() => {
     if (currentUser?.id && accessToken) {
       setUserId(currentUser.id);
-      fetchPermissions(currentUser.id);
+      fetchPerms(currentUser.id);
     } else {
       setUserId(null);
     }
-  }, [currentUser, accessToken, setUserId, fetchPermissions]);
+  }, [currentUser, accessToken, setUserId, fetchPerms]);
 
   return null;
 }

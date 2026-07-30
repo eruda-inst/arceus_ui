@@ -119,8 +119,8 @@ function Add({ handleClose, ...props }: AddProps) {
       setIxcUsers(ixcRes?.dados || []);
       setGroups(groups || []);
 
-      if (userRes?.dados) {
-        setRegisteredEmails(new Set(userRes.dados.map((u) => u.email)));
+      if (userRes?.data) {
+        setRegisteredEmails(new Set(userRes.data.map((u) => u.email)));
       } else {
         setRegisteredEmails(new Set());
       }

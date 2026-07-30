@@ -58,8 +58,8 @@ const API_ROUTES = {
     updatePasswordById: (id: number) =>
       `${API_ENDPOINT_BASES.user}/mudar-senha/id/${id}`,
     updateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,
-    inactivateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}/inativar`,
-    reactivateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}/reativar`,
+    toggleStatusById: (id: number) =>
+      `${API_ENDPOINT_BASES.user}/${id}/alternar-status`,
     deleteById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,
     getAll: (
       filters: {

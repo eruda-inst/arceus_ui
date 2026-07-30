@@ -1,28 +1,28 @@
 import { useCallback } from "react";
-import { usePermissionStore } from "@/stores/perm.store";
+import { usePermStore } from "@/stores/perm.store";
 
 export function useAuthorization() {
-  const { hasPermission, hasAnyPermission, hasAllPermissions } =
-    usePermissionStore();
+  const { hasPerm, hasAnyPerm, hasAllPerms } =
+    usePermStore();
 
-  const checkPermission = useCallback(
-    (permissionCode: string) => hasPermission(permissionCode),
-    [hasPermission],
+  const checkPerm = useCallback(
+    (permCode: string) => hasPerm(permCode),
+    [hasPerm],
   );
 
-  const checkAnyPermission = useCallback(
-    (permissionCodes: string[]) => hasAnyPermission(permissionCodes),
-    [hasAnyPermission],
+  const checkAnyPerm = useCallback(
+    (permCodes: string[]) => hasAnyPerm(permCodes),
+    [hasAnyPerm],
   );
 
-  const checkAllPermissions = useCallback(
-    (permissionCodes: string[]) => hasAllPermissions(permissionCodes),
-    [hasAllPermissions],
+  const CheckAllPerms = useCallback(
+    (permCodes: string[]) => hasAllPerms(permCodes),
+    [hasAllPerms],
   );
 
   return {
-    checkPermission,
-    checkAnyPermission,
-    checkAllPermissions,
+    checkPerm,
+    checkAnyPerm,
+    CheckAllPerms,
   };
 }

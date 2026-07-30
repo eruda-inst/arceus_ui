@@ -6,10 +6,10 @@ const LogOutSchema = z.object({
   metodo: z.string(),
   endpoint: z.string(),
   codigo: z.number().positive(),
-  duracao: z.float64(),
+  duracao: z.number(),
   protocolo: z.string().nullable(),
   payload: z.string().nullable(),
-  resposta: z.string().nullable(),
+  resposta: z.string(),
   url: z.string(),
   setor: z.enum(Departments),
   criado_em: z.string(),
@@ -17,11 +17,13 @@ const LogOutSchema = z.object({
 });
 
 const LogPaginationOutSchema = z.object({
-  dados: z.array(LogOutSchema),
-  pagina_atual: z.number().positive(),
-  itens_por_pagina: z.number().positive(),
-  total_paginas: z.number().nonnegative(),
-  total_itens: z.number().nonnegative(),
+  data: z.array(LogOutSchema),
+  meta: z.object({
+    pagina_atual: z.number().positive(),
+    itens_por_pagina: z.number().positive(),
+    total_paginas: z.number().nonnegative(),
+    total_itens: z.number().nonnegative(),
+  }),
 });
 
 const LogFilterInSchema = z.object({

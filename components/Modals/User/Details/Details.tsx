@@ -5,10 +5,11 @@ import { UserOut } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter";
 import { useAuthStore } from "@/stores/authentication.store";
 import DeleteUser from "@/components/AlertDialog/User/Delete/DeleteUser";
-import InactivateUser from "@/components/AlertDialog/User/Inactivate/InactivateUser";
-import ReactivateUser from "@/components/AlertDialog/User/Reactivate/ReactivateUser";
-import { useState } from "react";
-import { usePermissionStore } from "@/stores/perm.store";
+import { useEffect, useState } from "react";
+import { usePermStore } from "@/stores/perm.store";
+import { GroupService } from "@/services/Group";
+import { GroupOut } from "@/types/group.type";
+import ToggleUserStatus from "@/components/AlertDialog/User/ToggleStatus/ToggleStatus";
 
 interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;
@@ -16,12 +17,21 @@ interface DetailsProps extends Omit<ModalProps, "children"> {
 }
 
 function Details({ handleClose, user, ...props }: DetailsProps) {
-  const { hasAllPermissions } = usePermissionStore();
+  const { hasAllPerms } = usePermStore();
   const { currentUser } = useAuthStore();
 
+  const [group, setGroup]=useState<GroupOut|undefined>(undefined)
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const [isInactivateOpen, setIsInactivateOpen] = useState<boolean>(false);
-  const [isReactivateOpen, setIsReactivateOpen] = useState<boolean>(false);
+  const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
+
+  const fetchGroup = async () => {
+    const group =await GroupService.getById(user.id_grupo)
+    setGroup(group)
+  }
+
+  useEffect(() => {
+     fetchGroup()
+  },[user])
 
   return (
     <Modal {...props}>
@@ -59,15 +69,9 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
                     }
                     isDisabled={
                       user.id === currentUser?.id ||
-                      !hasAllPermissions(["alterar:usuarios"])
+                      !hasAllPerms(["alterar:usuarios"])
                     }
-                    onPress={() => {
-                      if (user.ativo) {
-                        setIsInactivateOpen(true);
-                      } else {
-                        setIsReactivateOpen(true);
-                      }
-                    }}
+                    onPress={()=>setIsToggleOpen(true)}
                   >
                     {user.ativo ? "Inativar" : "Reativar"}
                   </Button>
@@ -76,7 +80,7 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
                     variant="danger-soft"
                     isDisabled={
                       user.id === currentUser?.id ||
-                      !hasAllPermissions(["remover:usuarios"])
+                      !hasAllPerms(["remover:usuarios"])
                     }
                     onPress={() => setIsDeleteOpen(true)}
                   >
@@ -100,7 +104,7 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
                       : "---"
                   }
                 />
-                <InfoItem label="Grupo" value={user.nome_grupo} />
+                <InfoItem label="Grupo" value={group?.nome || ''} />
               </div>
             </Modal.Body>
           </Modal.Dialog>
@@ -112,16 +116,11 @@ function Details({ handleClose, user, ...props }: DetailsProps) {
         onOpenChange={setIsDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
       />
-      <InactivateUser
-        isOpen={isInactivateOpen}
-        onOpenChange={setIsInactivateOpen}
-        onClose={() => setIsInactivateOpen(false)}
-      />
-      <ReactivateUser
-        isOpen={isReactivateOpen}
-        onOpenChange={setIsReactivateOpen}
-        onClose={() => setIsReactivateOpen(false)}
-      />
+      <ToggleUserStatus
+             isOpen={isToggleOpen}
+             onOpenChange={setIsToggleOpen}
+             onClose={() => setIsToggleOpen(false)}
+           />
     </Modal>
   );
 }

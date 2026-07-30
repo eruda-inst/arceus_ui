@@ -2,7 +2,7 @@
 
 import { Toast } from "@heroui/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { PermissionsInitializer } from "@/components/PermInitializer/PermInitializer";
+import { PermInitializer } from "@/components/PermInitializer/PermInitializer";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/authentication.store";
 
@@ -27,7 +27,7 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <PermissionsInitializer />
+      <PermInitializer />
       <Toast.Provider />
     </QueryClientProvider>
   );

@@ -102,37 +102,15 @@ class UserService {
     }
   }
 
-  static async inactivate(id: number): Promise<UserOut | undefined> {
+  static async toggleStatus(id: number): Promise<UserOut | undefined> {
     try {
       const response = await withRetry(() =>
-        axiosClient.patch(API_ROUTES.user.inactivateById(id)),
+        axiosClient.patch(API_ROUTES.user.toggleStatusById(id)),
       );
       const user = response.data;
       UserOutSchema.parse(user);
       return user;
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error("Inactivate error details:", error.response?.data);
-      }
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return undefined;
-      }
-      throw error;
-    }
-  }
-
-  static async reactivate(id: number): Promise<UserOut | undefined> {
-    try {
-      const response = await withRetry(() =>
-        axiosClient.patch(API_ROUTES.user.reactivateById(id)),
-      );
-      const user = response.data;
-      UserOutSchema.parse(user);
-      return user;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error("Reactivate error details:", error.response?.data);
-      }
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return undefined;
       }
