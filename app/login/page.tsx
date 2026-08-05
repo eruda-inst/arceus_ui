@@ -27,7 +27,7 @@ import { LoginIn } from "@/types/login.type";
 import { LoginInSchema } from "@/schemas/login.schema";
 import { useAuthStore } from "@/stores/authentication.store";
 import Validator from "@/helpers/Validator";
-import logo from "@/public/logo.png";
+import logo from "@/public/logo.svg";
 
 export default function Login() {
   const router = useRouter();
@@ -179,7 +179,7 @@ export default function Login() {
 
           {/* Footer */}
           <div className="text-center text-sm text-muted mt-8">
-            &copy; {new Date().getFullYear()} Absol. Todos os direitos
+            &copy; {new Date().getFullYear()} Arceus. Todos os direitos
             reservados.
           </div>
         </div>
@@ -215,9 +215,9 @@ export default function Login() {
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <div className="w-20 h-20 mx-auto">
-              <Image alt="Absol Logo" src={logo} />
+              <Image alt="Logo do sistema. Imagem do pokémon Arceus" src={logo} />
             </div>
-            <h2 className="text-4xl font-bold mb-6 tracking-tight">Absol</h2>
+            <h2 className="text-4xl font-bold mb-6 tracking-tight mt-4">Arceus</h2>
             <p className="text-lg text-purple-100 leading-relaxed mb-8">
               Plataforma para monitoramento de requisições HTTP realizadas ao
               Arceus, com visualização de logs, métricas agregadas e dashboards

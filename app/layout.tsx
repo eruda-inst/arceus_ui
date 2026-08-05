@@ -4,7 +4,7 @@ import Providers from "@/app/providers";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Absol · Login",
+  title: "Arceus · Login",
   description:
     "Plataforma para monitoramento de requisições HTTP realizadas ao Arceus, exibição de métricas e dashboards.",
 };

@@ -12,7 +12,7 @@ import {
   FaUsers,
 } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
-import logo from "@/public/logo.png";
+import logo from "@/public/logo.svg";
 import {
   Avatar,
   Button,
@@ -137,7 +137,7 @@ function Sidebar() {
           <div className="flex items-center gap-3">
             <Image alt="Absol" className="size-8" src={logo} />
             <h1 className="text-xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
-              Absol
+              Arceus
             </h1>
           </div>
         </div>

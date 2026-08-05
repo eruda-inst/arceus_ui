@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Sidebar from "@/components/Sidebar/Sidebar";
 
 export const metadata: Metadata = {
-  title: "Absol · Início",
+  title: "Arceus · Início",
 };
 
 export default function MainLayout({
