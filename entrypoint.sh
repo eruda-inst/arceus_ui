@@ -22,18 +22,19 @@ if [ -z "$FILES" ]; then
   echo "Warning: No files containing placeholders were found in $TARGET_DIR."
 else
   echo "Found placeholder files. Processing..."
-  
+
   # Loop pelos arquivos encontrados
   for file in $FILES; do
     # Garante que é um arquivo
     if [ -f "$file" ]; then
       # echo "Processing $file..." # (Descomente para debug pesado)
-      
+
       # Roda a substituição
       sed -i "s|__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__|${NEXT_PUBLIC_BASE_API_URL}|g" "$file"
+      sed -i "s|__NEXT_SERVER_ACTIONS_ENCRYPTION_KEY_PLACEHOLDER__|${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}|g" "$file"
     fi
   done
-  
+
   echo "Replacement complete."
 fi
 
