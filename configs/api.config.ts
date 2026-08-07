@@ -114,7 +114,6 @@ const API_ROUTES = {
       if (filters.department) params.append("setor", filters.department);
       if (filters.nome_cliente)
         params.append("nome_cliente", filters.nome_cliente);
-      console.log(`${API_ENDPOINT_BASES.log}/?${params.toString()}`);
       return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;
     },
   },

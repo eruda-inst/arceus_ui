@@ -75,7 +75,6 @@ function LogFilters() {
   };
 
   const handleApply = () => {
-    console.log(localFilters);
     setFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
   };

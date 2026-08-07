@@ -10,6 +10,7 @@ const publicRoutes = ["/login"];
 // Route-permission mapping
 const routePerms: Record<string, string> = {
   "/": "ver:metricas",
+  "/logs": "ver:logs",
   "/usuarios": "ver:usuarios",
 };
 
