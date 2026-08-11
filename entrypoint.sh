@@ -1,43 +1,22 @@
 #!/bin/sh
 set -e
 
-echo "Starting runtime environment variable replacement..."
+echo "Starting runtime replacement for NEXT_PUBLIC_BASE_API_URL..."
 
-# --- CORREÇÃO AQUI ---
-# O Middleware (de onde vêm os logs [MW-LOG]) não está em /static.
-# Ele está em /server.
-# Vamos escanear a pasta .next INTEIRA para garantir que pegamos
-# tanto os arquivos de cliente (.next/static) quanto os de servidor/middleware (.next/server).
-TARGET_DIR=.next
+API_PLACEHOLDER="__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__"
+API_VALUE="${NEXT_PUBLIC_BASE_API_URL}"
 
-echo "Scanning directory: $TARGET_DIR for placeholders..."
-
-# Encontra TODOS os arquivos (.js, .css, .html, etc.) dentro de .next
-# que contenham qualquer string "__NEXT_PUBLIC_"
-# -r = recursivo
-# -l = listar apenas nomes de arquivos
-FILES=$(grep -rl "__NEXT_PUBLIC_" $TARGET_DIR || true)
-
-if [ -z "$FILES" ]; then
-  echo "Warning: No files containing placeholders were found in $TARGET_DIR."
+if [ -z "$API_VALUE" ]; then
+    echo "Warning: NEXT_PUBLIC_BASE_API_URL is not set – skipping replacement."
 else
-  echo "Found placeholder files. Processing..."
-
-  # Loop pelos arquivos encontrados
-  for file in $FILES; do
-    # Garante que é um arquivo
-    if [ -f "$file" ]; then
-      # echo "Processing $file..." # (Descomente para debug pesado)
-
-      # Roda a substituição
-      sed -i "s|__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__|${NEXT_PUBLIC_BASE_API_URL}|g" "$file"
-      sed -i "s|__NEXT_SERVER_ACTIONS_ENCRYPTION_KEY_PLACEHOLDER__|${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}|g" "$file"
-    fi
-  done
-
-  echo "Replacement complete."
+    find .next -type f \( -name "*.js" -o -name "*.html" -o -name "*.css" \) \
+        -exec grep -l "$API_PLACEHOLDER" {} \; | while IFS= read -r file; do
+        echo "Replacing in $file"
+        escaped_value=$(printf '%s' "$API_VALUE" | sed 's/|/\\|/g')
+        sed -i "s|$API_PLACEHOLDER|$escaped_value|g" "$file"
+    done
+    echo "Replacement complete."
 fi
 
-# 5. Executa o comando original (npm start)
 echo "Starting Next.js..."
 exec "$@"

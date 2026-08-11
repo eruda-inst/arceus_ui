@@ -33,7 +33,7 @@ export const TopHttpMethodSchema = z.object({
   total_requisicoes: z.number(),
 });
 export const TopDepartmentSchema = z.object({
-  setor: z.string(),
+  setor: z.string().nullable(),
   total_requisicoes: z.number(),
 });
 export const TopClientSchema = z.object({

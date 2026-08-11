@@ -116,7 +116,7 @@ function Add({ handleClose, ...props }: AddProps) {
         getAllGroups(),
       ]);
 
-      setIxcUsers(ixcRes?.dados || []);
+      setIxcUsers(ixcRes?.data || []);
       setGroups(groups || []);
 
       if (userRes?.data) {

@@ -12,11 +12,13 @@ export const IXCUserOutSchema = z.object({
 });
 
 export const IXCUserPaginationOutSchema = z.object({
-  dados: z.array(IXCUserOutSchema),
-  pagina_atual: z.number().positive(),
-  itens_por_pagina: z.number().positive(),
-  total_paginas: z.number().nonnegative(),
-  total_itens: z.number().nonnegative(),
+  data: z.array(IXCUserOutSchema),
+  meta: z.object({
+    pagina_atual: z.number().positive(),
+    itens_por_pagina: z.number().positive(),
+    total_paginas: z.number().nonnegative(),
+    total_itens: z.number().nonnegative(),
+  }),
 });
 
 export { IXCUserStatusEnum, IXCUserAccessTypeEnum };

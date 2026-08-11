@@ -21,7 +21,7 @@ class IxcUserService {
         API_ROUTES.ixc_user.getAll(filters),
       );
       const data = response.data;
-      IXCUserPaginationOutSchema.parse(data);
+      IXCUserPaginationOutSchema.safeParse(data);
       return data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
