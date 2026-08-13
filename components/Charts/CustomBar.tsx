@@ -38,7 +38,7 @@ function VerticalBarChart({
       {isLoading ? (
         <Skeleton className="h-80 rounded-3xl" />
       ) : (
-        <Card className="border bg-surface">
+        <Card className="border bg-surface min-h-80">
           <Card.Header className="space-y-3">
             <Card.Title className="text-lg font-bold">{label}</Card.Title>
             <Card.Description>{description}</Card.Description>
