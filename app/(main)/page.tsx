@@ -189,7 +189,7 @@ function Home() {
                 hoje: errorStats?.hoje?.percentual ?? 0,
                 sempre: errorStats?.sempre?.percentual ?? 0,
               },
-              format: (v: Number) => `${v.toFixed(2).replace(".", ",")}%`,
+              format: (v: number) => `${v.toFixed(2).replace(".", ",")}%`,
             },
             {
               label: "Total",
@@ -213,7 +213,7 @@ function Home() {
                 hoje: successStats?.hoje?.percentual ?? 0,
                 sempre: successStats?.sempre?.percentual ?? 0,
               },
-              format: (v: Number) => `${v.toFixed(2).replace(".", ",")}%`,
+              format: (v: number) => `${v.toFixed(2).replace(".", ",")}%`,
             },
             {
               label: "Total",
@@ -237,7 +237,7 @@ function Home() {
                 hoje: resTime?.hoje?.min ?? 0,
                 sempre: resTime?.sempre?.min ?? 0,
               },
-              format: (v: Number) => v.toFixed(3).replace(".", ","),
+              format: (v: number) => v.toFixed(3).replace(".", ","),
             },
             {
               label: "Méd",
@@ -245,7 +245,7 @@ function Home() {
                 hoje: resTime?.hoje?.avg ?? 0,
                 sempre: resTime?.sempre?.avg ?? 0,
               },
-              format: (v: Number) => v.toFixed(3).replace(".", ","),
+              format: (v: number) => v.toFixed(3).replace(".", ","),
             },
             {
               label: "Máx",
@@ -253,7 +253,7 @@ function Home() {
                 hoje: resTime?.hoje?.max ?? 0,
                 sempre: resTime?.sempre?.max ?? 0,
               },
-              format: (v: Number) => v.toFixed(3).replace(".", ","),
+              format: (v: number) => v.toFixed(3).replace(".", ","),
             },
           ]}
           isLoading={isLoading}
