@@ -1,9 +1,7 @@
-const DEFAULT_BASE_API_URL = "http://localhost:8000";
-const DEFAULT_BASE_WS_API_URL = "ws://localhost:8000";
 const ENV_BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 const ENV_BASE_WS_API_URL = process.env.NEXT_PUBLIC_BASE_WS_API_URL;
-let BASE_API_URL = DEFAULT_BASE_API_URL;
-let BASE_WS_API_URL = DEFAULT_BASE_WS_API_URL;
+let BASE_API_URL = "http://localhost:8000";
+let BASE_WS_API_URL = "ws://localhost:8000";
 
 if (ENV_BASE_API_URL) {
   if (ENV_BASE_API_URL?.endsWith("/")) {
@@ -130,9 +128,4 @@ const API_ROUTES = {
   },
 };
 
-export {
-  DEFAULT_BASE_API_URL,
-  ENV_BASE_API_URL,
-  API_ENDPOINT_BASES,
-  API_ROUTES,
-};
+export { BASE_API_URL, BASE_WS_API_URL, API_ENDPOINT_BASES, API_ROUTES };

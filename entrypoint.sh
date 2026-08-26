@@ -1,37 +1,34 @@
 #!/bin/sh
 set -e
 
-echo "Starting runtime replacement for NEXT_PUBLIC_BASE_API_URL..."
+replace_placeholder() {
+    placeholder="$1"
+    value="$2"
+    [ -z "$value" ] && return 0   # skip if empty
 
-API_PLACEHOLDER="__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__"
-API_VALUE="${NEXT_PUBLIC_BASE_API_URL}"
+    # Escape characters that are special in sed's replacement part when using '#' as delimiter:
+    #   #, &, \ (and also newline, but URLs don't contain them)
+    escaped_value=$(printf '%s' "$value" | sed -e 's/[#&\]/\\&/g')
 
-if [ -z "$API_VALUE" ]; then
-    echo "Warning: NEXT_PUBLIC_BASE_API_URL is not set – skipping replacement."
-else
-    find .next -type f \( -name "*.js" -o -name "*.html" -o -name "*.css" \) \
-        -exec grep -l "$API_PLACEHOLDER" {} \; | while IFS= read -r file; do
-        echo "Replacing in $file"
-        escaped_value=$(printf '%s' "$API_VALUE" | sed 's/|/\\|/g')
-        sed -i "s|$API_PLACEHOLDER|$escaped_value|g" "$file"
+    echo "Replacing $placeholder with runtime value..."
+
+    # Find all .js, .html, .css files, and run sed only on those containing the placeholder.
+    # Using xargs with -0 ensures spaces in filenames are handled.
+    find .next -type f \( -name "*.js" -o -name "*.html" -o -name "*.css" \) -print0 |
+    while IFS= read -r -d '' file; do
+        if grep -q "$placeholder" "$file"; then
+            echo "  -> $file"
+            sed -i "s#$placeholder#$escaped_value#g" "$file"
+        fi
     done
-    echo "Replacement complete."
-fi
+}
 
-API_WS_PLACEHOLDER="__NEXT_PUBLIC_BASE_WS_API_URL_PLACEHOLDER__"
-API_WS_VALUE="${NEXT_PUBLIC_BASE_WS_API_URL}"
+# Replace HTTP API placeholder
+replace_placeholder "__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__" "$NEXT_PUBLIC_BASE_API_URL"
 
-if [ -z "$API_WS_VALUE" ]; then
-    echo "Warning: NEXT_PUBLIC_BASE_WS_API_URL is not set – skipping replacement."
-else
-    find .next -type f \( -name "*.js" -o -name "*.html" -o -name "*.css" \) \
-        -exec grep -l "$API_WS_PLACEHOLDER" {} \; | while IFS= read -r file; do
-        echo "Replacing in $file"
-        escaped_value=$(printf '%s' "$API_VALUE" | sed 's/|/\\|/g')
-        sed -i "s|$API_WS_PLACEHOLDER|$escaped_value|g" "$file"
-    done
-    echo "Replacement complete."
-fi
+# Replace WebSocket API placeholder
+replace_placeholder "__NEXT_PUBLIC_BASE_WS_API_URL_PLACEHOLDER__" "$NEXT_PUBLIC_BASE_WS_API_URL"
 
+echo "Replacement complete."
 echo "Starting Next.js..."
 exec "$@"
