@@ -18,5 +18,20 @@ else
     echo "Replacement complete."
 fi
 
+API_WS_PLACEHOLDER="__NEXT_PUBLIC_BASE_WS_API_URL_PLACEHOLDER__"
+API_WS_VALUE="${NEXT_PUBLIC_BASE_WS_API_URL}"
+
+if [ -z "$API_WS_VALUE" ]; then
+    echo "Warning: NEXT_PUBLIC_BASE_WS_API_URL is not set – skipping replacement."
+else
+    find .next -type f \( -name "*.js" -o -name "*.html" -o -name "*.css" \) \
+        -exec grep -l "$API_WS_PLACEHOLDER" {} \; | while IFS= read -r file; do
+        echo "Replacing in $file"
+        escaped_value=$(printf '%s' "$API_VALUE" | sed 's/|/\\|/g')
+        sed -i "s|$API_WS_PLACEHOLDER|$escaped_value|g" "$file"
+    done
+    echo "Replacement complete."
+fi
+
 echo "Starting Next.js..."
 exec "$@"
