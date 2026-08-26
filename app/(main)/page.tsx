@@ -50,14 +50,22 @@ export default function Metrics() {
         <span
           className={clsx(
             "flex items-center gap-x-2",
-            isConnected ? "text-[#0f0]" : "text-[#f00]",
+            isConnecting
+              ? "text-blue-500"
+              : isConnected
+                ? "text-green-500"
+                : "text-red-500",
           )}
         >
-          {isConnected ? "Conectado" : "Desconectado"}
+          {isConnecting
+            ? "Conectando..."
+            : isConnected
+              ? "Conectado"
+              : "Desconectado"}
           <ColorSwatch
-            className="animate-bounce"
+            className="animate-pulse"
             size="xs"
-            color={isConnected ? "#0f0" : "#f00"}
+            color={isConnecting ? "#00f" : isConnected ? "#0f0" : "#f00"}
           />
         </span>
       </div>
@@ -84,7 +92,7 @@ export default function Metrics() {
               },
             },
           ]}
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
         />
 
         {/* Sucessos */}
@@ -108,7 +116,7 @@ export default function Metrics() {
               },
             },
           ]}
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
         />
 
         {/* Tempo de Resposta (agora com 3 métricas) */}
@@ -141,7 +149,7 @@ export default function Metrics() {
               format: (v: number) => v.toFixed(3).replace(".", ","),
             },
           ]}
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
         />
 
         {/* Requisições (apenas Total) */}
@@ -157,7 +165,7 @@ export default function Metrics() {
               },
             },
           ]}
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
         />
 
         {/* Atendimentos (apenas Total) */}
@@ -173,7 +181,7 @@ export default function Metrics() {
               },
             },
           ]}
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
         />
       </div>
 
@@ -187,7 +195,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Endpoints mais acessados no período"
           label="Top Endpoints — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
         />
         <CustomBar
@@ -197,7 +205,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Endpoints mais acessados no período"
           label="Top Endpoints — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
         />
 
@@ -209,7 +217,7 @@ export default function Metrics() {
           description="Códigos de status mais frequentes"
           name="Total de respostas"
           label="Top Status Codes — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#10b981"
           activeBarColor="#ef467e"
           layout="horizontal"
@@ -221,7 +229,7 @@ export default function Metrics() {
           name="Total de respostas"
           description="Códigos de status mais frequentes"
           label="Top Status Codes — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#10b981"
           activeBarColor="#ef467e"
           layout="horizontal"
@@ -235,7 +243,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Métodos HTTP mais utilizados"
           label="Top Métodos HTTP — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#06b6d4"
           activeBarColor="#ec4899"
           layout="horizontal"
@@ -247,7 +255,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Métodos HTTP mais utilizados"
           label="Top Métodos HTTP — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#06b6d4"
           activeBarColor="#ec4899"
           layout="horizontal"
@@ -261,7 +269,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Setores com maior volume de requisições"
           label="Top Setores — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#3b82f6"
           activeBarColor="#34d399"
           layout="horizontal"
@@ -273,7 +281,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Setores com maior volume de requisições"
           label="Top Setores — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#3b82f6"
           activeBarColor="#34d399"
           layout="horizontal"
@@ -287,7 +295,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Clientes que mais realizaram requisições"
           label="Top Clientes — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#d946ef"
           activeBarColor="#84cc16"
@@ -299,7 +307,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Clientes que mais realizaram requisições"
           label="Top Clientes — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#d946ef"
           activeBarColor="#84cc16"
@@ -313,7 +321,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Distribuição de requisições por hora do dia"
           label="Horas de Pico — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           lineColor="#8b5cf6"
           activeDotColor="#74a309"
         />
@@ -324,7 +332,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Distribuição de requisições por hora do dia"
           label="Horas de Pico — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           lineColor="#8b5cf6"
           activeDotColor="#74a309"
         />
@@ -337,7 +345,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Dias com maior concentração de acessos"
           label="Top Dias da Semana"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
           layout="horizontal"
@@ -349,7 +357,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Dias com maior concentração de acessos"
           label="Top Dias da Semana — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#f59e0b"
           activeBarColor="#0a61f4"
           layout="horizontal"
@@ -363,7 +371,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Dias do mês com mais requisições"
           label="Top Dias do Mês"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#f97316"
           activeBarColor="#16F99C"
           hideXAxis
@@ -375,7 +383,7 @@ export default function Metrics() {
           name="Total de requisições"
           description="Dias do mês com mais requisições"
           label="Top Dias do Mês — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           barColor="#f97316"
           activeBarColor="#16F99C"
           hideXAxis
@@ -389,7 +397,7 @@ export default function Metrics() {
           barDataKey="total_erros"
           description="Endpoints com maior número de erros"
           label="Piores Endpoints — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#ef4444"
           activeBarColor="#10bbbb"
@@ -401,7 +409,7 @@ export default function Metrics() {
           barDataKey="total_erros"
           description="Endpoints com maior número de erros"
           label="Piores Endpoints — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#ef4444"
           activeBarColor="#10bbbb"
@@ -415,7 +423,7 @@ export default function Metrics() {
           barDataKey="duracao"
           description="Endpoints com maior tempo médio de resposta"
           label="Endpoints mais Lentos — Hoje"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#6c5ce7"
           activeBarColor="#fdcb6e"
@@ -427,7 +435,7 @@ export default function Metrics() {
           barDataKey="duracao"
           description="Endpoints com maior tempo médio de resposta"
           label="Endpoints mais Lentos — Sempre"
-          isLoading={isConnecting}
+          isLoading={!lastMessage}
           hideXAxis
           barColor="#6c5ce7"
           activeBarColor="#fdcb6e"

@@ -77,24 +77,38 @@ export default function useMetricWebSocket({
     // Se já existir uma conexão aberta, não cria outra
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
+    // Se já está em processo de conexão, não dispara outra tentativa
+    if (wsRef.current?.readyState === WebSocket.CONNECTING) return;
+
+    // Fecha qualquer conexão anterior (ex: em estado CLOSING ou CLOSED)
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+
+    // Início da tentativa de conexão
+    setIsConnecting(true);
+    setIsConnected(false);
+
     const ws = new WebSocket(url);
     wsRef.current = ws;
 
     ws.onopen = () => {
-      setIsConnecting(true);
-      if (ws.readyState === WebSocket.OPEN) {
-        setIsConnecting(false);
-        setIsConnected(true);
-      }
+      setIsConnecting(false);
+      setIsConnected(true);
       ws.send(
         JSON.stringify({ action: "enroll", metric_names: initialMetrics }),
       );
     };
 
     ws.onclose = () => {
-      if (ws.readyState === WebSocket.CLOSED) {
-        setIsConnected(false);
-      }
+      setIsConnecting(false);
+      setIsConnected(false);
+    };
+
+    ws.onerror = () => {
+      setIsConnecting(false);
+      setIsConnected(false);
     };
 
     ws.onmessage = (event) => {
@@ -103,7 +117,7 @@ export default function useMetricWebSocket({
     };
   }, [url, initialMetrics]);
 
-  // Efeito para abrir a conexão quando a URL mudar ou o componente montar
+  // Efeito para abrir/fechar conexão
   useEffect(() => {
     connect();
 
@@ -111,11 +125,12 @@ export default function useMetricWebSocket({
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
-        setIsConnecting(false);
-        setIsConnected(false);
       }
+      // Reinicializar estados ao desmontar
+      setIsConnecting(false);
+      setIsConnected(false);
     };
-  }, [connect]); // Dependência apenas da função connect, ela, por sua vez, depende de outros
+  }, [connect]);
 
   return { isConnected, isConnecting, lastMessage };
 }
