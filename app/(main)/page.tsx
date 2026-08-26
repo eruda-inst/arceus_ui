@@ -14,6 +14,26 @@ export default function Metrics() {
     initialMetrics: "all",
   });
 
+  const topHorasHoje = lastMessage?.top_horas?.hoje
+    ? [...lastMessage.top_horas.hoje]
+        .sort((a, b) => Number(a.hora) - Number(b.hora))
+        .map((item) => ({ ...item, hora: `${item.hora}h` }))
+    : [];
+
+  const topHorasSempre = lastMessage?.top_horas?.sempre
+    ? [...lastMessage.top_horas.sempre]
+        .sort((a, b) => Number(a.hora) - Number(b.hora))
+        .map((item) => ({ ...item, hora: `${item.hora}h` }))
+    : [];
+
+  const topDiasMesHoje = lastMessage?.top_dias_mes?.hoje
+    ? [...lastMessage.top_dias_mes.hoje].sort((a, b) => a.dia_mes - b.dia_mes)
+    : [];
+
+  const topDiasMesSempre = lastMessage?.top_dias_mes?.sempre
+    ? [...lastMessage.top_dias_mes.sempre].sort((a, b) => a.dia_mes - b.dia_mes)
+    : [];
+
   return (
     <>
       {/* Metric cards */}
@@ -287,7 +307,7 @@ export default function Metrics() {
 
         {/* Horas de pico */}
         <OneLineChart
-          data={lastMessage?.top_horas?.hoje}
+          data={topHorasHoje}
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
@@ -298,7 +318,7 @@ export default function Metrics() {
           activeDotColor="#74a309"
         />
         <OneLineChart
-          data={lastMessage?.top_horas?.sempre}
+          data={topHorasSempre}
           dataKey="hora"
           lineDataKey="total_requisicoes"
           name="Total de requisições"
@@ -337,7 +357,7 @@ export default function Metrics() {
 
         {/* Top dias do mês */}
         <CustomBar
-          data={lastMessage?.top_dias_mes?.hoje}
+          data={topDiasMesHoje}
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
@@ -349,7 +369,7 @@ export default function Metrics() {
           hideXAxis
         />
         <CustomBar
-          data={lastMessage?.top_dias_mes?.sempre}
+          data={topDiasMesSempre}
           dataKey="dia_mes"
           barDataKey="total_requisicoes"
           name="Total de requisições"
