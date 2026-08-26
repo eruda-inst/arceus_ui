@@ -5,7 +5,7 @@ RUN yarn install --frozen-lockfile
 COPY . .
 ARG NEXT_PUBLIC_BASE_API_URL=__NEXT_PUBLIC_BASE_API_URL_PLACEHOLDER__
 ENV NEXT_PUBLIC_BASE_API_URL=$NEXT_PUBLIC_BASE_API_URL
-RUN npm run build
+RUN yarn build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
