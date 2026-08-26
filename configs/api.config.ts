@@ -1,12 +1,23 @@
 const DEFAULT_BASE_API_URL = "http://localhost:8000";
+const DEFAULT_BASE_WS_API_URL = "ws://localhost:8000";
 const ENV_BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
+const ENV_BASE_WS_API_URL = process.env.NEXT_PUBLIC_BASE_WS_API_URL;
 let BASE_API_URL = DEFAULT_BASE_API_URL;
+let BASE_WS_API_URL = DEFAULT_BASE_WS_API_URL;
 
 if (ENV_BASE_API_URL) {
   if (ENV_BASE_API_URL?.endsWith("/")) {
     BASE_API_URL = ENV_BASE_API_URL.slice(0, -1);
   } else {
     BASE_API_URL = ENV_BASE_API_URL;
+  }
+}
+
+if (ENV_BASE_WS_API_URL) {
+  if (ENV_BASE_WS_API_URL?.endsWith("/")) {
+    BASE_WS_API_URL = ENV_BASE_WS_API_URL.slice(0, -1);
+  } else {
+    BASE_WS_API_URL = ENV_BASE_WS_API_URL;
   }
 }
 
@@ -17,7 +28,7 @@ const API_ENDPOINT_BASES = {
   ixc_user: `${BASE_API_URL}/api/v1/usuarios-ixc`,
   user: `${BASE_API_URL}/api/v1/usuarios`,
   log: `${BASE_API_URL}/api/v1/logs`,
-  metric: `${BASE_API_URL}/api/v1/metricas`,
+  metric: `${BASE_WS_API_URL}/api/v1/metricas/`, // Tem que terminar obrigatoriamente com "/"
 };
 
 const API_ROUTES = {
@@ -116,25 +127,6 @@ const API_ROUTES = {
         params.append("nome_cliente", filters.nome_cliente);
       return `${API_ENDPOINT_BASES.log}/?${params.toString()}`;
     },
-  },
-  metric: {
-    totalReqs: () => `${API_ENDPOINT_BASES.metric}/total-requisicoes`,
-    totalServices: () => `${API_ENDPOINT_BASES.metric}/total-atendimentos`,
-    topEndpoints: () => `${API_ENDPOINT_BASES.metric}/top-endpoints`,
-    topStatusCodes: () => `${API_ENDPOINT_BASES.metric}/top-status-codes`,
-    topHours: () => `${API_ENDPOINT_BASES.metric}/top-horas`,
-    topWeekdays: () => `${API_ENDPOINT_BASES.metric}/top-dias-semana`,
-    topWorstEndpoints: () =>
-      `${API_ENDPOINT_BASES.metric}/top-piores-endpoints`,
-    topMonthDays: () => `${API_ENDPOINT_BASES.metric}/top-dias-mes`,
-    topSlowestEndpoints: () =>
-      `${API_ENDPOINT_BASES.metric}/top-endpoints-mais-lentos`,
-    topHttpMethods: () => `${API_ENDPOINT_BASES.metric}/top-metodos-http`,
-    topDepartments: () => `${API_ENDPOINT_BASES.metric}/top-setores`,
-    sucessos: () => `${API_ENDPOINT_BASES.metric}/sucessos`,
-    erros: () => `${API_ENDPOINT_BASES.metric}/erros`,
-    resTime: () => `${API_ENDPOINT_BASES.metric}/tempo-resposta`,
-    getTopClients: () => `${API_ENDPOINT_BASES.metric}/top-clientes`,
   },
 };
 

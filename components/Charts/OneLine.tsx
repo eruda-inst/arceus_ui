@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 interface OneLineChartProps {
-  data: Record<string, any>[];
+  data?: Record<string, any>[];
   label: string;
   name?: string;
   description: string;
@@ -23,7 +23,7 @@ interface OneLineChartProps {
 }
 
 function OneLineChart({
-  data,
+  data = [],
   label,
   name = "Total de requisições",
   description = "",

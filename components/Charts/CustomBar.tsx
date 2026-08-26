@@ -2,7 +2,7 @@ import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, Skeleton } from "@heroui/react";
 
 interface ChartBarProps {
-  data: Record<string, any>[];
+  data?: Record<string, any>[];
   label: string;
   name?: string;
   description: string;
@@ -17,7 +17,7 @@ interface ChartBarProps {
 }
 
 function VerticalBarChart({
-  data,
+  data = [],
   label,
   name = "Total de requisições",
   description,
