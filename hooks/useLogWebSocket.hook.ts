@@ -117,8 +117,8 @@ export default function useLogWebSocket({
 
     ws.onmessage = (event) => {
       const newData = JSON.parse(event.data);
-      // Merge new data with previous message (adjust if you want to replace entirely)
-      setLastMessage((prev) => ({ ...prev, ...newData }));
+      // Replace last message entirely
+      setLastMessage(newData);
     };
   }, [url, initialParams]);
 
