@@ -1,95 +1,39 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import Details from "@/components/Modals/Log/Details/Details";
-import PaginationControls from "@/components/PaginationControls/PaginationControls";
-import LogTable from "@/components/Tables/Log/Log";
-import LogFilters from "@/components/Filters/Log/Filter/Filter";
+import { useEffect, useState } from "react";
+import { ColorSwatch } from "@heroui/react";
+import { clsx } from "clsx";
+import PaginationControls from "@/components/PaginationControls/Log/PaginationControls";
 import ActiveLogFilters from "@/components/Filters/Log/Active/Active";
+import LogFilters from "@/components/Filters/Log/Filter/Filter";
+import Details from "@/components/Modals/Log/Details/Details";
+import LogTable from "@/components/Tables/Log/Log";
+import { useLogPagination } from "@/stores/useLogPagination.store";
 import { useLogFilter } from "@/stores/logFilter.store";
-import { LogService } from "@/services/Log";
-import { LogOut, LogPaginationOut } from "@/types/log.type";
-import { toast } from "@heroui/react";
+import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
+import { LogOut } from "@/types/log.type";
+import { API_ENDPOINT_BASES } from "@/configs/api.config";
 
-function Logs() {
-  const getAll = LogService.getAll;
+export default function Logs() {
+  const { isConnected, lastMessage, isConnecting, sendMessage } =
+    useLogWebSocket({ url: API_ENDPOINT_BASES.log });
+
+  const page = useLogPagination((state) => state.page);
+  const itemsPerPage = useLogPagination((state) => state.itemsPerPage);
+
   const filters = useLogFilter((state) => state.filters);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [logs, setLogs] = useState<LogOut[]>([]);
-  const [logPagination, setLogPagination] = useState<LogPaginationOut | null>(
-    null,
-  );
   const [selectedLog, setSelectedLog] = useState<LogOut | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [page, setPage] = useState<number>(1);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
-  const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
-    setItemsPerPage(newItemsPerPage);
-    setPage(1);
-  }, []);
 
   const handleRowClick = (log: LogOut) => {
     setSelectedLog(log);
     setIsDetailsOpen(true);
   };
 
-  const handleRefreshLogs = async () => {
-    setIsRefreshing(true);
-    try {
-      await fetchLogs();
-      toast.success("Registros atualizados com sucesso!");
-    } catch (error: unknown) {
-      toast.danger("Erro ao atualizar registros");
-      console.error(`Erro ao atualizar registros: ${error}`);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
-  const fetchLogs = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const serviceFilters = {
-        method: filters.metodo,
-        code: filters.codigo,
-        department: filters.setor,
-        endpoint: filters.endpoint,
-        data_inicio: filters.data_inicio,
-        data_fim: filters.data_fim,
-        hora_inicio: filters.hora_inicio,
-        hora_fim: filters.hora_fim,
-        protocol: filters.protocolo,
-        nome_cliente: filters.nome_cliente,
-      };
-
-      const result = await getAll({
-        page,
-        itemsPerPage,
-        ...serviceFilters,
-      });
-
-      setLogs(result?.data || []);
-      if (result) {
-        setLogPagination(result);
-      }
-    } catch (error) {
-      console.error("Erro ao buscar logs:", error);
-      toast.danger("Falha ao carregar registros.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, itemsPerPage, filters, getAll]);
-
   useEffect(() => {
-    fetchLogs();
-  }, [fetchLogs]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [filters]);
+    sendMessage({ pagina: page, itens_por_pagina: itemsPerPage, ...filters });
+  }, [itemsPerPage, sendMessage, page, filters]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -98,10 +42,32 @@ function Logs() {
           <h1 className="text-3xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
             Registros
           </h1>
-          <p className="text-gray-400 mt-1">
-            Visualize registros de requisições
+          <p className="text-muted">
+            Os registros são atualizados automaticamente, não é necessário
+            recarregar a página
           </p>
         </div>
+        <span
+          className={clsx(
+            "flex items-center gap-x-2",
+            isConnecting
+              ? "text-blue-500"
+              : isConnected
+                ? "text-green-500"
+                : "text-red-500",
+          )}
+        >
+          {isConnecting
+            ? "Conectando..."
+            : isConnected
+              ? "Conectado"
+              : "Desconectado"}
+          <ColorSwatch
+            className="animate-pulse"
+            size="xs"
+            color={isConnecting ? "#00f" : isConnected ? "#0f0" : "#f00"}
+          />
+        </span>
       </div>
 
       <LogFilters />
@@ -110,17 +76,12 @@ function Logs() {
       <div className="space-y-6">
         <PaginationControls
           page={page}
-          totalPages={logPagination?.meta?.total_paginas || 1}
-          totalItems={logPagination?.meta?.total_itens || 0}
-          onPageChange={setPage}
-          itemsPerPage={itemsPerPage}
-          onItemsPerPageChange={handleItemsPerPageChange}
+          totalPages={lastMessage?.meta?.total_paginas || 1}
+          totalItems={lastMessage?.meta?.total_itens || 0}
         />
         <LogTable
-          data={logs}
-          isLoading={isLoading}
-          isRefreshing={isRefreshing}
-          onRefreshLogs={handleRefreshLogs}
+          data={lastMessage?.data}
+          isLoading={!lastMessage}
           onRowClick={handleRowClick}
         />
       </div>
@@ -136,5 +97,3 @@ function Logs() {
     </div>
   );
 }
-
-export default Logs;

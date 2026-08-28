@@ -5,7 +5,6 @@ import {
   EmptyState,
   Chip,
   ChipProps,
-  Button,
 } from "@heroui/react";
 import {
   FaServer,
@@ -20,10 +19,8 @@ import Formatter from "@/helpers/Formatter";
 import { twMerge } from "tailwind-merge";
 
 interface LogTableProps {
-  data: LogOut[];
+  data?: LogOut[];
   isLoading: boolean;
-  isRefreshing: boolean;
-  onRefreshLogs: () => {};
   onRowClick: (data: LogOut) => void;
 }
 
@@ -80,11 +77,9 @@ function ChipCode({ code, className, children, ...props }: ChipCodeProps) {
   );
 }
 
-function LogTable({
+export default function LogTable({
   data,
   isLoading,
-  isRefreshing,
-  onRefreshLogs,
   onRowClick,
 }: LogTableProps) {
   if (isLoading) {
@@ -103,15 +98,6 @@ function LogTable({
               Registros de requisições
             </h2>
           </div>
-          <Button
-            className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
-            onPress={onRefreshLogs}
-            size="md"
-            isPending={isRefreshing}
-            isDisabled={isLoading || isRefreshing}
-          >
-            {({ isPending }) => (isPending ? "Atualizado..." : "Atualizar")}
-          </Button>
         </Card.Title>
       </Card.Header>
 
@@ -121,7 +107,7 @@ function LogTable({
             <Table.Content
               aria-label="Registros de requisições"
               onRowAction={(key) => {
-                const log = data.find((l) => l.id === key);
+                const log = data?.find((l) => l.id === key);
                 if (log) onRowClick(log);
               }}
             >
@@ -174,7 +160,7 @@ function LogTable({
                   </EmptyState>
                 )}
               >
-                {data.map((log) => (
+                {data?.map((log) => (
                   <Table.Row
                     key={log.id}
                     id={log.id}
@@ -256,5 +242,3 @@ function LogTable({
     </Card>
   );
 }
-
-export default LogTable;

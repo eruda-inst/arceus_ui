@@ -10,7 +10,7 @@ import UserFilters from "@/components/Filters/User/Filter/Filter";
 import { Button, Skeleton, toast } from "@heroui/react";
 import Details from "@/components/Modals/User/Details/Details";
 import { useUserStore } from "@/stores/user.store";
-import PaginationControls from "@/components/PaginationControls/PaginationControls";
+import PaginationControls from "@/components/PaginationControls/User/PaginationControls";
 import Add from "@/components/Modals/User/Add/Add";
 import { useAuthorization } from "@/hooks/authorization.hook";
 import { useAuthStore } from "@/stores/authentication.store";

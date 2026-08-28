@@ -15,6 +15,7 @@ import {
   TopWorstEndpoint,
 } from "@/types/metric.type";
 
+// Union type of all available metric names
 export type MetricName =
   | "erros"
   | "sucessos"
@@ -32,6 +33,8 @@ export type MetricName =
   | "top_setores"
   | "top_status_codes";
 
+// Type representing the structure of messages received from the server
+// Each key corresponds to a metric and contains its data wrapped in TodayAlwaysOut
 export interface lastMessageType {
   erros?: TodayAlwaysOut<ErrorStats>;
   sucessos?: TodayAlwaysOut<SuccessStats>;
@@ -50,52 +53,71 @@ export interface lastMessageType {
   top_status_codes?: TodayAlwaysOut<TopStatusCode[]>;
 }
 
+// Props fot he metric WebSocket hook
 export interface useMetricWebSocketProps {
   url: string;
   initialMetrics: MetricName[] | "all";
 }
 
+// Return type of the hook
 export interface useMetricWebSocketReturn {
   isConnected: boolean;
   isConnecting: boolean;
   lastMessage: lastMessageType | null;
 }
 
+/**
+ * Custom hook that establishes a WebSocket connection for real‑time metrics.
+ * Upon connection, it sends an "enroll" message to subscribe to the specified metrics.
+ *
+ * @param url - WebSocket endpoint
+ * @param initialMetrics - array of metric names or "all" to subscribe to all metrics
+ * @returns connection state and the last received message
+ */
 export default function useMetricWebSocket({
   url,
   initialMetrics,
 }: useMetricWebSocketProps): useMetricWebSocketReturn {
+  // Reference to the WebSocket instance
   const wsRef = useRef<WebSocket | null>(null);
+
+  // Connection states
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+
+  // Last message received from the server (contains one or more metrics)
   const [lastMessage, setLastMessage] = useState<lastMessageType | null>(null);
 
+  /**
+   * Establish the WebSocket connection and set up event handlers.
+   * On open, it sends an "enroll" message with the requested metric names.
+   */
   const connect = useCallback(() => {
-    // Só executa no cliente e se houver URL
+    // Avoid running on the server (SSR)
     if (typeof window === "undefined" || !url) return;
 
-    // Se já existir uma conexão aberta, não cria outra
+    // Prevent duplicate connections
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
-
-    // Se já está em processo de conexão, não dispara outra tentativa
     if (wsRef.current?.readyState === WebSocket.CONNECTING) return;
 
-    // Fecha qualquer conexão anterior (ex: em estado CLOSING ou CLOSED)
+    // Close any existing connection (e.g., in CLOSING or CLOSED state)
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
     }
 
-    // Início da tentativa de conexão
+    // Update connection status
     setIsConnecting(true);
     setIsConnected(false);
 
+    // Create the WebSocket
     const ws = new WebSocket(url);
     wsRef.current = ws;
 
     ws.onopen = () => {
       setIsConnecting(false);
       setIsConnected(true);
+      // Send subscription request with the desired metric names
       ws.send(
         JSON.stringify({ action: "enroll", metric_names: initialMetrics }),
       );
@@ -113,20 +135,21 @@ export default function useMetricWebSocket({
 
     ws.onmessage = (event) => {
       const newData = JSON.parse(event.data);
+      // Merge new data with previous message (assumes incremental updates)
       setLastMessage((prev) => ({ ...prev, ...newData }));
     };
   }, [url, initialMetrics]);
 
-  // Efeito para abrir/fechar conexão
+  // Automatically connect when the component mounts, and clean up on unmount
   useEffect(() => {
     connect();
 
     return () => {
+      // Close the WebSocket and reset state on component unmount
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
       }
-      // Reinicializar estados ao desmontar
       setIsConnecting(false);
       setIsConnected(false);
     };
