@@ -1,7 +1,7 @@
 import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
 import { LogOut } from "@/types/log.type";
-import InfoItem from "@/components/InfoItem/InfoItem";
+import InfoItem from "@/components/InfoItem";
 import {
   a11yDark,
   coldarkDark,

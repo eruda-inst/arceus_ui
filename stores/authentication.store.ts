@@ -3,13 +3,13 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import { UserOut } from "@/types/user.type";
-import { GroupService } from "@/services/Group";
+import GroupService from "@/services/Group";
 
-const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-const TOKEN_EXPIRY_KEY = "token_expiry";
+export const ACCESS_TOKEN_KEY = "access_token";
+export const REFRESH_TOKEN_KEY = "refresh_token";
+export const TOKEN_EXPIRY_KEY = "token_expiry";
 
-interface AuthState {
+export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
@@ -19,12 +19,10 @@ interface AuthState {
   groupName: string | null;
   loadingGroup: boolean;
 
-  // Ações
   init: () => Promise<void>;
   setTokens: (access: string, refresh: string, expiresIn?: number) => void;
   clearTokens: () => void;
   fetchCurrentUser: () => Promise<UserOut | null>;
-  refreshAccessToken: () => Promise<boolean>;
   logout: () => Promise<void>;
   setGroupName: (groupId: number) => Promise<void>;
 }
@@ -126,27 +124,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ groupName: group?.nome || null, loadingGroup: false });
     } catch {
       set({ groupName: null, loadingGroup: false });
-    }
-  },
-
-  refreshAccessToken: async () => {
-    const refresh =
-      get().refreshToken || (getCookie(REFRESH_TOKEN_KEY) as string);
-    if (!refresh) return false;
-
-    try {
-      const response = await axiosClient.post<{
-        access_token: string;
-        refresh_token?: string;
-        expires_in?: number;
-      }>(API_ROUTES.authentication.refreshToken(), { refresh_token: refresh });
-
-      const { access_token, refresh_token, expires_in } = response.data;
-      get().setTokens(access_token, refresh_token || refresh, expires_in);
-      return true;
-    } catch {
-      await get().logout();
-      return false;
     }
   },
 

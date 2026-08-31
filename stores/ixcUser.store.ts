@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { IXCUserOut } from "@/types/ixcUser.type";
 
-type IxcUserStore = {
+export type IxcUserStore = {
   // IXC users
   ixcUsers: IXCUserOut[];
   setIxcUsers: (data: IXCUserOut[]) => void;
@@ -11,7 +11,7 @@ type IxcUserStore = {
   setSelectedIxcUser: (data: IXCUserOut | null) => void;
 };
 
-const useIxcUserStore = create<IxcUserStore>()((set) => ({
+export const useIxcUserStore = create<IxcUserStore>()((set) => ({
   // IXC users
   ixcUsers: [],
   setIxcUsers: (data: IXCUserOut[]) => set({ ixcUsers: data }),
@@ -21,5 +21,3 @@ const useIxcUserStore = create<IxcUserStore>()((set) => ({
   setSelectedIxcUser: (data: IXCUserOut | null) =>
     set({ selectedIxcUser: data }),
 }));
-
-export { useIxcUserStore };

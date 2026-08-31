@@ -5,10 +5,10 @@ import {
   LogFilterInSchema,
 } from "@/schemas/log.schema";
 
-type Method = "GET" | "POST" | "PUT";
 type Code = 200 | 201 | 401 | 403 | 404 | 422 | 500;
+type LogFilterIn = z.infer<typeof LogFilterInSchema>;
 type LogOut = z.infer<typeof LogOutSchema>;
 type LogPaginationOut = z.infer<typeof LogPaginationOutSchema>;
-type LogFilterIn = z.infer<typeof LogFilterInSchema>;
+type Method = "GET" | "POST" | "PUT";
 
-export type { LogOut, LogPaginationOut, Method, Code, LogFilterIn };
+export type { Code, LogFilterIn, LogOut, LogPaginationOut, Method };

@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { UserOut, UserUpdate } from "@/types/user.type";
+import { UserOut } from "@/types/user.type";
 
-type UserStore = {
+export type UserStore = {
   // Users
   users: UserOut[];
   setUsers: (data: UserOut[]) => void;
@@ -12,12 +12,12 @@ type UserStore = {
   // Selected user
   selectedUser: UserOut | null;
   setSelectedUser: (data: UserOut) => void;
-  updateSelectedUser: (data: UserUpdate) => void;
+
   deleteSelectedUser: () => void;
   toggleSelectedUserStatus: () => void;
 };
 
-const useUserStore = create<UserStore>()((set) => ({
+export const useUserStore = create<UserStore>()((set) => ({
   // Users
   users: [],
   setUsers: (data: UserOut[]) => set({ users: data }),
@@ -29,21 +29,6 @@ const useUserStore = create<UserStore>()((set) => ({
   // Selected user
   selectedUser: null,
   setSelectedUser: (data: UserOut) => set({ selectedUser: data }),
-  updateSelectedUser: (data: UserUpdate) => {
-    set((state) => {
-      if (!state.selectedUser) {
-        return {};
-      }
-      const updatedUser = { ...state.selectedUser, ...data };
-      const updatedUsers = state.users.map((user) =>
-        user.id === updatedUser.id ? updatedUser : user,
-      );
-      return {
-        selectedUser: updatedUser,
-        users: updatedUsers,
-      };
-    });
-  },
   deleteSelectedUser: () => {
     set((state) => ({
       selectedUser: null,
@@ -65,5 +50,3 @@ const useUserStore = create<UserStore>()((set) => ({
     });
   },
 }));
-
-export { useUserStore };

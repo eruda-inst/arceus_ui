@@ -1,24 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { UserService } from "@/services/User";
+import UserService from "@/services/User";
 import type { UserOut, UserPaginationOut } from "@/types/user.type";
-import UserTable from "@/components/Tables/User/User";
+import UserTable from "@/components/Tables/UserTable";
 import { useUserFilter } from "@/stores/userFilter.store";
-import ActiveUserFilters from "@/components/Filters/User/Active/Active";
-import UserFilters from "@/components/Filters/User/Filter/Filter";
-import { Button, Skeleton, toast } from "@heroui/react";
-import Details from "@/components/Modals/User/Details/Details";
-import { useUserStore } from "@/stores/user.store";
-import PaginationControls from "@/components/PaginationControls/User/PaginationControls";
-import Add from "@/components/Modals/User/Add/Add";
-import { useAuthorization } from "@/hooks/authorization.hook";
-import { useAuthStore } from "@/stores/authentication.store";
-import { GroupService } from "@/services/Group";
-import { useGroupStore } from "@/stores/group.store";
+import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
+import UserFilters from "@/components/Filters/UserFilters";
 
-function Users() {
-  const { CheckAllPerms } = useAuthorization();
+import Details from "@/components/Modals/UserDetails";
+import { useUserStore } from "@/stores/user.store";
+import PaginationControls from "@/components/PaginationControls/UserPaginationControls";
+import Add from "@/components/Modals/UserAdd";
+import { useAuthStore } from "@/stores/authentication.store";
+import GroupService from "@/services/Group";
+import { useGroupStore } from "@/stores/group.store";
+import { usePermStore } from "@/stores/perm.store";
+import { Button, Skeleton, toast } from "@heroui/react";
+
+export default function Users() {
+  const { hasAllPerms } = usePermStore();
   const { currentUser } = useAuthStore();
   const groups = useGroupStore((state) => state.groups);
   const setGroups = useGroupStore((state) => state.setGroups);
@@ -105,7 +106,7 @@ function Users() {
             className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
             size="md"
             onPress={() => setIsAddOpen(true)}
-            isDisabled={!CheckAllPerms(["criar:usuarios"])}
+            isDisabled={!hasAllPerms(["criar:usuarios"])}
           >
             Adicionar
           </Button>
@@ -154,5 +155,3 @@ function Users() {
     </div>
   );
 }
-
-export default Users;

@@ -15,7 +15,7 @@ import {
   FaClock,
 } from "react-icons/fa6";
 import { Code, LogOut, Method } from "@/types/log.type";
-import Formatter from "@/helpers/Formatter";
+import Formatter from "@/helpers/Formatter.helper";
 import { twMerge } from "tailwind-merge";
 
 interface LogTableProps {

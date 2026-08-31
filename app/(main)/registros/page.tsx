@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { ColorSwatch } from "@heroui/react";
 import { clsx } from "clsx";
-import PaginationControls from "@/components/PaginationControls/Log/PaginationControls";
-import ActiveLogFilters from "@/components/Filters/Log/Active/Active";
-import LogFilters from "@/components/Filters/Log/Filter/Filter";
-import Details from "@/components/Modals/Log/Details/Details";
-import LogTable from "@/components/Tables/Log/Log";
+import PaginationControls from "@/components/PaginationControls/LogPaginationControls";
+import ActiveLogFilters from "@/components/Filters/ActiveLogFilters";
+import LogFilters from "@/components/Filters/LogFilters";
+import Details from "@/components/Modals/LogDetails";
+import LogTable from "@/components/Tables/LogTable";
 import { useLogPagination } from "@/stores/useLogPagination.store";
 import { useLogFilter } from "@/stores/logFilter.store";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";

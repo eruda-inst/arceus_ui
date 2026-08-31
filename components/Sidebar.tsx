@@ -28,14 +28,14 @@ import {
   toast,
 } from "@heroui/react";
 import { useAuthStore } from "@/stores/authentication.store";
-import { useAuthorization } from "@/hooks/authorization.hook";
-import Misc from "@/helpers/Misc";
+import Misc from "@/helpers/Misc.helper";
 import z from "zod";
 import { useEffect, useState } from "react";
 import { UserOut } from "@/types/user.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
-import InfoItem from "@/components/InfoItem/InfoItem";
+import InfoItem from "@/components/InfoItem";
+import { usePermStore } from "@/stores/perm.store";
 
 const FormSchema = z.object({
   senha: z.string().min(8).nullable(),
@@ -52,7 +52,7 @@ type FormType = z.infer<typeof FormSchema>;
 function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { CheckAllPerms } = useAuthorization();
+  const { hasAllPerms } = usePermStore();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -147,7 +147,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/")}
-              isDisabled={!CheckAllPerms(["ver:metricas"])}
+              isDisabled={!hasAllPerms(["ver:metricas"])}
             >
               <FaHouseChimney className="size-5" /> Métricas
             </Button>
@@ -159,7 +159,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/registros" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/registros")}
-              isDisabled={!CheckAllPerms(["ver:logs"])}
+              isDisabled={!hasAllPerms(["ver:logs"])}
             >
               <FaClipboardList className="size-5" /> Registros
             </Button>
@@ -171,7 +171,7 @@ function Sidebar() {
             <Button
               className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit"}`}
               onPress={() => router.push("/usuarios")}
-              isDisabled={!CheckAllPerms(["ver:usuarios"])}
+              isDisabled={!hasAllPerms(["ver:usuarios"])}
             >
               <FaUsers className="size-5" /> Usuários
             </Button>

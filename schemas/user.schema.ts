@@ -1,9 +1,23 @@
 import z from "zod";
 
+const UserFilterInSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().optional(),
+  groupName: z.string().optional(),
+});
+
+const UserInSchema = z.object({
+  nome: z.string(),
+  email: z.email(),
+  ativo: z.boolean(),
+  senha: z.string().min(8),
+  id_grupo: z.number().positive(),
+});
+
 const UserOutSchema = z.object({
   id: z.number().positive(),
   nome: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   ativo: z.boolean(),
   criado_em: z.string(),
   atualizado_em: z.string().nullable(),
@@ -20,33 +34,9 @@ const UserPaginationOutSchema = z.object({
   }),
 });
 
-// Os demais schemas permanecem iguais
-const UserInSchema = z.object({
-  senha: z.string().min(8),
-  nome: z.string(),
-  email: z.string().email(),
-  id_grupo: z.number().positive(),
-  ativo: z.boolean().default(true).optional(),
-});
-
-const UserUpdateSchema = z.object({
-  nome: z.string().optional(),
-  email: z.string().email().optional(),
-  ativo: z.boolean().optional(),
-  senha: z.string().min(8).optional(),
-  id_grupo: z.number().positive().optional(),
-});
-
-const UserFilterInSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().optional(),
-  groupName: z.string().optional(),
-});
-
 export {
-  UserOutSchema,
-  UserPaginationOutSchema,
-  UserUpdateSchema,
   UserFilterInSchema,
   UserInSchema,
+  UserOutSchema,
+  UserPaginationOutSchema,
 };

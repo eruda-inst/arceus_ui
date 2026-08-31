@@ -1,17 +1,14 @@
 import { z } from "zod";
 
-const IXCUserStatusEnum = z.enum(["Ativo", "Inativo"]);
-const IXCUserAccessTypeEnum = z.enum(["Ambos", "Web", "Mobile"]);
-
-export const IXCUserOutSchema = z.object({
+const IXCUserOutSchema = z.object({
   id: z.number().positive(),
   nome: z.string(),
   email: z.email(),
-  status: IXCUserStatusEnum.optional().default("Ativo"),
-  tipo_acesso: IXCUserAccessTypeEnum.optional().default("Ambos"),
+  status: z.enum(["Ativo", "Inativo"]).optional().default("Ativo"),
+  tipo_acesso: z.enum(["Ambos", "Web", "Mobile"]).optional().default("Ambos"),
 });
 
-export const IXCUserPaginationOutSchema = z.object({
+const IXCUserPaginationOutSchema = z.object({
   data: z.array(IXCUserOutSchema),
   meta: z.object({
     pagina_atual: z.number().positive(),
@@ -21,4 +18,4 @@ export const IXCUserPaginationOutSchema = z.object({
   }),
 });
 
-export { IXCUserStatusEnum, IXCUserAccessTypeEnum };
+export { IXCUserOutSchema, IXCUserPaginationOutSchema };

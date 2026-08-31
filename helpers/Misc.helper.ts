@@ -1,4 +1,4 @@
-class Misc {
+export default class Misc {
   static getInitials = (fullName?: string): string => {
     if (!fullName) return "";
 
@@ -15,5 +15,3 @@ class Misc {
     return firstInitial + lastInitial;
   };
 }
-
-export default Misc;

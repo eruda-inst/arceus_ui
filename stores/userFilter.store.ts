@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { UserFilterIn } from "@/types/user.type";
 
-type UserFilterStore = {
+export type UserFilterStore = {
   filters: UserFilterIn;
   setFilters: (filters: UserFilterIn) => void;
   resetFilters: () => void;

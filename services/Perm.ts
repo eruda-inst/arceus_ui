@@ -4,7 +4,7 @@ import { PermOut } from "@/types/perm.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { PermOutSchema } from "@/schemas/perm.schema";
 
-class PermService {
+export default class PermService {
   static async getByUserId(userId: number): Promise<PermOut[]> {
     try {
       const response = await axiosClient.get(
@@ -22,5 +22,3 @@ class PermService {
     }
   }
 }
-
-export { PermService };

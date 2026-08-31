@@ -25,8 +25,8 @@ const API_ENDPOINT_BASES = {
   perm: `${BASE_API_URL}/api/v1/permissoes`,
   ixc_user: `${BASE_API_URL}/api/v1/usuarios-ixc`,
   user: `${BASE_API_URL}/api/v1/usuarios`,
-  log: `${BASE_WS_API_URL}/api/v1/logs/`, // Tem que terminar obrigatoriamente com "/"
-  metric: `${BASE_WS_API_URL}/api/v1/metricas/`, // Tem que terminar obrigatoriamente com "/"
+  log: `${BASE_WS_API_URL}/api/v1/logs/`, // That must end with "/"
+  metric: `${BASE_WS_API_URL}/api/v1/metricas/`, // That must end with "/"
 };
 
 const API_ROUTES = {
@@ -66,7 +66,6 @@ const API_ROUTES = {
     create: () => `${API_ENDPOINT_BASES.user}/`,
     updatePasswordById: (id: number) =>
       `${API_ENDPOINT_BASES.user}/mudar-senha/id/${id}`,
-    updateById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,
     toggleStatusById: (id: number) =>
       `${API_ENDPOINT_BASES.user}/${id}/alternar-status`,
     deleteById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,

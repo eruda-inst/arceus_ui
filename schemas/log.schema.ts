@@ -1,6 +1,24 @@
 import z from "zod";
 import { Departments } from "@/types/department.type";
 
+const LogFilterInSchema = z.object({
+  metodo: z.enum(["GET", "POST", "PUT"]).optional(),
+  codigo: z
+    .number()
+    .refine((val) => [200, 201, 401, 403, 404, 422, 500].includes(val), {
+      message: "Código HTTP inválido",
+    })
+    .optional(),
+  data_inicio: z.string().optional(),
+  data_fim: z.string().optional(),
+  hora_inicio: z.string().optional(),
+  hora_fim: z.string().optional(),
+  endpoint: z.string().optional(),
+  setor: z.enum(Departments).optional(),
+  protocolo: z.string().optional(),
+  nome_cliente: z.string().optional(),
+});
+
 const LogOutSchema = z.object({
   id: z.number().positive(),
   metodo: z.string(),
@@ -26,22 +44,4 @@ const LogPaginationOutSchema = z.object({
   }),
 });
 
-const LogFilterInSchema = z.object({
-  metodo: z.enum(["GET", "POST", "PUT"]).optional(),
-  codigo: z
-    .number()
-    .refine((val) => [200, 201, 401, 403, 404, 422, 500].includes(val), {
-      message: "Código HTTP inválido",
-    })
-    .optional(),
-  data_inicio: z.string().optional(),
-  data_fim: z.string().optional(),
-  hora_inicio: z.string().optional(),
-  hora_fim: z.string().optional(),
-  endpoint: z.string().optional(),
-  setor: z.enum(Departments).optional(),
-  protocolo: z.string().optional(),
-  nome_cliente: z.string().optional(),
-});
-
-export { LogOutSchema, LogPaginationOutSchema, LogFilterInSchema };
+export { LogFilterInSchema, LogOutSchema, LogPaginationOutSchema };

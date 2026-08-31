@@ -27,10 +27,10 @@ import {
 } from "react-icons/fa6";
 import { IXCUserOut } from "@/types/ixcUser.type";
 import { useCallback, useEffect, useState } from "react";
-import { IxcUserService } from "@/services/IxcUser";
-import { UserService } from "@/services/User";
+import IxcUserService from "@/services/IxcUser";
+import UserService from "@/services/User";
 import { useIxcUserStore } from "@/stores/ixcUser.store";
-import { GroupService } from "@/services/Group";
+import GroupService from "@/services/Group";
 import { GroupOut } from "@/types/group.type";
 import z from "zod";
 import { useUserStore } from "@/stores/user.store";
@@ -50,7 +50,7 @@ const FormSchema = z.object({
 
 type formType = z.infer<typeof FormSchema>;
 
-function Add({ handleClose, ...props }: AddProps) {
+export default function Add({ handleClose, ...props }: AddProps) {
   const getAllUsers = UserService.getAll;
   const getAllIxcUsers = IxcUserService.getAll;
   const getAllGroups = GroupService.getAll;
@@ -101,7 +101,7 @@ function Add({ handleClose, ...props }: AddProps) {
       await fetchAll();
       setSelectedIxcUser(null);
       handleClearForm();
-    } catch (error) {
+    } catch {
       toast.danger("Erro ao adicionar usuário");
     } finally {
       setIsAdding(false);
@@ -417,5 +417,3 @@ function Add({ handleClose, ...props }: AddProps) {
     </Modal>
   );
 }
-
-export default Add;

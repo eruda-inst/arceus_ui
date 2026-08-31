@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
-interface OneLineChartProps {
+interface CustomLineProps {
   data?: Record<string, any>[];
   label: string;
   name?: string;
@@ -22,7 +22,7 @@ interface OneLineChartProps {
   hideXAxis?: boolean;
 }
 
-function OneLineChart({
+function CustomLine({
   data = [],
   label,
   name = "Total de requisições",
@@ -33,7 +33,7 @@ function OneLineChart({
   activeDotColor = "#fa7b20",
   isLoading = false,
   hideXAxis = false,
-}: OneLineChartProps) {
+}: CustomLineProps) {
   return (
     <>
       {isLoading ? (
@@ -99,4 +99,4 @@ function OneLineChart({
   );
 }
 
-export default OneLineChart;
+export default CustomLine;

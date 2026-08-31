@@ -1,13 +1,11 @@
 "use client";
 
 import { Toast } from "@heroui/react";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { PermInitializer } from "@/components/PermInitializer/PermInitializer";
-import { useEffect, useState } from "react";
+import { PermInitializer } from "@/components/PermInitializer";
+import { ReactNode, useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/authentication.store";
 
-function Providers({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient();
+function Providers({ children }: { children: ReactNode }) {
   const initAuth = useAuthStore((state) => state.init);
   const accessToken = useAuthStore((state) => state.accessToken);
   const [isReady, setIsReady] = useState(false);
@@ -25,11 +23,11 @@ function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       {children}
       <PermInitializer />
       <Toast.Provider />
-    </QueryClientProvider>
+    </>
   );
 }
 

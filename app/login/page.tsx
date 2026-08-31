@@ -26,7 +26,7 @@ import { API_ROUTES } from "@/configs/api.config";
 import { LoginIn } from "@/types/login.type";
 import { LoginInSchema } from "@/schemas/login.schema";
 import { useAuthStore } from "@/stores/authentication.store";
-import Validator from "@/helpers/Validator";
+import Validator from "@/helpers/Validator.helper";
 import logo from "@/public/logo.svg";
 
 export default function Login() {
@@ -215,9 +215,14 @@ export default function Login() {
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <div className="w-20 h-20 mx-auto">
-              <Image alt="Logo do sistema. Imagem do pokémon Arceus" src={logo} />
+              <Image
+                alt="Logo do sistema. Imagem do pokémon Arceus"
+                src={logo}
+              />
             </div>
-            <h2 className="text-4xl font-bold mb-6 tracking-tight mt-4">Arceus</h2>
+            <h2 className="text-4xl font-bold mb-6 tracking-tight mt-4">
+              Arceus
+            </h2>
             <p className="text-lg text-purple-100 leading-relaxed mb-8">
               Plataforma para monitoramento de requisições HTTP realizadas ao
               Arceus, com visualização de logs, métricas agregadas e dashboards

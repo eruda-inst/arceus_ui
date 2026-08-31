@@ -4,8 +4,8 @@ import useMetricWebSocket from "@/hooks/useMetricWebSocket.hook";
 import { ColorSwatch } from "@heroui/react";
 import clsx from "clsx";
 import CustomBar from "@/components/Charts/CustomBar";
-import OneLineChart from "@/components/Charts/OneLine";
-import { MetricCard } from "@/components/MetricCard/MetricCard";
+import CustomLine from "@/components/Charts/CustomLine";
+import { MetricCard } from "@/components/MetricCard";
 import { API_ENDPOINT_BASES } from "@/configs/api.config";
 
 export default function Metrics() {
@@ -314,7 +314,7 @@ export default function Metrics() {
         />
 
         {/* Horas de pico */}
-        <OneLineChart
+        <CustomLine
           data={topHorasHoje}
           dataKey="hora"
           lineDataKey="total_requisicoes"
@@ -325,7 +325,7 @@ export default function Metrics() {
           lineColor="#8b5cf6"
           activeDotColor="#74a309"
         />
-        <OneLineChart
+        <CustomLine
           data={topHorasSempre}
           dataKey="hora"
           lineDataKey="total_requisicoes"
