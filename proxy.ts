@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import AuthenticationService from "@/services/Authentication";
-import PermService from "@/services/Perm";
+import AuthenticationService from "@/services/Auth.service";
+import PermService from "@/services/Perm.service";
 import { PermOut } from "./types/perm.type";
 
 // Don't need authentication

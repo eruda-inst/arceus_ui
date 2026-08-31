@@ -1,13 +1,18 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import { useLogFilter } from "@/stores/logFilter.store";
 import { LogFilterIn } from "@/types/log.type";
 
-function ActiveLogFilters() {
-  const filters = useLogFilter((state) => state.filters);
-  const removeFilter = useLogFilter((state) => state.removeFilter);
-  const resetFilters = useLogFilter((state) => state.resetFilters);
+export interface ActiveLogFiltersProp {
+  filters: LogFilterIn;
+  onResetFilters: () => void;
+  onRemoveFilters: (filter: keyof LogFilterIn) => void;
+}
 
+function ActiveLogFilters({
+  filters,
+  onResetFilters,
+  onRemoveFilters,
+}: ActiveLogFiltersProp) {
   const activeFilters: {
     key: keyof LogFilterIn;
     label: string;
@@ -53,7 +58,7 @@ function ActiveLogFilters() {
               Filtros Ativos
             </span>
           </div>
-          <Button variant="danger-soft" onClick={resetFilters}>
+          <Button variant="danger-soft" onClick={onResetFilters}>
             <FaTrash className="size-4" /> Limpar
           </Button>
         </Card.Title>
@@ -62,7 +67,7 @@ function ActiveLogFilters() {
         {activeFilters.map((filter) => (
           <Chip
             key={filter.key}
-            onClick={() => removeFilter(filter.key)}
+            onClick={() => onRemoveFilters(filter.key)}
             size="lg"
           >
             {filter.label}: {filter.value} <FaXmark />

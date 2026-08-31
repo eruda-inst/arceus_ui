@@ -1,22 +1,26 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import UserService from "@/services/User";
-import type { UserOut, UserPaginationOut } from "@/types/user.type";
+import UserService from "@/services/User.service";
+import type {
+  UserFilterIn,
+  UserOut,
+  UserPaginationOut,
+} from "@/types/user.type";
 import UserTable from "@/components/Tables/UserTable";
-import { useUserFilter } from "@/stores/userFilter.store";
 import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
 import UserFilters from "@/components/Filters/UserFilters";
-
 import Details from "@/components/Modals/UserDetails";
 import { useUserStore } from "@/stores/user.store";
-import PaginationControls from "@/components/PaginationControls/UserPaginationControls";
+import PaginationControls from "@/components/PaginationControls";
 import Add from "@/components/Modals/UserAdd";
 import { useAuthStore } from "@/stores/authentication.store";
-import GroupService from "@/services/Group";
+import GroupService from "@/services/Group.service";
 import { useGroupStore } from "@/stores/group.store";
 import { usePermStore } from "@/stores/perm.store";
 import { Button, Skeleton, toast } from "@heroui/react";
+import usePagination from "@/hooks/usePagination.hook";
+import useFilter from "@/hooks/useFilter.hook";
 
 export default function Users() {
   const { hasAllPerms } = usePermStore();
@@ -24,21 +28,30 @@ export default function Users() {
   const groups = useGroupStore((state) => state.groups);
   const setGroups = useGroupStore((state) => state.setGroups);
 
+  const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
+    useFilter<UserFilterIn>();
+
   const users = useUserStore((state) => state.users);
   const setUsers = useUserStore((state) => state.setUsers);
   const selectedUser = useUserStore((state) => state.selectedUser);
   const setSelectedUser = useUserStore((state) => state.setSelectedUser);
 
   const getAll = UserService.getAll;
-  const filters = useUserFilter((state) => state.filters);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userPagination, setUserPagination] =
     useState<UserPaginationOut | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+
+  const {
+    page,
+    itemsPerPage,
+    handleGoToPage,
+    handleNextPage,
+    handlePrevPage,
+    handleSetItemsPerPage,
+  } = usePagination();
 
   const fetchUsers = useCallback(async () => {
     setIsLoading(true);
@@ -67,19 +80,10 @@ export default function Users() {
   }, [fetchUsers]);
 
   useEffect(() => {
-    setPage(1);
-  }, [filters]);
-
-  useEffect(() => {
     GroupService.getAll().then((data) => {
       if (data) setGroups(data);
     });
   }, []);
-
-  const handleItemsPerPageChange = (newItemsPerPage: number) => {
-    setItemsPerPage(newItemsPerPage);
-    setPage(1);
-  };
 
   const handleRowClick = (user: UserOut) => {
     setIsDetailsOpen(true);
@@ -115,8 +119,17 @@ export default function Users() {
         )}
       </div>
 
-      <UserFilters />
-      <ActiveUserFilters />
+      <UserFilters
+        filters={filters}
+        onResetFilters={handleResetFilters}
+        onSetFilters={handleSetFilters}
+      />
+
+      <ActiveUserFilters
+        filters={filters}
+        onRemoveFilters={handleRemoveFilter}
+        onResetFilters={handleResetFilters}
+      />
 
       {totalItems > 0 && (
         <div className="my-6">
@@ -124,9 +137,11 @@ export default function Users() {
             page={page}
             totalPages={totalPages}
             totalItems={totalItems}
-            onPageChange={setPage}
             itemsPerPage={itemsPerPage}
-            onItemsPerPageChange={handleItemsPerPageChange}
+            onGoToPage={handleGoToPage}
+            onNextPage={handleNextPage}
+            onPrevPage={handlePrevPage}
+            onSetItemsPerPage={handleSetItemsPerPage}
           />
         </div>
       )}

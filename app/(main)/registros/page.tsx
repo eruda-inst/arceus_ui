@@ -3,25 +3,32 @@
 import { useEffect, useState } from "react";
 import { ColorSwatch } from "@heroui/react";
 import { clsx } from "clsx";
-import PaginationControls from "@/components/PaginationControls/LogPaginationControls";
+import PaginationControls from "@/components/PaginationControls";
 import ActiveLogFilters from "@/components/Filters/ActiveLogFilters";
 import LogFilters from "@/components/Filters/LogFilters";
 import Details from "@/components/Modals/LogDetails";
 import LogTable from "@/components/Tables/LogTable";
-import { useLogPagination } from "@/stores/useLogPagination.store";
-import { useLogFilter } from "@/stores/logFilter.store";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
-import { LogOut } from "@/types/log.type";
-import { API_ENDPOINT_BASES } from "@/configs/api.config";
+import useFilter from "@/hooks/useFilter.hook";
+import { LogFilterIn, LogOut } from "@/types/log.type";
+import { API_ROUTES } from "@/configs/api.config";
+import usePagination from "@/hooks/usePagination.hook";
 
 export default function Logs() {
   const { isConnected, lastMessage, isConnecting, sendMessage } =
-    useLogWebSocket({ url: API_ENDPOINT_BASES.log });
+    useLogWebSocket({ url: API_ROUTES.log });
 
-  const page = useLogPagination((state) => state.page);
-  const itemsPerPage = useLogPagination((state) => state.itemsPerPage);
+  const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
+    useFilter<LogFilterIn>();
 
-  const filters = useLogFilter((state) => state.filters);
+  const {
+    page,
+    itemsPerPage,
+    handleGoToPage,
+    handleNextPage,
+    handlePrevPage,
+    handleSetItemsPerPage,
+  } = usePagination();
 
   const [selectedLog, setSelectedLog] = useState<LogOut | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -70,14 +77,28 @@ export default function Logs() {
         </span>
       </div>
 
-      <LogFilters />
-      <ActiveLogFilters />
+      <LogFilters
+        filters={filters}
+        onResetFilters={handleResetFilters}
+        onSetFilters={handleSetFilters}
+      />
+
+      <ActiveLogFilters
+        filters={filters}
+        onRemoveFilters={handleRemoveFilter}
+        onResetFilters={handleResetFilters}
+      />
 
       <div className="space-y-6">
         <PaginationControls
           page={page}
           totalPages={lastMessage?.meta?.total_paginas || 1}
           totalItems={lastMessage?.meta?.total_itens || 0}
+          itemsPerPage={itemsPerPage}
+          onGoToPage={handleGoToPage}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+          onSetItemsPerPage={handleSetItemsPerPage}
         />
         <LogTable
           data={lastMessage?.data}

@@ -6,11 +6,11 @@ import clsx from "clsx";
 import CustomBar from "@/components/Charts/CustomBar";
 import CustomLine from "@/components/Charts/CustomLine";
 import { MetricCard } from "@/components/MetricCard";
-import { API_ENDPOINT_BASES } from "@/configs/api.config";
+import { API_ROUTES } from "@/configs/api.config";
 
 export default function Metrics() {
   const { isConnected, isConnecting, lastMessage } = useMetricWebSocket({
-    url: API_ENDPOINT_BASES.metric,
+    url: API_ROUTES.metric,
     initialMetrics: "all",
   });
 

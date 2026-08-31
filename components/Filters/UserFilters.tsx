@@ -11,14 +11,19 @@ import {
   toast,
 } from "@heroui/react";
 import { FaFilter, FaUser, FaEnvelope, FaUsers } from "react-icons/fa6";
-import { useUserFilter } from "@/stores/userFilter.store";
 import type { UserFilterIn } from "@/types/user.type";
 
-function UserFilters() {
-  const filters = useUserFilter((state) => state.filters);
-  const setFilters = useUserFilter((state) => state.setFilters);
-  const resetFilters = useUserFilter((state) => state.resetFilters);
+export interface UserFiltersProps {
+  filters: UserFilterIn;
+  onSetFilters: (filters: UserFilterIn) => void;
+  onResetFilters: () => void;
+}
 
+function UserFilters({
+  filters,
+  onSetFilters,
+  onResetFilters,
+}: UserFiltersProps) {
   const [localFilters, setLocalFilters] = useState<UserFilterIn>(filters);
   const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
@@ -28,13 +33,13 @@ function UserFilters() {
   };
 
   const handleReset = () => {
-    resetFilters();
+    onResetFilters();
     setLocalFilters({});
     toast.success("Filtros limpos com sucesso");
   };
 
   const handleApply = () => {
-    setFilters(localFilters);
+    onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
   };
 

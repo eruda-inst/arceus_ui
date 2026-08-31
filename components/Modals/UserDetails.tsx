@@ -13,10 +13,10 @@ import Formatter from "@/helpers/Formatter.helper";
 import { useAuthStore } from "@/stores/authentication.store";
 import { useEffect, useState } from "react";
 import { usePermStore } from "@/stores/perm.store";
-import GroupService from "@/services/Group";
+import GroupService from "@/services/Group.service";
 import { GroupOut } from "@/types/group.type";
 import { useUserStore } from "@/stores/user.store";
-import UserService from "@/services/User";
+import UserService from "@/services/User.service";
 
 export interface CustomAlertDialogProps extends Omit<
   AlertDialogProps,

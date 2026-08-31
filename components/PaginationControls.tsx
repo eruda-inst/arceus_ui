@@ -1,22 +1,27 @@
 import { v4 as uuid } from "uuid";
 import { Card, Label, ListBox, Pagination, Select } from "@heroui/react";
+import { itemsPerPageValues } from "@/hooks/usePagination.hook";
 
 interface PaginationControlsProps {
   page: number;
   totalPages: number;
   totalItems: number;
-  onPageChange: (page: number) => void;
-  itemsPerPage: number;
-  onItemsPerPageChange: (itemsPerPage: number) => void;
+  itemsPerPage: itemsPerPageValues;
+  onNextPage: () => void;
+  onPrevPage: () => void;
+  onGoToPage: (page: number) => void;
+  onSetItemsPerPage: (itemsPerPage: itemsPerPageValues) => void;
 }
 
-function PaginationControls({
+export default function PaginationControls({
   page,
   totalPages,
   totalItems,
-  onPageChange,
   itemsPerPage,
-  onItemsPerPageChange,
+  onNextPage,
+  onPrevPage,
+  onGoToPage,
+  onSetItemsPerPage,
 }: PaginationControlsProps) {
   const safeTotalPages = totalPages || 1;
 
@@ -60,6 +65,7 @@ function PaginationControls({
             variant="secondary"
             placeholder="Itens por página"
             value={itemsPerPage}
+            onChange={(v) => onSetItemsPerPage(v as itemsPerPageValues)}
             className="w-40"
           >
             <Label>Itens por página</Label>
@@ -71,12 +77,11 @@ function PaginationControls({
 
             <Select.Popover>
               <ListBox>
-                {[5, 10, 25, 50].map((item) => (
+                {[5, 10, 25, 50, 100].map((item) => (
                   <ListBox.Item
                     key={`option-${item}`}
                     id={item}
                     textValue={item.toString()}
-                    onPress={() => onItemsPerPageChange(item)}
                   >
                     {item}
                   </ListBox.Item>
@@ -96,7 +101,7 @@ function PaginationControls({
               <Pagination.Item>
                 <Pagination.Previous
                   isDisabled={page === 1}
-                  onPress={() => onPageChange(page - 1)}
+                  onPress={onPrevPage}
                 >
                   <Pagination.PreviousIcon />
                   <span>Anterior</span>
@@ -112,8 +117,8 @@ function PaginationControls({
                   <Pagination.Item key={uuid()}>
                     <Pagination.Link
                       isActive={p === page}
-                      onPress={() => onPageChange(p)}
                       className={`${p === page ? "bg-linear-to-r" : ""} from-blue-500 to-indigo-500 text-white font-bold`}
+                      onPress={() => onGoToPage(p)}
                     >
                       {p}
                     </Pagination.Link>
@@ -124,7 +129,7 @@ function PaginationControls({
               <Pagination.Item>
                 <Pagination.Next
                   isDisabled={page === safeTotalPages}
-                  onPress={() => onPageChange(page + 1)}
+                  onPress={onNextPage}
                 >
                   <span>Próxima</span>
                   <Pagination.NextIcon />
@@ -137,5 +142,3 @@ function PaginationControls({
     </Card>
   );
 }
-
-export default PaginationControls;

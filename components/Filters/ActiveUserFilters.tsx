@@ -1,13 +1,18 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import { useUserFilter } from "@/stores/userFilter.store";
 import type { UserFilterIn } from "@/types/user.type";
 
-function ActiveUserFilters() {
-  const filters = useUserFilter((state) => state.filters);
-  const removeFilter = useUserFilter((state) => state.removeFilter);
-  const resetFilters = useUserFilter((state) => state.resetFilters);
+export interface ActiveUserFiltersProp {
+  filters: UserFilterIn;
+  onResetFilters: () => void;
+  onRemoveFilters: (filter: keyof UserFilterIn) => void;
+}
 
+export default function ActiveUserFilters({
+  filters,
+  onResetFilters,
+  onRemoveFilters,
+}: ActiveUserFiltersProp) {
   const activeFilters: {
     key: keyof UserFilterIn;
     label: string;
@@ -44,7 +49,7 @@ function ActiveUserFilters() {
               Filtros Ativos
             </span>
           </div>
-          <Button variant="danger-soft" onClick={resetFilters}>
+          <Button variant="danger-soft" onClick={onResetFilters}>
             <FaTrash className="size-4" /> Limpar
           </Button>
         </Card.Title>
@@ -53,7 +58,7 @@ function ActiveUserFilters() {
         {activeFilters.map((filter) => (
           <Chip
             key={filter.key}
-            onClick={() => removeFilter(filter.key)}
+            onClick={() => onRemoveFilters(filter.key)}
             size="lg"
           >
             {filter.label}: {filter.value} <FaXmark />
@@ -63,5 +68,3 @@ function ActiveUserFilters() {
     </Card>
   );
 }
-
-export default ActiveUserFilters;

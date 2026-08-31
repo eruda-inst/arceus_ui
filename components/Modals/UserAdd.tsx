@@ -27,10 +27,10 @@ import {
 } from "react-icons/fa6";
 import { IXCUserOut } from "@/types/ixcUser.type";
 import { useCallback, useEffect, useState } from "react";
-import IxcUserService from "@/services/IxcUser";
-import UserService from "@/services/User";
+import IxcUserService from "@/services/IxcUser.service";
+import UserService from "@/services/User.service";
 import { useIxcUserStore } from "@/stores/ixcUser.store";
-import GroupService from "@/services/Group";
+import GroupService from "@/services/Group.service";
 import { GroupOut } from "@/types/group.type";
 import z from "zod";
 import { useUserStore } from "@/stores/user.store";

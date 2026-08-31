@@ -28,7 +28,6 @@ import {
   FaUser,
 } from "react-icons/fa6";
 import { LogFilterIn } from "@/types/log.type";
-import { useLogFilter } from "@/stores/logFilter.store";
 
 const Departments = [
   "Suporte",
@@ -40,11 +39,17 @@ const Departments = [
   "Vila",
 ] as const;
 
-function LogFilters() {
-  const filters = useLogFilter((state) => state.filters);
-  const setFilters = useLogFilter((state) => state.setFilters);
-  const resetFilters = useLogFilter((state) => state.resetFilters);
+export interface LogFiltersProps {
+  filters: LogFilterIn;
+  onSetFilters: (filters: LogFilterIn) => void;
+  onResetFilters: () => void;
+}
 
+export default function LogFilters({
+  filters,
+  onSetFilters,
+  onResetFilters,
+}: LogFiltersProps) {
   const [localFilters, setLocalFilters] = useState<LogFilterIn>(filters);
   const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
@@ -69,13 +74,13 @@ function LogFilters() {
   };
 
   const handleReset = () => {
-    resetFilters();
+    onResetFilters();
     setLocalFilters({});
     toast.success("Filtros limpos com sucesso");
   };
 
   const handleApply = () => {
-    setFilters(localFilters);
+    onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
   };
 
@@ -430,5 +435,3 @@ function LogFilters() {
     </Card>
   );
 }
-
-export default LogFilters;

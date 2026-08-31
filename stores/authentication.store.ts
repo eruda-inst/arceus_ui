@@ -3,7 +3,7 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import { UserOut } from "@/types/user.type";
-import GroupService from "@/services/Group";
+import GroupService from "@/services/Group.service";
 
 export const ACCESS_TOKEN_KEY = "access_token";
 export const REFRESH_TOKEN_KEY = "refresh_token";

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { PermOut } from "@/types/perm.type";
-import PermService from "@/services/Perm";
+import PermService from "@/services/Perm.service";
 
 export interface PermStore {
   perms: PermOut[];

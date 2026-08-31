@@ -1,35 +1,29 @@
-const ENV_BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
-const ENV_BASE_WS_API_URL = process.env.NEXT_PUBLIC_BASE_WS_API_URL;
-let BASE_API_URL = "http://localhost:8000";
-let BASE_WS_API_URL = "ws://localhost:8000";
+let BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
+let BASE_WS_API_URL = process.env.NEXT_PUBLIC_BASE_WS_API_URL;
 
-if (ENV_BASE_API_URL) {
-  if (ENV_BASE_API_URL?.endsWith("/")) {
-    BASE_API_URL = ENV_BASE_API_URL.slice(0, -1);
-  } else {
-    BASE_API_URL = ENV_BASE_API_URL;
-  }
+if (BASE_API_URL?.endsWith("/")) {
+  BASE_API_URL = BASE_API_URL.slice(0, -1);
 }
 
-if (ENV_BASE_WS_API_URL) {
-  if (ENV_BASE_WS_API_URL?.endsWith("/")) {
-    BASE_WS_API_URL = ENV_BASE_WS_API_URL.slice(0, -1);
-  } else {
-    BASE_WS_API_URL = ENV_BASE_WS_API_URL;
-  }
+if (BASE_WS_API_URL?.endsWith("/")) {
+  BASE_WS_API_URL = BASE_WS_API_URL.slice(0, -1);
 }
 
 const API_ENDPOINT_BASES = {
+  // HTTPS
   authentication: `${BASE_API_URL}/api/v1/autenticacao`,
   group: `${BASE_API_URL}/api/v1/grupos`,
   perm: `${BASE_API_URL}/api/v1/permissoes`,
   ixc_user: `${BASE_API_URL}/api/v1/usuarios-ixc`,
   user: `${BASE_API_URL}/api/v1/usuarios`,
-  log: `${BASE_WS_API_URL}/api/v1/logs/`, // That must end with "/"
-  metric: `${BASE_WS_API_URL}/api/v1/metricas/`, // That must end with "/"
+
+  // WebSockets
+  log: `${BASE_WS_API_URL}/api/v1/logs`,
+  metric: `${BASE_WS_API_URL}/api/v1/metricas`,
 };
 
 const API_ROUTES = {
+  // HTTPS
   authentication: {
     login: () => `${API_ENDPOINT_BASES.authentication}/login`,
     refreshToken: () => `${API_ENDPOINT_BASES.authentication}/refresh-token`,
@@ -88,6 +82,10 @@ const API_ROUTES = {
       return `${API_ENDPOINT_BASES.user}/?${params.toString()}`;
     },
   },
+
+  // WebSockets
+  log: `${API_ENDPOINT_BASES.log}/`,
+  metric: `${API_ENDPOINT_BASES.metric}/`,
 };
 
-export { BASE_API_URL, BASE_WS_API_URL, API_ENDPOINT_BASES, API_ROUTES };
+export { API_ROUTES };
