@@ -2,19 +2,18 @@
 
 import { Toast } from "@heroui/react";
 import { PermInitializer } from "@/components/PermInitializer";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useAuthStore } from "@/stores/authentication.store";
 import useTokenRefresh from "@/hooks/useTokenRefresh.hook";
+import { ThemeProvider } from "next-themes";
 
 function Providers({ children }: { children: ReactNode }) {
   const initAuth = useAuthStore((state) => state.init);
   const accessToken = useAuthStore((state) => state.accessToken);
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
       await initAuth();
-      setIsReady(true);
     };
     initialize();
   }, [initAuth, accessToken]);
@@ -24,16 +23,12 @@ function Providers({ children }: { children: ReactNode }) {
     thresholdSeconds: 60,
   });
 
-  if (!isReady) {
-    return <></>;
-  }
-
   return (
-    <>
+    <ThemeProvider attribute="class" enableSystem>
       {children}
       <PermInitializer />
       <Toast.Provider />
-    </>
+    </ThemeProvider>
   );
 }
 

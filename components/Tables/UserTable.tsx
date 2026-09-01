@@ -22,7 +22,7 @@ interface UserTableProps {
   data: UserOut[];
   isLoading: boolean;
   onRowClick: (user: UserOut) => void;
-    groups?: GroupOut[];
+  groups?: GroupOut[];
 }
 
 function ChipStatus({
@@ -42,12 +42,11 @@ function ChipStatus({
   );
 }
 
-function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
-
+function UserTable({ data, isLoading, onRowClick, groups }: UserTableProps) {
   const getGroupName = (id: number) => {
-      const group = groups?.find((g) => g.id === id);
-      return group?.nome || String(id);
-    };
+    const group = groups?.find((g) => g.id === id);
+    return group?.nome || String(id);
+  };
 
   if (isLoading) {
     return <Skeleton className="h-80 rounded-lg" />;
@@ -61,7 +60,7 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
             <div className="p-2 bg-linear-to-r from-purple-700 to-indigo-700 rounded-lg">
               <FaUser className="size-5 text-white" />
             </div>
-            <h2 className="text-xl font-bold text-white">Usuários</h2>
+            <h2 className="text-xl font-bold">Usuários</h2>
           </div>
         </Card.Title>
       </Card.Header>
@@ -80,16 +79,16 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                 {/* Nome */}
                 <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
-                    <FaUser className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Nome</span>
+                    <FaUser className="size-3.5" />
+                    <span className="uppercase">Nome</span>
                   </div>
                 </Table.Column>
 
                 {/* Email */}
                 <Table.Column>
                   <div className="flex items-center gap-2 py-2">
-                    <FaEnvelope className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Email</span>
+                    <FaEnvelope className="size-3.5" />
+                    <span className="uppercase">Email</span>
                   </div>
                 </Table.Column>
 
@@ -97,27 +96,27 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                 <Table.Column>
                   <div className="flex items-center gap-2 py-2">
                     {true ? (
-                      <FaCircleCheck className="w-3.5 h-3.5 text-gray-400" />
+                      <FaCircleCheck className="size-3.5" />
                     ) : (
-                      <FaClock className="w-3.5 h-3.5 text-gray-400" />
+                      <FaClock className="size-3.5" />
                     )}
-                    <span className="text-gray-300 uppercase">Status</span>
+                    <span className="uppercase">Status</span>
                   </div>
                 </Table.Column>
 
                 {/* Grupo */}
                 <Table.Column>
                   <div className="flex items-center gap-2 py-2">
-                    <FaUsers className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Grupo</span>
+                    <FaUsers className="size-3.5" />
+                    <span className="uppercase">Grupo</span>
                   </div>
                 </Table.Column>
 
                 {/* Criado em */}
                 <Table.Column>
                   <div className="flex items-center gap-2 py-2">
-                    <FaCalendar className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Criado em</span>
+                    <FaCalendar className="size-3.5" />
+                    <span className="uppercase">Criado em</span>
                   </div>
                 </Table.Column>
               </Table.Header>
@@ -141,9 +140,7 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaUser className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
-                          {user.nome}
-                        </span>
+                        <span className="font-semibold">{user.nome}</span>
                       </div>
                     </Table.Cell>
 
@@ -153,9 +150,7 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaEnvelope className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
-                          {user.email}
-                        </span>
+                        <span className="font-semibold">{user.email}</span>
                       </div>
                     </Table.Cell>
 
@@ -180,7 +175,7 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaUsers className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           {getGroupName(user.id_grupo)}
                         </span>
                       </div>
@@ -192,7 +187,7 @@ function UserTable({ data, isLoading, onRowClick,groups }: UserTableProps) {
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaCalendar className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           {new Date(user.criado_em).toLocaleDateString(
                             "pt-BR",
                             {

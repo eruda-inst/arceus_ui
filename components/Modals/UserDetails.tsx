@@ -164,9 +164,7 @@ export default function Details({ handleClose, user, ...props }: DetailsProps) {
             <Modal.Body className="flex flex-col gap-y-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-200">
-                    Usuário
-                  </h3>
+                  <h3 className="text-lg font-semibold">Usuário</h3>
                   <p className="text-sm text-gray-400">
                     Seção destinada a exibição, inativação, reativação e
                     exclusão do usuário selecionado

@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import {
+  FaArrowRight,
   FaClipboardList,
   FaEye,
   FaEyeSlash,
   FaHouseChimney,
+  FaPaintbrush,
   FaPencil,
   FaRightFromBracket,
   FaUser,
@@ -36,6 +38,8 @@ import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import InfoItem from "@/components/InfoItem";
 import { usePermStore } from "@/stores/perm.store";
+import { useTheme } from "next-themes";
+import clsx from "clsx";
 
 const FormSchema = z.object({
   senha: z.string().min(8).nullable(),
@@ -59,6 +63,8 @@ function Sidebar() {
     useState<boolean>(false);
   const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [selected, setSelected] = useState<Selection>(new Set(["system"]));
+  const { setTheme } = useTheme();
 
   const {
     currentUser,
@@ -104,7 +110,7 @@ function Sidebar() {
         { nova_senha: form.senha },
       );
 
-      await fetchCurrentUser(); // substituído refreshUserData
+      await fetchCurrentUser();
 
       toast.success("Sucesso", {
         description: "Perfil atualizado com sucesso!",
@@ -145,7 +151,10 @@ function Sidebar() {
         <nav className="flex-1 px-4 py-6 space-y-2">
           {currentUser ? (
             <Button
-              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/" ? "bg-indigo-500" : "bg-inherit"}`}
+              className={clsx(
+                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
+                pathname === "/" ? "bg-indigo-500" : "bg-inherit",
+              )}
               onPress={() => router.push("/")}
               isDisabled={!hasAllPerms(["ver:metricas"])}
             >
@@ -157,7 +166,10 @@ function Sidebar() {
 
           {currentUser ? (
             <Button
-              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/registros" ? "bg-indigo-500" : "bg-inherit"}`}
+              className={clsx(
+                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
+                pathname === "/registros" ? "bg-indigo-500" : "bg-inherit",
+              )}
               onPress={() => router.push("/registros")}
               isDisabled={!hasAllPerms(["ver:logs"])}
             >
@@ -169,7 +181,10 @@ function Sidebar() {
 
           {currentUser ? (
             <Button
-              className={`text-sm w-full justify-start gap-3 h-12 ${pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit"}`}
+              className={clsx(
+                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
+                pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit",
+              )}
               onPress={() => router.push("/usuarios")}
               isDisabled={!hasAllPerms(["ver:usuarios"])}
             >
@@ -214,6 +229,48 @@ function Sidebar() {
                   <FaUser className="size-4" />
                   <Label>Perfil e Conta</Label>
                 </Dropdown.Item>
+
+                <Dropdown.SubmenuTrigger>
+                  <Dropdown.Item>
+                    <FaPaintbrush className="size-4" />
+                    <Label>Tema</Label>
+                    <Dropdown.SubmenuIndicator>
+                      <FaArrowRight className="size-4 text-muted" />
+                    </Dropdown.SubmenuIndicator>
+                  </Dropdown.Item>
+                  <Dropdown.Popover>
+                    <Dropdown.Menu
+                      selectedKeys={selected}
+                      selectionMode="single"
+                      onSelectionChange={setSelected}
+                    >
+                      <Dropdown.Item
+                        id="light"
+                        textValue="Claro"
+                        onPress={() => setTheme("light")}
+                      >
+                        <Dropdown.ItemIndicator />
+                        <Label>Claro</Label>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        id="dark"
+                        textValue="Escuro"
+                        onPress={() => setTheme("dark")}
+                      >
+                        <Dropdown.ItemIndicator />
+                        <Label>Escuro</Label>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        id="system"
+                        textValue="Sistema"
+                        onPress={() => setTheme("system")}
+                      >
+                        <Dropdown.ItemIndicator />
+                        <Label>Sistema</Label>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown.Popover>
+                </Dropdown.SubmenuTrigger>
 
                 <Dropdown.Item
                   variant="danger"
@@ -291,9 +348,7 @@ function Sidebar() {
                         <div className="p-2 bg-accent-soft rounded-lg">
                           <FaPencil className="w-5 h-5 text-accent-soft-foreground" />
                         </div>
-                        <h4 className="font-semibold text-gray-300">
-                          Alterar senha
-                        </h4>
+                        <h4 className="font-semibold">Alterar senha</h4>
                       </div>
                       <p className="text-warning">
                         Não é possível alterar nome, e-mail e grupo. Nome e

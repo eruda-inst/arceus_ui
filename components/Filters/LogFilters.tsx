@@ -111,7 +111,7 @@ export default function LogFilters({
             <div className="p-2 bg-linear-to-r from-purple-700 to-indigo-700 rounded-lg w-fit">
               <FaFilter className="w-5 h-5 text-white" />
             </div>
-            <div className="text-xl font-bold text-gray-200">Filtros</div>
+            <div className="text-xl font-bold">Filtros</div>
           </Card.Title>
           <Card.Description>
             Filtre os registros conforme necessário

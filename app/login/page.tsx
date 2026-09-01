@@ -109,7 +109,7 @@ export default function Login() {
                 }
                 return null;
               }}
-              variant="secondary"
+              variant="primary"
             >
               <Label>E-mail</Label>
               <InputGroup>
@@ -127,7 +127,7 @@ export default function Login() {
               value={login.senha}
               onChange={(value) => handleChange("senha", value)}
               type={isVisible ? "text" : "password"}
-              variant="secondary"
+              variant="primary"
               isRequired
               validate={(value) => {
                 if (!value.length) {
@@ -235,7 +235,7 @@ export default function Login() {
               whileHover={{ scale: 1.05 }}
             >
               <div className="font-bold text-xl">Logs</div>
-              <div className="text-xs text-muted uppercase tracking-wider">
+              <div className="text-xs dark:text-muted uppercase tracking-wider">
                 Detalhados
               </div>
             </motion.div>
@@ -244,14 +244,14 @@ export default function Login() {
               whileHover={{ scale: 1.05 }}
             >
               <div className="font-bold text-xl">Dashboards</div>
-              <div className="text-xs text-muted uppercase tracking-wider">
+              <div className="text-xs dark:text-muted uppercase tracking-wider">
                 Interativos
               </div>
             </motion.div>
           </div>
           <motion.div
             animate={{ opacity: 1 }}
-            className="absolute bottom-5 left-0 right-0 text-center text-muted text-sm font-mono"
+            className="absolute bottom-5 left-0 right-0 text-center dark:text-muted text-sm font-mono"
             initial={{ opacity: 0 }}
             transition={{ delay: 1, duration: 1 }}
           >

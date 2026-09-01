@@ -17,7 +17,7 @@ function InfoItem({
   codeStyle = oneDark,
 }: InfoItemProps) {
   return (
-    <div className="p-3 bg-gray-800 rounded-lg">
+    <div className="p-3 bg-gray-200 dark:bg-gray-800 rounded-lg">
       <p className="text-gray-500 text-xs uppercase mb-1">{label}</p>
       {isCode ? (
         <Prism

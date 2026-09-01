@@ -20,8 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      suppressHydrationWarning
       lang="pt-br"
-      className={`dark bg-black h-full antialiased ${fontInter.variable}`}
+      className={`bg-white dark:bg-black text-gray-800 dark:text-gray-200 h-full antialiased ${fontInter.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

@@ -94,9 +94,7 @@ export default function LogTable({
             <div className="p-2 bg-white/20 rounded-lg bg-linear-to-r from-purple-700 to-indigo-700">
               <FaServer className="size-5 text-white" />
             </div>
-            <h2 className="text-xl font-bold text-white">
-              Registros de requisições
-            </h2>
+            <h2 className="text-xl font-bold">Registros de requisições</h2>
           </div>
         </Card.Title>
       </Card.Header>
@@ -115,40 +113,40 @@ export default function LogTable({
                 {/* Método */}
                 <Table.Column>
                   <div className="flex items-center gap-2">
-                    <FaStackExchange className="w-3 h-3 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Método</span>
+                    <FaStackExchange className="size-3.5" />
+                    <span className="uppercase">Método</span>
                   </div>
                 </Table.Column>
 
                 {/* Endpoint */}
                 <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
-                    <FaLink className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Endpoint</span>
+                    <FaLink className="size-3.5" />
+                    <span className="uppercase">Endpoint</span>
                   </div>
                 </Table.Column>
 
                 {/* Código */}
                 <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
-                    <FaHashtag className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Código</span>
+                    <FaHashtag className="size-3.5" />
+                    <span className="uppercase">Código</span>
                   </div>
                 </Table.Column>
 
                 {/* Data */}
                 <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
-                    <FaCalendar className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Data</span>
+                    <FaCalendar className="size-3.5" />
+                    <span className="uppercase">Data</span>
                   </div>
                 </Table.Column>
 
                 {/* Hora */}
                 <Table.Column isRowHeader>
                   <div className="flex items-center gap-2 py-2">
-                    <FaClock className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-gray-300 uppercase">Hora</span>
+                    <FaClock className="size-3.5" />
+                    <span className="uppercase">Hora</span>
                   </div>
                 </Table.Column>
               </Table.Header>
@@ -172,7 +170,7 @@ export default function LogTable({
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaStackExchange className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           <ChipMethod method={log.metodo as Method}>
                             {log.metodo}
                           </ChipMethod>
@@ -187,7 +185,7 @@ export default function LogTable({
                           <FaLink className="w-4 h-4 text-indigo-400" />
                         </div>
                         <span
-                          className="font-semibold text-gray-100 whitespace-nowrap overflow-hidden text-ellipsis max-w-75"
+                          className="font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-75"
                           title={log.endpoint}
                         >
                           {log.endpoint}
@@ -201,7 +199,7 @@ export default function LogTable({
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaHashtag className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           <ChipCode code={log.codigo as Code}>
                             {log.codigo}
                           </ChipCode>
@@ -215,7 +213,7 @@ export default function LogTable({
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaCalendar className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           {Formatter.isoDate(log.criado_em.split("T")[0])}
                         </span>
                       </div>
@@ -227,7 +225,7 @@ export default function LogTable({
                         <div className="w-10 h-10 rounded-full bg-linear-to-r from-purple-500/30 to-indigo-500/30 flex items-center justify-center">
                           <FaClock className="w-4 h-4 text-indigo-400" />
                         </div>
-                        <span className="font-semibold text-gray-100">
+                        <span className="font-semibold">
                           {Formatter.isoHour(log.criado_em.split("T")[1])}
                         </span>
                       </div>

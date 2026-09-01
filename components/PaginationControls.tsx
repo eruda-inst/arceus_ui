@@ -117,7 +117,7 @@ export default function PaginationControls({
                   <Pagination.Item key={uuid()}>
                     <Pagination.Link
                       isActive={p === page}
-                      className={`${p === page ? "bg-linear-to-r" : ""} from-blue-500 to-indigo-500 text-white font-bold`}
+                      className={`${p === page ? "bg-linear-to-r" : ""} from-blue-500 to-indigo-500 font-bold`}
                       onPress={() => onGoToPage(p)}
                     >
                       {p}
