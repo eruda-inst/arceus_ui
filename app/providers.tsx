@@ -4,6 +4,7 @@ import { Toast } from "@heroui/react";
 import { PermInitializer } from "@/components/PermInitializer";
 import { ReactNode, useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/authentication.store";
+import useTokenRefresh from "@/hooks/useTokenRefresh.hook";
 
 function Providers({ children }: { children: ReactNode }) {
   const initAuth = useAuthStore((state) => state.init);
@@ -17,6 +18,11 @@ function Providers({ children }: { children: ReactNode }) {
     };
     initialize();
   }, [initAuth, accessToken]);
+
+  useTokenRefresh({
+    checkInterval: 30000,
+    thresholdSeconds: 60,
+  });
 
   if (!isReady) {
     return <></>;

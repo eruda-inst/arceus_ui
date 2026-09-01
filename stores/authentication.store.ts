@@ -25,6 +25,7 @@ export interface AuthState {
   fetchCurrentUser: () => Promise<UserOut | null>;
   logout: () => Promise<void>;
   setGroupName: (groupId: number) => Promise<void>;
+  refreshTokens: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -131,6 +132,39 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     get().clearTokens();
     if (typeof window !== "undefined") {
       window.location.href = "/login";
+    }
+  },
+
+  refreshTokens: async () => {
+    const refresh =
+      get().refreshToken || (getCookie(REFRESH_TOKEN_KEY) as string);
+    if (!refresh) {
+      await get().logout();
+      return false;
+    }
+
+    try {
+      const response = await axiosClient.post<{
+        access_token: string;
+        refresh_token: string;
+        expires_in: number;
+      }>(
+        API_ROUTES.authentication.refreshToken(),
+        { refresh_token: refresh },
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+
+      const { access_token, refresh_token, expires_in } = response.data;
+      get().setTokens(access_token, refresh_token, expires_in);
+
+      await get().fetchCurrentUser();
+
+      return true;
+    } catch {
+      await get().logout();
+      return false;
     }
   },
 }));
