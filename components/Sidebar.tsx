@@ -39,6 +39,7 @@ import { API_ROUTES } from "@/configs/api.config";
 import InfoItem from "@/components/InfoItem";
 import { usePermStore } from "@/stores/perm.store";
 import { useTheme } from "next-themes";
+import { Key } from "react-aria";
 import clsx from "clsx";
 
 const FormSchema = z.object({
@@ -63,7 +64,7 @@ function Sidebar() {
     useState<boolean>(false);
   const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Selection>(new Set(["system"]));
+  const [selected, setSelected] = useState<Set<Key>>(new Set(["system"]));
   const { setTheme } = useTheme();
 
   const {
@@ -242,7 +243,11 @@ function Sidebar() {
                     <Dropdown.Menu
                       selectedKeys={selected}
                       selectionMode="single"
-                      onSelectionChange={setSelected}
+                      onSelectionChange={(keys) => {
+                        if (keys !== "all") {
+                          setSelected(new Set(keys));
+                        }
+                      }}
                     >
                       <Dropdown.Item
                         id="light"
