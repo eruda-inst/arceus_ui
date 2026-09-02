@@ -10,7 +10,7 @@ import { API_ROUTES } from "@/configs/api.config";
 
 export default function Metrics() {
   const { isConnected, isConnecting, lastMessage } = useMetricWebSocket({
-    url: API_ROUTES.metric,
+    url: API_ROUTES.metricWs,
     initialMetrics: "all",
   });
 

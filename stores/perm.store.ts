@@ -9,6 +9,7 @@ export interface PermStore {
   userId: number | null;
   setUserId: (userId: number | null) => void;
   fetchPerms: (userId: number) => Promise<void>;
+  hasPerm: (permCode: string) => boolean;
   hasAllPerms: (permCodes: string[]) => boolean;
 }
 
@@ -28,6 +29,7 @@ export const usePermStore = create<PermStore>((set, get) => ({
       throw err;
     }
   },
+  hasPerm: (permCode) => get().perms.some((perm) => perm.codigo === permCode),
   hasAllPerms: (permCodes) =>
     permCodes.every((permCode) =>
       get().perms.some((perm) => perm.codigo === permCode),

@@ -16,7 +16,7 @@ import usePagination from "@/hooks/usePagination.hook";
 
 export default function Logs() {
   const { isConnected, lastMessage, isConnecting, sendMessage } =
-    useLogWebSocket({ url: API_ROUTES.log });
+    useLogWebSocket({ url: API_ROUTES.logWs });
 
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
     useFilter<LogFilterIn>();

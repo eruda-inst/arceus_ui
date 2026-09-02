@@ -19,7 +19,7 @@ import type { UserOut } from "@/types/user.type";
 import { GroupOut } from "@/types/group.type";
 
 interface UserTableProps {
-  data: UserOut[];
+  data?: UserOut[];
   isLoading: boolean;
   onRowClick: (user: UserOut) => void;
   groups?: GroupOut[];
@@ -71,7 +71,7 @@ function UserTable({ data, isLoading, onRowClick, groups }: UserTableProps) {
             <Table.Content
               aria-label="Usuários"
               onRowAction={(key) => {
-                const user = data.find((u) => u.id === Number(key));
+                const user = data?.find((u) => u.id === Number(key));
                 if (user) onRowClick(user);
               }}
             >
@@ -128,7 +128,7 @@ function UserTable({ data, isLoading, onRowClick, groups }: UserTableProps) {
                   </EmptyState>
                 )}
               >
-                {data.map((user) => (
+                {data?.map((user) => (
                   <Table.Row
                     key={user.id}
                     id={user.id.toString()}

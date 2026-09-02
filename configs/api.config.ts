@@ -18,8 +18,9 @@ const API_ENDPOINT_BASES = {
   user: `${BASE_API_URL}/api/v1/usuarios`,
 
   // WebSockets
-  log: `${BASE_WS_API_URL}/api/v1/logs`,
-  metric: `${BASE_WS_API_URL}/api/v1/metricas`,
+  logWs: `${BASE_WS_API_URL}/api/v1/logs-ws`,
+  metricWs: `${BASE_WS_API_URL}/api/v1/metricas-ws`,
+  userWs: `${BASE_WS_API_URL}/api/v1/usuarios-ws`,
 };
 
 const API_ROUTES = {
@@ -63,29 +64,12 @@ const API_ROUTES = {
     toggleStatusById: (id: number) =>
       `${API_ENDPOINT_BASES.user}/${id}/alternar-status`,
     deleteById: (id: number) => `${API_ENDPOINT_BASES.user}/${id}`,
-    getAll: (
-      filters: {
-        page?: number;
-        itemsPerPage?: number;
-        name?: string;
-        email?: string;
-        groupName?: string;
-      } = {},
-    ) => {
-      const { page = 1, itemsPerPage = 10 } = filters;
-      const params = new URLSearchParams();
-      params.append("pagina", page.toString());
-      params.append("itens_por_pagina", itemsPerPage.toString());
-      if (filters.name) params.append("nome", filters.name);
-      if (filters.email) params.append("email", filters.email);
-      if (filters.groupName) params.append("nome_grupo", filters.groupName);
-      return `${API_ENDPOINT_BASES.user}/?${params.toString()}`;
-    },
   },
 
   // WebSockets
-  log: `${API_ENDPOINT_BASES.log}/`,
-  metric: `${API_ENDPOINT_BASES.metric}/`,
+  logWs: `${API_ENDPOINT_BASES.logWs}/`,
+  metricWs: `${API_ENDPOINT_BASES.metricWs}/`,
+  userWs: `${API_ENDPOINT_BASES.userWs}/`,
 };
 
 export { API_ROUTES };

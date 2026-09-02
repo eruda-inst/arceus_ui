@@ -5,29 +5,6 @@ import { UserOut, UserPaginationOut, UserIn } from "@/types/user.type";
 import { UserOutSchema, UserPaginationOutSchema } from "@/schemas/user.schema";
 
 export default class UserService {
-  static async getAll(
-    filters: {
-      page?: number;
-      itemsPerPage?: number;
-      name?: string;
-      email?: string;
-      groupName?: string;
-    } = {},
-  ): Promise<UserPaginationOut | undefined> {
-    try {
-      const response = await axiosClient.get(API_ROUTES.user.getAll(filters));
-
-      const data = response.data;
-      UserPaginationOutSchema.parse(data);
-      return data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return undefined;
-      }
-      throw error;
-    }
-  }
-
   static async create(data: UserIn): Promise<UserOut | undefined> {
     try {
       const response = await axiosClient.post(API_ROUTES.user.create(), data);

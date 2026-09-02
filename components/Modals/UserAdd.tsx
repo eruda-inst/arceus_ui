@@ -51,7 +51,6 @@ const FormSchema = z.object({
 type formType = z.infer<typeof FormSchema>;
 
 export default function Add({ handleClose, ...props }: AddProps) {
-  const getAllUsers = UserService.getAll;
   const getAllIxcUsers = IxcUserService.getAll;
   const getAllGroups = GroupService.getAll;
   const createUser = UserService.create;
@@ -110,20 +109,13 @@ export default function Add({ handleClose, ...props }: AddProps) {
 
   const fetchAll = useCallback(async () => {
     try {
-      const [ixcRes, userRes, groups] = await Promise.all([
+      const [ixcRes, groups] = await Promise.all([
         getAllIxcUsers({ itemsPerPage: 9999 }),
-        getAllUsers({ itemsPerPage: 9999 }),
         getAllGroups(),
       ]);
 
       setIxcUsers(ixcRes?.data || []);
       setGroups(groups || []);
-
-      if (userRes?.data) {
-        setRegisteredEmails(new Set(userRes.data.map((u) => u.email)));
-      } else {
-        setRegisteredEmails(new Set());
-      }
     } catch {}
   }, []);
 

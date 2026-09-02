@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import UserService from "@/services/User.service";
+import { useEffect, useState } from "react";
 import type {
   UserFilterIn,
   UserOut,
@@ -18,12 +17,18 @@ import { useAuthStore } from "@/stores/authentication.store";
 import GroupService from "@/services/Group.service";
 import { useGroupStore } from "@/stores/group.store";
 import { usePermStore } from "@/stores/perm.store";
-import { Button, Skeleton, toast } from "@heroui/react";
+import { Button, ColorSwatch, Skeleton } from "@heroui/react";
 import usePagination from "@/hooks/usePagination.hook";
 import useFilter from "@/hooks/useFilter.hook";
+import { API_ROUTES } from "@/configs/api.config";
+import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
+import { clsx } from "clsx";
 
 export default function Users() {
-  const { hasAllPerms } = usePermStore();
+  const { isConnected, lastMessage, isConnecting, sendMessage } =
+    useUserWebSocket({ url: API_ROUTES.userWs });
+
+  const { hasPerm } = usePermStore();
   const { currentUser } = useAuthStore();
   const groups = useGroupStore((state) => state.groups);
   const setGroups = useGroupStore((state) => state.setGroups);
@@ -31,18 +36,18 @@ export default function Users() {
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
     useFilter<UserFilterIn>();
 
-  const users = useUserStore((state) => state.users);
   const setUsers = useUserStore((state) => state.setUsers);
   const selectedUser = useUserStore((state) => state.selectedUser);
   const setSelectedUser = useUserStore((state) => state.setSelectedUser);
 
-  const getAll = UserService.getAll;
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userPagination, setUserPagination] =
-    useState<UserPaginationOut | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (lastMessage?.data) {
+      setUsers(lastMessage.data);
+    }
+  }, [lastMessage]);
 
   const {
     page,
@@ -52,32 +57,6 @@ export default function Users() {
     handlePrevPage,
     handleSetItemsPerPage,
   } = usePagination();
-
-  const fetchUsers = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const result = await UserService.getAll({
-        page,
-        itemsPerPage,
-        name: filters.name,
-        email: filters.email,
-        groupName: filters.groupName,
-      });
-      if (result) {
-        setUsers(result.data);
-        setUserPagination(result);
-      }
-    } catch (error: unknown) {
-      console.error(error);
-      toast.danger("Erro ao buscar usuários");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, itemsPerPage, filters, getAll]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
 
   useEffect(() => {
     GroupService.getAll().then((data) => {
@@ -90,8 +69,12 @@ export default function Users() {
     setSelectedUser(user);
   };
 
-  const totalItems = userPagination?.meta?.total_itens ?? 0;
-  const totalPages = userPagination?.meta?.total_paginas ?? 1;
+  useEffect(() => {
+    sendMessage({ pagina: page, itens_por_pagina: itemsPerPage, ...filters });
+  }, [itemsPerPage, sendMessage, page, filters]);
+
+  const totalItems = lastMessage?.meta?.total_itens ?? 0;
+  const totalPages = lastMessage?.meta?.total_paginas ?? 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -103,6 +86,27 @@ export default function Users() {
           <p className="text-gray-400 mt-1">
             Visualize, adicione, remova, inative e reative usuários do IXC
           </p>
+          <span
+            className={clsx(
+              "flex items-center gap-x-2",
+              isConnecting
+                ? "text-blue-500"
+                : isConnected
+                  ? "text-green-500"
+                  : "text-red-500",
+            )}
+          >
+            {isConnecting
+              ? "Conectando..."
+              : isConnected
+                ? "Conectado"
+                : "Desconectado"}
+            <ColorSwatch
+              className="animate-pulse"
+              size="xs"
+              color={isConnecting ? "#00f" : isConnected ? "#0f0" : "#f00"}
+            />
+          </span>
         </div>
 
         {currentUser ? (
@@ -110,7 +114,7 @@ export default function Users() {
             className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
             size="md"
             onPress={() => setIsAddOpen(true)}
-            isDisabled={!hasAllPerms(["criar:usuarios"])}
+            isDisabled={!hasPerm("criar:usuarios")}
           >
             Adicionar
           </Button>
@@ -147,8 +151,8 @@ export default function Users() {
       )}
 
       <UserTable
-        data={users}
-        isLoading={isLoading}
+        data={lastMessage?.data}
+        isLoading={!lastMessage}
         onRowClick={handleRowClick}
         groups={groups}
       />
