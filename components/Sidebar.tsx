@@ -56,6 +56,7 @@ type FormType = z.infer<typeof FormSchema>;
 
 function Sidebar() {
   const router = useRouter();
+  const { setTheme, theme } = useTheme();
   const pathname = usePathname();
   const { hasAllPerms } = usePermStore();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
@@ -64,8 +65,9 @@ function Sidebar() {
     useState<boolean>(false);
   const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Set<Key>>(new Set(["system"]));
-  const { setTheme } = useTheme();
+  const [selected, setSelected] = useState<Set<Key>>(
+    new Set([theme || "system"]),
+  );
 
   const {
     currentUser,
