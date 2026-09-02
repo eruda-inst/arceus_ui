@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {
-  UserFilterIn,
-  UserOut,
-  UserPaginationOut,
-} from "@/types/user.type";
+import type { UserFilterIn, UserOut } from "@/types/user.type";
 import UserTable from "@/components/Tables/UserTable";
 import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
 import UserFilters from "@/components/Filters/UserFilters";
