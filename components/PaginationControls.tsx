@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { Card, Label, ListBox, Pagination, Select } from "@heroui/react";
 import { itemsPerPageValues } from "@/hooks/usePagination.hook";
+import clsx from "clsx";
 
 interface PaginationControlsProps {
   page: number;
@@ -117,7 +118,10 @@ export default function PaginationControls({
                   <Pagination.Item key={uuid()}>
                     <Pagination.Link
                       isActive={p === page}
-                      className={`${p === page ? "bg-linear-to-r" : ""} from-blue-500 to-indigo-500 font-bold`}
+                      className={clsx(
+                        "from-blue-500 to-indigo-500 font-bold",
+                        p === page && "bg-linear-to-r text-white",
+                      )}
                       onPress={() => onGoToPage(p)}
                     >
                       {p}

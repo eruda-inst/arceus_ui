@@ -223,7 +223,7 @@ export default function Login() {
             <h2 className="text-4xl font-bold mb-6 tracking-tight mt-4">
               Arceus
             </h2>
-            <p className="text-lg text-purple-100 leading-relaxed mb-8">
+            <p className="text-lg leading-relaxed mb-8">
               Plataforma para monitoramento de requisições HTTP realizadas ao
               Arceus, com visualização de logs, métricas agregadas e dashboards
               analíticos.
@@ -235,23 +235,21 @@ export default function Login() {
               whileHover={{ scale: 1.05 }}
             >
               <div className="font-bold text-xl">Logs</div>
-              <div className="text-xs dark:text-muted uppercase tracking-wider">
-                Detalhados
-              </div>
+              <div className="text-xs uppercase tracking-wider">Detalhados</div>
             </motion.div>
             <motion.div
               className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10"
               whileHover={{ scale: 1.05 }}
             >
               <div className="font-bold text-xl">Dashboards</div>
-              <div className="text-xs dark:text-muted uppercase tracking-wider">
+              <div className="text-xs uppercase tracking-wider">
                 Interativos
               </div>
             </motion.div>
           </div>
           <motion.div
             animate={{ opacity: 1 }}
-            className="absolute bottom-5 left-0 right-0 text-center dark:text-muted text-sm font-mono"
+            className="absolute bottom-5 left-0 right-0 text-center text-sm font-mono"
             initial={{ opacity: 0 }}
             transition={{ delay: 1, duration: 1 }}
           >

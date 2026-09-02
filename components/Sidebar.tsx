@@ -142,7 +142,7 @@ function Sidebar() {
       <div className="flex w-64 flex-col fixed inset-y-0 bg-surface border-r">
         <div className="flex items-center h-16 px-6 border-b">
           <div className="flex items-center gap-3">
-            <Image alt="Absol" className="size-8" src={logo} />
+            <Image alt="Arceus" className="size-8" src={logo} />
             <h1 className="text-xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
               Arceus
             </h1>
@@ -153,8 +153,8 @@ function Sidebar() {
           {currentUser ? (
             <Button
               className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
-                pathname === "/" ? "bg-indigo-500" : "bg-inherit",
+                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
+                pathname === "/" ? "bg-indigo-500 text-white" : "bg-inherit",
               )}
               onPress={() => router.push("/")}
               isDisabled={!hasAllPerms(["ver:metricas"])}
@@ -168,8 +168,10 @@ function Sidebar() {
           {currentUser ? (
             <Button
               className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
-                pathname === "/registros" ? "bg-indigo-500" : "bg-inherit",
+                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
+                pathname === "/registros"
+                  ? "bg-indigo-500 text-white"
+                  : "bg-inherit",
               )}
               onPress={() => router.push("/registros")}
               isDisabled={!hasAllPerms(["ver:logs"])}
@@ -183,8 +185,10 @@ function Sidebar() {
           {currentUser ? (
             <Button
               className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-black dark:text-white",
-                pathname === "/usuarios" ? "bg-indigo-500" : "bg-inherit",
+                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
+                pathname === "/usuarios"
+                  ? "bg-indigo-500 text-white"
+                  : "bg-inherit",
               )}
               onPress={() => router.push("/usuarios")}
               isDisabled={!hasAllPerms(["ver:usuarios"])}
@@ -204,7 +208,7 @@ function Sidebar() {
               ) : (
                 <>
                   <Avatar size="sm">
-                    <Avatar.Fallback className="bg-linear-to-r from-purple-500 to-indigo-500">
+                    <Avatar.Fallback className="bg-linear-to-r from-purple-500 to-indigo-500 text-white">
                       {Misc.getInitials(currentUser?.nome)}
                     </Avatar.Fallback>
                   </Avatar>
@@ -305,7 +309,7 @@ function Sidebar() {
                     <>
                       <Modal.Icon>
                         <Avatar size="lg">
-                          <Avatar.Fallback className="bg-linear-to-r from-purple-500 to-indigo-500">
+                          <Avatar.Fallback className="bg-linear-to-r from-purple-500 to-indigo-500 text-white">
                             {Misc.getInitials(currentUser?.nome)}
                           </Avatar.Fallback>
                         </Avatar>

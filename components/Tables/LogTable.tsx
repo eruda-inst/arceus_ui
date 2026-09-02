@@ -91,7 +91,7 @@ export default function LogTable({
       <Card.Header className="p-4">
         <Card.Title className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/20 rounded-lg bg-linear-to-r from-purple-700 to-indigo-700">
+            <div className="p-2 bg-white/20 rounded-lg bg-linear-to-r from-purple-500 to-indigo-500">
               <FaServer className="size-5 text-white" />
             </div>
             <h2 className="text-xl font-bold">Registros de requisições</h2>

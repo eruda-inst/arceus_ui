@@ -30,8 +30,10 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
             <Modal.Body className="flex flex-col gap-y-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">Registro</h3>
-                  <p className="text-sm text-gray-400">
+                  <h3 className="text-lg font-bold text-black dark:text-white">
+                    Registro
+                  </h3>
+                  <p className="text-sm text-muted">
                     Seção destinada a exibição de dados do registro selecionado
                   </p>
                 </div>
