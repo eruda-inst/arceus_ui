@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ColorSwatch } from "@heroui/react";
-import { clsx } from "clsx";
+import { Typography } from "@heroui/react";
 import PaginationControls from "@/components/PaginationControls";
 import ActiveLogFilters from "@/components/Filters/ActiveLogFilters";
 import LogFilters from "@/components/Filters/LogFilters";
 import Details from "@/components/Modals/LogDetails";
 import LogTable from "@/components/Tables/LogTable";
+import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
 import useFilter from "@/hooks/useFilter.hook";
 import { LogFilterIn, LogOut } from "@/types/log.type";
@@ -43,38 +43,25 @@ export default function Logs() {
   }, [itemsPerPage, sendMessage, page, filters]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-2">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
+          <Typography
+            type="h2"
+            className="bg-linear-to-r from-purple-500 to-indigo-500 w-fit text-transparent bg-clip-text"
+          >
             Registros
-          </h1>
-          <p className="text-muted">
-            Os registros são atualizados automaticamente, não é necessário
+          </Typography>
+          <p className="text-muted">Visualize informações das requisições</p>
+          <p className="text-warning-soft-foreground">
+            As informações são atualizadas automaticamente, não é necessário
             recarregar a página
           </p>
-        </div>
-        <span
-          className={clsx(
-            "flex items-center gap-x-2",
-            isConnecting
-              ? "text-blue-500"
-              : isConnected
-                ? "text-green-500"
-                : "text-red-500",
-          )}
-        >
-          {isConnecting
-            ? "Conectando..."
-            : isConnected
-              ? "Conectado"
-              : "Desconectado"}
-          <ColorSwatch
-            className="animate-pulse"
-            size="xs"
-            color={isConnecting ? "#00f" : isConnected ? "#0f0" : "#f00"}
+          <ConnectionIndicatior
+            isConnected={isConnected}
+            isConnecting={isConnecting}
           />
-        </span>
+        </div>
       </div>
 
       <LogFilters
@@ -101,7 +88,7 @@ export default function Logs() {
           onSetItemsPerPage={handleSetItemsPerPage}
         />
         <LogTable
-          data={lastMessage?.data}
+          logs={lastMessage?.data}
           isLoading={!lastMessage}
           onRowClick={handleRowClick}
         />

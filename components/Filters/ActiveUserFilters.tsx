@@ -20,9 +20,10 @@ export default function ActiveUserFilters({
   }[] = [];
 
   const labelMap: Record<string, string> = {
-    name: "Nome",
+    nome: "Nome",
     email: "Email",
-    groupName: "Grupo",
+    nome_grupo: "Nome do grupo",
+    ativo: "Ativo",
   };
 
   Object.entries(filters).forEach(([key, value]) => {

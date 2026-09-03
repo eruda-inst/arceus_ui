@@ -9,6 +9,8 @@ import {
   Form,
   Card,
   toast,
+  Select,
+  ListBox,
 } from "@heroui/react";
 import { FaFilter, FaUser, FaEnvelope, FaUsers } from "react-icons/fa6";
 import type { UserFilterIn } from "@/types/user.type";
@@ -27,8 +29,13 @@ function UserFilters({
   const [localFilters, setLocalFilters] = useState<UserFilterIn>(filters);
   const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
-  const handleChange = (key: keyof UserFilterIn, value?: string) => {
-    const cleanValue = value?.trim() === "" ? undefined : value;
+  const handleChange = (key: keyof UserFilterIn, value?: string | boolean) => {
+    const cleanValue =
+      typeof value === "string"
+        ? value.trim() === ""
+          ? undefined
+          : value
+        : value;
     setLocalFilters((prev) => ({ ...prev, [key]: cleanValue }));
   };
 
@@ -49,7 +56,10 @@ function UserFilters({
 
   useEffect(() => {
     setIsFiltersEmpty(
-      !localFilters.name && !localFilters.email && !localFilters.groupName,
+      !localFilters.nome &&
+        !localFilters.email &&
+        !localFilters.nome_grupo &&
+        localFilters.ativo === undefined,
     );
   }, [localFilters]);
 
@@ -58,7 +68,7 @@ function UserFilters({
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">
-            <div className="p-2 bg-linear-to-r from-purple-700 to-indigo-700 rounded-lg w-fit">
+            <div className="p-2 bg-indigo-500 rounded-lg w-fit">
               <FaFilter className="w-5 h-5 text-white" />
             </div>
             <div className="text-xl font-bold">Filtros</div>
@@ -79,7 +89,7 @@ function UserFilters({
           <Button
             onPress={handleApply}
             isDisabled={isFiltersEmpty}
-            className="bg-linear-to-r from-purple-600 to-indigo-600 text-white hover:shadow-md transition-shadow"
+            className="bg-indigo-500 text-white hover:bg-indigo-600"
           >
             Aplicar Filtros
           </Button>
@@ -103,15 +113,15 @@ function UserFilters({
                 <Form className="grid grid-cols-2 gap-4">
                   <TextField
                     variant="secondary"
-                    value={localFilters.name ?? ""}
-                    onChange={(value) => handleChange("name", value)}
+                    value={localFilters.nome ?? ""}
+                    onChange={(value) => handleChange("nome", value)}
                   >
                     <Label>Nome</Label>
                     <InputGroup>
                       <InputGroup.Prefix>
                         <FaUser className="size-4 text-gray-400" />
                       </InputGroup.Prefix>
-                      <InputGroup.Input placeholder="Nome do usuário..." />
+                      <InputGroup.Input placeholder="Nome do usuário" />
                     </InputGroup>
                     <FieldError />
                   </TextField>
@@ -131,17 +141,56 @@ function UserFilters({
                     <FieldError />
                   </TextField>
 
+                  <Select
+                    variant="secondary"
+                    placeholder="Ativo"
+                    value={
+                      localFilters.ativo === undefined
+                        ? ""
+                        : localFilters.ativo
+                          ? "true"
+                          : "false"
+                    }
+                    onChange={(value) => {
+                      const boolValue =
+                        value === "true"
+                          ? true
+                          : value === "false"
+                            ? false
+                            : undefined;
+                      handleChange("ativo", boolValue);
+                    }}
+                  >
+                    <Label>Ativo</Label>
+                    <Select.Trigger>
+                      <Select.Value />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                      <ListBox>
+                        <ListBox.Item key="true" id="true" textValue="Sim">
+                          Sim
+                          <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item key="false" id="false" textValue="Não">
+                          Não
+                          <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                      </ListBox>
+                    </Select.Popover>
+                  </Select>
+
                   <TextField
                     variant="secondary"
-                    value={localFilters.groupName ?? ""}
-                    onChange={(value) => handleChange("groupName", value)}
+                    value={localFilters.nome_grupo ?? ""}
+                    onChange={(value) => handleChange("nome_grupo", value)}
                   >
                     <Label>Grupo</Label>
                     <InputGroup>
                       <InputGroup.Prefix>
                         <FaUsers className="size-4 text-gray-400" />
                       </InputGroup.Prefix>
-                      <InputGroup.Input placeholder="Nome do grupo..." />
+                      <InputGroup.Input placeholder="Nome do grupo" />
                     </InputGroup>
                     <FieldError />
                   </TextField>

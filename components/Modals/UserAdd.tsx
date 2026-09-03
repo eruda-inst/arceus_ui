@@ -26,16 +26,16 @@ import {
   FaUserPlus,
 } from "react-icons/fa6";
 import { IXCUserOut } from "@/types/ixcUser.type";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import IxcUserService from "@/services/IxcUser.service";
 import UserService from "@/services/User.service";
-import { useIxcUserStore } from "@/stores/ixcUser.store";
 import GroupService from "@/services/Group.service";
 import { GroupOut } from "@/types/group.type";
 import z from "zod";
-import { useUserStore } from "@/stores/user.store";
+import { UserOut } from "@/types/user.type";
 
 interface AddProps extends Omit<ModalProps, "children"> {
+  addedUsers: UserOut[];
   handleClose: () => void;
 }
 
@@ -50,7 +50,7 @@ const FormSchema = z.object({
 
 type formType = z.infer<typeof FormSchema>;
 
-export default function Add({ handleClose, ...props }: AddProps) {
+export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
   const getAllIxcUsers = IxcUserService.getAll;
   const getAllGroups = GroupService.getAll;
   const createUser = UserService.create;
@@ -64,19 +64,16 @@ export default function Add({ handleClose, ...props }: AddProps) {
     confirmarSenha: "",
   };
   const [form, setForm] = useState<formType>(initialValues);
-
-  const ixcUsers = useIxcUserStore((state) => state.ixcUsers);
-  const addUser = useUserStore((state) => state.addUser);
-  const selectedIxcUser = useIxcUserStore((state) => state.selectedIxcUser);
-  const setIxcUsers = useIxcUserStore((state) => state.setIxcUsers);
-  const setSelectedIxcUser = useIxcUserStore(
-    (state) => state.setSelectedIxcUser,
+  const addedEmails = useMemo(
+    () => new Set(addedUsers.map((u) => u.email)),
+    [addedUsers],
+  );
+  const [ixcUsers, setIxcUsers] = useState<IXCUserOut[]>([]);
+  const [selectedIxcUser, setSelectedIxcUser] = useState<IXCUserOut | null>(
+    null,
   );
 
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
-  const [registeredEmails, setRegisteredEmails] = useState<Set<string>>(
-    new Set(),
-  );
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [groups, setGroups] = useState<GroupOut[]>([]);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -92,10 +89,7 @@ export default function Add({ handleClose, ...props }: AddProps) {
 
   const handleCreateUser = async () => {
     try {
-      const createdUser = await createUser(form);
-      if (createdUser) {
-        addUser(createdUser);
-      }
+      await createUser(form);
       toast.success("Usuário adicionado com sucesso");
       await fetchAll();
       setSelectedIxcUser(null);
@@ -317,7 +311,7 @@ export default function Add({ handleClose, ...props }: AddProps) {
               ) : (
                 <div className="grid grid-cols-3 gap-4">
                   {ixcUsers
-                    .filter((u) => !registeredEmails.has(u.email))
+                    .filter((u) => !addedEmails.has(u.email))
                     .map((ixcUser) => {
                       const isSelected = selectedIxcUser?.id === ixcUser.id;
                       return (

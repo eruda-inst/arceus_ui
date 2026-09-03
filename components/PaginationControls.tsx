@@ -94,7 +94,7 @@ export default function PaginationControls({
           <Pagination>
             <Pagination.Summary>
               <p>
-                Página {startItem}-{endItem}, total de {totalItems} resultados
+                Mostrando {startItem}-{endItem} de {totalItems} resultados
               </p>
             </Pagination.Summary>
 
@@ -119,8 +119,8 @@ export default function PaginationControls({
                     <Pagination.Link
                       isActive={p === page}
                       className={clsx(
-                        "from-blue-500 to-indigo-500 font-bold",
-                        p === page && "bg-linear-to-r text-white",
+                        "font-bold",
+                        p === page && "bg-indigo-500 text-white",
                       )}
                       onPress={() => onGoToPage(p)}
                     >

@@ -1,50 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { UserFilterIn, UserOut } from "@/types/user.type";
-import UserTable from "@/components/Tables/UserTable";
-import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
-import UserFilters from "@/components/Filters/UserFilters";
-import Details from "@/components/Modals/UserDetails";
-import { useUserStore } from "@/stores/user.store";
+import { Button, Typography } from "@heroui/react";
+import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import PaginationControls from "@/components/PaginationControls";
+import UserFilters from "@/components/Filters/UserFilters";
+import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
+import Details from "@/components/Modals/UserDetails";
+import UserTable from "@/components/Tables/UserTable";
 import Add from "@/components/Modals/UserAdd";
-import { useAuthStore } from "@/stores/authentication.store";
-import GroupService from "@/services/Group.service";
-import { useGroupStore } from "@/stores/group.store";
-import { usePermStore } from "@/stores/perm.store";
-import { Button, ColorSwatch, Skeleton } from "@heroui/react";
+import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
 import usePagination from "@/hooks/usePagination.hook";
 import useFilter from "@/hooks/useFilter.hook";
+import { usePermStore } from "@/stores/perm.store";
+import { UserFilterIn, UserOut } from "@/types/user.type";
 import { API_ROUTES } from "@/configs/api.config";
-import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
-import { clsx } from "clsx";
 
 export default function Users() {
-  const { isConnected, lastMessage, isConnecting, sendMessage } =
-    useUserWebSocket({ url: API_ROUTES.userWs });
-
-  const { hasPerm } = usePermStore();
-  const { currentUser } = useAuthStore();
-  const groups = useGroupStore((state) => state.groups);
-  const setGroups = useGroupStore((state) => state.setGroups);
-
-  const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
-    useFilter<UserFilterIn>();
-
-  const setUsers = useUserStore((state) => state.setUsers);
-  const selectedUser = useUserStore((state) => state.selectedUser);
-  const setSelectedUser = useUserStore((state) => state.setSelectedUser);
-
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<UserOut | null>(null);
 
-  useEffect(() => {
-    if (lastMessage?.data) {
-      setUsers(lastMessage.data);
-    }
-  }, [lastMessage]);
+  const { hasPerm } = usePermStore();
 
+  // WebSocket
+  const {
+    lastMessage: users,
+    isConnected,
+    isConnecting,
+    sendMessage,
+  } = useUserWebSocket({
+    url: API_ROUTES.userWs,
+  });
+
+  // Pagination
   const {
     page,
     itemsPerPage,
@@ -54,69 +43,57 @@ export default function Users() {
     handleSetItemsPerPage,
   } = usePagination();
 
-  useEffect(() => {
-    GroupService.getAll().then((data) => {
-      if (data) setGroups(data);
-    });
-  }, []);
+  // Filters
+  const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
+    useFilter<UserFilterIn>();
 
   const handleRowClick = (user: UserOut) => {
-    setIsDetailsOpen(true);
     setSelectedUser(user);
+    setIsDetailsOpen(true);
+  };
+
+  const handleRefreshUser = () => {
+    setSelectedUser((prev) => (prev ? { ...prev, ativo: !prev.ativo } : prev));
   };
 
   useEffect(() => {
-    sendMessage({ pagina: page, itens_por_pagina: itemsPerPage, ...filters });
+    sendMessage({
+      pagina: page,
+      itens_por_pagina: itemsPerPage,
+      ...filters,
+    });
   }, [itemsPerPage, sendMessage, page, filters]);
 
-  const totalItems = lastMessage?.meta?.total_itens ?? 0;
-  const totalPages = lastMessage?.meta?.total_paginas ?? 1;
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto p-2 space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
-            Usuários
-          </h1>
-          <p className="text-gray-400 mt-1">
-            Visualize, adicione, remova, inative e reative usuários do IXC
-          </p>
-          <span
-            className={clsx(
-              "flex items-center gap-x-2",
-              isConnecting
-                ? "text-blue-500"
-                : isConnected
-                  ? "text-green-500"
-                  : "text-red-500",
-            )}
+          <Typography
+            type="h2"
+            className="bg-linear-to-r from-purple-500 to-indigo-500 w-fit text-transparent bg-clip-text"
           >
-            {isConnecting
-              ? "Conectando..."
-              : isConnected
-                ? "Conectado"
-                : "Desconectado"}
-            <ColorSwatch
-              className="animate-pulse"
-              size="xs"
-              color={isConnecting ? "#00f" : isConnected ? "#0f0" : "#f00"}
-            />
-          </span>
+            Usuários
+          </Typography>
+
+          <p className="text-muted">Visualize informações dos usuários</p>
+          <p className="text-warning-soft-foreground">
+            As informações são atualizadas automaticamente, não é necessário
+            recarregar a página
+          </p>
+
+          <ConnectionIndicatior
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+          />
         </div>
 
-        {currentUser ? (
-          <Button
-            className="bg-linear-to-r from-purple-500 to-indigo-500 shadow-lg hover:shadow-xl transition-shadow"
-            size="md"
-            onPress={() => setIsAddOpen(true)}
-            isDisabled={!hasPerm("criar:usuarios")}
-          >
-            Adicionar
-          </Button>
-        ) : (
-          <Skeleton className="rounded-3xl w-30 h-10" />
-        )}
+        <Button
+          className="bg-indigo-500 hover:bg-indigo-600"
+          onPress={() => setIsAddOpen(true)}
+          isDisabled={!hasPerm("criar:usuarios")}
+        >
+          Novo usuário
+        </Button>
       </div>
 
       <UserFilters
@@ -131,40 +108,35 @@ export default function Users() {
         onResetFilters={handleResetFilters}
       />
 
-      {totalItems > 0 && (
-        <div className="my-6">
-          <PaginationControls
-            page={page}
-            totalPages={totalPages}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onGoToPage={handleGoToPage}
-            onNextPage={handleNextPage}
-            onPrevPage={handlePrevPage}
-            onSetItemsPerPage={handleSetItemsPerPage}
-          />
-        </div>
-      )}
+      <PaginationControls
+        page={page}
+        totalPages={users?.meta?.total_paginas || 1}
+        totalItems={users?.meta?.total_itens || 0}
+        itemsPerPage={itemsPerPage}
+        onGoToPage={handleGoToPage}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+        onSetItemsPerPage={handleSetItemsPerPage}
+      />
 
       <UserTable
-        data={lastMessage?.data}
-        isLoading={!lastMessage}
+        users={users?.data}
+        isLoading={!users}
         onRowClick={handleRowClick}
-        groups={groups}
       />
 
       {selectedUser && (
         <Details
-          isOpen={isDetailsOpen}
+          onRefreshUser={handleRefreshUser}
           user={selectedUser}
-          onOpenChange={setIsDetailsOpen}
-          handleClose={() => setIsDetailsOpen(false)}
+          isOpen={isDetailsOpen}
+          onClose={() => setIsDetailsOpen(false)}
         />
       )}
 
       <Add
+        addedUsers={users?.data || []}
         isOpen={isAddOpen}
-        onOpenChange={setIsAddOpen}
         handleClose={() => setIsAddOpen(false)}
       />
     </div>

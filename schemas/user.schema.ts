@@ -1,9 +1,10 @@
 import z from "zod";
 
 const UserFilterInSchema = z.object({
-  name: z.string().optional(),
+  nome: z.string().optional(),
   email: z.string().optional(),
-  groupName: z.string().optional(),
+  ativo: z.boolean().optional(),
+  nome_grupo: z.string().optional(),
 });
 
 const UserInSchema = z.object({
@@ -22,6 +23,7 @@ const UserOutSchema = z.object({
   criado_em: z.string(),
   atualizado_em: z.string().nullable(),
   id_grupo: z.number().positive(),
+  nome_grupo: z.string(),
 });
 
 const UserPaginationOutSchema = z.object({

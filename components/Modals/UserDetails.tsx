@@ -1,40 +1,33 @@
 import { FaUser } from "react-icons/fa6";
-import {
-  Button,
-  Modal,
-  ModalProps,
-  AlertDialog,
-  AlertDialogProps,
-  toast,
-} from "@heroui/react";
+import { Button, Modal, ModalProps, AlertDialog, toast } from "@heroui/react";
 import InfoItem from "@/components/InfoItem";
 import { UserOut } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
 import { useAuthStore } from "@/stores/authentication.store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePermStore } from "@/stores/perm.store";
-import GroupService from "@/services/Group.service";
-import { GroupOut } from "@/types/group.type";
-import { useUserStore } from "@/stores/user.store";
 import UserService from "@/services/User.service";
+import { clsx } from "clsx";
 
-export interface CustomAlertDialogProps extends Omit<
-  AlertDialogProps,
-  "children"
-> {
+export interface DetailsProps extends Omit<ModalProps, "children"> {
   onClose: () => void;
+  onRefreshUser: () => void;
+  user: UserOut;
 }
 
-export function DeleteUser({ onClose, ...props }: CustomAlertDialogProps) {
-  const deleteById = UserService.delete;
-
-  const selectedUser = useUserStore((state) => state.selectedUser);
-  const deleteSelectedUser = useUserStore((state) => state.deleteSelectedUser);
+export default function Details({
+  onClose,
+  onRefreshUser,
+  user,
+  ...props
+}: DetailsProps) {
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
 
   const handleDelete = async () => {
     try {
-      await deleteById(selectedUser?.id || 0);
-      deleteSelectedUser();
+      await UserService.delete(user?.id || 0);
+      setIsDeleteOpen(false);
       onClose();
       toast.success("Usuário removido com sucesso!");
     } catch (error: unknown) {
@@ -43,115 +36,27 @@ export function DeleteUser({ onClose, ...props }: CustomAlertDialogProps) {
     }
   };
 
-  return (
-    <AlertDialog {...props}>
-      <AlertDialog.Backdrop>
-        <AlertDialog.Container>
-          <AlertDialog.Dialog>
-            <AlertDialog.CloseTrigger onPress={onClose} />
-            <AlertDialog.Header>
-              <AlertDialog.Icon status="danger" />
-              <AlertDialog.Heading>Excluir usuário</AlertDialog.Heading>
-            </AlertDialog.Header>
-            <AlertDialog.Body>
-              Tem certeza que deseja remover esse usuário?,{" "}
-              <strong>esta ação é irreversível</strong>.
-            </AlertDialog.Body>
-            <AlertDialog.Footer>
-              <Button variant="danger-soft" onPress={handleDelete}>
-                Remover
-              </Button>
-            </AlertDialog.Footer>
-          </AlertDialog.Dialog>
-        </AlertDialog.Container>
-      </AlertDialog.Backdrop>
-    </AlertDialog>
-  );
-}
-
-export function ToggleUserStatus({
-  onClose,
-  ...props
-}: CustomAlertDialogProps) {
-  const selectedUser = useUserStore((state) => state.selectedUser);
-  const toggleSelectedUserStatus = useUserStore(
-    (state) => state.toggleSelectedUserStatus,
-  );
-
-  const isActive = selectedUser?.ativo ?? false;
-  const action = isActive ? "inativar" : "reativar";
-  const statusColor = isActive ? "warning" : "success";
-  const buttonClass = isActive
-    ? "bg-warning-soft text-warning-soft-foreground hover:bg-warning-soft-hover"
-    : "bg-success-soft text-success-soft-foreground hover:bg-success-soft-hover";
-
   const handleToggle = async () => {
     try {
-      await UserService.toggleStatus(selectedUser?.id || 0);
-      toggleSelectedUserStatus();
-      onClose();
-      toast.success(`Usuário ${action}do com sucesso!`);
+      await UserService.toggleStatus(user.id);
+      setIsToggleOpen(false);
+      onRefreshUser();
+      toast.success("Status alterado com sucesso!");
     } catch (error: unknown) {
-      toast.danger(`Não foi possível ${action} o usuário`);
+      toast.danger("Erro ao mudar status do usuário");
       throw error;
     }
   };
 
-  return (
-    <AlertDialog {...props}>
-      <AlertDialog.Backdrop>
-        <AlertDialog.Container>
-          <AlertDialog.Dialog>
-            <AlertDialog.CloseTrigger onPress={onClose} />
-            <AlertDialog.Header>
-              <AlertDialog.Icon status={statusColor} />
-              <AlertDialog.Heading>
-                {isActive ? "Inativar" : "Reativar"} usuário
-              </AlertDialog.Heading>
-            </AlertDialog.Header>
-            <AlertDialog.Body>
-              Tem certeza que deseja {action} esse usuário?
-            </AlertDialog.Body>
-            <AlertDialog.Footer>
-              <Button className={buttonClass} onPress={handleToggle}>
-                {isActive ? "Inativar" : "Reativar"}
-              </Button>
-            </AlertDialog.Footer>
-          </AlertDialog.Dialog>
-        </AlertDialog.Container>
-      </AlertDialog.Backdrop>
-    </AlertDialog>
-  );
-}
-
-export interface DetailsProps extends Omit<ModalProps, "children"> {
-  handleClose: () => void;
-  user: UserOut;
-}
-
-export default function Details({ handleClose, user, ...props }: DetailsProps) {
   const { hasAllPerms } = usePermStore();
   const { currentUser } = useAuthStore();
-
-  const [group, setGroup] = useState<GroupOut | undefined>(undefined);
-  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
-
-  const fetchGroup = async () => {
-    const group = await GroupService.getById(user.id_grupo);
-    setGroup(group);
-  };
-
-  useEffect(() => {
-    fetchGroup();
-  }, [user]);
 
   return (
     <Modal {...props}>
       <Modal.Backdrop variant="blur">
         <Modal.Container size="cover">
           <Modal.Dialog>
-            <Modal.CloseTrigger onPress={handleClose} />
+            <Modal.CloseTrigger onPress={onClose} />
             <Modal.Header>
               <div className="text-xl font-bold flex items-center gap-2">
                 <Modal.Icon>
@@ -217,23 +122,71 @@ export default function Details({ handleClose, user, ...props }: DetailsProps) {
                       : "---"
                   }
                 />
-                <InfoItem label="Grupo" value={group?.nome || ""} />
+                <InfoItem label="Grupo" value={user.nome_grupo || ""} />
               </div>
             </Modal.Body>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
 
-      <DeleteUser
-        isOpen={isDeleteOpen}
-        onOpenChange={setIsDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
-      />
-      <ToggleUserStatus
-        isOpen={isToggleOpen}
-        onOpenChange={setIsToggleOpen}
-        onClose={() => setIsToggleOpen(false)}
-      />
+      <AlertDialog isOpen={isDeleteOpen}>
+        <AlertDialog.Backdrop>
+          <AlertDialog.Container>
+            <AlertDialog.Dialog>
+              <AlertDialog.CloseTrigger
+                onPress={() => setIsDeleteOpen(false)}
+              />
+              <AlertDialog.Header>
+                <AlertDialog.Icon status="danger" />
+                <AlertDialog.Heading>Excluir usuário</AlertDialog.Heading>
+              </AlertDialog.Header>
+              <AlertDialog.Body>
+                Tem certeza que deseja remover esse usuário?,{" "}
+                <strong>esta ação é irreversível</strong>.
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button variant="danger-soft" onPress={handleDelete}>
+                  Remover
+                </Button>
+              </AlertDialog.Footer>
+            </AlertDialog.Dialog>
+          </AlertDialog.Container>
+        </AlertDialog.Backdrop>
+      </AlertDialog>
+
+      <AlertDialog isOpen={isToggleOpen}>
+        <AlertDialog.Backdrop>
+          <AlertDialog.Container>
+            <AlertDialog.Dialog>
+              <AlertDialog.CloseTrigger
+                onPress={() => setIsToggleOpen(false)}
+              />
+              <AlertDialog.Header>
+                <AlertDialog.Icon status={user.ativo ? "warning" : "success"} />
+                <AlertDialog.Heading>
+                  {user.ativo ? "Inativar" : "Reativar"} usuário
+                </AlertDialog.Heading>
+              </AlertDialog.Header>
+              <AlertDialog.Body>
+                Tem certeza que deseja {user.ativo ? "inativar" : "reativar"}{" "}
+                esse usuário?
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button
+                  className={clsx(
+                    user.ativo
+                      ? "bg-warning-soft text-warning-soft-foreground hover:bg-warning-soft-hover"
+                      : "bg-success-soft text-success-soft-foreground hover:bg-success-soft-hover",
+                  )}
+                  onPress={handleToggle}
+                >
+                  {user.ativo ? "Inativar" : "Reativar"}
+                </Button>
+              </AlertDialog.Footer>
+            </AlertDialog.Dialog>
+          </AlertDialog.Container>
+        </AlertDialog.Backdrop>
+      </AlertDialog>
     </Modal>
   );
 }
