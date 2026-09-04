@@ -1,12 +1,12 @@
+import { useState } from "react";
+import { clsx } from "clsx";
 import { FaUser } from "react-icons/fa6";
 import { Button, Modal, ModalProps, AlertDialog, toast } from "@heroui/react";
 import InfoItem from "@/components/InfoItem";
 import { UserOutType } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
 import { useAuthStore } from "@/stores/auth.store";
-import { useState } from "react";
 import UserService from "@/services/User.service";
-import { clsx } from "clsx";
 
 export interface DetailsProps extends Omit<ModalProps, "children"> {
   onClose: () => void;

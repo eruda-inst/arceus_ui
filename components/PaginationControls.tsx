@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid";
 import { Card, Label, ListBox, Pagination, Select } from "@heroui/react";
-import { itemsPerPageValues } from "@/hooks/usePagination.hook";
 import clsx from "clsx";
+import { itemsPerPageValues } from "@/hooks/usePagination.hook";
 
-interface PaginationControlsProps {
+export interface PaginationControlsProps {
   page: number;
   totalPages: number;
   totalItems: number;

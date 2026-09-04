@@ -1,15 +1,16 @@
+import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { redirect } from "next/navigation";
 import axios, {
   AxiosInstance,
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
-import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { API_ROUTES } from "@/configs/api.config";
-import { redirect } from "next/navigation";
-
-const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-const TOKEN_EXPIRY_KEY = "token_expiry";
+import {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  TOKEN_EXPIRY_KEY,
+} from "@/stores/auth.store";
 
 interface RefreshTokenResponse {
   access_token: string;

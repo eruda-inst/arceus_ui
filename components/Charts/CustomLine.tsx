@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, Skeleton } from "@heroui/react";
 import {
   CartesianGrid,
@@ -9,7 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-interface CustomLineProps {
+export interface CustomLineProps {
   data?: Record<string, number | string | boolean>[];
   label: string;
   name?: string;
@@ -22,7 +24,7 @@ interface CustomLineProps {
   hideXAxis?: boolean;
 }
 
-function CustomLine({
+export default function CustomLine({
   data = [],
   label,
   name = "Total de requisições",
@@ -98,5 +100,3 @@ function CustomLine({
     </>
   );
 }
-
-export default CustomLine;

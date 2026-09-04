@@ -1,19 +1,19 @@
 import { Card, Skeleton } from "@heroui/react";
 
-interface MetricItem {
+export interface MetricItem {
   label: string;
   value: { hoje: number; sempre: number };
   format?: (v: number) => string;
 }
 
-interface MetricCardProps {
+export interface MetricCardProps {
   title: string;
   description: string;
   metrics: MetricItem[];
   isLoading?: boolean;
 }
 
-export function MetricCard({
+export default function MetricCard({
   title,
   description,
   metrics,

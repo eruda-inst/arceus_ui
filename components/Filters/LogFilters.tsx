@@ -29,7 +29,7 @@ import {
 } from "react-icons/fa6";
 import { LogFilterInType } from "@/types/log.type";
 
-const Departments = [
+export const Departments = [
   "Suporte",
   "Financeiro",
   "Comercial",

@@ -9,7 +9,7 @@ import {
 import type { UserOutType } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
 
-interface UserTableProps {
+export interface UserTableProps {
   users?: UserOutType[];
   isLoading: boolean;
   onRowClick: (user: UserOutType) => void;

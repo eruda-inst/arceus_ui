@@ -10,9 +10,9 @@ import LogTable from "@/components/Tables/LogTable";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
 import useFilter from "@/hooks/useFilter.hook";
+import usePagination from "@/hooks/usePagination.hook";
 import { LogFilterInType, LogOutType } from "@/types/log.type";
 import { API_ROUTES } from "@/configs/api.config";
-import usePagination from "@/hooks/usePagination.hook";
 
 export default function Logs() {
   const { isConnected, lastMessage, isConnecting, sendMessage } =

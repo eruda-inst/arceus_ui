@@ -5,8 +5,8 @@ import { PermOutSchema } from "@/schemas/perm.schema";
 
 export default class PermService {
   static async getByUserId(userId: number): Promise<PermOutType[]> {
-    const response = await axiosClient.get(API_ROUTES.perm.getByUserId(userId));
-    const data = response.data;
+    const res = await axiosClient.get(API_ROUTES.perm.getByUserId(userId));
+    const data = res.data;
     const perms = data.data;
     PermOutSchema.array().parse(perms);
     return perms;

@@ -9,7 +9,7 @@ import {
 import { LogOutType } from "@/types/log.type";
 import Formatter from "@/helpers/Formatter.helper";
 
-interface LogTableProps {
+export interface LogTableProps {
   logs?: LogOutType[];
   isLoading: boolean;
   onRowClick: (user: LogOutType) => void;

@@ -1,12 +1,12 @@
 "use client";
 
-import { Toast } from "@heroui/react";
 import { ReactNode, useEffect } from "react";
+import { Toast } from "@heroui/react";
+import { ThemeProvider } from "next-themes";
 import { useAuthStore } from "@/stores/auth.store";
 import useTokenRefresh from "@/hooks/useTokenRefresh.hook";
-import { ThemeProvider } from "next-themes";
 
-function Providers({ children }: { children: ReactNode }) {
+export default function Providers({ children }: { children: ReactNode }) {
   const initAuth = useAuthStore((state) => state.init);
   const accessToken = useAuthStore((state) => state.accessToken);
 
@@ -29,5 +29,3 @@ function Providers({ children }: { children: ReactNode }) {
     </ThemeProvider>
   );
 }
-
-export default Providers;

@@ -1,7 +1,9 @@
+"use client";
+
 import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, Skeleton } from "@heroui/react";
 
-interface ChartBarProps {
+export interface ChartBarProps {
   data?: Record<string, number | string | boolean>[];
   label: string;
   name?: string;
@@ -16,7 +18,7 @@ interface ChartBarProps {
   layout?: "vertical" | "horizontal";
 }
 
-function VerticalBarChart({
+export default function VerticalBarChart({
   data = [],
   label,
   name = "Total de requisições",
@@ -110,5 +112,3 @@ function VerticalBarChart({
     </>
   );
 }
-
-export default VerticalBarChart;

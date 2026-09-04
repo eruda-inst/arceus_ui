@@ -11,7 +11,7 @@ if (BASE_WS_API_URL?.endsWith("/")) {
 
 const API_ENDPOINT_BASES = {
   // HTTPS
-  authentication: `${BASE_API_URL}/api/v1/autenticacao`,
+  auth: `${BASE_API_URL}/api/v1/autenticacao`,
   group: `${BASE_API_URL}/api/v1/grupos`,
   perm: `${BASE_API_URL}/api/v1/permissoes`,
   ixc_user: `${BASE_API_URL}/api/v1/usuarios-ixc`,
@@ -25,10 +25,10 @@ const API_ENDPOINT_BASES = {
 
 const API_ROUTES = {
   // HTTPS
-  authentication: {
-    login: () => `${API_ENDPOINT_BASES.authentication}/login`,
-    refreshToken: () => `${API_ENDPOINT_BASES.authentication}/refresh-token`,
-    getMe: () => `${API_ENDPOINT_BASES.authentication}/me`,
+  auth: {
+    login: () => `${API_ENDPOINT_BASES.auth}/login`,
+    refreshToken: () => `${API_ENDPOINT_BASES.auth}/refresh-token`,
+    getMe: () => `${API_ENDPOINT_BASES.auth}/me`,
   },
   group: {
     getById: (id: number) => `${API_ENDPOINT_BASES.group}/id/${id}`,

@@ -8,7 +8,7 @@ export interface ActiveLogFiltersProp {
   onRemoveFilters: (filter: keyof LogFilterInType) => void;
 }
 
-function ActiveLogFilters({
+export default function ActiveLogFilters({
   filters,
   onResetFilters,
   onRemoveFilters,
@@ -77,5 +77,3 @@ function ActiveLogFilters({
     </Card>
   );
 }
-
-export default ActiveLogFilters;

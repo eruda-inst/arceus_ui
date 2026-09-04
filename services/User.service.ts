@@ -5,8 +5,8 @@ import { UserOutSchema } from "@/schemas/user.schema";
 
 export default class UserService {
   static async create(data: UserInType): Promise<UserOutType | undefined> {
-    const response = await axiosClient.post(API_ROUTES.user.create(), data);
-    const user = response.data;
+    const res = await axiosClient.post(API_ROUTES.user.create(), data);
+    const user = res.data;
     UserOutSchema.parse(user);
     return user;
   }
@@ -16,10 +16,8 @@ export default class UserService {
   }
 
   static async toggleStatus(id: number): Promise<UserOutType | undefined> {
-    const response = await axiosClient.patch(
-      API_ROUTES.user.toggleStatusById(id),
-    );
-    const user = response.data;
+    const res = await axiosClient.patch(API_ROUTES.user.toggleStatusById(id));
+    const user = res.data;
     UserOutSchema.parse(user);
     return user;
   }
@@ -28,11 +26,11 @@ export default class UserService {
     id: number,
     nova_senha: string,
   ): Promise<UserOutType | undefined> {
-    const response = await axiosClient.patch(
+    const res = await axiosClient.patch(
       API_ROUTES.user.updatePasswordById(id),
       { nova_senha },
     );
-    const user = response.data;
+    const user = res.data;
     UserOutSchema.parse(user);
     return user;
   }

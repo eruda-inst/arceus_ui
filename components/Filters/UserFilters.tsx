@@ -21,7 +21,7 @@ export interface UserFiltersProps {
   onResetFilters: () => void;
 }
 
-function UserFilters({
+export default function UserFilters({
   filters,
   onSetFilters,
   onResetFilters,
@@ -200,5 +200,3 @@ function UserFilters({
     </Card>
   );
 }
-
-export default UserFilters;

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { fontInter } from "@/configs/font.config";
 import Providers from "@/app/providers";
+import { fontInter } from "@/configs/font.config";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {

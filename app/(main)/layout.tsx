@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import Sidebar from "@/components/Sidebar";
 import { CURRENT_VERSION } from "@/configs/misc.config";
 
-export const metadata: Metadata = {
-  title: "Arceus · Início",
-};
+export const metadata: Metadata = { title: "Arceus · Início" };
 
 export default function MainLayout({
   children,

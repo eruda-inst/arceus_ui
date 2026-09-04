@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import AuthenticationService from "@/services/Auth.service";
+import AuthService from "@/services/Auth.service";
 import PermService from "@/services/Perm.service";
 import { PermOutType } from "./types/perm.type";
 
@@ -61,7 +61,7 @@ export default async function proxy(request: NextRequest) {
   // 3. Check permissions for protected routes when user has token
   if (hasToken && !isPublicRoute) {
     try {
-      const currentUser = await AuthenticationService.getMe(accessToken);
+      const currentUser = await AuthService.getMe(accessToken);
       const perms = await PermService.getByUserId(currentUser.id);
 
       // Check if the current route requires a specific permission

@@ -1,14 +1,16 @@
-import { create } from "zustand";
+import { redirect } from "next/navigation";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { create } from "zustand";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
+import PermService from "@/services/Perm.service";
 import { UserOutType } from "@/types/user.type";
 import { PermOutType } from "@/types/perm.type";
-import PermService from "@/services/Perm.service";
-import { redirect } from "next/navigation";
 
 export const ACCESS_TOKEN_KEY = "access_token";
+
 export const REFRESH_TOKEN_KEY = "refresh_token";
+
 export const TOKEN_EXPIRY_KEY = "token_expiry";
 
 export interface AuthState {

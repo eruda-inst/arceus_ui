@@ -1,6 +1,12 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Key } from "react-aria";
+import { useTheme } from "next-themes";
+import z from "zod";
+import clsx from "clsx";
 import {
   FaArrowRight,
   FaClipboardList,
@@ -13,8 +19,6 @@ import {
   FaUser,
   FaUsers,
 } from "react-icons/fa6";
-import { usePathname, useRouter } from "next/navigation";
-import logo from "@/public/logo.svg";
 import {
   Avatar,
   Button,
@@ -29,29 +33,25 @@ import {
   TextField,
   toast,
 } from "@heroui/react";
+import InfoItem from "@/components/InfoItem";
 import { useAuthStore } from "@/stores/auth.store";
 import Misc from "@/helpers/Misc.helper";
-import z from "zod";
-import { useMemo, useState } from "react";
 import { UserOutType } from "@/types/user.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
-import InfoItem from "@/components/InfoItem";
-import { useTheme } from "next-themes";
-import { Key } from "react-aria";
-import clsx from "clsx";
+import logo from "@/public/logo.svg";
 
-const FormSchema = z.object({
+export const FormSchema = z.object({
   senha: z.string().min(8).nullable(),
   confirmarSenha: z.string().min(8).nullable(),
 });
 
-const EmptyForm = z.object({
+export const EmptyForm = z.object({
   senha: z.literal(""),
   confirmarSenha: z.literal(""),
 });
 
-type FormType = z.infer<typeof FormSchema>;
+export type FormType = z.infer<typeof FormSchema>;
 
 export default function Sidebar() {
   const router = useRouter();

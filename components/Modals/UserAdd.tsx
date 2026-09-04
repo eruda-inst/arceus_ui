@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -25,21 +26,20 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa6";
+import z from "zod";
 import { IXCUserOutType } from "@/types/ixcUser.type";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { GroupOutType } from "@/types/group.type";
+import { UserOutType } from "@/types/user.type";
 import IxcUserService from "@/services/IxcUser.service";
 import UserService from "@/services/User.service";
 import GroupService from "@/services/Group.service";
-import { GroupOutType } from "@/types/group.type";
-import z from "zod";
-import { UserOutType } from "@/types/user.type";
 
-interface AddProps extends Omit<ModalProps, "children"> {
+export interface AddProps extends Omit<ModalProps, "children"> {
   addedUsers: UserOutType[];
   handleClose: () => void;
 }
 
-const FormSchema = z.object({
+export const FormSchema = z.object({
   senha: z.string().min(8),
   id_grupo: z.number().positive(),
   email: z.email(),
@@ -48,7 +48,7 @@ const FormSchema = z.object({
   confirmarSenha: z.string().min(8),
 });
 
-type formType = z.infer<typeof FormSchema>;
+export type formType = z.infer<typeof FormSchema>;
 
 export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
   const getAllIxcUsers = IxcUserService.getAll;

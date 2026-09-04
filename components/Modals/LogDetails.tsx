@@ -1,18 +1,18 @@
 import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
-import { LogOutType } from "@/types/log.type";
 import InfoItem from "@/components/InfoItem";
 import {
   a11yDark,
   coldarkDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { LogOutType } from "@/types/log.type";
 
-interface DetailsProps extends Omit<ModalProps, "children"> {
+export interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;
   log: LogOutType;
 }
 
-function Details({ handleClose, log, ...props }: DetailsProps) {
+export default function Details({ handleClose, log, ...props }: DetailsProps) {
   return (
     <Modal {...props}>
       <Modal.Backdrop variant="blur">
@@ -97,5 +97,3 @@ function Details({ handleClose, log, ...props }: DetailsProps) {
     </Modal>
   );
 }
-
-export default Details;

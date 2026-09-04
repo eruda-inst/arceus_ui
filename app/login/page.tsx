@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Label,
   TextField,
@@ -10,8 +12,6 @@ import {
   FieldError,
   toast,
 } from "@heroui/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import {
   FaUser,
@@ -31,7 +31,7 @@ import logo from "@/public/logo.svg";
 
 export default function Login() {
   const router = useRouter();
-  const { setTokens } = useAuthStore();
+  const setTokens = useAuthStore((state) => state.setTokens);
   const [login, setLogin] = useState<LoginInType>({ email: "", senha: "" });
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,10 +51,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        API_ROUTES.authentication.login(),
-        login,
-      );
+      const response = await axios.post(API_ROUTES.auth.login(), login);
       const data = response.data;
 
       const { access_token, refresh_token } = data;

@@ -12,8 +12,8 @@ export default class IxcUserService {
       email?: string;
     } = {},
   ): Promise<IXCUserListOutType | undefined> {
-    const response = await axiosClient.get(API_ROUTES.ixc_user.getAll(filters));
-    const data = response.data;
+    const res = await axiosClient.get(API_ROUTES.ixc_user.getAll(filters));
+    const data = res.data;
     IXCUserListOutSchema.safeParse(data);
     return data;
   }

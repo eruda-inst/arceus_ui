@@ -1,12 +1,12 @@
 "use client";
 
-import useMetricWebSocket from "@/hooks/useMetricWebSocket.hook";
 import { Typography } from "@heroui/react";
 import CustomBar from "@/components/Charts/CustomBar";
 import CustomLine from "@/components/Charts/CustomLine";
-import { MetricCard } from "@/components/MetricCard";
-import { API_ROUTES } from "@/configs/api.config";
+import MetricCard from "@/components/MetricCard";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
+import useMetricWebSocket from "@/hooks/useMetricWebSocket.hook";
+import { API_ROUTES } from "@/configs/api.config";
 
 export default function Metrics() {
   const { isConnected, isConnecting, lastMessage } = useMetricWebSocket({
