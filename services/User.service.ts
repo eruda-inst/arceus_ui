@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { UserOutType, UserInType } from "@/types/user.type";

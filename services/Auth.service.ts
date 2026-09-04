@@ -4,18 +4,14 @@ import { UserOutType } from "@/types/user.type";
 
 export default class AuthenticationService {
   static async getMe(accessToken: string) {
-    try {
-      const response = await axiosClient.get<UserOutType>(
-        API_ROUTES.authentication.getMe(),
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+    const response = await axiosClient.get<UserOutType>(
+      API_ROUTES.authentication.getMe(),
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
-      return response.data;
-    } catch (error: unknown) {
-      throw error;
-    }
+      },
+    );
+    return response.data;
   }
 }
