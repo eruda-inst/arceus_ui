@@ -102,7 +102,7 @@ const createAxiosClient = (
           }
 
           const response = await axios.post<RefreshTokenResponse>(
-            API_ROUTES.authentication.refreshToken(),
+            API_ROUTES.auth.refreshToken(),
             { refresh_token: refreshToken },
             {
               baseURL:

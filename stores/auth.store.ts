@@ -111,7 +111,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loadingUser: true, userError: null });
     try {
       const response = await axiosClient.get<UserOutType>(
-        API_ROUTES.authentication.getMe(),
+        API_ROUTES.auth.getMe(),
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -155,7 +155,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         refresh_token: string;
         expires_in: number;
       }>(
-        API_ROUTES.authentication.refreshToken(),
+        API_ROUTES.auth.refreshToken(),
         { refresh_token: refresh },
         {
           headers: { "Content-Type": "application/json" },
