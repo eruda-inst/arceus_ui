@@ -68,6 +68,7 @@ export default function Sidebar() {
   );
 
   const currentUser = useAuthStore((state) => state.currentUser);
+  const perms = useAuthStore((state) => state.perms);
   const loadingUser = useAuthStore((state) => state.loadingUser);
   const logout = useAuthStore((state) => state.logout);
   const fetchCurrentUser = useAuthStore((state) => state.fetchCurrentUser);
@@ -143,7 +144,7 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2">
-          {currentUser ? (
+          {perms ? (
             <Button
               isDisabled={!hasPerm("ver:metricas")}
               className={clsx(
@@ -158,7 +159,7 @@ export default function Sidebar() {
             <Skeleton className="w-full h-12 rounded-3xl" />
           )}
 
-          {currentUser ? (
+          {perms ? (
             <Button
               isDisabled={!hasPerm("ver:logs")}
               onPress={() => router.push("/registros")}
@@ -175,7 +176,7 @@ export default function Sidebar() {
             <Skeleton className="w-full h-12 rounded-3xl" />
           )}
 
-          {currentUser ? (
+          {perms ? (
             <Button
               isDisabled={!hasPerm("ver:usuarios")}
               onPress={() => router.push("/usuarios")}
