@@ -1,17 +1,17 @@
 import z from "zod";
 import {
-  UserFilterInTypeSchema,
+  UserFilterInSchema,
   UserInSchema,
   UserOutSchema,
-  UserPaginationOutSchema,
+  UserListOutSchema,
   UserParamsInSchema,
 } from "@/schemas/user.schema";
 
-type UserFilterInType = z.infer<typeof UserFilterInTypeSchema>;
+type UserFilterInType = z.infer<typeof UserFilterInSchema>;
 
 type UserInType = z.infer<typeof UserInSchema>;
 
-type UserListOutType = z.infer<typeof UserPaginationOutSchema>;
+type UserListOutType = z.infer<typeof UserListOutSchema>;
 
 type UserOutType = z.infer<typeof UserOutSchema>;
 

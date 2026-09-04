@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { IXCUserListOutType } from "@/types/ixcUser.type";
-import { IXCUserPaginationOutSchema } from "@/schemas/ixcUser.schema";
+import { IXCUserListOutSchema } from "@/schemas/ixcUser.schema";
 
 export default class IxcUserService {
   static async getAll(
@@ -18,7 +18,7 @@ export default class IxcUserService {
         API_ROUTES.ixc_user.getAll(filters),
       );
       const data = response.data;
-      IXCUserPaginationOutSchema.safeParse(data);
+      IXCUserListOutSchema.safeParse(data);
       return data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {

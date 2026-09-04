@@ -72,6 +72,7 @@ const LogParamsInSchema = z.object({
 });
 
 export {
+  Departments,
   LogFilterInSchema,
   LogOutSchema,
   LogPaginationOutSchema,

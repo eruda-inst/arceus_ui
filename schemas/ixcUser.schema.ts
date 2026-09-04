@@ -8,7 +8,7 @@ const IXCUserOutSchema = z.object({
   tipo_acesso: z.enum(["Ambos", "Web", "Mobile"]).optional().default("Ambos"),
 });
 
-const IXCUserPaginationOutSchema = z.object({
+const IXCUserListOutSchema = z.object({
   data: z.array(IXCUserOutSchema),
   meta: z.object({
     pagina_atual: z.number().positive(),
@@ -18,4 +18,4 @@ const IXCUserPaginationOutSchema = z.object({
   }),
 });
 
-export { IXCUserOutSchema, IXCUserPaginationOutSchema };
+export { IXCUserListOutSchema, IXCUserOutSchema };
