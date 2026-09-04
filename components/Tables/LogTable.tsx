@@ -6,13 +6,13 @@ import {
   FaCalendar,
   FaClock,
 } from "react-icons/fa6";
-import { LogOut } from "@/types/log.type";
+import { LogOutType } from "@/types/log.type";
 import Formatter from "@/helpers/Formatter.helper";
 
 interface LogTableProps {
-  logs?: LogOut[];
+  logs?: LogOutType[];
   isLoading: boolean;
-  onRowClick: (user: LogOut) => void;
+  onRowClick: (user: LogOutType) => void;
 }
 
 export default function LogTable({

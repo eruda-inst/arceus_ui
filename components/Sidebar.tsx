@@ -33,7 +33,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import Misc from "@/helpers/Misc.helper";
 import z from "zod";
 import { useEffect, useState } from "react";
-import { UserOut } from "@/types/user.type";
+import { UserOutType } from "@/types/user.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import InfoItem from "@/components/InfoItem";
@@ -104,7 +104,7 @@ export default function Sidebar() {
     setIsSaving(true);
 
     try {
-      await axiosClient.patch<UserOut>(
+      await axiosClient.patch<UserOutType>(
         API_ROUTES.user.updatePasswordById(currentUser.id),
         { nova_senha: form.senha },
       );

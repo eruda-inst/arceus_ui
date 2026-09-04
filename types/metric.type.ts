@@ -14,40 +14,53 @@ import {
 } from "@/schemas/metric.schema";
 import type z from "zod";
 
-type ErrorStats = z.infer<typeof ErrorStatsSchema>;
-type SuccessStats = z.infer<typeof SuccessStatsSchema>;
-interface TodayAlwaysOut<T> {
+type ErrorStatsType = z.infer<typeof ErrorStatsSchema>;
+
+type SuccessStatsType = z.infer<typeof SuccessStatsSchema>;
+
+interface TodayAlwaysOutType<T> {
   hoje: T;
   sempre: T;
 }
-type TopClient = z.infer<typeof TopClientSchema>;
-type TopDepartment = z.infer<typeof TopDepartmentSchema>;
-type TopEndpoint = z.infer<typeof TopEndpointSchema>;
-type TopHour = z.infer<typeof TopHourSchema>;
-interface TopHourFormatted {
+
+type TopClientType = z.infer<typeof TopClientSchema>;
+
+type TopDepartmentType = z.infer<typeof TopDepartmentSchema>;
+
+type TopEndpointType = z.infer<typeof TopEndpointSchema>;
+
+type TopHourType = z.infer<typeof TopHourSchema>;
+
+interface TopHourFormattedType {
   hora: string;
   total_requisicoes: number;
 }
-type TopHttpMethod = z.infer<typeof TopHttpMethodSchema>;
-type TopMonthDay = z.infer<typeof TopMonthDaySchema>;
-type TopSlowestEndpoint = z.infer<typeof TopSlowestEndpointSchema>;
-type TopStatusCode = z.infer<typeof TopStatusCodeSchema>;
-type TopWeekday = z.infer<typeof TopWeekdaySchema>;
-type TopWorstEndpoint = z.infer<typeof TopWorstEndpointSchema>;
+
+type TopHttpMethodType = z.infer<typeof TopHttpMethodSchema>;
+
+type TopMonthDayType = z.infer<typeof TopMonthDaySchema>;
+
+type TopSlowestEndpointType = z.infer<typeof TopSlowestEndpointSchema>;
+
+type TopStatusCodeType = z.infer<typeof TopStatusCodeSchema>;
+
+type TopWeekdayType = z.infer<typeof TopWeekdaySchema>;
+
+type TopWorstEndpointType = z.infer<typeof TopWorstEndpointSchema>;
 
 export type {
-  ErrorStats,
-  SuccessStats,
-  TodayAlwaysOut,
-  TopClient,
-  TopDepartment,
-  TopEndpoint,
-  TopHour,
-  TopHourFormatted,
-  TopHttpMethod,
-  TopMonthDay,
-  TopSlowestEndpoint,
-  TopStatusCode,
-  TopWeekday,
-  TopWorstEndpoint,
+  ErrorStatsType,
+  SuccessStatsType,
+  TodayAlwaysOutType,
+  TopClientType,
+  TopDepartmentType,
+  TopEndpointType,
+  TopHourType,
+  TopHourFormattedType,
+  TopHttpMethodType,
+  TopMonthDayType,
+  TopSlowestEndpointType,
+  TopStatusCodeType,
+  TopWeekdayType,
+  TopWorstEndpointType,
 };

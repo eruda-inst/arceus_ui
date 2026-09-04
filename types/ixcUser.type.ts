@@ -4,7 +4,8 @@ import {
   IXCUserPaginationOutSchema,
 } from "@/schemas/ixcUser.schema";
 
-type IXCUserOut = z.infer<typeof IXCUserOutSchema>;
-type IXCUserPaginationOut = z.infer<typeof IXCUserPaginationOutSchema>;
+type IXCUserListOutType = z.infer<typeof IXCUserPaginationOutSchema>;
 
-export type { IXCUserOut, IXCUserPaginationOut };
+type IXCUserOutType = z.infer<typeof IXCUserOutSchema>;
+
+export type { IXCUserListOutType, IXCUserOutType };

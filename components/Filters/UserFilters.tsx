@@ -13,11 +13,11 @@ import {
   ListBox,
 } from "@heroui/react";
 import { FaFilter, FaUser, FaEnvelope, FaUsers } from "react-icons/fa6";
-import type { UserFilterIn } from "@/types/user.type";
+import type { UserFilterInType } from "@/types/user.type";
 
 export interface UserFiltersProps {
-  filters: UserFilterIn;
-  onSetFilters: (filters: UserFilterIn) => void;
+  filters: UserFilterInType;
+  onSetFilters: (filters: UserFilterInType) => void;
   onResetFilters: () => void;
 }
 
@@ -26,10 +26,13 @@ function UserFilters({
   onSetFilters,
   onResetFilters,
 }: UserFiltersProps) {
-  const [localFilters, setLocalFilters] = useState<UserFilterIn>(filters);
+  const [localFilters, setLocalFilters] = useState<UserFilterInType>(filters);
   const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
-  const handleChange = (key: keyof UserFilterIn, value?: string | boolean) => {
+  const handleChange = (
+    key: keyof UserFilterInType,
+    value?: string | boolean,
+  ) => {
     const cleanValue =
       typeof value === "string"
         ? value.trim() === ""

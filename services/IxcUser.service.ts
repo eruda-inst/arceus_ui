@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
 import { axiosClient } from "@/libs/axiosClient.lib";
-import { IXCUserPaginationOut } from "@/types/ixcUser.type";
+import { IXCUserListOutType } from "@/types/ixcUser.type";
 import { IXCUserPaginationOutSchema } from "@/schemas/ixcUser.schema";
 
 export default class IxcUserService {
@@ -12,7 +12,7 @@ export default class IxcUserService {
       name?: string;
       email?: string;
     } = {},
-  ): Promise<IXCUserPaginationOut | undefined> {
+  ): Promise<IXCUserListOutType | undefined> {
     try {
       const response = await axiosClient.get(
         API_ROUTES.ixc_user.getAll(filters),

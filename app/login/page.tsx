@@ -23,7 +23,7 @@ import {
 import axios from "axios";
 import { CURRENT_VERSION } from "@/configs/misc.config";
 import { API_ROUTES } from "@/configs/api.config";
-import { LoginIn } from "@/types/login.type";
+import { LoginInType } from "@/types/login.type";
 import { LoginInSchema } from "@/schemas/login.schema";
 import { useAuthStore } from "@/stores/auth.store";
 import Validator from "@/helpers/Validator.helper";
@@ -32,12 +32,12 @@ import logo from "@/public/logo.svg";
 export default function Login() {
   const router = useRouter();
   const { setTokens } = useAuthStore();
-  const [login, setLogin] = useState<LoginIn>({ email: "", senha: "" });
+  const [login, setLogin] = useState<LoginInType>({ email: "", senha: "" });
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(true);
 
-  const handleChange = (key: keyof LoginIn, value: string) => {
+  const handleChange = (key: keyof LoginInType, value: string) => {
     setLogin((previous) => ({ ...previous, [key]: value }));
   };
 

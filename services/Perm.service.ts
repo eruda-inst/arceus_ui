@@ -1,11 +1,11 @@
 import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
-import { PermOut } from "@/types/perm.type";
+import { PermOutType } from "@/types/perm.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { PermOutSchema } from "@/schemas/perm.schema";
 
 export default class PermService {
-  static async getByUserId(userId: number): Promise<PermOut[]> {
+  static async getByUserId(userId: number): Promise<PermOutType[]> {
     try {
       const response = await axiosClient.get(
         API_ROUTES.perm.getByUserId(userId),

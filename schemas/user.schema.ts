@@ -1,6 +1,6 @@
 import z from "zod";
 
-const UserFilterInSchema = z.object({
+const UserFilterInTypeSchema = z.object({
   nome: z.string().optional(),
   email: z.string().optional(),
   ativo: z.boolean().optional(),
@@ -36,9 +36,20 @@ const UserPaginationOutSchema = z.object({
   }),
 });
 
+const UserParamsInSchema = z.object({
+  pagina: z.int().min(1).default(1).optional(),
+  itens_por_pagina: z.int().min(1).max(100).default(10).optional(),
+
+  nome: z.string().optional(),
+  email: z.string().optional(),
+  ativo: z.boolean().optional(),
+  nome_grupo: z.string().optional(),
+});
+
 export {
-  UserFilterInSchema,
+  UserFilterInTypeSchema,
   UserInSchema,
   UserOutSchema,
   UserPaginationOutSchema,
+  UserParamsInSchema,
 };

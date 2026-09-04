@@ -1,5 +1,14 @@
 import z from "zod";
-import { Departments } from "@/types/department.type";
+
+enum Departments {
+  Support = "Suporte",
+  Commercial = "Comercial",
+  Finance = "Financeiro",
+  Screening = "Triagem",
+  Collection = "Cobrança",
+  Upgrade = "Upgrade",
+  Village = "Vila",
+}
 
 const LogFilterInSchema = z.object({
   metodo: z.enum(["GET", "POST", "PUT"]).optional(),
@@ -44,4 +53,27 @@ const LogPaginationOutSchema = z.object({
   }),
 });
 
-export { LogFilterInSchema, LogOutSchema, LogPaginationOutSchema };
+const LogParamsInSchema = z.object({
+  // Pagination
+  pagina: z.int().min(1).default(1).optional(),
+  itens_por_pagina: z.int().min(1).max(100).default(10).optional(),
+
+  // Filtering (all optional)
+  metodo: z.string().optional(),
+  endpoint: z.string().optional(),
+  codigo: z.number().positive().optional(),
+  data_inicio: z.string().optional(),
+  data_fim: z.string().optional(),
+  hora_inicio: z.string().optional(),
+  hora_fim: z.string().optional(),
+  protocolo: z.string().optional(),
+  setor: z.string().optional(),
+  nome_cliente: z.string().optional(),
+});
+
+export {
+  LogFilterInSchema,
+  LogOutSchema,
+  LogPaginationOutSchema,
+  LogParamsInSchema,
+};

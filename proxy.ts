@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import AuthenticationService from "@/services/Auth.service";
 import PermService from "@/services/Perm.service";
-import { PermOut } from "./types/perm.type";
+import { PermOutType } from "./types/perm.type";
 
 // Don't need authentication
 const publicRoutes = ["/login"];
@@ -69,7 +69,9 @@ export default async function proxy(request: NextRequest) {
 
       if (reqPerm) {
         // Check if user has the required permission
-        const hasPerm = perms.some((perm: PermOut) => perm.codigo === reqPerm);
+        const hasPerm = perms.some(
+          (perm: PermOutType) => perm.codigo === reqPerm,
+        );
 
         if (!hasPerm) {
           // → Redireciona para /login?error=unauthorized (sem loop!)

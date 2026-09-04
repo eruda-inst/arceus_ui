@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
-import { UserOut } from "@/types/user.type";
-import { PermOut } from "@/types/perm.type";
+import { UserOutType } from "@/types/user.type";
+import { PermOutType } from "@/types/perm.type";
 import PermService from "@/services/Perm.service";
 
 export const ACCESS_TOKEN_KEY = "access_token";
@@ -15,12 +15,12 @@ export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  currentUser: UserOut | null;
+  currentUser: UserOutType | null;
   loadingUser: boolean;
   userError: string | null;
 
   // Perms
-  perms: PermOut[];
+  perms: PermOutType[];
   loadingPerms: boolean;
   permError: string | null;
 
@@ -28,7 +28,7 @@ export interface AuthState {
   init: () => Promise<void>;
   setTokens: (access: string, refresh: string, expiresIn?: number) => void;
   clearTokens: () => void;
-  fetchCurrentUser: () => Promise<UserOut | null>;
+  fetchCurrentUser: () => Promise<UserOutType | null>;
   logout: () => Promise<void>;
   refreshTokens: () => Promise<boolean>;
 
@@ -107,7 +107,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     set({ loadingUser: true, userError: null });
     try {
-      const response = await axiosClient.get<UserOut>(
+      const response = await axiosClient.get<UserOutType>(
         API_ROUTES.authentication.getMe(),
         {
           headers: { Authorization: `Bearer ${token}` },

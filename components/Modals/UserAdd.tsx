@@ -25,17 +25,17 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa6";
-import { IXCUserOut } from "@/types/ixcUser.type";
+import { IXCUserOutType } from "@/types/ixcUser.type";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import IxcUserService from "@/services/IxcUser.service";
 import UserService from "@/services/User.service";
 import GroupService from "@/services/Group.service";
-import { GroupOut } from "@/types/group.type";
+import { GroupOutType } from "@/types/group.type";
 import z from "zod";
-import { UserOut } from "@/types/user.type";
+import { UserOutType } from "@/types/user.type";
 
 interface AddProps extends Omit<ModalProps, "children"> {
-  addedUsers: UserOut[];
+  addedUsers: UserOutType[];
   handleClose: () => void;
 }
 
@@ -68,14 +68,14 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
     () => new Set(addedUsers.map((u) => u.email)),
     [addedUsers],
   );
-  const [ixcUsers, setIxcUsers] = useState<IXCUserOut[]>([]);
-  const [selectedIxcUser, setSelectedIxcUser] = useState<IXCUserOut | null>(
+  const [ixcUsers, setIxcUsers] = useState<IXCUserOutType[]>([]);
+  const [selectedIxcUser, setSelectedIxcUser] = useState<IXCUserOutType | null>(
     null,
   );
 
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
   const [isAdding, setIsAdding] = useState<boolean>(false);
-  const [groups, setGroups] = useState<GroupOut[]>([]);
+  const [groups, setGroups] = useState<GroupOutType[]>([]);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
@@ -145,7 +145,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
     setIsValidForm(isValid);
   }, [form]);
 
-  const handleSelectIxcUser = (user: IXCUserOut) => {
+  const handleSelectIxcUser = (user: IXCUserOutType) => {
     setSelectedIxcUser(selectedIxcUser?.id === user.id ? null : user);
   };
 

@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa6";
 import { Button, Modal, ModalProps, AlertDialog, toast } from "@heroui/react";
 import InfoItem from "@/components/InfoItem";
-import { UserOut } from "@/types/user.type";
+import { UserOutType } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import { useState } from "react";
@@ -10,13 +10,13 @@ import { clsx } from "clsx";
 
 export interface DetailsProps extends Omit<ModalProps, "children"> {
   onClose: () => void;
-  user: UserOut;
+  user: UserOutType;
 }
 
 export default function Details({ onClose, user, ...props }: DetailsProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
-  const [localUser, setLocalUser] = useState<UserOut | null>(user);
+  const [localUser, setLocalUser] = useState<UserOutType | null>(user);
 
   const handleDelete = async () => {
     try {

@@ -6,13 +6,13 @@ import {
   FaCalendar,
   FaUsers,
 } from "react-icons/fa6";
-import type { UserOut } from "@/types/user.type";
+import type { UserOutType } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
 
 interface UserTableProps {
-  users?: UserOut[];
+  users?: UserOutType[];
   isLoading: boolean;
-  onRowClick: (user: UserOut) => void;
+  onRowClick: (user: UserOutType) => void;
 }
 
 export default function UserTable({

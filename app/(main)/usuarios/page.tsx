@@ -13,13 +13,13 @@ import { useAuthStore } from "@/stores/auth.store";
 import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
 import usePagination from "@/hooks/usePagination.hook";
 import useFilter from "@/hooks/useFilter.hook";
-import { UserFilterIn, UserOut } from "@/types/user.type";
+import { UserFilterInType, UserOutType } from "@/types/user.type";
 import { API_ROUTES } from "@/configs/api.config";
 
 export default function Users() {
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserOut | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserOutType | null>(null);
 
   // Auth
   const hasPerm = useAuthStore((state) => state.hasPerm);
@@ -46,9 +46,9 @@ export default function Users() {
 
   // Filters
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
-    useFilter<UserFilterIn>();
+    useFilter<UserFilterInType>();
 
-  const handleRowClick = (user: UserOut) => {
+  const handleRowClick = (user: UserOutType) => {
     setSelectedUser(user);
     setIsDetailsOpen(true);
   };

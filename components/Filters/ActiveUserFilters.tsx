@@ -1,11 +1,11 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import type { UserFilterIn } from "@/types/user.type";
+import type { UserFilterInType } from "@/types/user.type";
 
 export interface ActiveUserFiltersProp {
-  filters: UserFilterIn;
+  filters: UserFilterInType;
   onResetFilters: () => void;
-  onRemoveFilters: (filter: keyof UserFilterIn) => void;
+  onRemoveFilters: (filter: keyof UserFilterInType) => void;
 }
 
 export default function ActiveUserFilters({
@@ -14,7 +14,7 @@ export default function ActiveUserFilters({
   onRemoveFilters,
 }: ActiveUserFiltersProp) {
   const activeFilters: {
-    key: keyof UserFilterIn;
+    key: keyof UserFilterInType;
     label: string;
     value: string;
   }[] = [];
@@ -29,7 +29,7 @@ export default function ActiveUserFilters({
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
       activeFilters.push({
-        key: key as keyof UserFilterIn,
+        key: key as keyof UserFilterInType,
         label: labelMap[key] || key,
         value: String(value),
       });

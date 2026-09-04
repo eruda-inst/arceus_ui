@@ -1,11 +1,11 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
-import { LogFilterIn } from "@/types/log.type";
+import { LogFilterInType } from "@/types/log.type";
 
 export interface ActiveLogFiltersProp {
-  filters: LogFilterIn;
+  filters: LogFilterInType;
   onResetFilters: () => void;
-  onRemoveFilters: (filter: keyof LogFilterIn) => void;
+  onRemoveFilters: (filter: keyof LogFilterInType) => void;
 }
 
 function ActiveLogFilters({
@@ -14,7 +14,7 @@ function ActiveLogFilters({
   onRemoveFilters,
 }: ActiveLogFiltersProp) {
   const activeFilters: {
-    key: keyof LogFilterIn;
+    key: keyof LogFilterInType;
     label: string;
     value: string;
   }[] = [];
@@ -37,7 +37,7 @@ function ActiveLogFilters({
       };
 
       activeFilters.push({
-        key: key as keyof LogFilterIn,
+        key: key as keyof LogFilterInType,
         label: labelMap[key] || key,
         value: displayValue,
       });

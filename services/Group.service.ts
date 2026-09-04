@@ -1,11 +1,11 @@
 import axios from "axios";
 import { API_ROUTES } from "@/configs/api.config";
 import { axiosClient } from "@/libs/axiosClient.lib";
-import { GroupOut } from "@/types/group.type";
+import { GroupOutType } from "@/types/group.type";
 import { GroupOutSchema } from "@/schemas/group.schema";
 
 export default class GroupService {
-  static async getById(id: number): Promise<GroupOut | undefined> {
+  static async getById(id: number): Promise<GroupOutType | undefined> {
     try {
       const response = await axiosClient.get(API_ROUTES.group.getById(id), {
         withCredentials: false,
@@ -21,7 +21,7 @@ export default class GroupService {
     }
   }
 
-  static async getAll(): Promise<GroupOut[] | undefined> {
+  static async getAll(): Promise<GroupOutType[] | undefined> {
     try {
       const response = await axiosClient.get(API_ROUTES.group.getAll(), {
         withCredentials: false,

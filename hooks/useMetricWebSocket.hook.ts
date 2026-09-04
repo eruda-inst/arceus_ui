@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ErrorStats,
-  SuccessStats,
-  TodayAlwaysOut,
-  TopDepartment,
-  TopClient,
-  TopEndpoint,
-  TopHourFormatted,
-  TopHttpMethod,
-  TopMonthDay,
-  TopSlowestEndpoint,
-  TopStatusCode,
-  TopWeekday,
-  TopWorstEndpoint,
+  ErrorStatsType,
+  SuccessStatsType,
+  TodayAlwaysOutType,
+  TopDepartmentType,
+  TopClientType,
+  TopEndpointType,
+  TopHourFormattedType,
+  TopHttpMethodType,
+  TopMonthDayType,
+  TopSlowestEndpointType,
+  TopStatusCodeType,
+  TopWeekdayType,
+  TopWorstEndpointType,
 } from "@/types/metric.type";
 
 // Union type of all available metric names
@@ -34,23 +34,27 @@ export type MetricName =
   | "top_status_codes";
 
 // Type representing the structure of messages received from the server
-// Each key corresponds to a metric and contains its data wrapped in TodayAlwaysOut
+// Each key corresponds to a metric and contains its data wrapped in TodayAlwaysOutType
 export interface lastMessageType {
-  erros?: TodayAlwaysOut<ErrorStats>;
-  sucessos?: TodayAlwaysOut<SuccessStats>;
-  tempo_resposta?: TodayAlwaysOut<{ min: number; avg: number; max: number }>;
-  top_clientes?: TodayAlwaysOut<TopClient[]>;
-  total_atendimentos?: TodayAlwaysOut<number>;
-  total_requisicoes?: TodayAlwaysOut<number>;
-  top_dias_mes?: TodayAlwaysOut<TopMonthDay[]>;
-  top_dias_semana?: TodayAlwaysOut<TopWeekday[]>;
-  top_endpoints?: TodayAlwaysOut<TopEndpoint[]>;
-  top_endpoints_mais_lentos?: TodayAlwaysOut<TopSlowestEndpoint[]>;
-  top_horas?: TodayAlwaysOut<TopHourFormatted[]>;
-  top_metodos_http?: TodayAlwaysOut<TopHttpMethod[]>;
-  top_piores_endpoints?: TodayAlwaysOut<TopWorstEndpoint[]>;
-  top_setores?: TodayAlwaysOut<TopDepartment[]>;
-  top_status_codes?: TodayAlwaysOut<TopStatusCode[]>;
+  erros?: TodayAlwaysOutType<ErrorStatsType>;
+  sucessos?: TodayAlwaysOutType<SuccessStatsType>;
+  tempo_resposta?: TodayAlwaysOutType<{
+    min: number;
+    avg: number;
+    max: number;
+  }>;
+  top_clientes?: TodayAlwaysOutType<TopClientType[]>;
+  total_atendimentos?: TodayAlwaysOutType<number>;
+  total_requisicoes?: TodayAlwaysOutType<number>;
+  top_dias_mes?: TodayAlwaysOutType<TopMonthDayType[]>;
+  top_dias_semana?: TodayAlwaysOutType<TopWeekdayType[]>;
+  top_endpoints?: TodayAlwaysOutType<TopEndpointType[]>;
+  top_endpoints_mais_lentos?: TodayAlwaysOutType<TopSlowestEndpointType[]>;
+  top_horas?: TodayAlwaysOutType<TopHourFormattedType[]>;
+  top_metodos_http?: TodayAlwaysOutType<TopHttpMethodType[]>;
+  top_piores_endpoints?: TodayAlwaysOutType<TopWorstEndpointType[]>;
+  top_setores?: TodayAlwaysOutType<TopDepartmentType[]>;
+  top_status_codes?: TodayAlwaysOutType<TopStatusCodeType[]>;
 }
 
 // Props fot he metric WebSocket hook

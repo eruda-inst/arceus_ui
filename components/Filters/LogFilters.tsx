@@ -27,7 +27,7 @@ import {
   FaFileCode,
   FaUser,
 } from "react-icons/fa6";
-import { LogFilterIn } from "@/types/log.type";
+import { LogFilterInType } from "@/types/log.type";
 
 const Departments = [
   "Suporte",
@@ -40,8 +40,8 @@ const Departments = [
 ] as const;
 
 export interface LogFiltersProps {
-  filters: LogFilterIn;
-  onSetFilters: (filters: LogFilterIn) => void;
+  filters: LogFilterInType;
+  onSetFilters: (filters: LogFilterInType) => void;
   onResetFilters: () => void;
 }
 
@@ -50,11 +50,11 @@ export default function LogFilters({
   onSetFilters,
   onResetFilters,
 }: LogFiltersProps) {
-  const [localFilters, setLocalFilters] = useState<LogFilterIn>(filters);
+  const [localFilters, setLocalFilters] = useState<LogFilterInType>(filters);
   const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
 
   const handleChange = (
-    key: keyof LogFilterIn,
+    key: keyof LogFilterInType,
     value?: string | number | boolean | null,
   ) => {
     const cleanValue =

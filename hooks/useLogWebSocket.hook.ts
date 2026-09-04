@@ -1,41 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import z from "zod";
-import { LogPaginationOut } from "@/types/log.type";
-
-// Zod schema for validating and typing log query parameters
-export const LogParamsSchema = z.object({
-  // Pagination
-  pagina: z.int().min(1).default(1).optional(),
-  itens_por_pagina: z.int().min(1).max(100).default(10).optional(),
-
-  // Filtering (all optional)
-  metodo: z.string().optional(),
-  endpoint: z.string().optional(),
-  codigo: z.number().positive().optional(),
-  data_inicio: z.string().optional(),
-  data_fim: z.string().optional(),
-  hora_inicio: z.string().optional(),
-  hora_fim: z.string().optional(),
-  protocolo: z.string().optional(),
-  setor: z.string().optional(),
-  nome_cliente: z.string().optional(),
-});
-
-// Infer the TypeScript type from the Zod schema
-export type LogParamsType = z.infer<typeof LogParamsSchema>;
+import { LogParamsInSchema } from "@/schemas/log.schema";
+import { LogListOutType, LogParamsInType } from "@/types/log.type";
 
 // Props for the WebSocket hook
 export interface useLogWebSocketProps {
   url: string;
-  initialParams?: LogParamsType; // optional – defaults will be applied via Zod
+  initialParams?: LogParamsInType; // optional – defaults will be applied via Zod
 }
 
 // Return type of the hook
 export interface useLogWebSocketReturn {
   isConnected: boolean;
   isConnecting: boolean;
-  lastMessage: LogPaginationOut | null;
-  sendMessage: (params: LogParamsType) => void;
+  lastMessage: LogListOutType | null;
+  sendMessage: (params: LogParamsInType) => void;
 }
 
 /**
@@ -57,13 +35,13 @@ export default function useLogWebSocket({
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   // Last message received from the server
-  const [lastMessage, setLastMessage] = useState<LogPaginationOut | null>(null);
+  const [lastMessage, setLastMessage] = useState<LogListOutType | null>(null);
 
   /**
    * Send a message (query parameters) to the server if the WebSocket is open.
    * The payload format is { params: ... } to match the backend expectation.
    */
-  const sendMessage = useCallback((params: LogParamsType) => {
+  const sendMessage = useCallback((params: LogParamsInType) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(params));
     }
@@ -92,7 +70,7 @@ export default function useLogWebSocket({
     setIsConnected(false);
 
     // Apply Zod defaults even if initialParams is undefined or incomplete
-    const paramsToSend = LogParamsSchema.parse(initialParams ?? {});
+    const paramsToSend = LogParamsInSchema.parse(initialParams ?? {});
 
     // Create the WebSocket
     const ws = new WebSocket(url);

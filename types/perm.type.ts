@@ -1,6 +1,6 @@
 import z from "zod";
 import { PermOutSchema } from "@/schemas/perm.schema";
 
-type PermOut = z.infer<typeof PermOutSchema>;
+type PermOutType = z.infer<typeof PermOutSchema>;
 
-export type { PermOut };
+export type { PermOutType };

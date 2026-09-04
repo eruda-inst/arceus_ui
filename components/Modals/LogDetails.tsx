@@ -1,6 +1,6 @@
 import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
-import { LogOut } from "@/types/log.type";
+import { LogOutType } from "@/types/log.type";
 import InfoItem from "@/components/InfoItem";
 import {
   a11yDark,
@@ -9,7 +9,7 @@ import {
 
 interface DetailsProps extends Omit<ModalProps, "children"> {
   handleClose: () => void;
-  log: LogOut;
+  log: LogOutType;
 }
 
 function Details({ handleClose, log, ...props }: DetailsProps) {
