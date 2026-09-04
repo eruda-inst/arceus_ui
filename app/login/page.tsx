@@ -212,7 +212,12 @@ export default function Login() {
                 src={logo}
               />
             </div>
-            <Typography type="h2" weight="bold" className="text-4xl mt-4 mb-6">
+            <Typography
+              type="h2"
+              align="center"
+              weight="bold"
+              className="text-4xl mt-4 mb-6"
+            >
               Arceus
             </Typography>
             <p className="text-lg leading-relaxed mb-8">
