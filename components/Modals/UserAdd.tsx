@@ -73,7 +73,11 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
     null,
   );
 
-  const [isValidForm, setIsValidForm] = useState<boolean>(false);
+  const isValidForm = useMemo(() => {
+    return (
+      FormSchema.safeParse(form).success && form.confirmarSenha === form.senha
+    );
+  }, [form]);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [groups, setGroups] = useState<GroupOutType[]>([]);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -111,7 +115,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
       setIxcUsers(ixcRes?.data || []);
       setGroups(groups || []);
     } catch {}
-  }, []);
+  }, [getAllGroups, getAllIxcUsers]);
 
   const handleClearForm = () => {
     setForm(initialValues);
@@ -121,36 +125,38 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
     fetchAll();
   }, [fetchAll]);
 
-  useEffect(() => {
-    if (selectedIxcUser) {
-      setForm((previous) => ({
-        ...previous,
-        nome: selectedIxcUser.nome || "",
-        email: selectedIxcUser.email || "",
-      }));
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setIsAdding(false);
+      setSelectedIxcUser(null);
+      setIsPasswordVisible(false);
+      setIsConfirmPasswordVisible(false);
+      handleClearForm();
     }
-  }, [selectedIxcUser]);
-
-  useEffect(() => {
-    setIsAdding(false);
-    setSelectedIxcUser(null);
-    setIsPasswordVisible(false);
-    setIsConfirmPasswordVisible(false);
-    handleClearForm();
-  }, [props.isOpen]);
-
-  useEffect(() => {
-    const isValid =
-      FormSchema.safeParse(form).success && form.confirmarSenha === form.senha;
-    setIsValidForm(isValid);
-  }, [form]);
+    props.onOpenChange?.(open);
+  };
 
   const handleSelectIxcUser = (user: IXCUserOutType) => {
-    setSelectedIxcUser(selectedIxcUser?.id === user.id ? null : user);
+    const newSelected = selectedIxcUser?.id === user.id ? null : user;
+    setSelectedIxcUser(newSelected);
+
+    if (newSelected) {
+      setForm((prev) => ({
+        ...prev,
+        nome: newSelected.nome || "",
+        email: newSelected.email || "",
+      }));
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        nome: "",
+        email: "",
+      }));
+    }
   };
 
   return (
-    <Modal {...props}>
+    <Modal {...props} onOpenChange={handleOpenChange}>
       <Modal.Backdrop variant="blur">
         <Modal.Container size="cover">
           <Modal.Dialog>

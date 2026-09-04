@@ -2,7 +2,7 @@ import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, Skeleton } from "@heroui/react";
 
 interface ChartBarProps {
-  data?: Record<string, any>[];
+  data?: Record<string, number | string | boolean>[];
   label: string;
   name?: string;
   description: string;

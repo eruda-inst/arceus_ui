@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 interface CustomLineProps {
-  data?: Record<string, any>[];
+  data?: Record<string, number | string | boolean>[];
   label: string;
   name?: string;
   description: string;

@@ -5,6 +5,7 @@ import axios, {
 } from "axios";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { API_ROUTES } from "@/configs/api.config";
+import { redirect } from "next/navigation";
 
 const ACCESS_TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
@@ -93,8 +94,7 @@ const createAxiosClient = (
       refreshPromise = (async () => {
         try {
           const refreshToken = getCookie(REFRESH_TOKEN_KEY) as
-            | string
-            | undefined;
+            string | undefined;
 
           if (!refreshToken) {
             throw new Error("No refresh token");
@@ -171,7 +171,7 @@ const createAxiosClient = (
 const redirectToLogin = () => {
   if (typeof window !== "undefined") {
     const currentPath = window.location.pathname;
-    window.location.href = `/login?callbackUrl=${encodeURIComponent(currentPath)}`;
+    redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`);
   }
 };
 

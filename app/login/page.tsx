@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import {
   Label,
   TextField,
@@ -35,7 +35,11 @@ export default function Login() {
   const [login, setLogin] = useState<LoginInType>({ email: "", senha: "" });
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(true);
+  const isBtnDisabled = useMemo(() => {
+    const result = LoginInSchema.safeParse(login);
+    const isDisabled = !result.success;
+    return isDisabled;
+  }, [login]);
 
   const handleChange = (key: keyof LoginInType, value: string) => {
     setLogin((previous) => ({ ...previous, [key]: value }));
@@ -63,16 +67,6 @@ export default function Login() {
       setIsLoading(false);
     }
   };
-
-  const checkIsBtnDisabled = () => {
-    const result = LoginInSchema.safeParse(login);
-    const isDisabled = !result.success;
-    setIsBtnDisabled(isDisabled);
-  };
-
-  useEffect(() => {
-    checkIsBtnDisabled();
-  }, [login]);
 
   return (
     <main className="flex h-screen w-full overflow-hidden">

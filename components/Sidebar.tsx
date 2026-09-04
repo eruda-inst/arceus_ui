@@ -32,7 +32,7 @@ import {
 import { useAuthStore } from "@/stores/auth.store";
 import Misc from "@/helpers/Misc.helper";
 import z from "zod";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { UserOutType } from "@/types/user.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
@@ -74,11 +74,17 @@ export default function Sidebar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasPerm = useAuthStore((state) => state.hasPerm);
 
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [form, setForm] = useState<FormType>({
     senha: "",
     confirmarSenha: "",
   });
+
+  const isDisabled = useMemo(() => {
+    const isFormEmpty = EmptyForm.safeParse(form).success;
+    const isFormValid = FormSchema.safeParse(form).success;
+    const passwordMismatch = form.senha !== form.confirmarSenha;
+    return isFormEmpty || !isFormValid || passwordMismatch;
+  }, [form]);
 
   const handleProfileClick = () => {
     setIsProfileModalOpen(true);
@@ -123,17 +129,6 @@ export default function Sidebar() {
       setIsSaving(false);
     }
   };
-
-  const checkIsDisabled = () => {
-    const isFormEmpty = EmptyForm.safeParse(form).success;
-    const isFormValid = FormSchema.safeParse(form).success;
-    const passwordMismatch = form.senha !== form.confirmarSenha;
-    setIsDisabled(isFormEmpty || !isFormValid || passwordMismatch);
-  };
-
-  useEffect(() => {
-    checkIsDisabled();
-  }, [form]);
 
   return (
     <>

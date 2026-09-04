@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import {
   Button,
   InputGroup,
@@ -27,7 +27,14 @@ function UserFilters({
   onResetFilters,
 }: UserFiltersProps) {
   const [localFilters, setLocalFilters] = useState<UserFilterInType>(filters);
-  const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
+  const isFiltersEmpty = useMemo(() => {
+    return (
+      !localFilters.nome &&
+      !localFilters.email &&
+      !localFilters.nome_grupo &&
+      localFilters.ativo === undefined
+    );
+  }, [localFilters]);
 
   const handleChange = (
     key: keyof UserFilterInType,
@@ -52,19 +59,6 @@ function UserFilters({
     onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
   };
-
-  useEffect(() => {
-    setLocalFilters(filters);
-  }, [filters]);
-
-  useEffect(() => {
-    setIsFiltersEmpty(
-      !localFilters.nome &&
-        !localFilters.email &&
-        !localFilters.nome_grupo &&
-        localFilters.ativo === undefined,
-    );
-  }, [localFilters]);
 
   return (
     <Card className="mb-6 border">

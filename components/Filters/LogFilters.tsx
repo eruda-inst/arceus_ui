@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { Time, parseDate } from "@internationalized/date";
 import {
   Button,
@@ -51,7 +51,20 @@ export default function LogFilters({
   onResetFilters,
 }: LogFiltersProps) {
   const [localFilters, setLocalFilters] = useState<LogFilterInType>(filters);
-  const [isFiltersEmpty, setIsFiltersEmpty] = useState(true);
+  const isFiltersEmpty = useMemo(() => {
+    const isEmpty =
+      localFilters.metodo === undefined &&
+      localFilters.codigo === undefined &&
+      localFilters.endpoint === undefined &&
+      localFilters.protocolo === undefined &&
+      localFilters.setor === undefined &&
+      localFilters.data_inicio === undefined &&
+      localFilters.data_fim === undefined &&
+      localFilters.hora_inicio === undefined &&
+      localFilters.hora_fim === undefined &&
+      localFilters.nome_cliente === undefined;
+    return isEmpty;
+  }, [localFilters]);
 
   const handleChange = (
     key: keyof LogFilterInType,
@@ -83,25 +96,6 @@ export default function LogFilters({
     onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
   };
-
-  useEffect(() => {
-    setLocalFilters(filters);
-  }, [filters]);
-
-  useEffect(() => {
-    setIsFiltersEmpty(
-      localFilters.metodo === undefined &&
-        localFilters.codigo === undefined &&
-        localFilters.endpoint === undefined &&
-        localFilters.protocolo === undefined &&
-        localFilters.setor === undefined &&
-        localFilters.data_inicio === undefined &&
-        localFilters.data_fim === undefined &&
-        localFilters.hora_inicio === undefined &&
-        localFilters.hora_fim === undefined &&
-        localFilters.nome_cliente === undefined,
-    );
-  }, [localFilters]);
 
   return (
     <Card className="mb-6 border">

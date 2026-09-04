@@ -5,6 +5,7 @@ import { API_ROUTES } from "@/configs/api.config";
 import { UserOutType } from "@/types/user.type";
 import { PermOutType } from "@/types/perm.type";
 import PermService from "@/services/Perm.service";
+import { redirect } from "next/navigation";
 
 export const ACCESS_TOKEN_KEY = "access_token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
@@ -122,13 +123,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
 
       return user;
-    } catch (error: any) {
-      if (error.response?.status !== 401) {
-        set({
-          userError:
-            error.response?.data?.message || "Erro ao carregar usuário",
-        });
-      }
+    } catch {
+      set({
+        userError: "Erro ao carregar usuário",
+      });
       set({ loadingUser: false });
       return null;
     }
@@ -137,7 +135,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     get().clearTokens();
     if (typeof window !== "undefined") {
-      window.location.href = "/login";
+      redirect("/login");
     }
   },
 
