@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useAuthStore } from "@/stores/authentication.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { getCookie } from "cookies-next";
-import { TOKEN_EXPIRY_KEY } from "@/stores/authentication.store";
+import { TOKEN_EXPIRY_KEY } from "@/stores/auth.store";
 
 interface UseTokenRefreshOptions {
   checkInterval?: number;

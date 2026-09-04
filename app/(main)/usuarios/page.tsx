@@ -9,10 +9,10 @@ import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
 import Details from "@/components/Modals/UserDetails";
 import UserTable from "@/components/Tables/UserTable";
 import Add from "@/components/Modals/UserAdd";
+import { useAuthStore } from "@/stores/auth.store";
 import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
 import usePagination from "@/hooks/usePagination.hook";
 import useFilter from "@/hooks/useFilter.hook";
-import { usePermStore } from "@/stores/perm.store";
 import { UserFilterIn, UserOut } from "@/types/user.type";
 import { API_ROUTES } from "@/configs/api.config";
 
@@ -21,8 +21,8 @@ export default function Users() {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserOut | null>(null);
 
-  // Perms
-  const { hasPerm } = usePermStore();
+  // Auth
+  const hasPerm = useAuthStore((state) => state.hasPerm);
 
   // WebSocket
   const {
@@ -85,9 +85,9 @@ export default function Users() {
         </div>
 
         <Button
-          className="bg-indigo-500 hover:bg-indigo-600"
-          onPress={() => setIsAddOpen(true)}
           isDisabled={!hasPerm("criar:usuarios")}
+          onPress={() => setIsAddOpen(true)}
+          className="bg-indigo-500 hover:bg-indigo-600"
         >
           Novo usuário
         </Button>

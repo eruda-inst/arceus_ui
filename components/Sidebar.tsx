@@ -29,7 +29,7 @@ import {
   TextField,
   toast,
 } from "@heroui/react";
-import { useAuthStore } from "@/stores/authentication.store";
+import { useAuthStore } from "@/stores/auth.store";
 import Misc from "@/helpers/Misc.helper";
 import z from "zod";
 import { useEffect, useState } from "react";
@@ -37,7 +37,6 @@ import { UserOut } from "@/types/user.type";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import InfoItem from "@/components/InfoItem";
-import { usePermStore } from "@/stores/perm.store";
 import { useTheme } from "next-themes";
 import { Key } from "react-aria";
 import clsx from "clsx";
@@ -54,11 +53,10 @@ const EmptyForm = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-function Sidebar() {
+export default function Sidebar() {
   const router = useRouter();
   const { setTheme, theme } = useTheme();
   const pathname = usePathname();
-  const { hasAllPerms } = usePermStore();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -69,14 +67,12 @@ function Sidebar() {
     new Set([theme || "system"]),
   );
 
-  const {
-    currentUser,
-    loadingUser,
-    logout,
-    fetchCurrentUser,
-    isAuthenticated,
-    groupName,
-  } = useAuthStore();
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const loadingUser = useAuthStore((state) => state.loadingUser);
+  const logout = useAuthStore((state) => state.logout);
+  const fetchCurrentUser = useAuthStore((state) => state.fetchCurrentUser);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const hasPerm = useAuthStore((state) => state.hasPerm);
 
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [form, setForm] = useState<FormType>({
@@ -154,12 +150,12 @@ function Sidebar() {
         <nav className="flex-1 px-4 py-6 space-y-2">
           {currentUser ? (
             <Button
+              isDisabled={!hasPerm("ver:metricas")}
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
                 pathname === "/" ? "bg-indigo-500 text-white" : "bg-inherit",
               )}
               onPress={() => router.push("/")}
-              isDisabled={!hasAllPerms(["ver:metricas"])}
             >
               <FaHouseChimney className="size-5" /> Métricas
             </Button>
@@ -169,14 +165,14 @@ function Sidebar() {
 
           {currentUser ? (
             <Button
+              isDisabled={!hasPerm("ver:logs")}
+              onPress={() => router.push("/registros")}
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
                 pathname === "/registros"
                   ? "bg-indigo-500 text-white"
                   : "bg-inherit",
               )}
-              onPress={() => router.push("/registros")}
-              isDisabled={!hasAllPerms(["ver:logs"])}
             >
               <FaClipboardList className="size-5" /> Registros
             </Button>
@@ -186,14 +182,14 @@ function Sidebar() {
 
           {currentUser ? (
             <Button
+              isDisabled={!hasPerm("ver:usuarios")}
+              onPress={() => router.push("/usuarios")}
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
                 pathname === "/usuarios"
                   ? "bg-indigo-500 text-white"
                   : "bg-inherit",
               )}
-              onPress={() => router.push("/usuarios")}
-              isDisabled={!hasAllPerms(["ver:usuarios"])}
             >
               <FaUsers className="size-5" /> Usuários
             </Button>
@@ -221,7 +217,9 @@ function Sidebar() {
                     >
                       {currentUser?.nome}
                     </p>
-                    <p className="text-xs text-muted">{groupName}</p>
+                    <p className="text-xs text-muted">
+                      {currentUser?.nome_grupo}
+                    </p>
                   </div>
                 </>
               )}
@@ -320,7 +318,9 @@ function Sidebar() {
                         <Modal.Heading className="text-lg font-semibold">
                           {currentUser?.nome}
                         </Modal.Heading>
-                        <p className="text-sm text-muted">{groupName}</p>
+                        <p className="text-sm text-muted">
+                          {currentUser?.nome_grupo}
+                        </p>
                       </div>
                     </>
                   )}
@@ -349,7 +349,10 @@ function Sidebar() {
                         label="Usuário ativo"
                         value={currentUser?.ativo ? "Sim" : "Não"}
                       />
-                      <InfoItem label="Grupo" value={groupName || "-"} />
+                      <InfoItem
+                        label="Grupo"
+                        value={currentUser?.nome_grupo || "-"}
+                      />
                     </div>
                   </div>
                 ) : (
@@ -474,5 +477,3 @@ function Sidebar() {
     </>
   );
 }
-
-export default Sidebar;

@@ -25,7 +25,7 @@ import { CURRENT_VERSION } from "@/configs/misc.config";
 import { API_ROUTES } from "@/configs/api.config";
 import { LoginIn } from "@/types/login.type";
 import { LoginInSchema } from "@/schemas/login.schema";
-import { useAuthStore } from "@/stores/authentication.store";
+import { useAuthStore } from "@/stores/auth.store";
 import Validator from "@/helpers/Validator.helper";
 import logo from "@/public/logo.svg";
 

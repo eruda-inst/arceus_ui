@@ -36,9 +36,9 @@ export default function Metrics() {
 
   return (
     <>
-      <div className="container mx-auto p-2">
+      <div className="container mx-auto p-2 space-y-6">
         {/* Metric cards */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center">
           <div>
             <Typography
               type="h2"
@@ -58,7 +58,7 @@ export default function Metrics() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4">
           {/* Erros */}
           <MetricCard
             title="Malsucedidas"

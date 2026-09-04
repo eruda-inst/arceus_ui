@@ -43,7 +43,7 @@ export default function Logs() {
   }, [itemsPerPage, sendMessage, page, filters]);
 
   return (
-    <div className="container mx-auto p-2">
+    <div className="container mx-auto p-2 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <Typography
@@ -76,23 +76,22 @@ export default function Logs() {
         onResetFilters={handleResetFilters}
       />
 
-      <div className="space-y-6">
-        <PaginationControls
-          page={page}
-          totalPages={lastMessage?.meta?.total_paginas || 1}
-          totalItems={lastMessage?.meta?.total_itens || 0}
-          itemsPerPage={itemsPerPage}
-          onGoToPage={handleGoToPage}
-          onNextPage={handleNextPage}
-          onPrevPage={handlePrevPage}
-          onSetItemsPerPage={handleSetItemsPerPage}
-        />
-        <LogTable
-          logs={lastMessage?.data}
-          isLoading={!lastMessage}
-          onRowClick={handleRowClick}
-        />
-      </div>
+      <PaginationControls
+        page={page}
+        totalPages={lastMessage?.meta?.total_paginas || 1}
+        totalItems={lastMessage?.meta?.total_itens || 0}
+        itemsPerPage={itemsPerPage}
+        onGoToPage={handleGoToPage}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+        onSetItemsPerPage={handleSetItemsPerPage}
+      />
+
+      <LogTable
+        logs={lastMessage?.data}
+        isLoading={!lastMessage}
+        onRowClick={handleRowClick}
+      />
 
       {selectedLog && (
         <Details

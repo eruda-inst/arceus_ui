@@ -3,41 +3,56 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { axiosClient } from "@/libs/axiosClient.lib";
 import { API_ROUTES } from "@/configs/api.config";
 import { UserOut } from "@/types/user.type";
-import GroupService from "@/services/Group.service";
+import { PermOut } from "@/types/perm.type";
+import PermService from "@/services/Perm.service";
 
 export const ACCESS_TOKEN_KEY = "access_token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
 export const TOKEN_EXPIRY_KEY = "token_expiry";
 
 export interface AuthState {
+  // Auth
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
   currentUser: UserOut | null;
   loadingUser: boolean;
   userError: string | null;
-  groupName: string | null;
-  loadingGroup: boolean;
 
+  // Perms
+  perms: PermOut[];
+  loadingPerms: boolean;
+  permError: string | null;
+
+  // Auth methods
   init: () => Promise<void>;
   setTokens: (access: string, refresh: string, expiresIn?: number) => void;
   clearTokens: () => void;
   fetchCurrentUser: () => Promise<UserOut | null>;
   logout: () => Promise<void>;
-  setGroupName: (groupId: number) => Promise<void>;
   refreshTokens: () => Promise<boolean>;
+
+  // Permission methods
+  fetchPermissions: (userId: number) => Promise<void>;
+  hasPerm: (permCode: string) => boolean;
+  hasAllPerms: (permCodes: string[]) => boolean;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
+  // Auth state
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
   currentUser: null,
   loadingUser: false,
   userError: null,
-  groupName: null,
-  loadingGroup: false,
 
+  // Permission state
+  perms: [],
+  loadingPerms: false,
+  permError: null,
+
+  // Auth methods
   init: async () => {
     const access = getCookie(ACCESS_TOKEN_KEY) as string | undefined;
     const refresh = getCookie(REFRESH_TOKEN_KEY) as string | undefined;
@@ -82,7 +97,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       refreshToken: null,
       isAuthenticated: false,
       currentUser: null,
-      groupName: null,
+      perms: [],
     });
   },
 
@@ -101,10 +116,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const user = response.data;
       set({ currentUser: user, isAuthenticated: true, loadingUser: false });
 
-      // Buscar nome do grupo
-      if (user.id_grupo) {
-        await get().setGroupName(user.id_grupo);
+      // Fetch permissions for the logged-in user
+      if (user.id) {
+        await get().fetchPermissions(user.id);
       }
+
       return user;
     } catch (error: any) {
       if (error.response?.status !== 401) {
@@ -115,16 +131,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
       set({ loadingUser: false });
       return null;
-    }
-  },
-
-  setGroupName: async (groupId: number) => {
-    set({ loadingGroup: true });
-    try {
-      const group = await GroupService.getById(groupId);
-      set({ groupName: group?.nome || null, loadingGroup: false });
-    } catch {
-      set({ groupName: null, loadingGroup: false });
     }
   },
 
@@ -167,4 +173,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return false;
     }
   },
+
+  // Permission methods
+  fetchPermissions: async (userId: number) => {
+    set({ loadingPerms: true, permError: null });
+    try {
+      const perms = await PermService.getByUserId(userId);
+      set({ perms, loadingPerms: false });
+    } catch (err) {
+      set({ permError: "Erro ao buscar permissões", loadingPerms: false });
+      throw err;
+    }
+  },
+
+  hasPerm: (permCode: string) =>
+    get().perms.some((perm) => perm.codigo === permCode),
+
+  hasAllPerms: (permCodes: string[]) =>
+    permCodes.every((permCode) =>
+      get().perms.some((perm) => perm.codigo === permCode),
+    ),
 }));

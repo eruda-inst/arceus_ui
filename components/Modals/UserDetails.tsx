@@ -3,9 +3,8 @@ import { Button, Modal, ModalProps, AlertDialog, toast } from "@heroui/react";
 import InfoItem from "@/components/InfoItem";
 import { UserOut } from "@/types/user.type";
 import Formatter from "@/helpers/Formatter.helper";
-import { useAuthStore } from "@/stores/authentication.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { useState } from "react";
-import { usePermStore } from "@/stores/perm.store";
 import UserService from "@/services/User.service";
 import { clsx } from "clsx";
 
@@ -43,8 +42,8 @@ export default function Details({ onClose, user, ...props }: DetailsProps) {
     }
   };
 
-  const { hasAllPerms } = usePermStore();
-  const { currentUser } = useAuthStore();
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const hasPerm = useAuthStore((state) => state.hasPerm);
 
   return (
     <Modal {...props}>
@@ -75,26 +74,26 @@ export default function Details({ onClose, user, ...props }: DetailsProps) {
 
                 <div className="flex items-center gap-x-2">
                   <Button
+                    isDisabled={
+                      !hasPerm("alterar:usuarios") ||
+                      currentUser?.id === user.id
+                    }
+                    onPress={() => setIsToggleOpen(true)}
                     className={
                       localUser?.ativo
                         ? "bg-warning-soft text-warning-soft-foreground hover:bg-warning-soft-hover"
                         : "bg-success-soft text-success-soft-foreground hover:bg-success-soft-hover"
                     }
-                    isDisabled={
-                      localUser?.id === currentUser?.id ||
-                      !hasAllPerms(["alterar:usuarios"])
-                    }
-                    onPress={() => setIsToggleOpen(true)}
                   >
                     {localUser?.ativo ? "Inativar" : "Reativar"}
                   </Button>
 
                   <Button
-                    variant="danger-soft"
                     isDisabled={
-                      localUser?.id === currentUser?.id ||
-                      !hasAllPerms(["remover:usuarios"])
+                      !hasPerm("remover:usuarios") ||
+                      currentUser?.id === user.id
                     }
+                    variant="danger-soft"
                     onPress={() => setIsDeleteOpen(true)}
                   >
                     Excluir
