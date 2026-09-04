@@ -116,9 +116,13 @@ export default function UserTable({
 
                     <span className="font-semibold">
                       {ativo ? (
-                        <Chip color="success">Ativo</Chip>
+                        <Chip color="success" variant="soft">
+                          Ativo
+                        </Chip>
                       ) : (
-                        <Chip color="warning">Inativo</Chip>
+                        <Chip color="warning" variant="soft">
+                          Inativo
+                        </Chip>
                       )}
                     </span>
                   </div>

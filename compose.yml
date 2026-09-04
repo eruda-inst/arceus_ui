@@ -7,7 +7,7 @@ services:
         NEXT_PUBLIC_BASE_API_URL: ${NEXT_PUBLIC_BASE_API_URL}
         NEXT_PUBLIC_BASE_WS_API_URL: ${NEXT_PUBLIC_BASE_WS_API_URL}
         NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}
-    container_name: absol-ui
+    container_name: arceus-ui
     environment:
       NODE_ENV: "development"
       COOKIE_SECURE: "false"

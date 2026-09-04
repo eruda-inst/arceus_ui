@@ -102,7 +102,7 @@ export default function LogFilters({
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">
-            <div className="p-2 bg-linear-to-r from-purple-700 to-indigo-700 rounded-lg w-fit">
+            <div className="p-2 bg-linear-to-r bg-indigo-500 rounded-lg w-fit">
               <FaFilter className="w-5 h-5 text-white" />
             </div>
             <div className="text-xl font-bold text-gray-800 dark:text-white">
@@ -125,7 +125,7 @@ export default function LogFilters({
           <Button
             onPress={handleApply}
             isDisabled={isFiltersEmpty}
-            className="bg-linear-to-r from-purple-600 to-indigo-600 text-white hover:shadow-md transition-shadow"
+            className="bg-linear-to-r bg-indigo-500 hover:bg-indigo-600 text-white hover:shadow-md transition-shadow"
           >
             Aplicar Filtros
           </Button>

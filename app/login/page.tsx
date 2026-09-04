@@ -11,6 +11,7 @@ import {
   Button,
   FieldError,
   toast,
+  Typography,
 } from "@heroui/react";
 import { motion } from "motion/react";
 import {
@@ -211,9 +212,9 @@ export default function Login() {
                 src={logo}
               />
             </div>
-            <h2 className="text-4xl font-bold mb-6 tracking-tight mt-4">
+            <Typography type="h2" weight="bold" className="text-4xl mt-4 mb-6">
               Arceus
-            </h2>
+            </Typography>
             <p className="text-lg leading-relaxed mb-8">
               Plataforma para monitoramento de requisições HTTP realizadas ao
               Arceus, com visualização de logs, métricas agregadas e dashboards

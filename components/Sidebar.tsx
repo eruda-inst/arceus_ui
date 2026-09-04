@@ -32,6 +32,7 @@ import {
   Skeleton,
   TextField,
   toast,
+  Typography,
 } from "@heroui/react";
 import InfoItem from "@/components/InfoItem";
 import { useAuthStore } from "@/stores/auth.store";
@@ -137,9 +138,13 @@ export default function Sidebar() {
         <div className="flex items-center h-16 px-6 border-b">
           <div className="flex items-center gap-3">
             <Image alt="Arceus" className="size-8" src={logo} />
-            <h1 className="text-xl font-bold bg-linear-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
+            <Typography
+              type="h1"
+              weight="bold"
+              className="text-xl text-purple-500"
+            >
               Arceus
-            </h1>
+            </Typography>
           </div>
         </div>
 
@@ -149,7 +154,9 @@ export default function Sidebar() {
               isDisabled={!hasPerm("ver:metricas")}
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
-                pathname === "/" ? "bg-indigo-500 text-white" : "bg-inherit",
+                pathname === "/"
+                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
+                  : "bg-inherit",
               )}
               onPress={() => router.push("/")}
             >
@@ -166,7 +173,7 @@ export default function Sidebar() {
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
                 pathname === "/registros"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
                   : "bg-inherit",
               )}
             >
@@ -183,7 +190,7 @@ export default function Sidebar() {
               className={clsx(
                 "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
                 pathname === "/usuarios"
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
                   : "bg-inherit",
               )}
             >

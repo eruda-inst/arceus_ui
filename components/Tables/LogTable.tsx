@@ -94,12 +94,20 @@ export default function LogTable({
 
                     <span className="font-semibold">
                       {metodo === "POST" && (
-                        <Chip color="success">{metodo}</Chip>
+                        <Chip color="success" variant="soft">
+                          {metodo}
+                        </Chip>
                       )}
                       {metodo === "PUT" && (
-                        <Chip color="warning">{metodo}</Chip>
+                        <Chip color="warning" variant="soft">
+                          {metodo}
+                        </Chip>
                       )}
-                      {metodo === "GET" && <Chip color="accent">{metodo}</Chip>}
+                      {metodo === "GET" && (
+                        <Chip color="accent" variant="soft">
+                          {metodo}
+                        </Chip>
+                      )}
                     </span>
                   </div>
                 </Table.Cell>
@@ -124,13 +132,19 @@ export default function LogTable({
 
                     <span className="font-semibold">
                       {codigo >= 200 && codigo <= 299 && (
-                        <Chip color="success">{codigo}</Chip>
+                        <Chip color="success" variant="soft">
+                          {codigo}
+                        </Chip>
                       )}
                       {codigo >= 400 && codigo <= 499 && (
-                        <Chip color="warning">{codigo}</Chip>
+                        <Chip color="warning" variant="soft">
+                          {codigo}
+                        </Chip>
                       )}
                       {codigo >= 500 && codigo <= 599 && (
-                        <Chip color="danger">{codigo}</Chip>
+                        <Chip color="danger" variant="soft">
+                          {codigo}
+                        </Chip>
                       )}
                     </span>
                   </div>
