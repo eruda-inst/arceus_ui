@@ -143,7 +143,7 @@ export default function UserTable({
                     </div>
 
                     <span className="font-semibold">
-                      {Formatter.isoDate(criado_em)}
+                      {Formatter.isoDatetimeToDate(criado_em)}
                     </span>
                   </div>
                 </Table.Cell>

@@ -21,6 +21,7 @@ export default function Users() {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserOut | null>(null);
 
+  // Perms
   const { hasPerm } = usePermStore();
 
   // WebSocket
@@ -50,10 +51,6 @@ export default function Users() {
   const handleRowClick = (user: UserOut) => {
     setSelectedUser(user);
     setIsDetailsOpen(true);
-  };
-
-  const handleRefreshUser = () => {
-    setSelectedUser((prev) => (prev ? { ...prev, ativo: !prev.ativo } : prev));
   };
 
   useEffect(() => {
@@ -127,7 +124,6 @@ export default function Users() {
 
       {selectedUser && (
         <Details
-          onRefreshUser={handleRefreshUser}
           user={selectedUser}
           isOpen={isDetailsOpen}
           onClose={() => setIsDetailsOpen(false)}

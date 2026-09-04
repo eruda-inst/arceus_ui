@@ -11,18 +11,13 @@ import { clsx } from "clsx";
 
 export interface DetailsProps extends Omit<ModalProps, "children"> {
   onClose: () => void;
-  onRefreshUser: () => void;
   user: UserOut;
 }
 
-export default function Details({
-  onClose,
-  onRefreshUser,
-  user,
-  ...props
-}: DetailsProps) {
+export default function Details({ onClose, user, ...props }: DetailsProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
+  const [localUser, setLocalUser] = useState<UserOut | null>(user);
 
   const handleDelete = async () => {
     try {
@@ -38,9 +33,9 @@ export default function Details({
 
   const handleToggle = async () => {
     try {
-      await UserService.toggleStatus(user.id);
+      const updatedUser = await UserService.toggleStatus(user.id);
       setIsToggleOpen(false);
-      onRefreshUser();
+      setLocalUser((prev) => (prev ? { ...prev, ...updatedUser } : null));
       toast.success("Status alterado com sucesso!");
     } catch (error: unknown) {
       toast.danger("Erro ao mudar status do usuário");
@@ -62,7 +57,7 @@ export default function Details({
                 <Modal.Icon>
                   <FaUser className="text-blue-600" />
                 </Modal.Icon>
-                <Modal.Heading>{user.nome}</Modal.Heading>
+                <Modal.Heading>{localUser?.nome}</Modal.Heading>
               </div>
             </Modal.Header>
 
@@ -81,23 +76,23 @@ export default function Details({
                 <div className="flex items-center gap-x-2">
                   <Button
                     className={
-                      user.ativo
+                      localUser?.ativo
                         ? "bg-warning-soft text-warning-soft-foreground hover:bg-warning-soft-hover"
                         : "bg-success-soft text-success-soft-foreground hover:bg-success-soft-hover"
                     }
                     isDisabled={
-                      user.id === currentUser?.id ||
+                      localUser?.id === currentUser?.id ||
                       !hasAllPerms(["alterar:usuarios"])
                     }
                     onPress={() => setIsToggleOpen(true)}
                   >
-                    {user.ativo ? "Inativar" : "Reativar"}
+                    {localUser?.ativo ? "Inativar" : "Reativar"}
                   </Button>
 
                   <Button
                     variant="danger-soft"
                     isDisabled={
-                      user.id === currentUser?.id ||
+                      localUser?.id === currentUser?.id ||
                       !hasAllPerms(["remover:usuarios"])
                     }
                     onPress={() => setIsDeleteOpen(true)}
@@ -108,17 +103,24 @@ export default function Details({
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <InfoItem label="E-mail" value={user.email} />
-                <InfoItem label="Ativo" value={user.ativo ? "Sim" : "Não"} />
+                <InfoItem label="E-mail" value={localUser?.email} />
+                <InfoItem
+                  label="Ativo"
+                  value={localUser?.ativo ? "Sim" : "Não"}
+                />
                 <InfoItem
                   label="Criado em"
-                  value={Formatter.isoDate(user.criado_em.split("T")[0])}
+                  value={
+                    localUser?.criado_em
+                      ? Formatter.isoDatetimeToDate(localUser?.criado_em)
+                      : "---"
+                  }
                 />
                 <InfoItem
                   label="Atualizado em"
                   value={
-                    user.atualizado_em
-                      ? Formatter.isoDate(user.atualizado_em.split("T")[0])
+                    localUser?.atualizado_em
+                      ? Formatter.isoDatetimeToDate(localUser?.atualizado_em)
                       : "---"
                   }
                 />

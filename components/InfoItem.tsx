@@ -4,7 +4,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface InfoItemProps {
   label: string;
-  value: string | number | null;
+  value?: string | number | null;
   isCode?: boolean;
   language?: SyntaxHighlighterProps["language"];
   codeStyle?: SyntaxHighlighterProps["style"];
