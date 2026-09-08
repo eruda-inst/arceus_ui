@@ -1,23 +1,26 @@
 import { useMemo, useState } from "react";
 import {
+  Accordion,
   Button,
+  Card,
+  FieldError,
+  Form,
   InputGroup,
   Label,
-  TextField,
-  FieldError,
-  Accordion,
-  Form,
-  Card,
-  toast,
-  Select,
   ListBox,
+  Select,
+  TextField,
+  toast,
 } from "@heroui/react";
-import { FaFilter, FaUser, FaEnvelope, FaUsers } from "react-icons/fa6";
-import type { UserFilterInType } from "@/types/user.type";
+import { FaEnvelope, FaFilter, FaUser, FaUsers } from "react-icons/fa6";
+import { UserFilterInType } from "@/types/user.type";
 
 export interface UserFiltersProps {
+  /** Current filter values from parent */
   filters: UserFilterInType;
+  /** Callback to apply filters (send to parent) */
   onSetFilters: (filters: UserFilterInType) => void;
+  /** Callback to reset all filters to empty */
   onResetFilters: () => void;
 }
 
@@ -26,35 +29,22 @@ export default function UserFilters({
   onSetFilters,
   onResetFilters,
 }: UserFiltersProps) {
+  // Local state for filter values before applying
   const [localFilters, setLocalFilters] = useState<UserFilterInType>(filters);
+
+  // Determine if any filter is set (to enable/disable action buttons)
   const isFiltersEmpty = useMemo(() => {
-    return (
-      !localFilters.nome &&
-      !localFilters.email &&
-      !localFilters.nome_grupo &&
-      localFilters.ativo === undefined
-    );
+    return !Object.keys(localFilters).length;
   }, [localFilters]);
 
-  const handleChange = (
-    key: keyof UserFilterInType,
-    value?: string | boolean,
-  ) => {
-    const cleanValue =
-      typeof value === "string"
-        ? value.trim() === ""
-          ? undefined
-          : value
-        : value;
-    setLocalFilters((prev) => ({ ...prev, [key]: cleanValue }));
-  };
-
+  // Reset filters locally and notify parent
   const handleReset = () => {
     onResetFilters();
     setLocalFilters({});
     toast.success("Filtros limpos com sucesso");
   };
 
+  // Apply current local filters to parent
   const handleApply = () => {
     onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
@@ -94,6 +84,7 @@ export default function UserFilters({
       </Card.Header>
 
       <Card.Content>
+        {/* Accordion groups filter sections; only one section for user filters */}
         <Accordion>
           <Accordion.Item>
             <Accordion.Heading>
@@ -111,7 +102,9 @@ export default function UserFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.nome ?? ""}
-                    onChange={(value) => handleChange("nome", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, nome: v }))
+                    }
                   >
                     <Label>Nome</Label>
                     <InputGroup>
@@ -126,7 +119,9 @@ export default function UserFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.email ?? ""}
-                    onChange={(value) => handleChange("email", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, email: v }))
+                    }
                   >
                     <Label>Email</Label>
                     <InputGroup>
@@ -148,14 +143,16 @@ export default function UserFilters({
                           ? "true"
                           : "false"
                     }
-                    onChange={(value) => {
-                      const boolValue =
-                        value === "true"
-                          ? true
-                          : value === "false"
-                            ? false
-                            : undefined;
-                      handleChange("ativo", boolValue);
+                    onChange={(v) => {
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        ativo:
+                          v === "true"
+                            ? true
+                            : v === "false"
+                              ? false
+                              : undefined,
+                      }));
                     }}
                   >
                     <Label>Ativo</Label>
@@ -180,7 +177,9 @@ export default function UserFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.nome_grupo ?? ""}
-                    onChange={(value) => handleChange("nome_grupo", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, nome_grupo: v }))
+                    }
                   >
                     <Label>Grupo</Label>
                     <InputGroup>

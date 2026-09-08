@@ -1,47 +1,68 @@
 import { useMemo, useState } from "react";
-import { Time, parseDate } from "@internationalized/date";
+import { parseDate, parseTime } from "@internationalized/date";
 import {
-  Button,
-  TimeField,
-  InputGroup,
-  Select,
-  ListBox,
-  Label,
-  TextField,
-  DateField,
-  FieldError,
   Accordion,
-  Form,
-  RangeCalendar,
-  DateRangePicker,
+  Button,
   Card,
+  DateField,
+  DateRangePicker,
+  FieldError,
+  Form,
+  InputGroup,
+  Label,
+  ListBox,
+  RangeCalendar,
+  Select,
+  TextField,
+  TimeField,
   toast,
 } from "@heroui/react";
 import {
-  FaFilter,
   FaCalendar,
-  FaServer,
-  FaGlobe,
-  FaCode,
   FaClock,
+  FaCode,
   FaFileCode,
+  FaFilter,
+  FaGlobe,
+  FaServer,
   FaUser,
 } from "react-icons/fa6";
-import { LogFilterInType } from "@/types/log.type";
+import {
+  HTTPMethodType,
+  HTTPStatusCodeType,
+  LogFilterInType,
+  SectorType,
+} from "@/types/log.type";
 
-export const Departments = [
-  "Suporte",
-  "Financeiro",
-  "Comercial",
-  "Triagem",
+// Predefined options for filter dropdowns
+export const methods: HTTPMethodType[] = [
+  "GET",
+  "DELETE",
+  "PATCH",
+  "POST",
+  "PUT",
+];
+
+export const statusCodes: HTTPStatusCodeType[] = [
+  200, 201, 401, 403, 404, 422, 500,
+];
+
+export const sectors: SectorType[] = [
   "Cobrança",
+  "Comercial",
+  "Financeiro",
+  "Suporte",
+  "Triagem",
   "Upgrade",
   "Vila",
-] as const;
+];
 
 export interface LogFiltersProps {
+  /** Current filter values from parent */
   filters: LogFilterInType;
+  /** Callback to apply filters (send to parent) */
   onSetFilters: (filters: LogFilterInType) => void;
+  /** Callback to reset all filters to empty */
   onResetFilters: () => void;
 }
 
@@ -50,48 +71,22 @@ export default function LogFilters({
   onSetFilters,
   onResetFilters,
 }: LogFiltersProps) {
+  // Local state for filter values before applying
   const [localFilters, setLocalFilters] = useState<LogFilterInType>(filters);
+
+  // Determine if any filter is set (to enable/disable action buttons)
   const isFiltersEmpty = useMemo(() => {
-    const isEmpty =
-      localFilters.metodo === undefined &&
-      localFilters.codigo === undefined &&
-      localFilters.endpoint === undefined &&
-      localFilters.protocolo === undefined &&
-      localFilters.setor === undefined &&
-      localFilters.data_inicio === undefined &&
-      localFilters.data_fim === undefined &&
-      localFilters.hora_inicio === undefined &&
-      localFilters.hora_fim === undefined &&
-      localFilters.nome_cliente === undefined;
-    return isEmpty;
+    return !Object.keys(localFilters).length;
   }, [localFilters]);
 
-  const handleChange = (
-    key: keyof LogFilterInType,
-    value?: string | number | boolean | null,
-  ) => {
-    const cleanValue =
-      typeof value === "string" && value.trim() === "" ? undefined : value;
-    setLocalFilters((prev) => ({ ...prev, [key]: cleanValue }));
-  };
-
-  const stringToTime = (timeString: string | undefined): Time | null => {
-    if (!timeString) return null;
-    const [hours, minutes] = timeString.split(":").map(Number);
-    return new Time(hours, minutes);
-  };
-
-  const timeToString = (time: Time | null): string | undefined => {
-    if (!time) return undefined;
-    return `${String(time.hour).padStart(2, "0")}:${String(time.minute).padStart(2, "0")}`;
-  };
-
+  // Reset filters locally and notify parent
   const handleReset = () => {
     onResetFilters();
     setLocalFilters({});
     toast.success("Filtros limpos com sucesso");
   };
 
+  // Apply current local filters to parent
   const handleApply = () => {
     onSetFilters(localFilters);
     toast.success("Filtros aplicados com sucesso");
@@ -133,7 +128,9 @@ export default function LogFilters({
       </Card.Header>
 
       <Card.Content>
+        {/* Accordion groups filter sections for better UX */}
         <Accordion>
+          {/* Request section: HTTP method, status code, endpoint, protocol */}
           <Accordion.Item>
             <Accordion.Heading>
               <Accordion.Trigger>
@@ -151,7 +148,12 @@ export default function LogFilters({
                     variant="secondary"
                     placeholder="Método HTTP"
                     value={localFilters.metodo ?? ""}
-                    onChange={(value) => handleChange("metodo", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        metodo: v as HTTPMethodType,
+                      }))
+                    }
                   >
                     <Label>Método</Label>
                     <Select.Trigger>
@@ -160,7 +162,7 @@ export default function LogFilters({
                     </Select.Trigger>
                     <Select.Popover>
                       <ListBox>
-                        {["GET", "POST", "PUT"].map((method) => (
+                        {methods.map((method) => (
                           <ListBox.Item key={method} id={method}>
                             <Label>{method}</Label>
                             <ListBox.ItemIndicator />
@@ -173,13 +175,12 @@ export default function LogFilters({
                   <Select
                     variant="secondary"
                     placeholder="Código HTTP"
-                    value={
-                      localFilters.codigo !== undefined
-                        ? String(localFilters.codigo)
-                        : ""
-                    }
-                    onChange={(value) =>
-                      handleChange("codigo", value ? Number(value) : undefined)
+                    value={localFilters.codigo ? localFilters.codigo : ""}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        codigo: v as HTTPStatusCodeType,
+                      }))
                     }
                   >
                     <Label>Código</Label>
@@ -189,14 +190,15 @@ export default function LogFilters({
                     </Select.Trigger>
                     <Select.Popover>
                       <ListBox>
-                        {[200, 201, 400, 404, 405, 422, 500, 503].map(
-                          (code) => (
-                            <ListBox.Item key={code} id={String(code)}>
-                              <Label>{code}</Label>
-                              <ListBox.ItemIndicator />
-                            </ListBox.Item>
-                          ),
-                        )}
+                        {statusCodes.map((statusCode) => (
+                          <ListBox.Item
+                            key={statusCode}
+                            id={String(statusCode)}
+                          >
+                            <Label>{statusCode}</Label>
+                            <ListBox.ItemIndicator />
+                          </ListBox.Item>
+                        ))}
                       </ListBox>
                     </Select.Popover>
                   </Select>
@@ -204,7 +206,9 @@ export default function LogFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.endpoint ?? ""}
-                    onChange={(value) => handleChange("endpoint", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, endpont: v }))
+                    }
                   >
                     <Label>Endpoint</Label>
                     <InputGroup>
@@ -219,7 +223,9 @@ export default function LogFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.protocolo ?? ""}
-                    onChange={(value) => handleChange("protocolo", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, protocolo: v }))
+                    }
                   >
                     <Label>Protocolo</Label>
                     <InputGroup>
@@ -235,6 +241,7 @@ export default function LogFilters({
             </Accordion.Panel>
           </Accordion.Item>
 
+          {/* Origin section: sector and client name */}
           <Accordion.Item>
             <Accordion.Heading>
               <Accordion.Trigger>
@@ -250,9 +257,14 @@ export default function LogFilters({
                 <Form className="grid grid-cols-2 gap-4">
                   <Select
                     variant="secondary"
-                    placeholder="Departamento"
+                    placeholder="Setor"
                     value={localFilters.setor ?? ""}
-                    onChange={(value) => handleChange("setor", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        setor: v as SectorType,
+                      }))
+                    }
                   >
                     <Label>Setor</Label>
                     <Select.Trigger>
@@ -261,7 +273,7 @@ export default function LogFilters({
                     </Select.Trigger>
                     <Select.Popover>
                       <ListBox>
-                        {Departments.map((dept) => (
+                        {sectors.map((dept) => (
                           <ListBox.Item key={dept} id={dept}>
                             <Label>{dept}</Label>
                             <ListBox.ItemIndicator />
@@ -274,7 +286,9 @@ export default function LogFilters({
                   <TextField
                     variant="secondary"
                     value={localFilters.nome_cliente ?? ""}
-                    onChange={(value) => handleChange("nome_cliente", value)}
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({ ...prev, nome_cliente: v }))
+                    }
                   >
                     <Label>Nome do cliente</Label>
                     <InputGroup>
@@ -290,6 +304,7 @@ export default function LogFilters({
             </Accordion.Panel>
           </Accordion.Item>
 
+          {/* Date section: date range picker */}
           <Accordion.Item>
             <Accordion.Heading>
               <Accordion.Trigger>
@@ -315,13 +330,11 @@ export default function LogFilters({
                         : null
                     }
                     onChange={(range) => {
-                      if (range) {
-                        handleChange("data_inicio", range.start.toString());
-                        handleChange("data_fim", range.end.toString());
-                      } else {
-                        handleChange("data_inicio", undefined);
-                        handleChange("data_fim", undefined);
-                      }
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        data_inicio: range?.start.toString(),
+                        data_fim: range?.end.toString(),
+                      }));
                     }}
                   >
                     <Label>Intervalo de datas</Label>
@@ -376,6 +389,7 @@ export default function LogFilters({
             </Accordion.Panel>
           </Accordion.Item>
 
+          {/* Time section: start and end time fields */}
           <Accordion.Item>
             <Accordion.Heading>
               <Accordion.Trigger>
@@ -390,12 +404,16 @@ export default function LogFilters({
               <Accordion.Body>
                 <Form className="grid grid-cols-2 gap-4">
                   <TimeField
-                    value={stringToTime(localFilters.hora_inicio)}
-                    onChange={(time) =>
-                      handleChange(
-                        "hora_inicio",
-                        time ? timeToString(time) : undefined,
-                      )
+                    value={
+                      localFilters.hora_inicio
+                        ? parseTime(localFilters.hora_inicio)
+                        : null
+                    }
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        hora_inicio: v?.toString(),
+                      }))
                     }
                   >
                     <Label>Hora início</Label>
@@ -407,12 +425,16 @@ export default function LogFilters({
                   </TimeField>
 
                   <TimeField
-                    value={stringToTime(localFilters.hora_fim)}
-                    onChange={(time) =>
-                      handleChange(
-                        "hora_fim",
-                        time ? timeToString(time) : undefined,
-                      )
+                    value={
+                      localFilters.hora_fim
+                        ? parseTime(localFilters.hora_fim)
+                        : null
+                    }
+                    onChange={(v) =>
+                      setLocalFilters((prev) => ({
+                        ...prev,
+                        hora_fim: v?.toString(),
+                      }))
                     }
                   >
                     <Label>Hora fim</Label>

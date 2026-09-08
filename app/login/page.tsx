@@ -21,43 +21,60 @@ import {
   FaEyeSlash,
   FaArrowRightToBracket,
 } from "react-icons/fa6";
-import axios from "axios";
 import { CURRENT_VERSION } from "@/configs/misc.config";
-import { API_ROUTES } from "@/configs/api.config";
-import { LoginInType } from "@/types/login.type";
-import { LoginInSchema } from "@/schemas/login.schema";
+import { LoginInType } from "@/types/auth.type";
+import { LoginInSchema } from "@/schemas/auth.schema";
 import { useAuthStore } from "@/stores/auth.store";
 import Validator from "@/helpers/Validator.helper";
+import AuthService from "@/services/Auth.service";
 import logo from "@/public/logo.svg";
 
-export default function Login() {
+/**
+ * LoginPage component
+ * Renders the login screen with email/password fields, form validation,
+ * and handles the authentication flow. Uses Zustand store to persist tokens
+ * and redirects to the home page upon success.
+ */
+export default function LoginPage() {
   const router = useRouter();
+
+  // Zustand store action to save authentication tokens.
   const setTokens = useAuthStore((state) => state.setTokens);
+
+  // Local state for login form data.
   const [login, setLogin] = useState<LoginInType>({ email: "", senha: "" });
+  // Toggle password visibility.
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  // Loading state while authentication request is in progress.
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  /**
+   * Computes whether the submit button should be disabled.
+   * Uses Zod schema to validate the current login data.
+   * The button is disabled if validation fails.
+   */
   const isBtnDisabled = useMemo(() => {
     const result = LoginInSchema.safeParse(login);
     const isDisabled = !result.success;
     return isDisabled;
   }, [login]);
 
-  const handleChange = (key: keyof LoginInType, value: string) => {
-    setLogin((previous) => ({ ...previous, [key]: value }));
-  };
-
+  /**
+   * Handles form submission:
+   * - Prevents default browser behavior
+   * - Sets loading state
+   * - Calls the authentication service
+   * - On success: stores tokens and redirects to home
+   * - On error: shows a toast message
+   * - Finally resets loading state
+   */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setIsLoading(true);
 
     try {
-      const response = await axios.post(API_ROUTES.auth.login(), login);
-      const data = response.data;
-
-      const { access_token, refresh_token } = data;
-
-      setTokens(access_token, refresh_token);
+      const data = await AuthService.login(login);
+      setTokens(data.access_token, data.refresh_token);
       router.replace("/");
     } catch {
       toast.danger("Erro ao fazer login");
@@ -67,8 +84,8 @@ export default function Login() {
   };
 
   return (
-    <main className="flex h-screen w-full overflow-hidden">
-      {/* Left Side */}
+    <main className="flex h-screen w-full">
+      {/* Left column: login form with slide-in animation */}
       <motion.div
         animate={{ opacity: 1, x: 0 }}
         className="flex w-1/2 flex-col justify-center items-center px-12 relative"
@@ -76,21 +93,23 @@ export default function Login() {
         transition={{ duration: 0.5 }}
       >
         <div className="w-full max-w-md space-y-8">
-          <div className="text-left">
-            <h1 className="text-3xl font-bold tracking-tight">
+          {/* Header section */}
+          <div>
+            <Typography type="h1" className="text-3xl" weight="bold">
               Bem-vindo de volta
-            </h1>
+            </Typography>
             <p className="mt-2 text-muted">
               Por favor, insira suas credenciais para acessar o sistema.
             </p>
           </div>
 
+          {/* Login form */}
           <Form className="flex flex-col gap-8" onSubmit={handleSubmit}>
-            {/* Usuário */}
+            {/* Email field with built-in validation */}
             <TextField
               autoComplete="email"
               value={login.email}
-              onChange={(value) => handleChange("email", value)}
+              onChange={(v) => setLogin((prev) => ({ ...prev, email: v }))}
               isRequired
               validate={(value) => {
                 if (!value.length) {
@@ -101,7 +120,7 @@ export default function Login() {
                 }
                 return null;
               }}
-              variant="primary"
+              variant="secondary"
             >
               <Label>E-mail</Label>
               <InputGroup>
@@ -113,13 +132,13 @@ export default function Login() {
               <FieldError />
             </TextField>
 
-            {/* Senha */}
+            {/* Password field with visibility toggle and validation */}
             <TextField
               autoComplete="current-password"
               value={login.senha}
-              onChange={(value) => handleChange("senha", value)}
+              onChange={(v) => setLogin((prev) => ({ ...prev, senha: v }))}
               type={isVisible ? "text" : "password"}
-              variant="primary"
+              variant="secondary"
               isRequired
               validate={(value) => {
                 if (!value.length) {
@@ -153,6 +172,8 @@ export default function Login() {
               </InputGroup>
               <FieldError />
             </TextField>
+
+            {/* Submit button with loading state and icon */}
             <Button
               type="submit"
               fullWidth
@@ -169,49 +190,40 @@ export default function Login() {
             </Button>
           </Form>
 
-          {/* Footer */}
+          {/* Footer credits */}
           <div className="text-center text-sm text-muted mt-8">
-            &copy; {new Date().getFullYear()} Arceus. Todos os direitos
-            reservados.
+            Desenvolvido pela Newnet.
           </div>
         </div>
       </motion.div>
 
-      {/* Right Side */}
+      {/* Right column: branding and info with fade-in animation */}
       <motion.div
         animate={{ opacity: 1 }}
         className="flex w-1/2 relative bg-linear-to-br from-purple-500 to-indigo-500 items-center justify-center text-white overflow-hidden"
         initial={{ opacity: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-          }}
-          className="absolute -top-20 -right-20 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.5, 1],
-            x: [0, 50, 0],
-          }}
-          className="absolute -bottom-20 -left-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        />
-        <div className="relative z-10 p-12 text-center max-w-lg">
+        {/* Decorative blurred background circles */}
+        <div className="absolute -top-20 -right-20 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+        <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+
+        {/* Main content with staggered animation */}
+        <div className="relative p-12 text-center max-w-lg">
           <motion.div
             animate={{ y: 0, opacity: 1 }}
             initial={{ y: 20, opacity: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <div className="w-20 h-20 mx-auto">
+            {/* Logo */}
+            <div className="size-20 mx-auto">
               <Image
                 alt="Logo do sistema. Imagem do pokémon Arceus"
                 src={logo}
               />
             </div>
+
+            {/* Title and description */}
             <Typography
               type="h2"
               align="center"
@@ -226,6 +238,8 @@ export default function Login() {
               analíticos.
             </p>
           </motion.div>
+
+          {/* Feature cards with hover animation */}
           <div className="grid grid-cols-2 gap-4 mt-12 text-left">
             <motion.div
               className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10"
@@ -234,6 +248,7 @@ export default function Login() {
               <div className="font-bold text-xl">Logs</div>
               <div className="text-xs uppercase tracking-wider">Detalhados</div>
             </motion.div>
+
             <motion.div
               className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10"
               whileHover={{ scale: 1.05 }}
@@ -244,6 +259,8 @@ export default function Login() {
               </div>
             </motion.div>
           </div>
+
+          {/* Version info with delayed fade-in */}
           <motion.div
             animate={{ opacity: 1 }}
             className="absolute bottom-5 left-0 right-0 text-center text-sm font-mono"

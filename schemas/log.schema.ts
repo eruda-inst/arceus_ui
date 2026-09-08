@@ -1,64 +1,93 @@
 import z from "zod";
+import { HttpStatusCode } from "axios";
 
-enum Departments {
-  Support = "Suporte",
-  Commercial = "Comercial",
-  Finance = "Financeiro",
-  Screening = "Triagem",
-  Collection = "Cobrança",
-  Upgrade = "Upgrade",
-  Village = "Vila",
-}
+/**
+ * Valid HTTP methods as per the API.
+ */
+const HTTPMethodSchema = z.enum(["GET", "DELETE", "PATCH", "POST", "PUT"]);
 
+/**
+ * Valid HTTP status codes expected in log entries.
+ * Derived from axios HttpStatusCode enum.
+ */
+const HTTPStatusCodeSchema = z.literal([
+  HttpStatusCode.Ok, // 200
+  HttpStatusCode.Created, // 201
+  HttpStatusCode.Unauthorized, // 401
+  HttpStatusCode.Forbidden, // 403
+  HttpStatusCode.NotFound, // 404
+  HttpStatusCode.UnprocessableEntity, // 422
+  HttpStatusCode.InternalServerError, // 500
+]);
+
+/**
+ * Business sectors used for filtering and categorizing logs.
+ */
+const SectorSchema = z.enum([
+  "Cobrança",
+  "Comercial",
+  "Financeiro",
+  "Suporte",
+  "Triagem",
+  "Upgrade",
+  "Vila",
+]);
+
+/**
+ * Input filter schema for logs.
+ * All fields are optional; used to build query parameters.
+ */
 const LogFilterInSchema = z.object({
-  metodo: z.enum(["GET", "POST", "PUT"]).optional(),
-  codigo: z
-    .number()
-    .refine((val) => [200, 201, 401, 403, 404, 422, 500].includes(val), {
-      message: "Código HTTP inválido",
-    })
-    .optional(),
-  data_inicio: z.string().optional(),
-  data_fim: z.string().optional(),
-  hora_inicio: z.string().optional(),
-  hora_fim: z.string().optional(),
-  endpoint: z.string().optional(),
-  setor: z.enum(Departments).optional(),
-  protocolo: z.string().optional(),
-  nome_cliente: z.string().optional(),
+  metodo: HTTPMethodSchema.optional(), // HTTP method
+  codigo: HTTPStatusCodeSchema.optional(), // HTTP status code
+  data_inicio: z.string().optional(), // Start date (ISO string)
+  data_fim: z.string().optional(), // End date (ISO string)
+  hora_inicio: z.string().optional(), // Start time (HH:mm:ss)
+  hora_fim: z.string().optional(), // End time (HH:mm:ss)
+  endpoint: z.string().optional(), // API endpoint path
+  setor: SectorSchema.optional(), // Business sector
+  protocolo: z.string().optional(), // Request protocol (e.g., NWT...)
+  nome_cliente: z.string().optional(), // Client name
 });
 
+/**
+ * Detailed log entry schema for a single log record.
+ */
 const LogOutSchema = z.object({
-  id: z.number().positive(),
-  metodo: z.string(),
-  endpoint: z.string(),
-  codigo: z.number().positive(),
-  duracao: z.number(),
-  protocolo: z.string().nullable(),
-  payload: z.string().nullable(),
-  resposta: z.string(),
-  url: z.string(),
-  setor: z.enum(Departments),
-  criado_em: z.string(),
-  nome_cliente: z.string().nullable(),
+  id: z.number().positive(), // Unique log ID
+  metodo: z.string(), // HTTP method
+  endpoint: z.string(), // API endpoint
+  codigo: z.number().positive(), // HTTP status code
+  duracao: z.number(), // Request duration in milliseconds
+  protocolo: z.string().nullable(), // Protocol identifier
+  payload: z.string().nullable(), // Request payload (if any)
+  resposta: z.string(), // Response body
+  url: z.string(), // Full request URL
+  setor: SectorSchema, // Business sector
+  criado_em: z.string(), // Creation timestamp (ISO string)
+  nome_cliente: z.string().nullable(), // Client name
 });
 
-const LogPaginationOutSchema = z.object({
-  data: z.array(LogOutSchema),
+/**
+ * Paginated list response schema for logs.
+ */
+const LogListOutSchema = z.object({
+  data: z.array(LogOutSchema), // Array of log entries
   meta: z.object({
-    pagina_atual: z.number().positive(),
-    itens_por_pagina: z.number().positive(),
-    total_paginas: z.number().nonnegative(),
-    total_itens: z.number().nonnegative(),
+    pagina_atual: z.number().positive(), // Current page number
+    itens_por_pagina: z.number().positive(), // Items per page
+    total_paginas: z.number().nonnegative(), // Total number of pages
+    total_itens: z.number().nonnegative(), // Total item count
   }),
 });
 
+/**
+ * Query parameters schema for log listing endpoints.
+ * Used for validation of incoming request query strings.
+ */
 const LogParamsInSchema = z.object({
-  // Pagination
   pagina: z.int().min(1).default(1).optional(),
   itens_por_pagina: z.int().min(1).max(100).default(10).optional(),
-
-  // Filtering (all optional)
   metodo: z.string().optional(),
   endpoint: z.string().optional(),
   codigo: z.number().positive().optional(),
@@ -72,9 +101,11 @@ const LogParamsInSchema = z.object({
 });
 
 export {
-  Departments,
+  HTTPMethodSchema,
+  HTTPStatusCodeSchema,
   LogFilterInSchema,
+  LogListOutSchema,
   LogOutSchema,
-  LogPaginationOutSchema,
   LogParamsInSchema,
+  SectorSchema,
 };

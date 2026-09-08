@@ -1,26 +1,24 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { JSX, ReactNode, useEffect } from "react";
 import { Toast } from "@heroui/react";
 import { ThemeProvider } from "next-themes";
 import { useAuthStore } from "@/stores/auth.store";
 import useTokenRefresh from "@/hooks/useTokenRefresh.hook";
 
-export default function Providers({ children }: { children: ReactNode }) {
-  const initAuth = useAuthStore((state) => state.init);
+export interface ProvidersProps {
+  children: ReactNode;
+}
+
+export default function Providers({ children }: ProvidersProps): JSX.Element {
+  const init = useAuthStore((state) => state.init);
   const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
-    const initialize = async () => {
-      await initAuth();
-    };
-    initialize();
-  }, [initAuth, accessToken]);
+    init();
+  }, [init, accessToken]);
 
-  useTokenRefresh({
-    checkInterval: 30000,
-    thresholdSeconds: 60,
-  });
+  useTokenRefresh({ checkInterval: 30000, thresholdSeconds: 60 });
 
   return (
     <ThemeProvider attribute="class" enableSystem>

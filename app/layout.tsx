@@ -6,12 +6,10 @@ import "@/app/globals.css";
 export const metadata: Metadata = {
   title: "Arceus · Login",
   description:
-    "Plataforma para monitoramento de requisições HTTP realizadas ao Arceus, exibição de métricas e dashboards.",
+    "Plataforma para monitoramento de requisições HTTP, exibição de métricas e dashboards.",
 };
 
-export const viewport: Viewport = {
-  themeColor: "#000000",
-};
+export const viewport: Viewport = { themeColor: "#000" };
 
 export default function RootLayout({
   children,

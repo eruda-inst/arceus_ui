@@ -1,28 +1,41 @@
 import { z } from "zod";
 import {
-  LogOutSchema,
-  LogPaginationOutSchema,
+  HTTPMethodSchema,
+  HTTPStatusCodeSchema,
   LogFilterInSchema,
+  LogListOutSchema,
+  LogOutSchema,
   LogParamsInSchema,
+  SectorSchema,
 } from "@/schemas/log.schema";
 
-type CodeType = 200 | 201 | 401 | 403 | 404 | 422 | 500;
+/** Allowed HTTP methods for log filtering */
+type HTTPMethodType = z.infer<typeof HTTPMethodSchema>;
 
+/** Allowed HTTP status codes for log filtering */
+type HTTPStatusCodeType = z.infer<typeof HTTPStatusCodeSchema>;
+
+/** Input filter parameters for querying logs */
 type LogFilterInType = z.infer<typeof LogFilterInSchema>;
 
-type LogListOutType = z.infer<typeof LogPaginationOutSchema>;
+/** Paginated list response containing log entries and metadata */
+type LogListOutType = z.infer<typeof LogListOutSchema>;
 
+/** Single log entry structure */
 type LogOutType = z.infer<typeof LogOutSchema>;
 
+/** Query parameters for log listing (pagination and filters) */
 type LogParamsInType = z.infer<typeof LogParamsInSchema>;
 
-type MethodType = "GET" | "POST" | "PUT";
+/** Business sector values */
+type SectorType = z.infer<typeof SectorSchema>;
 
 export type {
-  CodeType,
+  HTTPMethodType,
+  HTTPStatusCodeType,
   LogFilterInType,
   LogListOutType,
   LogOutType,
   LogParamsInType,
-  MethodType,
+  SectorType,
 };

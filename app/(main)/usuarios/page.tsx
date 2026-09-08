@@ -5,7 +5,7 @@ import { Button, Typography } from "@heroui/react";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import PaginationControls from "@/components/PaginationControls";
 import UserFilters from "@/components/Filters/UserFilters";
-import ActiveUserFilters from "@/components/Filters/ActiveUserFilters";
+import ActiveFilters from "@/components/Filters/ActiveFilters";
 import Details from "@/components/Modals/UserDetails";
 import UserTable from "@/components/Tables/UserTable";
 import Add from "@/components/Modals/UserAdd";
@@ -16,25 +16,33 @@ import useFilter from "@/hooks/useFilter.hook";
 import { UserFilterInType, UserOutType } from "@/types/user.type";
 import { API_ROUTES } from "@/configs/api.config";
 
-export default function Users() {
+/**
+ * Users page component for managing system users.
+ * It uses a WebSocket connection to receive real-time user data,
+ * supports filtering and pagination, and provides modals for viewing details and adding new users.
+ */
+export default function UsersPage() {
+  // State for details modal visibility and selected user.
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
+  // State for "Add user" modal visibility.
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  // Currently selected user for details modal.
   const [selectedUser, setSelectedUser] = useState<UserOutType | null>(null);
 
-  // Auth
+  // Permission check: user must have "criar:usuarios" permission to see the "New user" button.
   const hasPerm = useAuthStore((state) => state.hasPerm);
 
-  // WebSocket
+  // WebSocket hook for user data; provides connection status, received messages, and send function.
   const {
     lastMessage: users,
     isConnected,
     isConnecting,
     sendMessage,
   } = useUserWebSocket({
-    url: API_ROUTES.userWs,
+    url: API_ROUTES.userWs(),
   });
 
-  // Pagination
+  // Pagination state and handlers.
   const {
     page,
     itemsPerPage,
@@ -44,15 +52,23 @@ export default function Users() {
     handleSetItemsPerPage,
   } = usePagination();
 
-  // Filters
+  // Filter state and handlers.
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
     useFilter<UserFilterInType>();
 
+  /**
+   * Handler for table row click.
+   * Sets the selected user and opens the details modal.
+   */
   const handleRowClick = (user: UserOutType) => {
     setSelectedUser(user);
     setIsDetailsOpen(true);
   };
 
+  /**
+   * Effect that sends a WebSocket message whenever pagination or filters change.
+   * This fetches the appropriate page of users matching the current criteria.
+   */
   useEffect(() => {
     sendMessage({
       pagina: page,
@@ -63,6 +79,7 @@ export default function Users() {
 
   return (
     <div className="container mx-auto p-2 space-y-6">
+      {/* Header: title, description, connection status, and "New user" button */}
       <div className="flex justify-between items-center">
         <div>
           <Typography
@@ -84,6 +101,7 @@ export default function Users() {
           />
         </div>
 
+        {/* Add user button – only enabled if user has the required permission */}
         <Button
           isDisabled={!hasPerm("criar:usuarios")}
           onPress={() => setIsAddOpen(true)}
@@ -93,18 +111,27 @@ export default function Users() {
         </Button>
       </div>
 
+      {/* Filter builder component */}
       <UserFilters
         filters={filters}
         onResetFilters={handleResetFilters}
         onSetFilters={handleSetFilters}
       />
 
-      <ActiveUserFilters
+      {/* Displays currently active filters */}
+      <ActiveFilters
         filters={filters}
-        onRemoveFilters={handleRemoveFilter}
         onResetFilters={handleResetFilters}
+        onRemoveFilters={handleRemoveFilter}
+        labelMap={{
+          nome: "Nome",
+          email: "Email",
+          nome_grupo: "Nome do grupo",
+          ativo: "Ativo",
+        }}
       />
 
+      {/* Pagination controls */}
       <PaginationControls
         page={page}
         totalPages={users?.meta?.total_paginas || 1}
@@ -116,12 +143,14 @@ export default function Users() {
         onSetItemsPerPage={handleSetItemsPerPage}
       />
 
+      {/* User table – shows loading state until data arrives */}
       <UserTable
         users={users?.data}
         isLoading={!users}
         onRowClick={handleRowClick}
       />
 
+      {/* Details modal – only rendered when a user is selected */}
       {selectedUser && (
         <Details
           user={selectedUser}
@@ -130,6 +159,7 @@ export default function Users() {
         />
       )}
 
+      {/* Add user modal */}
       <Add
         addedUsers={users?.data || []}
         isOpen={isAddOpen}
