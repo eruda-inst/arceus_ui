@@ -4,22 +4,22 @@ import { FormEvent, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  Label,
-  TextField,
-  Form,
-  InputGroup,
   Button,
   FieldError,
+  Form,
+  InputGroup,
+  Label,
+  TextField,
   toast,
   Typography,
 } from "@heroui/react";
 import { motion } from "motion/react";
 import {
-  FaUser,
-  FaLock,
+  FaArrowRightToBracket,
   FaEye,
   FaEyeSlash,
-  FaArrowRightToBracket,
+  FaLock,
+  FaUser,
 } from "react-icons/fa6";
 import { CURRENT_VERSION } from "@/configs/misc.config";
 import { LoginInType } from "@/types/auth.type";

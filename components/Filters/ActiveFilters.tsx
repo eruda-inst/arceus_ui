@@ -1,5 +1,5 @@
 import { Button, Card, Chip } from "@heroui/react";
-import { FaTrash, FaXmark, FaFilter } from "react-icons/fa6";
+import { FaFilter, FaTrash, FaXmark } from "react-icons/fa6";
 
 /**
  * Props for the ActiveFilters component.

@@ -1,11 +1,12 @@
+import { ReactNode } from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Arceus · Registros" };
 
-export default function MainLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export interface LogLayoutProps {
+  children: ReactNode;
+}
+
+export default function LogLayout({ children }: Readonly<LogLayoutProps>) {
   return <>{children}</>;
 }

@@ -1,24 +1,36 @@
 import { FaServer } from "react-icons/fa6";
 import { Modal, ModalProps } from "@heroui/react";
-import InfoItem from "@/components/InfoItem";
 import {
   a11yDark,
   coldarkDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import InfoItem from "@/components/InfoItem";
 import { LogOutType } from "@/types/log.type";
 
+/**
+ * Props for the LogDetails component.
+ * Extends all ModalProps from HeroUI except 'children' (which we don't use directly).
+ */
 export interface DetailsProps extends Omit<ModalProps, "children"> {
-  handleClose: () => void;
+  /** Callback function to close the modal. */
+  onClose: () => void;
+  /** The log entry to display in detail. */
   log: LogOutType;
 }
 
-export default function Details({ handleClose, log, ...props }: DetailsProps) {
+/**
+ * LogDetails – a modal that displays detailed information about a selected log entry.
+ * Uses HeroUI's Modal components and renders multiple InfoItem fields.
+ */
+export default function LogDetails({ onClose, log, ...props }: DetailsProps) {
   return (
     <Modal {...props}>
+      {/* Backdrop with blur effect */}
       <Modal.Backdrop variant="blur">
         <Modal.Container size="cover">
           <Modal.Dialog>
-            <Modal.CloseTrigger onPress={handleClose} />
+            {/* Close button that triggers the onClose callback */}
+            <Modal.CloseTrigger onPress={onClose} />
             <Modal.Header>
               <div className="text-xl font-bold flex items-center gap-2">
                 <Modal.Icon>
@@ -27,6 +39,7 @@ export default function Details({ handleClose, log, ...props }: DetailsProps) {
                 <Modal.Heading>{log.endpoint}</Modal.Heading>
               </div>
             </Modal.Header>
+
             <Modal.Body className="flex flex-col gap-y-8">
               <div className="flex items-center justify-between">
                 <div>
@@ -39,54 +52,30 @@ export default function Details({ handleClose, log, ...props }: DetailsProps) {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
+                {/* Format duration with 3 decimal places using Intl.NumberFormat */}
                 <InfoItem
                   label="Duração"
-                  value={log.duracao.toFixed(3).toString().replace(".", ",")}
+                  value={Intl.NumberFormat("pt-BR", {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3,
+                  }).format(log.duracao)}
                 />
-                <InfoItem
-                  label="Protocolo"
-                  value={log.protocolo ? log.protocolo : "---"}
-                />
+                <InfoItem label="Protocolo" value={log.protocolo} />
                 <InfoItem label="URL" value={log.url} />
                 <InfoItem label="Setor" value={log.setor} />
-                <InfoItem
-                  label="Nome do cliente"
-                  value={log.nome_cliente ? log.nome_cliente : "---"}
-                />
+                <InfoItem label="Nome do cliente" value={log.nome_cliente} />
+                {/* Payload is shown as code (JSON) if present, using a11yDark style */}
                 <InfoItem
                   label="Payload"
-                  value={
-                    log.payload
-                      ? (() => {
-                          try {
-                            const obj =
-                              typeof log.payload === "string"
-                                ? JSON.parse(log.payload)
-                                : log.payload;
-                            return JSON.stringify(obj, null, 2);
-                          } catch {
-                            return String(log.payload);
-                          }
-                        })()
-                      : "---"
-                  }
-                  isCode={log.payload !== null}
+                  value={log.payload}
+                  isCode={!!log.payload}
                   codeStyle={a11yDark}
                 />
+                {/* Response is shown as code (JSON) if present, using coldarkDark style */}
                 <InfoItem
                   label="Resposta"
-                  value={(() => {
-                    try {
-                      const obj =
-                        typeof log.resposta === "string"
-                          ? JSON.parse(log.resposta)
-                          : log.resposta;
-                      return JSON.stringify(obj, null, 2);
-                    } catch {
-                      return String(log.resposta);
-                    }
-                  })()}
-                  isCode={log.resposta !== null}
+                  value={log.resposta}
+                  isCode={!!log.resposta}
                   codeStyle={coldarkDark}
                 />
               </div>

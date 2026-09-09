@@ -5,7 +5,7 @@ import { Typography } from "@heroui/react";
 import PaginationControls from "@/components/PaginationControls";
 import ActiveFilters from "@/components/Filters/ActiveFilters";
 import LogFilters from "@/components/Filters/LogFilters";
-import Details from "@/components/Modals/LogDetails";
+import LogDetails from "@/components/Modals/LogDetails";
 import LogTable from "@/components/Tables/LogTable";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
@@ -134,11 +134,11 @@ export default function LogsPage() {
 
       {/* Modal for showing detailed log information; only rendered when a log is selected */}
       {selectedLog && (
-        <Details
+        <LogDetails
           isOpen={isDetailsOpen}
           onOpenChange={setIsDetailsOpen}
           log={selectedLog}
-          handleClose={() => setIsDetailsOpen(false)}
+          onClose={() => setIsDetailsOpen(false)}
         />
       )}
     </div>

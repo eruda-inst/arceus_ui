@@ -1,3 +1,3 @@
 # Arceus
 
-Plataforma para monitoramento de requisições HTTP realizadas ao Arceus, exibição de métricas e dashboards.
+Plataforma para monitoramento de requisições HTTP.
