@@ -25,7 +25,11 @@ export default function LogTable({
   }
 
   return (
-    <Table>
+    <Table
+      onClick={() => {
+        console.log(logs);
+      }}
+    >
       <Table.ScrollContainer>
         <Table.Content
           aria-label="Logs"
@@ -98,13 +102,18 @@ export default function LogTable({
                           {metodo}
                         </Chip>
                       )}
-                      {metodo === "PUT" && (
+                      {(metodo === "PUT" || metodo === "PATCH") && (
                         <Chip color="warning" variant="soft">
                           {metodo}
                         </Chip>
                       )}
                       {metodo === "GET" && (
                         <Chip color="accent" variant="soft">
+                          {metodo}
+                        </Chip>
+                      )}
+                      {metodo === "DELETE" && (
+                        <Chip color="danger" variant="soft">
                           {metodo}
                         </Chip>
                       )}

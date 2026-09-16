@@ -1,4 +1,4 @@
 /** Current application version, used for display or API headers. */
-const CURRENT_VERSION = "1.4.2";
+const CURRENT_VERSION = "1.4.3";
 
 export { CURRENT_VERSION };

@@ -55,7 +55,7 @@ const LogFilterInSchema = z.object({
  */
 const LogOutSchema = z.object({
   id: z.number().positive(), // Unique log ID
-  metodo: z.string(), // HTTP method
+  metodo: HTTPMethodSchema, // HTTP method
   endpoint: z.string(), // API endpoint
   codigo: z.number().positive(), // HTTP status code
   duracao: z.number(), // Request duration in milliseconds
