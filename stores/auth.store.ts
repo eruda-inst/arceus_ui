@@ -98,9 +98,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearTokens: () => {
-    deleteCookie(ACCESS_TOKEN_KEY, { path: "/" });
-    deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
-    deleteCookie(TOKEN_EXPIRY_KEY, { path: "/" });
+    deleteCookie(ACCESS_TOKEN_KEY);
+    deleteCookie(REFRESH_TOKEN_KEY);
+    deleteCookie(TOKEN_EXPIRY_KEY);
     set({
       accessToken: null,
       refreshToken: null,
