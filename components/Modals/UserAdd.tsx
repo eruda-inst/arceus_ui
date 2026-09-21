@@ -192,7 +192,6 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                     <Description>Nome do usuário</Description>
                     <FieldError />
                   </TextField>
-                  {/* E-mail */}
                   <TextField
                     variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isReadOnly
@@ -208,7 +207,6 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                     <Description>E-mail do usuário</Description>
                     <FieldError />
                   </TextField>
-                  {/* Grupo de permissões */}
                   <Select
                     variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isRequired

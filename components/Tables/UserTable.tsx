@@ -35,7 +35,7 @@ export default function UserTable({
           }}
         >
           <Table.Header className="sticky top-0 z-10">
-            {/* Nome */}
+            {/* Name */}
             <Table.Column isRowHeader>
               <div className="flex items-center gap-2 py-2">
                 <FaUser className="size-3.5" />
@@ -51,7 +51,7 @@ export default function UserTable({
               </div>
             </Table.Column>
 
-            {/* Status (Ativo/Inativo) */}
+            {/* Status (Active/Inactive) */}
             <Table.Column>
               <div className="flex items-center gap-2 py-2">
                 <FaCircleCheck className="size-3.5" />
@@ -59,7 +59,7 @@ export default function UserTable({
               </div>
             </Table.Column>
 
-            {/* Nome do grupo */}
+            {/* Group name */}
             <Table.Column>
               <div className="flex items-center gap-2 py-2">
                 <FaUsers className="size-3.5" />
@@ -67,7 +67,7 @@ export default function UserTable({
               </div>
             </Table.Column>
 
-            {/* Data de criação */}
+            {/* Creation date */}
             <Table.Column>
               <div className="flex items-center gap-2 py-2">
                 <FaCalendar className="size-3.5" />
@@ -85,7 +85,7 @@ export default function UserTable({
           >
             {users?.map(({ id, nome, email, ativo, nome_grupo, criado_em }) => (
               <Table.Row id={id} key={id} className="hover:cursor-pointer">
-                {/* Nome */}
+                {/* Name */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -107,7 +107,7 @@ export default function UserTable({
                   </div>
                 </Table.Cell>
 
-                {/* Status (Ativo/Inativo) */}
+                {/* Status (Active/Inactive) */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -128,7 +128,7 @@ export default function UserTable({
                   </div>
                 </Table.Cell>
 
-                {/* Nome do grupo */}
+                {/* Group name */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -139,7 +139,7 @@ export default function UserTable({
                   </div>
                 </Table.Cell>
 
-                {/* Data de criação */}
+                {/* Date of creation */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">

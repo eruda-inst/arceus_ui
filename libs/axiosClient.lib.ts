@@ -23,7 +23,6 @@ interface AxiosClientConfig {
 }
 
 let isRefreshing = false;
-// Substituímos a fila por uma única Promise pendente
 let refreshPromise: Promise<string> | null = null;
 
 const createAxiosClient = (
@@ -34,14 +33,12 @@ const createAxiosClient = (
     withCredentials: defaultConfig?.withCredentials !== false,
   });
 
-  // Request interceptor to add access token
   client.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       if (config.withCredentials !== false) {
         const accessToken = getCookie(ACCESS_TOKEN_KEY) as string | undefined;
 
         if (accessToken) {
-          // Usamos set() para garantir compatibilidade com AxiosHeaders
           config.headers.set("Authorization", `Bearer ${accessToken}`);
         }
       }
@@ -53,7 +50,6 @@ const createAxiosClient = (
     },
   );
 
-  // Response interceptor to handle token refresh
   client.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
@@ -62,11 +58,6 @@ const createAxiosClient = (
         _skipAuth?: boolean;
       };
 
-      // Só tenta refrescar se:
-      // - Retornou 401
-      // - A requisição original existe
-      // - Não é uma tentativa de retry anterior
-      // - Não tem skip de autenticação
       if (
         error.response?.status !== 401 ||
         !originalRequest ||
@@ -77,7 +68,6 @@ const createAxiosClient = (
         return Promise.reject(error);
       }
 
-      // Se já existe um refresh em andamento, reutiliza a Promise existente
       if (isRefreshing && refreshPromise) {
         try {
           const newToken = await refreshPromise;
@@ -117,7 +107,6 @@ const createAxiosClient = (
             expires_in,
           } = response.data;
 
-          // Armazena os novos tokens
           const cookieOptions = {
             maxAge: expires_in || 3600,
             path: "/",
@@ -142,7 +131,6 @@ const createAxiosClient = (
 
           return access_token;
         } catch (refreshError) {
-          // Limpa tokens e redireciona apenas se for erro de autenticação
           deleteCookie(ACCESS_TOKEN_KEY, { path: "/" });
           deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
           deleteCookie(TOKEN_EXPIRY_KEY, { path: "/" });

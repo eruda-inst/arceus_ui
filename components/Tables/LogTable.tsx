@@ -85,7 +85,7 @@ export default function LogTable({
           >
             {logs?.map(({ id, codigo, criado_em, endpoint, metodo }) => (
               <Table.Row id={id} key={id} className="hover:cursor-pointer">
-                {/* Método HTTP */}
+                {/* HTTP method */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -128,7 +128,7 @@ export default function LogTable({
                   </div>
                 </Table.Cell>
 
-                {/* Código HTTP */}
+                {/* HTTP code */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -155,7 +155,7 @@ export default function LogTable({
                   </div>
                 </Table.Cell>
 
-                {/* Data de registro */}
+                {/* Date of creation */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
@@ -168,7 +168,7 @@ export default function LogTable({
                   </div>
                 </Table.Cell>
 
-                {/* Hora de registro */}
+                {/* Hour of creation */}
                 <Table.Cell>
                   <div className="flex items-center gap-3">
                     <div className="size-8 bg-indigo-500 rounded-full flex items-center justify-center">
