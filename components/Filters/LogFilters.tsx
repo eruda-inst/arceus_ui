@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { parseDate, parseTime } from "@internationalized/date";
+import { useTheme } from "next-themes";
 import {
   Accordion,
   Button,
@@ -71,6 +72,9 @@ export default function LogFilters({
   onSetFilters,
   onResetFilters,
 }: LogFiltersProps) {
+  // Get the resolved theme (light/dark) so HeroUI components can switch variants accordingly
+  const { resolvedTheme } = useTheme();
+
   // Local state for filter values before applying
   const [localFilters, setLocalFilters] = useState<LogFilterInType>(filters);
 
@@ -93,7 +97,7 @@ export default function LogFilters({
   };
 
   return (
-    <Card className="mb-6 border">
+    <Card className="mb-6 border bg-surface-secondary dark:bg-surface">
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">
@@ -145,7 +149,7 @@ export default function LogFilters({
               <Accordion.Body>
                 <Form className="grid grid-cols-2 gap-4">
                   <Select
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     placeholder="Método HTTP"
                     value={localFilters.metodo ?? ""}
                     onChange={(v) =>
@@ -173,7 +177,7 @@ export default function LogFilters({
                   </Select>
 
                   <Select
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     placeholder="Código HTTP"
                     value={localFilters.codigo ? localFilters.codigo : ""}
                     onChange={(v) =>
@@ -204,7 +208,7 @@ export default function LogFilters({
                   </Select>
 
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.endpoint ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, endpont: v }))
@@ -221,7 +225,7 @@ export default function LogFilters({
                   </TextField>
 
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.protocolo ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, protocolo: v }))
@@ -256,7 +260,7 @@ export default function LogFilters({
               <Accordion.Body>
                 <Form className="grid grid-cols-2 gap-4">
                   <Select
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     placeholder="Setor"
                     value={localFilters.setor ?? ""}
                     onChange={(v) =>
@@ -284,7 +288,7 @@ export default function LogFilters({
                   </Select>
 
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.nome_cliente ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, nome_cliente: v }))
@@ -338,7 +342,12 @@ export default function LogFilters({
                     }}
                   >
                     <Label>Intervalo de datas</Label>
-                    <DateField.Group fullWidth variant="secondary">
+                    <DateField.Group
+                      fullWidth
+                      variant={
+                        resolvedTheme === "dark" ? "secondary" : "primary"
+                      }
+                    >
                       <DateField.Input slot="start">
                         {(segment) => <DateField.Segment segment={segment} />}
                       </DateField.Input>
@@ -417,7 +426,11 @@ export default function LogFilters({
                     }
                   >
                     <Label>Hora início</Label>
-                    <TimeField.Group variant="secondary">
+                    <TimeField.Group
+                      variant={
+                        resolvedTheme === "dark" ? "secondary" : "primary"
+                      }
+                    >
                       <TimeField.Input>
                         {(segment) => <TimeField.Segment segment={segment} />}
                       </TimeField.Input>
@@ -438,7 +451,11 @@ export default function LogFilters({
                     }
                   >
                     <Label>Hora fim</Label>
-                    <TimeField.Group variant="secondary">
+                    <TimeField.Group
+                      variant={
+                        resolvedTheme === "dark" ? "secondary" : "primary"
+                      }
+                    >
                       <TimeField.Input>
                         {(segment) => <TimeField.Segment segment={segment} />}
                       </TimeField.Input>

@@ -25,11 +25,7 @@ export default function LogTable({
   }
 
   return (
-    <Table
-      onClick={() => {
-        console.log(logs);
-      }}
-    >
+    <Table>
       <Table.ScrollContainer>
         <Table.Content
           aria-label="Logs"

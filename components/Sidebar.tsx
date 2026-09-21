@@ -56,7 +56,7 @@ export type FormType = z.infer<typeof FormSchema>;
 
 export default function Sidebar() {
   const router = useRouter();
-  const { setTheme, theme } = useTheme();
+  const { resolvedTheme, setTheme, theme } = useTheme();
   const pathname = usePathname();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
@@ -134,7 +134,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="flex w-64 flex-col fixed inset-y-0 bg-surface border-r">
+      <div className="flex w-64 flex-col fixed inset-y-0 bg-surface-secondary dark:bg-surface border-r">
         <div className="flex items-center h-16 px-6 border-b">
           <div className="flex items-center gap-3">
             <Image alt="Arceus" className="size-8" src={logo} />
@@ -380,7 +380,9 @@ export default function Sidebar() {
                     >
                       <div className="space-y-4 grid gap-x-4 grid-cols-2 w-full">
                         <TextField
-                          variant="secondary"
+                          variant={
+                            resolvedTheme === "dark" ? "secondary" : "primary"
+                          }
                           type={showNewPassword ? "text" : "password"}
                           value={form.senha || ""}
                           autoComplete="new-password"
@@ -422,7 +424,9 @@ export default function Sidebar() {
                             handleChange("confirmarSenha", value)
                           }
                           type={showConfirmPassword ? "text" : "password"}
-                          variant="secondary"
+                          variant={
+                            resolvedTheme === "dark" ? "secondary" : "primary"
+                          }
                           isRequired
                           validate={(value) => {
                             if (value.length) {

@@ -60,7 +60,7 @@ export default function BarChartCard({
       {isLoading ? (
         <Skeleton className="h-80 rounded-3xl" />
       ) : (
-        <Card className="border bg-surface min-h-80">
+        <Card className="border bg-surface-secondary min-h-80 dark:bg-surface">
           {/* Card header with title and description */}
           <Card.Header className="space-y-3">
             <Card.Title className="text-lg font-bold">{label}</Card.Title>

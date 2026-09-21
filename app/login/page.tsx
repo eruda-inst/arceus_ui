@@ -21,6 +21,7 @@ import {
   FaLock,
   FaUser,
 } from "react-icons/fa6";
+import { useTheme } from "next-themes";
 import { CURRENT_VERSION } from "@/configs/misc.config";
 import { LoginInType } from "@/types/auth.type";
 import { LoginInSchema } from "@/schemas/auth.schema";
@@ -37,6 +38,9 @@ import logo from "@/public/logo.svg";
  */
 export default function LoginPage() {
   const router = useRouter();
+
+  // Get the resolved theme (light/dark) so HeroUI components can switch variants accordingly
+  const { resolvedTheme } = useTheme();
 
   // Zustand store action to save authentication tokens.
   const setTokens = useAuthStore((state) => state.setTokens);
@@ -120,7 +124,7 @@ export default function LoginPage() {
                 }
                 return null;
               }}
-              variant="secondary"
+              variant={resolvedTheme === "dark" ? "secondary" : "primary"}
             >
               <Label>E-mail</Label>
               <InputGroup>
@@ -138,7 +142,7 @@ export default function LoginPage() {
               value={login.senha}
               onChange={(v) => setLogin((prev) => ({ ...prev, senha: v }))}
               type={isVisible ? "text" : "password"}
-              variant="secondary"
+              variant={resolvedTheme === "dark" ? "secondary" : "primary"}
               isRequired
               validate={(value) => {
                 if (!value.length) {
@@ -228,7 +232,7 @@ export default function LoginPage() {
               type="h2"
               align="center"
               weight="bold"
-              className="text-4xl mt-4 mb-6"
+              className="text-4xl mt-4 mb-6 text-white"
             >
               Arceus
             </Typography>

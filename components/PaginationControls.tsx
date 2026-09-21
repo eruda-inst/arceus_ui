@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { Card, Label, ListBox, Pagination, Select } from "@heroui/react";
 import clsx from "clsx";
+import { useTheme } from "next-themes";
 import { itemsPerPageValues } from "@/hooks/usePagination.hook";
 
 export interface PaginationControlsProps {
@@ -24,6 +25,9 @@ export default function PaginationControls({
   onGoToPage,
   onSetItemsPerPage,
 }: PaginationControlsProps) {
+  // Get the resolved theme (light/dark) so HeroUI components can switch variants accordingly
+  const { resolvedTheme } = useTheme();
+
   const safeTotalPages = totalPages || 1;
 
   const getPageNumbers = () => {
@@ -59,11 +63,11 @@ export default function PaginationControls({
   const endItem = Math.min(page * itemsPerPage, totalItems);
 
   return (
-    <Card className="border">
+    <Card className="border bg-surface-secondary dark:bg-surface">
       <Card.Content>
         <div className="flex items-center justify-between gap-4">
           <Select
-            variant="secondary"
+            variant={resolvedTheme === "dark" ? "secondary" : "primary"}
             placeholder="Itens por página"
             value={itemsPerPage}
             onChange={(v) => onSetItemsPerPage(v as itemsPerPageValues)}

@@ -20,7 +20,7 @@ export default function MetricCard({
   isLoading = false,
 }: MetricCardProps) {
   return (
-    <Card className="border bg-surface">
+    <Card className="border dark:bg-surface bg-surface-secondary">
       <Card.Header className="space-y-3">
         <Card.Title className="text-lg font-bold">{title}</Card.Title>
         <Card.Description>{description}</Card.Description>

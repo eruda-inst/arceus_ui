@@ -27,6 +27,7 @@ import {
   FaUserPlus,
 } from "react-icons/fa6";
 import z from "zod";
+import { useTheme } from "next-themes";
 import { IXCUserOutType } from "@/types/ixcUser.type";
 import { GroupOutType } from "@/types/group.type";
 import { UserOutType } from "@/types/user.type";
@@ -51,6 +52,8 @@ export const FormSchema = z.object({
 export type formType = z.infer<typeof FormSchema>;
 
 export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
+  const { resolvedTheme } = useTheme();
+
   const getAllIxcUsers = IxcUserService.getAll;
   const getAllGroups = GroupService.getAll;
   const createUser = UserService.create;
@@ -176,7 +179,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                 <Form className="grid grid-cols-2 gap-2">
                   {/* Nome */}
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isReadOnly
                     isRequired
                     isDisabled
@@ -191,7 +194,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                   </TextField>
                   {/* E-mail */}
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isReadOnly
                     type="email"
                     isRequired
@@ -207,7 +210,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                   </TextField>
                   {/* Grupo de permissões */}
                   <Select
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isRequired
                     placeholder="Selecione o grupo de permissões"
                     value={form.id_grupo || null}
@@ -238,7 +241,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                     </Select.Popover>
                   </Select>
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     isRequired
                     type={isPasswordVisible ? "text" : "password"}
                     autoComplete="new-password"
@@ -275,7 +278,7 @@ export default function Add({ addedUsers, handleClose, ...props }: AddProps) {
                     <FieldError />
                   </TextField>
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     type={isConfirmPasswordVisible ? "text" : "password"}
                     isRequired
                     validate={(value) => {

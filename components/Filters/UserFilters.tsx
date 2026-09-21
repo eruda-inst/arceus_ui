@@ -13,6 +13,7 @@ import {
   toast,
 } from "@heroui/react";
 import { FaEnvelope, FaFilter, FaUser, FaUsers } from "react-icons/fa6";
+import { useTheme } from "next-themes";
 import { UserFilterInType } from "@/types/user.type";
 
 export interface UserFiltersProps {
@@ -29,6 +30,9 @@ export default function UserFilters({
   onSetFilters,
   onResetFilters,
 }: UserFiltersProps) {
+  // Get the resolved theme (light/dark) so HeroUI components can switch variants accordingly
+  const { resolvedTheme } = useTheme();
+
   // Local state for filter values before applying
   const [localFilters, setLocalFilters] = useState<UserFilterInType>(filters);
 
@@ -51,7 +55,7 @@ export default function UserFilters({
   };
 
   return (
-    <Card className="mb-6 border">
+    <Card className="mb-6 border bg-surface-secondary dark:bg-surface">
       <Card.Header className="flex justify-between flex-row items-center">
         <div className="space-y-2">
           <Card.Title className="flex items-center gap-x-2">
@@ -100,7 +104,7 @@ export default function UserFilters({
               <Accordion.Body>
                 <Form className="grid grid-cols-2 gap-4">
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.nome ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, nome: v }))
@@ -117,7 +121,7 @@ export default function UserFilters({
                   </TextField>
 
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.email ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, email: v }))
@@ -134,7 +138,7 @@ export default function UserFilters({
                   </TextField>
 
                   <Select
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     placeholder="Ativo"
                     value={
                       localFilters.ativo === undefined
@@ -175,7 +179,7 @@ export default function UserFilters({
                   </Select>
 
                   <TextField
-                    variant="secondary"
+                    variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.nome_grupo ?? ""}
                     onChange={(v) =>
                       setLocalFilters((prev) => ({ ...prev, nome_grupo: v }))

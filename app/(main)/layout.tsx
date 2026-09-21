@@ -12,7 +12,7 @@ export interface MainLayoutProps {
 export default function MainLayout({ children }: Readonly<MainLayoutProps>) {
   return (
     <>
-      <header className="fixed top-0 w-full ml-sidebar-width p-4 flex items-center justify-between h-header-height z-20 border-b border-b-divider bg-surface">
+      <header className="fixed top-0 w-full ml-sidebar-width p-4 flex items-center justify-between h-header-height z-20 border-b border-b-divider bg-surface-secondary dark:bg-surface">
         <h1 className="text-lg font-semibold">
           Sistema de Monitoramento de Requisições v{CURRENT_VERSION}
         </h1>
