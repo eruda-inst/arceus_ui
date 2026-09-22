@@ -8,6 +8,8 @@ import { UserListOutType, UserParamsInType } from "@/types/user.type";
 export interface useUserWebSocketProps {
   /** WebSocket endpoint URL */
   url: string;
+  /** Authorization token used to authenticate the WebSocket connection */
+  token: string;
   /** Initial filter/pagination parameters (optional – defaults applied via Zod) */
   initialParams?: UserParamsInType;
 }
@@ -32,11 +34,13 @@ export interface useUserWebSocketReturn {
  * and provides a send function to update the query.
  *
  * @param url - WebSocket endpoint
+ * @param token - Authorization token
  * @param initialParams - initial filter/pagination parameters (optional)
  * @returns connection state, last received message, and a send function
  */
 export default function useUserWebSocket({
   url,
+  token,
   initialParams,
 }: useUserWebSocketProps): useUserWebSocketReturn {
   // Reference to the WebSocket instance
@@ -65,7 +69,7 @@ export default function useUserWebSocket({
    */
   const connect = useCallback(() => {
     // Avoid running on the server (SSR)
-    if (typeof window === "undefined" || !url) return;
+    if (typeof window === "undefined" || !url || !token) return;
 
     // Prevent duplicate connections
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
@@ -85,7 +89,9 @@ export default function useUserWebSocket({
     const paramsToSend = UserParamsInSchema.parse(initialParams ?? {});
 
     // Create the WebSocket
-    const ws = new WebSocket(url);
+    const separator = url.includes("?") ? "&" : "?";
+    const wsUrl = `${url}${separator}token=${encodeURIComponent(token)}`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {

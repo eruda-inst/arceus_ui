@@ -11,6 +11,7 @@ import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
 import useFilter from "@/hooks/useFilter.hook";
 import usePagination from "@/hooks/usePagination.hook";
+import { useAuthStore } from "@/stores/auth.store";
 import { LogFilterInType, LogOutType } from "@/types/log.type";
 import { API_ROUTES } from "@/configs/api.config";
 
@@ -20,13 +21,16 @@ import { API_ROUTES } from "@/configs/api.config";
  * supports filtering, pagination, and shows a detail modal on row click.
  */
 export default function LogsPage() {
+  // Access token used to authenticate the logs WebSocket connection
+  const token = useAuthStore((state) => state.accessToken);
+
   // WebSocket connection hook; provides connection status, received messages, and send function
   const {
     isConnected,
     lastMessage: logs,
     isConnecting,
     sendMessage,
-  } = useLogWebSocket({ url: API_ROUTES.logWs() });
+  } = useLogWebSocket({ url: API_ROUTES.logWs(), token: token ?? "" });
 
   // Filter state and handlers: manages active filters for the log listing
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =

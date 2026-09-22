@@ -6,6 +6,7 @@ import LineChartCard from "@/components/Charts/LineChartCard";
 import MetricCard from "@/components/MetricCard";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import useMetricWebSocket from "@/hooks/useMetricWebSocket.hook";
+import { useAuthStore } from "@/stores/auth.store";
 import { API_ROUTES } from "@/configs/api.config";
 
 /**
@@ -14,6 +15,9 @@ import { API_ROUTES } from "@/configs/api.config";
  * response times, request counts, and various top charts.
  */
 export default function MetricsPage() {
+  // Access token used to authenticate the metrics WebSocket connection
+  const token = useAuthStore((state) => state.accessToken);
+
   // WebSocket connection for metrics data; initialMetrics set to 'all' to fetch all metric types.
   const {
     isConnected,
@@ -21,6 +25,7 @@ export default function MetricsPage() {
     lastMessage: metrics,
   } = useMetricWebSocket({
     url: API_ROUTES.metricWs(),
+    token: token ?? "",
     initialMetrics: "all",
   });
 

@@ -60,6 +60,7 @@ export interface lastMessageType {
 // Props fot he metric WebSocket hook
 export interface useMetricWebSocketProps {
   url: string;
+  token: string;
   initialMetrics: MetricName[] | "all";
 }
 
@@ -75,11 +76,13 @@ export interface useMetricWebSocketReturn {
  * Upon connection, it sends an "enroll" message to subscribe to the specified metrics.
  *
  * @param url - WebSocket endpoint
+ * @param token - Authorization token
  * @param initialMetrics - array of metric names or "all" to subscribe to all metrics
  * @returns connection state and the last received message
  */
 export default function useMetricWebSocket({
   url,
+  token,
   initialMetrics,
 }: useMetricWebSocketProps): useMetricWebSocketReturn {
   // Reference to the WebSocket instance
@@ -98,7 +101,7 @@ export default function useMetricWebSocket({
    */
   const connect = useCallback(() => {
     // Avoid running on the server (SSR)
-    if (typeof window === "undefined" || !url) return;
+    if (typeof window === "undefined" || !url || !token) return;
 
     // Prevent duplicate connections
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
@@ -115,7 +118,9 @@ export default function useMetricWebSocket({
     setIsConnected(false);
 
     // Create the WebSocket
-    const ws = new WebSocket(url);
+    const separator = url.includes("?") ? "&" : "?";
+    const wsUrl = `${url}${separator}token=${encodeURIComponent(token)}`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {

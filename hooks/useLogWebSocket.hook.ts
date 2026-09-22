@@ -5,6 +5,7 @@ import { LogListOutType, LogParamsInType } from "@/types/log.type";
 // Props for the WebSocket hook
 export interface useLogWebSocketProps {
   url: string;
+  token: string;
   initialParams?: LogParamsInType; // optional – defaults will be applied via Zod
 }
 
@@ -20,11 +21,13 @@ export interface useLogWebSocketReturn {
  * Custom hook to manage a WebSocket connection for log streaming.
  *
  * @param url - WebSocket endpoint
+ * @param token - Authorization token
  * @param initialParams - initial filter/pagination parameters (optional)
  * @returns connection state, last received message, and a send function
  */
 export default function useLogWebSocket({
   url,
+  token,
   initialParams,
 }: useLogWebSocketProps): useLogWebSocketReturn {
   // Reference to the WebSocket instance
@@ -53,7 +56,7 @@ export default function useLogWebSocket({
    */
   const connect = useCallback(() => {
     // Avoid running on the server (SSR)
-    if (typeof window === "undefined" || !url) return;
+    if (typeof window === "undefined" || !url || !token) return;
 
     // Prevent duplicate connections
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
@@ -73,7 +76,9 @@ export default function useLogWebSocket({
     const paramsToSend = LogParamsInSchema.parse(initialParams ?? {});
 
     // Create the WebSocket
-    const ws = new WebSocket(url);
+    const separator = url.includes("?") ? "&" : "?";
+    const wsUrl = `${url}${separator}token=${encodeURIComponent(token)}`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {

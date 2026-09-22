@@ -32,6 +32,9 @@ export default function UsersPage() {
   // Permission check: user must have "criar:usuarios" permission to see the "New user" button.
   const hasPerm = useAuthStore((state) => state.hasPerm);
 
+  // Access token used to authenticate the users WebSocket connection
+  const token = useAuthStore((state) => state.accessToken);
+
   // WebSocket hook for user data; provides connection status, received messages, and send function.
   const {
     lastMessage: users,
@@ -40,6 +43,7 @@ export default function UsersPage() {
     sendMessage,
   } = useUserWebSocket({
     url: API_ROUTES.userWs(),
+    token: token ?? "",
   });
 
   // Pagination state and handlers.
