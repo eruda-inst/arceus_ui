@@ -1,8 +1,9 @@
+import axios from "axios";
 import { redirect } from "next/navigation";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { create } from "zustand";
 import { axiosClient } from "@/libs/axiosClient.lib";
-import { API_ROUTES } from "@/configs/api.config";
+import { API_ROUTES, BASE_API_URL } from "@/configs/api.config";
 import PermService from "@/services/Perm.service";
 import GroupService from "@/services/Group.service";
 import { UserOutType } from "@/types/user.type";
@@ -36,7 +37,7 @@ export interface AuthState {
   logout: () => Promise<void>;
   refreshTokens: () => Promise<boolean>;
 
-  fetchPermissions: (userId: number) => Promise<void>;
+  fetchPerms: (userId: number) => Promise<void>;
   hasPerm: (permCode: string) => boolean;
   hasAllPerms: (permCodes: string[]) => boolean;
 
@@ -127,7 +128,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ currentUser: user, isAuthenticated: true, loadingUser: false });
 
       if (user.id) {
-        await get().fetchPermissions(user.id);
+        await get().fetchPerms(user.id);
       }
 
       return user;
@@ -143,20 +144,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     get().clearTokens();
     if (typeof window !== "undefined") {
-      redirect("/login");
+      if (!window.location.pathname.startsWith("/login")) {
+        window.location.replace("/login");
+      }
     }
   },
 
   refreshTokens: async () => {
     const refresh =
       get().refreshToken || (getCookie(REFRESH_TOKEN_KEY) as string);
+
     if (!refresh) {
       await get().logout();
       return false;
     }
 
     try {
-      const response = await axiosClient.post<{
+      const response = await axios.post<{
         access_token: string;
         refresh_token: string;
         expires_in: number;
@@ -164,7 +168,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         API_ROUTES.auth.refreshToken(),
         { refresh_token: refresh },
         {
+          baseURL: BASE_API_URL,
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         },
       );
 
@@ -175,7 +181,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (get().isAuthenticated) {
         await get().fetchGroups();
       }
-
       return true;
     } catch {
       await get().logout();
@@ -183,7 +188,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  fetchPermissions: async (userId: number) => {
+  fetchPerms: async (userId: number) => {
     set({ loadingPerms: true, permError: null });
     try {
       const perms = await PermService.getByUserId(userId);

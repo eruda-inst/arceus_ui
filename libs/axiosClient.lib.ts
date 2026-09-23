@@ -5,7 +5,7 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
-import { API_ROUTES } from "@/configs/api.config";
+import { API_ROUTES, BASE_API_URL } from "@/configs/api.config";
 import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
@@ -62,8 +62,9 @@ const createAxiosClient = (
         error.response?.status !== 401 ||
         !originalRequest ||
         originalRequest._retry ||
+        originalRequest._skipAuth ||
         originalRequest.withCredentials === false ||
-        originalRequest._skipAuth
+        originalRequest.url?.includes("/refresh-token")
       ) {
         return Promise.reject(error);
       }
@@ -94,11 +95,7 @@ const createAxiosClient = (
           const response = await axios.post<RefreshTokenResponse>(
             API_ROUTES.auth.refreshToken(),
             { refresh_token: refreshToken },
-            {
-              baseURL:
-                process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:8000",
-              withCredentials: true,
-            },
+            { baseURL: BASE_API_URL, withCredentials: true },
           );
 
           const {
@@ -157,11 +154,17 @@ const createAxiosClient = (
   return client;
 };
 
+let redirecting = false;
+
 const redirectToLogin = () => {
-  if (typeof window !== "undefined") {
-    const currentPath = window.location.pathname;
-    redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`);
-  }
+  if (typeof window === "undefined") return;
+  if (redirecting) return;
+  if (window.location.pathname.startsWith("/login")) return;
+  redirecting = true;
+  const currentPath = window.location.pathname + window.location.search;
+  window.location.replace(
+    `/login?callbackUrl=${encodeURIComponent(currentPath)}`,
+  );
 };
 
 export const axiosClient = createAxiosClient({ withCredentials: true });

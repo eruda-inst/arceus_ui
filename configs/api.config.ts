@@ -95,4 +95,4 @@ const API_ROUTES = {
   userWs: () => `${API_ENDPOINT_BASES.userWs}/`,
 };
 
-export { API_ROUTES };
+export { API_ROUTES, BASE_API_URL };
