@@ -5,9 +5,66 @@ import BarChartCard from "@/components/Charts/BarChartCard";
 import LineChartCard from "@/components/Charts/LineChartCard";
 import MetricCard from "@/components/MetricCard";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
-import useMetricWebSocket from "@/hooks/useMetricWebSocket.hook";
+import useWs from "@/hooks/useWs.hook";
+import {
+  ErrorStatsType,
+  SuccessStatsType,
+  TodayAlwaysOutType,
+  TopDepartmentType,
+  TopClientType,
+  TopEndpointType,
+  TopHourFormattedType,
+  TopHttpMethodType,
+  TopMonthDayType,
+  TopSlowestEndpointType,
+  TopStatusCodeType,
+  TopWeekdayType,
+  TopWorstEndpointType,
+} from "@/types/metric.type";
 import { useAuthStore } from "@/stores/auth.store";
 import { API_ROUTES } from "@/configs/api.config";
+
+// Union type of all available metric names
+export type MetricName =
+  | "erros"
+  | "sucessos"
+  | "tempo_resposta"
+  | "top_clientes"
+  | "total_atendimentos"
+  | "total_requisicoes"
+  | "top_dias_mes"
+  | "top_dias_semana"
+  | "top_endpoints"
+  | "top_endpoints_mais_lentos"
+  | "top_horas"
+  | "top_metodos_http"
+  | "top_piores_endpoints"
+  | "top_setores"
+  | "top_status_codes";
+
+// Type representing the structure of messages received from the server
+// Each key corresponds to a metric and contains its data wrapped in TodayAlwaysOutType
+export interface lastMessageType {
+  erros?: TodayAlwaysOutType<ErrorStatsType>;
+  sucessos?: TodayAlwaysOutType<SuccessStatsType>;
+  tempo_resposta?: TodayAlwaysOutType<{
+    min: number;
+    avg: number;
+    max: number;
+  }>;
+  top_clientes?: TodayAlwaysOutType<TopClientType[]>;
+  total_atendimentos?: TodayAlwaysOutType<number>;
+  total_requisicoes?: TodayAlwaysOutType<number>;
+  top_dias_mes?: TodayAlwaysOutType<TopMonthDayType[]>;
+  top_dias_semana?: TodayAlwaysOutType<TopWeekdayType[]>;
+  top_endpoints?: TodayAlwaysOutType<TopEndpointType[]>;
+  top_endpoints_mais_lentos?: TodayAlwaysOutType<TopSlowestEndpointType[]>;
+  top_horas?: TodayAlwaysOutType<TopHourFormattedType[]>;
+  top_metodos_http?: TodayAlwaysOutType<TopHttpMethodType[]>;
+  top_piores_endpoints?: TodayAlwaysOutType<TopWorstEndpointType[]>;
+  top_setores?: TodayAlwaysOutType<TopDepartmentType[]>;
+  top_status_codes?: TodayAlwaysOutType<TopStatusCodeType[]>;
+}
 
 /**
  * Metrics dashboard page.
@@ -18,15 +75,28 @@ export default function MetricsPage() {
   // Access token used to authenticate the metrics WebSocket connection
   const token = useAuthStore((state) => state.accessToken);
 
-  // WebSocket connection for metrics data; initialMetrics set to 'all' to fetch all metric types.
+  // WebSocket connection that streams real-time metric updates.
+  // The initial message enrolls this client to receive "all" metric groups,
+  // and `onMessage` shallow-merges each incoming metric batch into the
+  // previously received state so partial updates accumulate over time.
   const {
     isConnected,
     isConnecting,
     lastMessage: metrics,
-  } = useMetricWebSocket({
+  } = useWs<
+    { action: "enroll"; metric_names: MetricName[] | "all" },
+    lastMessageType
+  >({
     url: API_ROUTES.metricWs(),
     token: token ?? "",
-    initialMetrics: "all",
+    initialMessage: {
+      action: "enroll",
+      metric_names: "all",
+    },
+    onMessage: (incoming, previous) => ({
+      ...previous,
+      ...incoming,
+    }),
   });
 
   /**

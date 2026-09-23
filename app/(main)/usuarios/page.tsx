@@ -10,10 +10,15 @@ import Details from "@/components/Modals/UserDetails";
 import UserTable from "@/components/Tables/UserTable";
 import Add from "@/components/Modals/UserAdd";
 import { useAuthStore } from "@/stores/auth.store";
-import useUserWebSocket from "@/hooks/useUserWebSocket.hook";
+import useWs from "@/hooks/useWs.hook";
 import usePagination from "@/hooks/usePagination.hook";
 import useFilter from "@/hooks/useFilter.hook";
-import { UserFilterInType, UserOutType } from "@/types/user.type";
+import {
+  UserFilterInType,
+  UserListOutType,
+  UserOutType,
+  UserParamsInType,
+} from "@/types/user.type";
 import { API_ROUTES } from "@/configs/api.config";
 
 /**
@@ -35,17 +40,6 @@ export default function UsersPage() {
   // Access token used to authenticate the users WebSocket connection
   const token = useAuthStore((state) => state.accessToken);
 
-  // WebSocket hook for user data; provides connection status, received messages, and send function.
-  const {
-    lastMessage: users,
-    isConnected,
-    isConnecting,
-    sendMessage,
-  } = useUserWebSocket({
-    url: API_ROUTES.userWs(),
-    token: token ?? "",
-  });
-
   // Pagination state and handlers.
   const {
     page,
@@ -59,6 +53,25 @@ export default function UsersPage() {
   // Filter state and handlers.
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
     useFilter<UserFilterInType>();
+
+  // WebSocket connection that streams paginated, filtered user data.
+  // The initial message sends the current page, items-per-page, and any
+  // active filters; later changes are propagated by calling `sendMessage`
+  // inside the pagination/filter effect below.
+  const {
+    lastMessage: users,
+    isConnected,
+    isConnecting,
+    sendMessage,
+  } = useWs<UserParamsInType, UserListOutType>({
+    url: API_ROUTES.userWs(),
+    token: token ?? "",
+    initialMessage: () => ({
+      pagina: page,
+      itens_por_pagina: itemsPerPage,
+      ...filters,
+    }),
+  });
 
   /**
    * Handler for table row click.

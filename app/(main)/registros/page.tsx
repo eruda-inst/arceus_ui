@@ -8,11 +8,16 @@ import LogFilters from "@/components/Filters/LogFilters";
 import LogDetails from "@/components/Modals/LogDetails";
 import LogTable from "@/components/Tables/LogTable";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
-import useLogWebSocket from "@/hooks/useLogWebSocket.hook";
+import useWs from "@/hooks/useWs.hook";
 import useFilter from "@/hooks/useFilter.hook";
 import usePagination from "@/hooks/usePagination.hook";
 import { useAuthStore } from "@/stores/auth.store";
-import { LogFilterInType, LogOutType } from "@/types/log.type";
+import {
+  LogFilterInType,
+  LogListOutType,
+  LogOutType,
+  LogParamsInType,
+} from "@/types/log.type";
 import { API_ROUTES } from "@/configs/api.config";
 
 /**
@@ -23,14 +28,6 @@ import { API_ROUTES } from "@/configs/api.config";
 export default function LogsPage() {
   // Access token used to authenticate the logs WebSocket connection
   const token = useAuthStore((state) => state.accessToken);
-
-  // WebSocket connection hook; provides connection status, received messages, and send function
-  const {
-    isConnected,
-    lastMessage: logs,
-    isConnecting,
-    sendMessage,
-  } = useLogWebSocket({ url: API_ROUTES.logWs(), token: token ?? "" });
 
   // Filter state and handlers: manages active filters for the log listing
   const { filters, handleRemoveFilter, handleResetFilters, handleSetFilters } =
@@ -45,6 +42,25 @@ export default function LogsPage() {
     handlePrevPage,
     handleSetItemsPerPage,
   } = usePagination();
+
+  // WebSocket connection that streams paginated, filtered log data.
+  // The initial message seeds the connection with the current page,
+  // items-per-page, and active filters so the server knows what to send;
+  // subsequent updates are pushed by re-sending messages via `sendMessage`.
+  const {
+    isConnected,
+    lastMessage: logs,
+    isConnecting,
+    sendMessage,
+  } = useWs<LogParamsInType, LogListOutType>({
+    url: API_ROUTES.logWs(),
+    token: token ?? "",
+    initialMessage: () => ({
+      pagina: page,
+      itens_por_pagina: itemsPerPage,
+      ...filters,
+    }),
+  });
 
   // State for the modal that shows log details
   const [selectedLog, setSelectedLog] = useState<LogOutType | null>(null);
