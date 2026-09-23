@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "next/navigation";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { create } from "zustand";
 import { axiosClient } from "@/libs/axiosClient.lib";
@@ -99,9 +98,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearTokens: () => {
-    deleteCookie(ACCESS_TOKEN_KEY);
-    deleteCookie(REFRESH_TOKEN_KEY);
-    deleteCookie(TOKEN_EXPIRY_KEY);
+    deleteCookie(ACCESS_TOKEN_KEY, { path: "/" });
+    deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
+    deleteCookie(TOKEN_EXPIRY_KEY, { path: "/" });
     set({
       accessToken: null,
       refreshToken: null,
@@ -135,8 +134,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch {
       set({
         userError: "Erro ao carregar usuário",
+        isAuthenticated: false,
+        currentUser: null,
+        accessToken: null,
+        refreshToken: null,
       });
       set({ loadingUser: false });
+      deleteCookie(ACCESS_TOKEN_KEY, { path: "/" });
+      deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
+      deleteCookie(TOKEN_EXPIRY_KEY, { path: "/" });
       return null;
     }
   },
