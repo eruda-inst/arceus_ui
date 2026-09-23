@@ -5,18 +5,14 @@ import { GroupOutSchema } from "@/schemas/group.schema";
 
 export default class GroupService {
   static async getById(id: number): Promise<GroupOutType | undefined> {
-    const res = await axiosClient.get(API_ROUTES.group.getById(id), {
-      withCredentials: false,
-    });
+    const res = await axiosClient.get(API_ROUTES.group.getById(id));
     const data = res.data;
     GroupOutSchema.parse(data);
     return data;
   }
 
   static async getAll(): Promise<GroupOutType[] | undefined> {
-    const res = await axiosClient.get(API_ROUTES.group.getAll(), {
-      withCredentials: false,
-    });
+    const res = await axiosClient.get(API_ROUTES.group.getAll());
     const data = res.data;
     const groups = data.data;
     GroupOutSchema.array().parse(groups);
