@@ -211,7 +211,7 @@ export default function LogFilters({
                     variant={resolvedTheme === "dark" ? "secondary" : "primary"}
                     value={localFilters.endpoint ?? ""}
                     onChange={(v) =>
-                      setLocalFilters((prev) => ({ ...prev, endpont: v }))
+                      setLocalFilters((prev) => ({ ...prev, endpoint: v }))
                     }
                   >
                     <Label>Endpoint</Label>
