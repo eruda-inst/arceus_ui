@@ -1,20 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Key } from "react-aria";
 import { useTheme } from "next-themes";
-import z from "zod";
 import clsx from "clsx";
 import {
   FaArrowRight,
   FaClipboardList,
-  FaEye,
-  FaEyeSlash,
   FaHouseChimney,
   FaPaintbrush,
-  FaPencil,
   FaRightFromBracket,
   FaUser,
   FaUsers,
@@ -22,115 +18,30 @@ import {
 import {
   Avatar,
   Button,
-  Description,
   Dropdown,
-  FieldError,
-  Form,
-  InputGroup,
   Label,
-  Modal,
   Skeleton,
-  TextField,
-  toast,
   Typography,
 } from "@heroui/react";
-import InfoItem from "@/components/InfoItem";
+import ProfileDetails from "@/components/Modals/ProfileDetails";
 import { useAuthStore } from "@/stores/auth.store";
 import Misc from "@/helpers/Misc.helper";
-import { UserOutType } from "@/types/user.type";
-import { axiosClient } from "@/libs/axiosClient.lib";
-import { API_ROUTES } from "@/configs/api.config";
 import logo from "@/public/logo.svg";
-
-export const FormSchema = z.object({
-  senha: z.string().min(8).nullable(),
-  confirmarSenha: z.string().min(8).nullable(),
-});
-
-export const EmptyForm = z.object({
-  senha: z.literal(""),
-  confirmarSenha: z.literal(""),
-});
-
-export type FormType = z.infer<typeof FormSchema>;
 
 export default function Sidebar() {
   const router = useRouter();
-  const { resolvedTheme, setTheme, theme } = useTheme();
+  const { setTheme, theme } = useTheme();
   const pathname = usePathname();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
-  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
-  const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [selected, setSelected] = useState<Set<Key>>(
     new Set([theme || "system"]),
   );
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const perms = useAuthStore((state) => state.perms);
-  const loadingUser = useAuthStore((state) => state.loadingUser);
   const logout = useAuthStore((state) => state.logout);
-  const fetchCurrentUser = useAuthStore((state) => state.fetchCurrentUser);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasPerm = useAuthStore((state) => state.hasPerm);
-
-  const [form, setForm] = useState<FormType>({
-    senha: "",
-    confirmarSenha: "",
-  });
-
-  const isDisabled = useMemo(() => {
-    const isFormEmpty = EmptyForm.safeParse(form).success;
-    const isFormValid = FormSchema.safeParse(form).success;
-    const passwordMismatch = form.senha !== form.confirmarSenha;
-    return isFormEmpty || !isFormValid || passwordMismatch;
-  }, [form]);
-
-  const handleProfileClick = () => {
-    setIsProfileModalOpen(true);
-    setForm({ senha: "", confirmarSenha: "" });
-  };
-
-  const handleModalClose = () => {
-    setIsProfileModalOpen(false);
-    setIsEditingUser(false);
-    setShowNewPassword(false);
-    setShowConfirmPassword(false);
-  };
-
-  const handleChange = (key: keyof FormType, value: string) => {
-    setForm((previous) => ({ ...previous, [key]: value }));
-  };
-
-  const handleSave = async () => {
-    if (!currentUser) {
-      return;
-    }
-
-    setIsSaving(true);
-
-    try {
-      await axiosClient.patch<UserOutType>(
-        API_ROUTES.user.updatePasswordById(currentUser.id),
-        { nova_senha: form.senha },
-      );
-
-      await fetchCurrentUser();
-
-      toast.success("Sucesso", {
-        description: "Perfil atualizado com sucesso!",
-      });
-
-      setIsEditingUser(false);
-    } catch (error: unknown) {
-      toast.danger("Erro ao atualizar perfil.");
-      console.error(error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   return (
     <>
@@ -232,7 +143,7 @@ export default function Sidebar() {
               <Dropdown.Menu>
                 <Dropdown.Item
                   textValue="Perfil e Conta"
-                  onPress={handleProfileClick}
+                  onPress={() => setIsProfileModalOpen(true)}
                 >
                   <FaUser className="size-4" />
                   <Label>Perfil e Conta</Label>
@@ -298,189 +209,10 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <Modal isOpen={isProfileModalOpen} onOpenChange={setIsProfileModalOpen}>
-        <Modal.Backdrop variant="blur">
-          <Modal.Container size="cover">
-            <Modal.Dialog>
-              <Modal.CloseTrigger onPress={() => handleModalClose()} />
-
-              <Modal.Header>
-                <div className="flex items-center gap-3">
-                  {loadingUser ? (
-                    <Skeleton className="w-10 h-10 rounded-full" />
-                  ) : (
-                    <>
-                      <Modal.Icon>
-                        <Avatar size="lg">
-                          <Avatar.Fallback className="bg-linear-to-r from-purple-500 to-indigo-500 text-white">
-                            {Misc.getInitials(currentUser?.nome)}
-                          </Avatar.Fallback>
-                        </Avatar>
-                      </Modal.Icon>
-                      <div>
-                        <Modal.Heading className="text-lg font-semibold">
-                          {currentUser?.nome}
-                        </Modal.Heading>
-                        <p className="text-sm text-muted">
-                          {currentUser?.nome_grupo}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Modal.Header>
-
-              <Modal.Body className="flex flex-col py-6">
-                {!isEditingUser ? (
-                  <div>
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-semibold">Perfil e Conta</h3>
-                      <Button
-                        onPress={() => setIsEditingUser(true)}
-                        size="sm"
-                        className="bg-accent-soft text-accent-soft-foreground hover:bg-accent-soft-hover"
-                      >
-                        Editar
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <InfoItem
-                        label="Email"
-                        value={currentUser?.email || "-"}
-                      />
-                      <InfoItem
-                        label="Usuário ativo"
-                        value={currentUser?.ativo ? "Sim" : "Não"}
-                      />
-                      <InfoItem
-                        label="Grupo"
-                        value={currentUser?.nome_grupo || "-"}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="mb-4 space-y-2">
-                      <div className="flex items-center gap-2 mt-2">
-                        <div className="p-2 bg-accent-soft rounded-lg">
-                          <FaPencil className="w-5 h-5 text-accent-soft-foreground" />
-                        </div>
-                        <h4 className="font-semibold">Alterar senha</h4>
-                      </div>
-                      <p className="text-warning">
-                        Não é possível alterar nome, e-mail e grupo. Nome e
-                        e-mail são somente leitura, pois condiz com o que está
-                        salvo no IXC.
-                      </p>
-                    </div>
-                    <Form
-                      action={handleSave}
-                      className="flex flex-col justify-between h-full"
-                      autoComplete="off"
-                    >
-                      <div className="space-y-4 grid gap-x-4 grid-cols-2 w-full">
-                        <TextField
-                          variant={
-                            resolvedTheme === "dark" ? "secondary" : "primary"
-                          }
-                          type={showNewPassword ? "text" : "password"}
-                          value={form.senha || ""}
-                          autoComplete="new-password"
-                          onChange={(value) => handleChange("senha", value)}
-                          isRequired
-                          validate={(value) => {
-                            if (value.length && value.length < 8) {
-                              return "Digite 8 caracteres ou mais";
-                            }
-                            return null;
-                          }}
-                        >
-                          <Label>Nova Senha</Label>
-                          <InputGroup>
-                            <InputGroup.Input placeholder="Digite sua nova senha" />
-                            <InputGroup.Suffix>
-                              {showNewPassword ? (
-                                <FaEyeSlash
-                                  className="hover:cursor-pointer text-xl"
-                                  onClick={() => setShowNewPassword(false)}
-                                />
-                              ) : (
-                                <FaEye
-                                  className="hover:cursor-pointer text-xl"
-                                  onClick={() => setShowNewPassword(true)}
-                                />
-                              )}
-                            </InputGroup.Suffix>
-                          </InputGroup>
-                          <Description>
-                            Senha utilizada para acessar o sistema
-                          </Description>
-                          <FieldError />
-                        </TextField>
-
-                        <TextField
-                          value={form.confirmarSenha || ""}
-                          onChange={(value) =>
-                            handleChange("confirmarSenha", value)
-                          }
-                          type={showConfirmPassword ? "text" : "password"}
-                          variant={
-                            resolvedTheme === "dark" ? "secondary" : "primary"
-                          }
-                          isRequired
-                          validate={(value) => {
-                            if (value.length) {
-                              if (value.length < 8) {
-                                return "Digite 8 caracteres ou mais";
-                              } else {
-                                if (value !== form.senha) {
-                                  return "As senhas não coincidem";
-                                }
-                              }
-                            }
-                            return null;
-                          }}
-                        >
-                          <Label>Confirmar nova senha</Label>
-                          <InputGroup>
-                            <InputGroup.Input placeholder="Confirme sua nova senha" />
-                            <InputGroup.Suffix>
-                              {showConfirmPassword ? (
-                                <FaEyeSlash
-                                  className="hover:cursor-pointer text-xl"
-                                  onClick={() => setShowConfirmPassword(false)}
-                                />
-                              ) : (
-                                <FaEye
-                                  className="hover:cursor-pointer text-xl"
-                                  onClick={() => setShowConfirmPassword(true)}
-                                />
-                              )}
-                            </InputGroup.Suffix>
-                          </InputGroup>
-                          <FieldError />
-                          <Description>Confirmar a nova senha</Description>
-                        </TextField>
-                      </div>
-
-                      <div className="space-x-2 ml-auto">
-                        <Button
-                          type="submit"
-                          isPending={isSaving}
-                          isDisabled={isDisabled}
-                          className="bg-accent-soft text-accent-soft-foreground hover:bg-accent-soft-hover"
-                        >
-                          Salvar
-                        </Button>
-                      </div>
-                    </Form>
-                  </>
-                )}
-              </Modal.Body>
-            </Modal.Dialog>
-          </Modal.Container>
-        </Modal.Backdrop>
-      </Modal>
+      <ProfileDetails
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </>
   );
 }
