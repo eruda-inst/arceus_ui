@@ -1,8 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import AuthService from "@/services/Auth.service";
-import PermService from "@/services/Perm.service";
-import { PermOutType } from "./types/perm.type";
+import { API_ROUTES } from "./configs/api.config";
 
 // Don't need authentication
 const publicRoutes = ["/login"];
@@ -61,8 +59,21 @@ export default async function proxy(request: NextRequest) {
   // 3. Check permissions for protected routes when user has token
   if (hasToken && !isPublicRoute) {
     try {
-      const currentUser = await AuthService.getMe(accessToken);
-      const perms = await PermService.getByUserId(currentUser.id);
+      // Fetch user
+      const authHeader = { Authorization: `Bearer ${accessToken}` };
+      const userRes = await fetch(API_ROUTES.auth.getMe(), {
+        headers: authHeader,
+      });
+      if (!userRes.ok) throw new Error("Error while fetching user");
+      const currentUser = await userRes.json();
+
+      // Fetch user perms
+      const permRes = await fetch(API_ROUTES.perm.getByUserId(currentUser.id), {
+        headers: authHeader,
+      });
+      if (!permRes.ok) throw new Error("Error while fetching user perms");
+      const permData = await permRes.json();
+      const perms = permData.data || [];
 
       // Check if the current route requires a specific permission
       const reqPerm = routePerms[pathname];
@@ -70,7 +81,7 @@ export default async function proxy(request: NextRequest) {
       if (reqPerm) {
         // Check if user has the required permission
         const hasPerm = perms.some(
-          (perm: PermOutType) => perm.codigo === reqPerm,
+          (perm: { codigo: string }) => perm.codigo === reqPerm,
         );
 
         if (!hasPerm) {
@@ -82,8 +93,9 @@ export default async function proxy(request: NextRequest) {
       }
     } catch (error: unknown) {
       // If there's an error getting user info, redirect to login
+      console.error(`Erro no middleware: ${error}`);
       const loginUrl = new URL("/login", request.url);
-      console.error(error);
+      loginUrl.searchParams.set("error", "unauthorized");
       return NextResponse.redirect(loginUrl);
     }
   }
