@@ -194,25 +194,27 @@ export default function Details({ onClose, user, ...props }: DetailsProps) {
                 onPress={() => setIsToggleOpen(false)}
               />
               <AlertDialog.Header>
-                <AlertDialog.Icon status={user.ativo ? "warning" : "success"} />
+                <AlertDialog.Icon
+                  status={localUser?.ativo ? "warning" : "success"}
+                />
                 <AlertDialog.Heading>
-                  {user.ativo ? "Inativar" : "Reativar"} usuário
+                  {localUser?.ativo ? "Inativar" : "Reativar"} usuário
                 </AlertDialog.Heading>
               </AlertDialog.Header>
               <AlertDialog.Body>
-                Tem certeza que deseja {user.ativo ? "inativar" : "reativar"}{" "}
-                esse usuário?
+                Tem certeza que deseja{" "}
+                {localUser?.ativo ? "inativar" : "reativar"} esse usuário?
               </AlertDialog.Body>
               <AlertDialog.Footer>
                 <Button
                   className={clsx(
-                    user.ativo
+                    localUser?.ativo
                       ? "bg-warning-soft text-warning-soft-foreground hover:bg-warning-soft-hover"
                       : "bg-success-soft text-success-soft-foreground hover:bg-success-soft-hover",
                   )}
                   onPress={handleToggle}
                 >
-                  {user.ativo ? "Inativar" : "Reativar"}
+                  {localUser?.ativo ? "Inativar" : "Reativar"}
                 </Button>
               </AlertDialog.Footer>
             </AlertDialog.Dialog>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Typography } from "@heroui/react";
 import ConnectionIndicatior from "@/components/ConnectionIndicatior";
 import PaginationControls from "@/components/PaginationControls";
@@ -31,8 +31,8 @@ export default function UsersPage() {
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   // State for "Add user" modal visibility.
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  // Currently selected user for details modal.
-  const [selectedUser, setSelectedUser] = useState<UserOutType | null>(null);
+  // Currently selected user ID for details modal.
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   // Permission check: user must have "criar:usuarios" permission to see the "New user" button.
   const hasPerm = useAuthStore((state) => state.hasPerm);
@@ -74,11 +74,22 @@ export default function UsersPage() {
   });
 
   /**
+   * Selected user derived from the current WebSocket array.
+   * Only the id is kept in state; the object is recomputed whenever the
+   * list changes, so the modal automatically reflects real-time updates
+   * without needing extra state.
+   */
+  const selectedUser = useMemo(
+    () => users?.data.find((u) => u.id === selectedUserId) ?? null,
+    [users?.data, selectedUserId],
+  );
+
+  /**
    * Handler for table row click.
    * Sets the selected user and opens the details modal.
    */
   const handleRowClick = (user: UserOutType) => {
-    setSelectedUser(user);
+    setSelectedUserId(user.id);
     setIsDetailsOpen(true);
   };
 
@@ -172,7 +183,10 @@ export default function UsersPage() {
         <Details
           user={selectedUser}
           isOpen={isDetailsOpen}
-          onClose={() => setIsDetailsOpen(false)}
+          onClose={() => {
+            setIsDetailsOpen(false);
+            setSelectedUserId(null); // selectedUser becomes null → Details unmounts
+          }}
         />
       )}
 
