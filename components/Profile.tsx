@@ -13,7 +13,7 @@ import {
   FaUser,
 } from "react-icons/fa6";
 
-interface ProfilePros {
+export interface ProfilePros {
   onCloseDetails: () => void;
 }
 

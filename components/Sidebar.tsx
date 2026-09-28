@@ -1,23 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import clsx from "clsx";
+import type { Key } from "@heroui/react";
 import { FaClipboardList, FaHouseChimney, FaUsers } from "react-icons/fa6";
-import { Button, Skeleton, Typography } from "@heroui/react";
+import { TagGroup, Typography } from "@heroui/react";
 import ProfileDetails from "@/components/Modals/ProfileDetails";
 import Profile from "@/components/Profile";
+import SidebarTag from "@/components/SidebarTag";
 import { useAuthStore } from "@/stores/auth.store";
 import logo from "@/public/logo.svg";
+
+export interface MyTag {
+  id: string;
+  isDisabled: boolean;
+  onPress: () => void;
+  children: ReactNode;
+}
 
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
 
   const perms = useAuthStore((state) => state.perms);
   const hasPerm = useAuthStore((state) => state.hasPerm);
+
+  const activeTag: string = useMemo(() => paths[pathname], [pathname]);
+
+  const hasPermArray: Record<string, boolean> = useMemo(() => {
+    return {
+      metrics: hasPerm("ver:metricas"),
+      logs: hasPerm("ver:logs"),
+      users: hasPerm("ver:usuarios"),
+    };
+  }, [perms]);
+
+  const [selected, setSelected] = useState<Iterable<Key>>(new Set([activeTag]));
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+
+  const paths: Record<string, string> = {
+    "/": "metrics",
+    "/registros": "logs",
+    "/usuarios": "users",
+  };
+
+  const tags: MyTag[] = [
+    {
+      id: "metrics",
+      isDisabled: !hasPermArray.metrics,
+      onPress: () => router.push("/"),
+      children: (
+        <>
+          <FaHouseChimney className="size-5" /> Métricas
+        </>
+      ),
+    },
+    {
+      id: "logs",
+      isDisabled: !hasPermArray.logs,
+      onPress: () => router.push("/registros"),
+      children: (
+        <>
+          <FaClipboardList className="size-5" /> Registros
+        </>
+      ),
+    },
+    {
+      id: "users",
+      isDisabled: !hasPermArray.users,
+      onPress: () => router.push("/usuarios"),
+      children: (
+        <>
+          <FaUsers className="size-5" /> Usuários
+        </>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -36,56 +95,26 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2">
-          {perms ? (
-            <Button
-              isDisabled={!hasPerm("ver:metricas")}
-              className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
-                pathname === "/"
-                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
-                  : "bg-inherit",
-              )}
-              onPress={() => router.push("/")}
-            >
-              <FaHouseChimney className="size-5" /> Métricas
-            </Button>
-          ) : (
-            <Skeleton className="w-full h-12 rounded-3xl" />
-          )}
-
-          {perms ? (
-            <Button
-              isDisabled={!hasPerm("ver:logs")}
-              onPress={() => router.push("/registros")}
-              className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
-                pathname === "/registros"
-                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
-                  : "bg-inherit",
-              )}
-            >
-              <FaClipboardList className="size-5" /> Registros
-            </Button>
-          ) : (
-            <Skeleton className="w-full h-12 rounded-3xl" />
-          )}
-
-          {perms ? (
-            <Button
-              isDisabled={!hasPerm("ver:usuarios")}
-              onPress={() => router.push("/usuarios")}
-              className={clsx(
-                "text-sm w-full justify-start gap-3 h-12 text-gray-800 dark:text-white",
-                pathname === "/usuarios"
-                  ? "bg-linear-to-r from-purple-500 to-indigo-500 text-white"
-                  : "bg-inherit",
-              )}
-            >
-              <FaUsers className="size-5" /> Usuários
-            </Button>
-          ) : (
-            <Skeleton className="w-full h-12 rounded-3xl" />
-          )}
+          <TagGroup
+            selectionBehavior="toggle"
+            selectionMode="single"
+            selectedKeys={selected}
+            onSelectionChange={(key) => setSelected(key)}
+          >
+            <TagGroup.List className="flex flex-col">
+              {tags.map(({ id, isDisabled, onPress, children }) => (
+                <SidebarTag
+                  perms={perms}
+                  id={id}
+                  isDisabled={isDisabled}
+                  key={id}
+                  onPress={onPress}
+                >
+                  {children}
+                </SidebarTag>
+              ))}
+            </TagGroup.List>
+          </TagGroup>
         </nav>
 
         <div className="p-4 border-t space-y-4">
