@@ -26,7 +26,18 @@ export default function Sidebar() {
   const perms = useAuthStore((state) => state.perms);
   const hasPerm = useAuthStore((state) => state.hasPerm);
 
-  const activeTag: string = useMemo(() => paths[pathname], [pathname]);
+  const paths: Record<string, string> = {
+    "/": "metrics",
+    "/registros": "logs",
+    "/usuarios": "users",
+  };
+
+  const activeTag: string = useMemo(() => {
+    if (pathname) {
+      return paths[pathname];
+    }
+    return paths["/"];
+  }, [pathname]);
 
   const hasPermArray: Record<string, boolean> = useMemo(() => {
     return {
@@ -38,12 +49,6 @@ export default function Sidebar() {
 
   const [selected, setSelected] = useState<Iterable<Key>>(new Set([activeTag]));
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
-
-  const paths: Record<string, string> = {
-    "/": "metrics",
-    "/registros": "logs",
-    "/usuarios": "users",
-  };
 
   const tags: MyTag[] = [
     {
