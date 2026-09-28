@@ -48,7 +48,8 @@ export default function Sidebar() {
   }, [perms]);
 
   const [selected, setSelected] = useState<Iterable<Key>>(new Set([activeTag]));
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [isProfileDetailsOpen, setIsProfileDetailOpen] =
+    useState<boolean>(false);
 
   const tags: MyTag[] = [
     {
@@ -123,13 +124,13 @@ export default function Sidebar() {
         </nav>
 
         <div className="p-4 border-t space-y-4">
-          <Profile onCloseDetails={() => setIsProfileModalOpen(false)} />
+          <Profile onOpenDetails={() => setIsProfileDetailOpen(true)} />
         </div>
       </div>
 
       <ProfileDetails
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
+        isOpen={isProfileDetailsOpen}
+        onClose={() => setIsProfileDetailOpen(false)}
       />
     </>
   );

@@ -14,10 +14,10 @@ import {
 } from "react-icons/fa6";
 
 export interface ProfilePros {
-  onCloseDetails: () => void;
+  onOpenDetails: () => void;
 }
 
-export default function Profile({ onCloseDetails }: ProfilePros) {
+export default function Profile({ onOpenDetails }: ProfilePros) {
   const { setTheme, theme } = useTheme();
   const [selected, setSelected] = useState<Set<Key>>(
     new Set([theme || "system"]),
@@ -53,7 +53,7 @@ export default function Profile({ onCloseDetails }: ProfilePros) {
 
       <Dropdown.Popover>
         <Dropdown.Menu>
-          <Dropdown.Item textValue="Perfil e Conta" onPress={onCloseDetails}>
+          <Dropdown.Item textValue="Perfil e Conta" onPress={onOpenDetails}>
             <FaUser className="size-4" />
             <Label>Perfil e Conta</Label>
           </Dropdown.Item>
