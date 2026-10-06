@@ -16,6 +16,7 @@ export interface MyTag {
   id: string;
   isDisabled: boolean;
   onPress: () => void;
+  textValue: string;
   children: ReactNode;
 }
 
@@ -56,6 +57,7 @@ export default function Sidebar() {
       id: "metrics",
       isDisabled: !hasPermArray.metrics,
       onPress: () => router.push("/"),
+      textValue: "Métricas",
       children: (
         <>
           <FaHouseChimney className="size-5" /> Métricas
@@ -66,6 +68,7 @@ export default function Sidebar() {
       id: "logs",
       isDisabled: !hasPermArray.logs,
       onPress: () => router.push("/registros"),
+      textValue: "Registros",
       children: (
         <>
           <FaClipboardList className="size-5" /> Registros
@@ -76,6 +79,7 @@ export default function Sidebar() {
       id: "users",
       isDisabled: !hasPermArray.users,
       onPress: () => router.push("/usuarios"),
+      textValue: "Usuários",
       children: (
         <>
           <FaUsers className="size-5" /> Usuários
@@ -108,12 +112,13 @@ export default function Sidebar() {
             onSelectionChange={(key) => setSelected(key)}
           >
             <TagGroup.List className="flex flex-col">
-              {tags.map(({ id, isDisabled, onPress, children }) => (
+              {tags.map(({ id, isDisabled, onPress, textValue, children }) => (
                 <SidebarTag
                   perms={perms}
                   id={id}
                   isDisabled={isDisabled}
                   key={id}
+                  textValue={textValue}
                   onPress={onPress}
                 >
                   {children}
