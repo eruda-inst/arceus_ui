@@ -48,6 +48,12 @@ const ErrorStatsSchema = z.object({
   total: z.number().int().nonnegative(),
   percentual: z.number(),
 });
+const TopErrorRateEndpointSchema = z.object({
+  endpoint: z.string(),
+  taxa_erro: z.number().min(0).max(100),
+  total_erros: z.number().int().nonnegative(),
+  total_requisicoes: z.number().int().nonnegative(),
+});
 
 export {
   TopEndpointSchema,
@@ -62,4 +68,5 @@ export {
   SuccessStatsSchema,
   ErrorStatsSchema,
   TopClientSchema,
+  TopErrorRateEndpointSchema,
 };

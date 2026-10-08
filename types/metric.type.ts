@@ -11,6 +11,7 @@ import {
   SuccessStatsSchema,
   ErrorStatsSchema,
   TopClientSchema,
+  TopErrorRateEndpointSchema,
 } from "@/schemas/metric.schema";
 import type z from "zod";
 
@@ -48,6 +49,8 @@ type TopWeekdayType = z.infer<typeof TopWeekdaySchema>;
 
 type TopWorstEndpointType = z.infer<typeof TopWorstEndpointSchema>;
 
+type TopErrorRateEndpointType = z.infer<typeof TopErrorRateEndpointSchema>;
+
 export type {
   ErrorStatsType,
   SuccessStatsType,
@@ -63,4 +66,5 @@ export type {
   TopStatusCodeType,
   TopWeekdayType,
   TopWorstEndpointType,
+  TopErrorRateEndpointType,
 };

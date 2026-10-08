@@ -20,6 +20,7 @@ import {
   TopStatusCodeType,
   TopWeekdayType,
   TopWorstEndpointType,
+  TopErrorRateEndpointType,
 } from "@/types/metric.type";
 import { useAuthStore } from "@/stores/auth.store";
 import { API_ROUTES } from "@/configs/api.config";
@@ -40,7 +41,8 @@ export type MetricName =
   | "top_metodos_http"
   | "top_piores_endpoints"
   | "top_setores"
-  | "top_status_codes";
+  | "top_status_codes"
+  | "top_endpoints_taxa_erro";
 
 // Type representing the structure of messages received from the server
 // Each key corresponds to a metric and contains its data wrapped in TodayAlwaysOutType
@@ -64,6 +66,7 @@ export interface lastMessageType {
   top_piores_endpoints?: TodayAlwaysOutType<TopWorstEndpointType[]>;
   top_setores?: TodayAlwaysOutType<TopDepartmentType[]>;
   top_status_codes?: TodayAlwaysOutType<TopStatusCodeType[]>;
+  top_endpoints_taxa_erro?: TodayAlwaysOutType<TopErrorRateEndpointType[]>;
 }
 
 /**
@@ -515,6 +518,34 @@ export default function MetricsPage() {
             hideXAxis
             barColor="#6c5ce7"
             activeBarColor="#fdcb6e"
+          />
+
+          {/* Endpoints com maior taxa de erro */}
+          <BarChartCard
+            data={metrics?.top_endpoints_taxa_erro?.hoje}
+            dataKey="endpoint"
+            barDataKey="taxa_erro"
+            name="Taxa de erro (%)"
+            description="Endpoints com maior proporção de requisições com erro"
+            label="Maior Taxa de Erro — Hoje"
+            isLoading={!metrics}
+            hideXAxis
+            barColor="#e11d48"
+            activeBarColor="#22d3ee"
+            layout="horizontal"
+          />
+          <BarChartCard
+            data={metrics?.top_endpoints_taxa_erro?.sempre}
+            dataKey="endpoint"
+            barDataKey="taxa_erro"
+            name="Taxa de erro (%)"
+            description="Endpoints com maior proporção de requisições com erro"
+            label="Maior Taxa de Erro — Sempre"
+            isLoading={!metrics}
+            hideXAxis
+            barColor="#e11d48"
+            activeBarColor="#22d3ee"
+            layout="horizontal"
           />
         </div>
       </div>
