@@ -532,7 +532,6 @@ export default function MetricsPage() {
             hideXAxis
             barColor="#e11d48"
             activeBarColor="#22d3ee"
-            layout="horizontal"
           />
           <BarChartCard
             data={metrics?.top_endpoints_taxa_erro?.sempre}
@@ -545,7 +544,6 @@ export default function MetricsPage() {
             hideXAxis
             barColor="#e11d48"
             activeBarColor="#22d3ee"
-            layout="horizontal"
           />
         </div>
       </div>
