@@ -37,6 +37,7 @@ export type MetricName =
   | "top_dias_semana"
   | "top_endpoints"
   | "top_endpoints_mais_lentos"
+  | "top_endpoints_menos_acessados"
   | "top_horas"
   | "top_metodos_http"
   | "top_piores_endpoints"
@@ -61,6 +62,7 @@ export interface lastMessageType {
   top_dias_semana?: TodayAlwaysOutType<TopWeekdayType[]>;
   top_endpoints?: TodayAlwaysOutType<TopEndpointType[]>;
   top_endpoints_mais_lentos?: TodayAlwaysOutType<TopSlowestEndpointType[]>;
+  top_endpoints_menos_acessados?: TodayAlwaysOutType<TopEndpointType[]>;
   top_horas?: TodayAlwaysOutType<TopHourFormattedType[]>;
   top_metodos_http?: TodayAlwaysOutType<TopHttpMethodType[]>;
   top_piores_endpoints?: TodayAlwaysOutType<TopWorstEndpointType[]>;
@@ -286,6 +288,32 @@ export default function MetricsPage() {
             label="Top Endpoints — Sempre"
             isLoading={!metrics}
             hideXAxis
+          />
+
+          {/* Endpoints Menos Acessados */}
+          <BarChartCard
+            data={metrics?.top_endpoints_menos_acessados?.hoje}
+            dataKey="endpoint"
+            barDataKey="total_requisicoes"
+            name="Total de requisições"
+            description="Endpoints menos acessados no período"
+            label="Endpoints Menos Acessados — Hoje"
+            isLoading={!metrics}
+            hideXAxis
+            barColor="#64748b"
+            activeBarColor="#0f172a"
+          />
+          <BarChartCard
+            data={metrics?.top_endpoints_menos_acessados?.sempre}
+            dataKey="endpoint"
+            barDataKey="total_requisicoes"
+            name="Total de requisições"
+            description="Endpoints menos acessados no período"
+            label="Endpoints Menos Acessados — Sempre"
+            isLoading={!metrics}
+            hideXAxis
+            barColor="#64748b"
+            activeBarColor="#0f172a"
           />
 
           {/* Top Status Codes */}
