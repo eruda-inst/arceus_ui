@@ -419,10 +419,15 @@ export default function LogFilters({
                         : null
                     }
                     onChange={(v) =>
-                      setLocalFilters((prev) => ({
-                        ...prev,
-                        hora_inicio: v?.toString(),
-                      }))
+                      setLocalFilters((prev) => {
+                        const next = { ...prev };
+                        if (v) {
+                          next.hora_inicio = v.toString();
+                        } else {
+                          delete next.hora_inicio;
+                        }
+                        return next;
+                      })
                     }
                   >
                     <Label>Hora início</Label>
@@ -444,10 +449,15 @@ export default function LogFilters({
                         : null
                     }
                     onChange={(v) =>
-                      setLocalFilters((prev) => ({
-                        ...prev,
-                        hora_fim: v?.toString(),
-                      }))
+                      setLocalFilters((prev) => {
+                        const next = { ...prev };
+                        if (v) {
+                          next.hora_fim = v.toString();
+                        } else {
+                          delete next.hora_fim;
+                        }
+                        return next;
+                      })
                     }
                   >
                     <Label>Hora fim</Label>
