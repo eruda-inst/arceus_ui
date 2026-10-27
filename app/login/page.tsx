@@ -196,7 +196,7 @@ export default function LoginPage() {
 
           {/* Footer credits */}
           <div className="text-center text-sm text-muted mt-8">
-            Desenvolvido pela Newnet.
+            Desenvolvido pela equipe de inovação da Newnet.
           </div>
         </div>
       </motion.div>
