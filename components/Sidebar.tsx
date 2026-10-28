@@ -109,7 +109,12 @@ export default function Sidebar() {
             selectionBehavior="toggle"
             selectionMode="single"
             selectedKeys={selected}
-            onSelectionChange={(key) => setSelected(key)}
+            onSelectionChange={(key) => {
+              if (key === "all" || (key instanceof Set && key.size === 0)) {
+                return;
+              }
+              setSelected(key);
+            }}
           >
             <TagGroup.List className="flex flex-col">
               {tags.map(({ id, isDisabled, onPress, textValue, children }) => (
